@@ -1,11 +1,8 @@
 import Default from "Pages/default.js"
-import Home from "Pages/home.js"
 import Account from "Pages/Account/index.js"
 import Dashboard from "Pages/Dashboard"
 import Layout from "Layouts/index.js"
-import { scrollToAnchor, jsonCopy } from "Utils"
-import { newCart } from "Models/cart"
-import { includes } from "ramda"
+import { scrollToAnchor } from "Utils"
 
 const AuthenticatedRoutes = [
   {
@@ -126,12 +123,11 @@ const AuthenticatedRoutes = [
 
       localStorage.clear()
       sessionStorage.clear()
-      mdl.cart = jsonCopy(newCart)
       mdl.state.isAuth(false)
       mdl.user = {}
       console.log("loggout", mdl)
 
-      let routes = ["account", "checkout", "cart"]
+      let routes = ["account"]
       let currentRoute = m.route.get()
       routes
         .map((r) => currentRoute.includes(r))
@@ -140,7 +136,7 @@ const AuthenticatedRoutes = [
         ? m.route.set("/")
         : m.route.set(currentRoute)
     },
-    component: (mdl) => m(Layout, { mdl }, m(Home, { mdl })),
+    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
 ]
 

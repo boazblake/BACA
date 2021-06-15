@@ -67,17 +67,19 @@ export const Login = () => {
       mdl.state.isLoading()
         ? m(LogoLoader, { mdl })
         : m(
-            ".frow ",
+            ".grid",
             [
               state.showErrorMsg() && m("code.warning", state.errorMsg()),
               m(
-                "form.frow",
+                "form.grid",
                 {
                   role: "form",
                   id: "login-form",
                   onsubmit: (e) => e.preventDefault(),
                 },
-                [
+
+                m(
+                  ".col",
                   m("input.auth-input", {
                     class: state.isSubmitted
                       ? state.errors.email
@@ -94,8 +96,10 @@ export const Login = () => {
                     value: state.data.userModel.email,
                   }),
                   state.errors.email &&
-                    m("p.auth-input-hint", state.errors.email),
-
+                    m("p.auth-input-hint", state.errors.email)
+                ),
+                m(
+                  ".col",
                   m("input.auth-input", {
                     class: state.isSubmitted
                       ? state.errors.password
@@ -112,8 +116,8 @@ export const Login = () => {
                     value: state.data.userModel.password,
                   }),
                   state.errors.password &&
-                    m("p.auth-input-hint", state.errors.password),
-                ]
+                    m("p.auth-input-hint", state.errors.password)
+                )
               ),
               state.httpError && m(".toast toast-error", state.httpError),
             ],

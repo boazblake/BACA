@@ -76,23 +76,23 @@ exports.plugins = {
       },
     },
   },
-  sharp: {
-    src: "app/assets/images",
-    dest: "docs/images",
-    imageExt: ["jpg", "png", "svg"],
-    tasks: [
-      [
-        { resize: [1200] },
-        { ignoreAspectRatio: true },
-        { toFormat: "webp" },
-        { withoutEnlargement: true },
-        { quality: 95 },
-        { withoutAdaptiveFiltering: true },
-        { optimiseScans: true },
-        // { rename: "{base}-1200.{ext}" },
-      ],
-    ],
-  },
+  // sharp: {
+  //   src: "app/assets/images",
+  //   dest: "docs/images",
+  //   imageExt: ["jpg", "png", "svg"],
+  //   tasks: [
+  //     [
+  //       { resize: [1200] },
+  //       { ignoreAspectRatio: true },
+  //       { toFormat: "webp" },
+  //       { withoutEnlargement: true },
+  //       { quality: 95 },
+  //       { withoutAdaptiveFiltering: true },
+  //       { optimiseScans: true },
+  //       // { rename: "{base}-1200.{ext}" },
+  //     ],
+  //   ],
+  // },
 }
 
 exports.paths = {
@@ -112,6 +112,13 @@ exports.npm = {
   enabled: true,
   compilers: ["babel-brunch"],
   globals: { m: "mithril", Stream: "mithril-stream" },
+  styles: {
+    "spectre.css": [
+      "dist/spectre.css",
+      "dist/spectre-exp.css",
+      "dist/spectre-icons.css",
+    ],
+  },
 }
 
 exports.server = {

@@ -1,43 +1,28 @@
-import NavLink from "Components/nav-link.js"
+import Hamburger from "Components/Hamburger.js"
 import { isActiveRoute } from "Utils/index.js"
 
 const NavBar = () => {
-  let NavRoutes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navbar"))
-  let SubNavRoutes = (mdl) =>
-    mdl.Routes.filter((r) => r.group.includes("sub-navbar"))
   return {
-    view: ({ attrs: { mdl } }) => [
+    view: ({ attrs: { mdl } }) =>
       m(
-        ".navbar.navbar2.hidden-xs",
-        m(
-          "nav.frow row-around",
-          SubNavRoutes(mdl).map((r) => {
-            return m(NavLink, {
-              mdl,
-              href: r.route,
-              link: r.name,
-              classList: isActiveRoute(r.route),
-            })
-          })
-        )
+        ".navbar.grid",
+        mdl.settings.screenSize !== "desktop"
+          ? m(
+              ".col",
+              {
+                onclick: () => {
+                  mdl.state.showNavModal(true)
+                  console.log(mdl.state.showNavModal())
+                },
+              },
+              m(Hamburger, {
+                mdl,
+              })
+            )
+          : m(".col", "Members"),
+        m(".col.col-grow-2", "LOGO"),
+        m(".col", "Safety")
       ),
-      m(
-        ".navbar.navbar1",
-        { id: "navbar" },
-
-        m(
-          "nav.frow row-around",
-          NavRoutes(mdl).map((r) => {
-            return m(NavLink, {
-              mdl,
-              href: r.route,
-              link: r.name,
-              classList: isActiveRoute(r.route),
-            })
-          })
-        )
-      ),
-    ],
   }
 }
 

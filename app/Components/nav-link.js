@@ -17,6 +17,7 @@ export const NavLink = () => {
       return m(
         m.route.Link,
         {
+          onclick: (e) => e.stopPropagation(),
           style: {
             ...handlers(["onmouseover", "onmouseout"], (e) => {
               return e.type == "mouseover"

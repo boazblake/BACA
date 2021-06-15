@@ -1,5 +1,5 @@
 {
-  "name": "sette-bambini",
+  "name": "bon-ham-acres",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
-    "@babel/plugin-transform-spread": "^7.7.4",
+    "@babel/preset-env": "^7.14.5",
     "auto-reload-brunch": "^2.7.1",
     "autoprefixer": "^9.7.6",
     "babel-brunch": "7.0.1",

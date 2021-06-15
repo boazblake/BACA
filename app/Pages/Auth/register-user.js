@@ -63,75 +63,81 @@ export const validateForm = (mdl) => (data) => {
 
 const RegisterUser = () => {
   return {
-    view: ({ attrs: { mdl, data, errors, isSubmitted } }) => [
+    view: ({ attrs: { mdl, data, errors, isSubmitted } }) =>
       mdl.state.isLoading()
         ? m(LogoLoader, { mdl })
-        : m("input.auth-input", {
-            class: isSubmitted
-              ? errors.name
-                ? "has-error"
-                : "has-success"
-              : "",
-            id: "reg-name",
-            type: "text",
-            placeholder: "Full Name",
-            onkeyup: (e) => (data.name = e.target.value),
-            value: data.name,
-          }),
-      errors.name && m("p.auth-input-hint", errors.name),
+        : [
+            m("input.auth-input", {
+              class: isSubmitted
+                ? errors.name
+                  ? "has-error"
+                  : "has-success"
+                : "",
+              id: "reg-name",
+              type: "text",
+              placeholder: "Full Name",
+              onkeyup: (e) => (data.name = e.target.value),
+              value: data.name,
+            }),
+            errors.name && m("p.auth-input-hint", errors.name),
 
-      m("input.auth-input", {
-        class: isSubmitted ? (errors.email ? "has-error" : "has-success") : "",
-        id: "reg-email",
-        type: "email",
-        placeholder: "Email",
-        onkeyup: (e) => (data.email = e.target.value),
-        value: data.email,
-      }),
-      errors.email && m("p.auth-input-hint", errors.email),
+            m("input.auth-input", {
+              class: isSubmitted
+                ? errors.email
+                  ? "has-error"
+                  : "has-success"
+                : "",
+              id: "reg-email",
+              type: "email",
+              placeholder: "Email",
+              onkeyup: (e) => (data.email = e.target.value),
+              value: data.email,
+            }),
+            errors.email && m("p.auth-input-hint", errors.email),
 
-      m("input.auth-input", {
-        id: "confirmEmail",
-        class: isSubmitted
-          ? errors.confirmEmail
-            ? "has-error"
-            : "has-success"
-          : "",
-        type: "email",
-        placeholder: "Confirm Email",
-        onkeyup: (e) => (data.confirmEmail = e.target.value),
-        value: data.confirmEmail,
-      }),
-      errors.confirmEmail && m("p.auth-input-hint", errors.confirmEmail),
+            m("input.auth-input", {
+              id: "confirmEmail",
+              class: isSubmitted
+                ? errors.confirmEmail
+                  ? "has-error"
+                  : "has-success"
+                : "",
+              type: "email",
+              placeholder: "Confirm Email",
+              onkeyup: (e) => (data.confirmEmail = e.target.value),
+              value: data.confirmEmail,
+            }),
+            errors.confirmEmail && m("p.auth-input-hint", errors.confirmEmail),
 
-      m("input.auth-input", {
-        class: isSubmitted
-          ? errors.password
-            ? "has-error"
-            : "has-success"
-          : "",
-        id: "reg-pass",
-        type: "password",
-        placeholder: "Password",
-        onkeyup: (e) => (data.password = e.target.value),
-        value: data.password,
-      }),
-      errors.password && m("p.auth-input-hint", errors.password),
+            m("input.auth-input", {
+              class: isSubmitted
+                ? errors.password
+                  ? "has-error"
+                  : "has-success"
+                : "",
+              id: "reg-pass",
+              type: "password",
+              placeholder: "Password",
+              onkeyup: (e) => (data.password = e.target.value),
+              value: data.password,
+            }),
+            errors.password && m("p.auth-input-hint", errors.password),
 
-      m("input.auth-input", {
-        class: isSubmitted
-          ? errors.confirmPassword
-            ? "has-error"
-            : "has-success"
-          : "",
-        id: "pass-confirm",
-        type: "password",
-        placeholder: "Confirm Password",
-        onkeyup: (e) => (data.confirmPassword = e.target.value),
-        value: data.confirmPassword,
-      }),
-      errors.confirmPassword && m("p.auth-input-hint", errors.confirmPassword),
-    ],
+            m("input.auth-input", {
+              class: isSubmitted
+                ? errors.confirmPassword
+                  ? "has-error"
+                  : "has-success"
+                : "",
+              id: "pass-confirm",
+              type: "password",
+              placeholder: "Confirm Password",
+              onkeyup: (e) => (data.confirmPassword = e.target.value),
+              value: data.confirmPassword,
+            }),
+            errors.confirmPassword &&
+              m("p.auth-input-hint", errors.confirmPassword),
+          ],
   }
 }
 
