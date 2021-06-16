@@ -12,7 +12,13 @@ const MemberRoutes = [
     route: "/safety",
     isNav: false,
     group: ["navmenu", "safety"],
-    children: ["report", "district-J"],
+    children: [
+      "report",
+      "district-J",
+      "SeeClickFix",
+      "Harrison-County-Public-Health",
+      "Houston-311-Service-Request/Report",
+    ],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
@@ -55,16 +61,41 @@ const MemberRoutes = [
     group: ["external", "members"],
     children: [],
     options: [],
-    //   onmatch: (mdl, args, path, fullroute, isAnchor) => {
-    //     isAnchor
-    //       ? scrollToAnchor(mdl.state.anchor)
-    //       : window.scrollTo({
-    //           top: 0,
-    //           left: 0,
-    //           behavior: "smooth",
-    //         })
-    //   },
-    //   component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
+  },
+  {
+    id: "SeeClickFix",
+    name: "SeeClickFix Request",
+    // icon: Icons.search,
+    route: `/#`,
+    external: "https://seeclickfix.com/houston/report",
+    isNav: false,
+    group: ["external", "members"],
+    children: [],
+    options: [],
+  },
+  {
+    id: "Harrison-County-Public-Health",
+    name: "Harrison County Public Health",
+    // icon: Icons.search,
+    route: `/#`,
+    external:
+      "https://publichealth.harriscountytx.gov/Services-Programs/Services/NeighborhoodNuisance",
+    isNav: false,
+    group: ["external", "members"],
+    children: [],
+    options: [],
+  },
+  {
+    id: "Houston-311-Service-Request/Report",
+    name: "Houston 311 Service Request/Report",
+    // icon: Icons.search,
+    route: `/#`,
+    external:
+      "https://www.houstontx.gov/311/ServiceRequestDirectoryWebpage.htm",
+    isNav: false,
+    group: ["external", "members"],
+    children: [],
+    options: [],
   },
 ]
 

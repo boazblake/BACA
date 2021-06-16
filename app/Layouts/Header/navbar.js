@@ -20,7 +20,12 @@ const NavBar = () => {
               })
             )
           : m(".col", "Members"),
-        m(".col.col-grow-2", "LOGO"),
+        m(
+          ".col.col-grow-2",
+          m("img.nav-logo", {
+            src: "images/BonhamAcresIcon.webp",
+          })
+        ),
         m(".col", "Safety")
       ),
   }

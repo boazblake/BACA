@@ -2,8 +2,7 @@ import NavLink from "Components/nav-link"
 import { jsonCopy } from "Utils"
 import { validateLoginTask } from "./Validations.js"
 import { loginTask } from "./fns.js"
-import LogoLoader from "Components/LogoLoader"
-import m from "mithril"
+// import LogoLoader from "Components/LogoLoader"
 
 const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
@@ -65,7 +64,7 @@ export const Login = () => {
     onremove: () => resetState(),
     view: ({ attrs: { mdl } }) =>
       mdl.state.isLoading()
-        ? m(LogoLoader, { mdl })
+        ? "" //m(LogoLoader, { mdl })
         : m(
             ".grid",
             [

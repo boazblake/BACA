@@ -1,6 +1,7 @@
-import { AngleLine } from "@mithril-icons/clarity"
+import { AngleLine, PopOutLine } from "@mithril-icons/clarity"
 import NavLink from "Components/nav-link"
 import { log, isActiveRoute } from "Utils/index.js"
+import { replaceCSS } from "Styles/animations.js"
 
 let navItemstate = {
   onHover: () => {},
@@ -43,21 +44,34 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
               style: { transform: `rotate(${isSelected() ? 180 : 0}deg)` },
             })
           ),
-          isSelected()
-            ? childRoutes.map((r) =>
-                m(
-                  ".",
-                  r.group.includes("external")
-                    ? m("a.p-8", { target: "_blank", href: r.external }, r.name)
-                    : m(NavItem, {
-                        mdl,
-                        href: r.route,
-                        link: r.name,
-                        classList: `p-8 grid-between ${isActiveRoute(r.route)}`,
-                      })
-                )
+          isSelected() &&
+            m(
+              `.grid show-child-routes`,
+              {
+                onbeforeremove: replaceCSS(
+                  "show-child-routes",
+                  "hide-child-routes"
+                ),
+              },
+              childRoutes.map((r) =>
+                r.group.includes("external")
+                  ? m(
+                      "li.nav-link.col-align-top",
+                      m(
+                        "a.nav-link",
+                        { target: "_blank", href: r.external },
+                        r.name,
+                        m(PopOutLine, { width: "15px" })
+                      )
+                    )
+                  : m(NavItem, {
+                      mdl,
+                      href: r.route,
+                      link: r.name,
+                      classList: `p-8 grid-between ${isActiveRoute(r.route)}`,
+                    })
               )
-            : m("")
+            )
         )
       ),
   }

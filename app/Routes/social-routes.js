@@ -32,6 +32,66 @@ const SocialRoutes = [
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
   {
+    id: "calendar",
+    name: "Events Calendar",
+    // icon: Icons.home,
+    route: "/social/calendar",
+    isNav: true,
+    group: ["nav", "social"],
+    children: [],
+    options: [],
+    onmatch: (mdl, args, path, fullroute, isAnchor) => {
+      isAnchor
+        ? scrollToAnchor(mdl.state.anchor)
+        : window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+          })
+    },
+    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
+  },
+  {
+    id: "photos",
+    name: "Photo Gallery",
+    // icon: Icons.home,
+    route: "/social/photos",
+    isNav: true,
+    group: ["nav", "social"],
+    children: [],
+    options: [],
+    onmatch: (mdl, args, path, fullroute, isAnchor) => {
+      isAnchor
+        ? scrollToAnchor(mdl.state.anchor)
+        : window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+          })
+    },
+    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
+  },
+  {
+    id: "blog",
+    name: "Blog",
+    // icon: Icons.home,
+    route: "/social/blog",
+    isNav: true,
+    group: ["nav", "social"],
+    children: [],
+    options: [],
+    onmatch: (mdl, args, path, fullroute, isAnchor) => {
+      isAnchor
+        ? scrollToAnchor(mdl.state.anchor)
+        : window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+          })
+    },
+    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
+  },
+  {
     id: "local-news",
     name: "Local News",
     // icon: Icons.home,
@@ -71,26 +131,7 @@ const SocialRoutes = [
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
-  {
-    id: "blog",
-    name: "Blog",
-    // icon: Icons.home,
-    route: "/social/blog",
-    isNav: true,
-    group: ["nav", "social"],
-    children: [],
-    options: [],
-    onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          })
-    },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
-  },
+
   {
     id: "explore",
     name: "Explore Houston",
@@ -111,65 +152,17 @@ const SocialRoutes = [
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
-  {
-    id: "photos",
-    name: "Photo Gallery",
-    // icon: Icons.home,
-    route: "/social/photos",
-    isNav: true,
-    group: ["nav", "social"],
-    children: [],
-    options: [],
-    onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          })
-    },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
-  },
-  {
-    id: "calendar",
-    name: "Events Calendar",
-    // icon: Icons.home,
-    route: "/social/calendar",
-    isNav: true,
-    group: ["nav", "social"],
-    children: [],
-    options: [],
-    onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          })
-    },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
-  },
+
   {
     id: "bfn-park",
     name: "Bonham Family Nature Park",
     // icon: Icons.home,
-    route: "/social/Bonham-Family-Nature-Park",
+    route: `/#`,
+    external: "https://www.pct3.com/Parks/Bonham-Family-Nature-Park",
     isNav: true,
-    group: ["nav", "social"],
+    group: ["nav", "social", "external"],
     children: [],
     options: [],
-    onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          })
-    },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
 ]
 

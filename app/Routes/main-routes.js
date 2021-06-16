@@ -2,14 +2,17 @@ import Layout from "Layouts/index.js"
 import Default from "Pages/default.js"
 import Home from "Pages/home.js"
 import About from "Pages/about.js"
-import Logo from "Components/Logo"
+
+const Logo = m("img", {
+  src: "Images/BonhamAcresIcon.webp",
+})
 
 import { scrollToAnchor } from "Utils/index.js"
 
 const Routes = [
   {
     id: "home",
-    name: m(Logo),
+    name: "Home",
     // icon: Icons.home,
     route: "/",
     isNav: true,

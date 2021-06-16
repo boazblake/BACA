@@ -37,7 +37,7 @@
   margin: 0px;
   padding: 0px;
   font-family: "Roboto", sans-serif;
-  color: $black;
+  color: black;
   p {
     font-size: 16px;
   }
@@ -77,23 +77,23 @@ a {
 
 a.button {
   line-height: initial;
-  background-color: $white;
+  background-color: whitesmoke;
   display: inline-block;
   padding: 0.35em 1.2em;
   margin: 0 0.3em 0.3em 0;
   border-radius: 0.12em;
   font-family: "Roboto", sans-serif;
   font-weight: 300;
-  color: $oxford-blue;
+  color: $dark-green;
   text-align: center;
   transition: all 0.2s;
   &:hover {
-    color: $gold;
-    border: 0.1em solid $oxford-blue;
+    color: $cambridge-blue;
+    border: 0.1em solid $dark-green;
     font-weight: 500;
 
     h1 {
-      color: $oxford-blue !important;
+      color: $dark-green !important;
       font-weight: 500;
     }
   }
@@ -121,10 +121,14 @@ a.button {
   width: 100%;
 }
 
+.nav-logo {
+  width: 100%;
+}
+
 .nav-link,
 .auth-link {
   &:hover {
-    color: $gold;
+    color: $cambridge-blue;
   }
 }
 
@@ -134,7 +138,7 @@ a.button {
   &:hover,
   &:active {
     user-select: none;
-    -webkit-tap-highlight-color: $gold;
+    -webkit-tap-highlight-color: $cambridge-blue;
     -webkit-user-select: none;
     -webkit-touch-callout: none; /*only to disable context menu on long press*/
   }
@@ -150,8 +154,8 @@ a.button {
 
 .is-active {
   font-weight: 900;
-  color: $gold !important;
-  fill: $gold !important;
+  color: $cambridge-blue !important;
+  fill: $cambridge-blue !important;
 }
 
 .btn-icon {
@@ -162,7 +166,7 @@ a.button {
 
 #cart-icon {
   position: relative;
-  fill: $oxford-blue;
+  fill: $dark-green;
 
   .cart-pill {
     position: absolute;
@@ -173,8 +177,8 @@ a.button {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    color: $oxford-blue;
-    border: 1px solid $gold;
+    color: $dark-green;
+    border: 1px solid $cambridge-blue;
     text-align: center;
   }
 }
@@ -189,11 +193,11 @@ a.button {
 #footer {
   grid-area: footer;
   min-height: 200px;
-  color: $white;
+  color: whitesmoke;
   align-items: center;
   border:rgb(230, 150, 2) > * a {
     margin: 4px;
-    color: $oxford-blue;
+    color: $dark-green;
   }
 }
 
@@ -203,7 +207,7 @@ a.button {
 
 .label {
   font-weight: bold;
-  color: $oxford-blue;
+  color: $dark-green;
 }
 
 .logoLoader {
@@ -251,7 +255,7 @@ h1 {
 }
 
 .auth-input {
-  border: 2px solid $oxford-blue;
+  border: 2px solid $dark-green;
   border-radius: 20px;
   margin-bottom: 20px;
   padding: 10px;
@@ -274,7 +278,7 @@ h1 {
 }
 
 .cover {
-  background-color: $oxford-blue;
+  background-color: $dark-green;
 }
 
 .dash-table {
@@ -292,13 +296,13 @@ h1 {
 }
 
 icon.icon#logo-svg {
-  fill: $gold;
+  fill: $cambridge-blue;
 }
 
 .icon-click {
   &:hover {
     transition: translate3d(0, 10px, 0);
-    fill: $gold;
+    fill: $cambridge-blue;
   }
 }
 
@@ -308,7 +312,7 @@ icon.icon#logo-svg {
       font-family: "SilverThreadJF";
       font-size: 10px;
       text-transform: initial;
-      color: $oxford-blue !important;
+      color: $dark-green !important;
     }
   }
 }
@@ -322,7 +326,7 @@ icon.icon#logo-svg {
   height: 100%;
   min-width: 90vw;
   min-height: 100vh;
-  background-color: $white;
+  background-color: whitesmoke;
   padding: 30px 30px 60px 30px;
   overflow-y: auto;
 
@@ -332,7 +336,7 @@ icon.icon#logo-svg {
   h3,
   h4,
   p {
-    color: $oxford-blue !important;
+    color: $dark-green !important;
   }
 
   > ul.nav {
@@ -348,10 +352,10 @@ icon.icon#logo-svg {
 
 .modalButton {
   border: none;
-  background-color: $white;
+  background-color: whitesmoke;
   &::hover {
     border: none;
-    background-color: $white;
+    background-color: whitesmoke;
   }
 }
 
@@ -390,15 +394,15 @@ icon.icon#logo-svg {
 }
 
 .navbar1 {
-  background-color: $oxford-blue;
+  background-color: $dark-green;
   position: relative;
   z-index: 100;
   .frow {
     a {
       font-size: 1.2em;
-      color: $platinum;
+      color: $cambridge-blue;
       &:hover {
-        color: $white;
+        color: whitesmoke;
       }
     }
   }
@@ -406,7 +410,7 @@ icon.icon#logo-svg {
 
 .navbar2 {
   a {
-    color: $oxford-blue;
+    color: $dark-green;
   }
 }
 
@@ -415,10 +419,10 @@ icon.icon#logo-svg {
   order: 2;
   height: 40px;
   padding-top: 0.5rem;
-  background: $white;
+  background: whitesmoke;
 
   a {
-    color: $oxford-blue;
+    color: $dark-green;
     background-color: inherit;
     backdrop-filter: none;
   }
@@ -441,7 +445,7 @@ icon.icon#logo-svg {
 }
 
 .para {
-  border: 2px solid $gold;
+  border: 2px solid $cambridge-blue;
 }
 
 .white {
@@ -478,37 +482,45 @@ icon.icon#logo-svg {
   border-radius: 9px;
 }
 .progress-bar progress::-webkit-progress-value {
-  background: $oxford-blue;
-  background: -moz-linear-gradient(top, $oxford-blue 0%, $gold 100%);
+  background: $dark-green;
+  background: -moz-linear-gradient(top, $dark-green 0%, $cambridge-blue 100%);
   background: -webkit-gradient(
     linear,
     left top,
     left bottom,
-    color-stop(0%, $oxford-blue),
-    color-stop(100%, $gold)
+    color-stop(0%, $dark-green),
+    color-stop(100%, $cambridge-blue)
   );
-  background: -webkit-linear-gradient(top, $oxford-blue 0%, $gold 100%);
-  background: -o-linear-gradient(top, $oxford-blue 0%, $gold 100%);
-  background: -ms-linear-gradient(top, $oxford-blue 0%, $gold 100%);
-  background: linear-gradient(to bottom, $oxford-blue 0%, $gold 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$blue', endColorstr='$gold',GradientType=0 );
+  background: -webkit-linear-gradient(
+    top,
+    $dark-green 0%,
+    $cambridge-blue 100%
+  );
+  background: -o-linear-gradient(top, $dark-green 0%, $cambridge-blue 100%);
+  background: -ms-linear-gradient(top, $dark-green 0%, $cambridge-blue 100%);
+  background: linear-gradient(to bottom, $dark-green 0%, $cambridge-blue 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$blue', endColorstr='$cambridge-blue',GradientType=0 );
   border-radius: 9px;
 }
 .progress-bar progress::-moz-progress-bar {
-  background: $oxford-blue;
-  background: -moz-linear-gradient(top, $oxford-blue 0%, $gold 100%);
+  background: $dark-green;
+  background: -moz-linear-gradient(top, $dark-green 0%, $cambridge-blue 100%);
   background: -webkit-gradient(
     linear,
     left top,
     left bottom,
-    color-stop(0%, $oxford-blue),
-    color-stop(100%, $gold)
+    color-stop(0%, $dark-green),
+    color-stop(100%, $cambridge-blue)
   );
-  background: -webkit-linear-gradient(top, $oxford-blue 0%, $gold 100%);
-  background: -o-linear-gradient(top, $oxford-blue 0%, $gold 100%);
-  background: -ms-linear-gradient(top, $oxford-blue 0%, $gold 100%);
-  background: linear-gradient(to bottom, $oxford-blue 0%, $gold 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$blue', endColorstr='$gold',GradientType=0 );
+  background: -webkit-linear-gradient(
+    top,
+    $dark-green 0%,
+    $cambridge-blue 100%
+  );
+  background: -o-linear-gradient(top, $dark-green 0%, $cambridge-blue 100%);
+  background: -ms-linear-gradient(top, $dark-green 0%, $cambridge-blue 100%);
+  background: linear-gradient(to bottom, $dark-green 0%, $cambridge-blue 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$blue', endColorstr='$cambridge-blue',GradientType=0 );
   border-radius: 9px;
 }
 .progress-bar .progress-value {
@@ -518,7 +530,7 @@ icon.icon#logo-svg {
   line-height: 10px;
   margin-left: 5px;
   font-size: 0.8em;
-  color: $oxford-blue;
+  color: $dark-green;
   height: 8px;
   float: right;
 }
@@ -529,8 +541,8 @@ icon.icon#logo-svg {
 
 .shadow {
   &::hover {
-    -webkit-filter: drop-shadow(2px 2px 1px $oxford-blue);
-    filter: drop-shadow(2px 2px 1px $oxford-blue);
+    -webkit-filter: drop-shadow(2px 2px 1px $dark-green);
+    filter: drop-shadow(2px 2px 1px $dark-green);
   }
 }
 
@@ -611,13 +623,31 @@ icon.icon#logo-svg {
       width: 100px;
       &.is-active,
       &:hover {
-        border: 2px solid $gold;
+        border: 2px solid $cambridge-blue;
       }
     }
   }
 }
 
+.show-child-routes {
+  opacity: 1;
+  background-color: $myrtle-green;
+  // height: 100%;
+  width: 100%;
+  transition: opacity 0.1s ease;
+  color: white !important;
+}
+
+.hide-child-routes {
+  opacity: 0;
+  height: 0;
+  transition: opacity 0.1s ease;
+}
+
 @media screen and (min-width: 624px) {
+  .nav-logo {
+    width: 50%;
+  }
   #masonry {
     img {
       width: 33.3%;
@@ -696,9 +726,9 @@ icon.icon#logo-svg {
 }
 
 #nav-modal {
-  box-shadow: 1px 7px 6px $oxford-blue;
+  box-shadow: 1px 7px 6px $dark-green;
 }
 
 #cart-modal {
-  box-shadow: 1px 7px 6px $oxford-blue;
+  box-shadow: 1px 7px 6px $dark-green;
 }

@@ -2,7 +2,7 @@ import NavLink from "Components/nav-link"
 import { jsonCopy } from "Utils"
 import { validateUserRegistrationTask } from "./Validations"
 import { registerUserTask, createAccountTask } from "./fns.js"
-import LogoLoader from "Components/LogoLoader"
+// import LogoLoader from "Components/LogoLoader"
 
 const userModel = {
   name: "",
@@ -65,7 +65,7 @@ const RegisterUser = () => {
   return {
     view: ({ attrs: { mdl, data, errors, isSubmitted } }) =>
       mdl.state.isLoading()
-        ? m(LogoLoader, { mdl })
+        ? "" // m(LogoLoader, { mdl })
         : [
             m("input.auth-input", {
               class: isSubmitted

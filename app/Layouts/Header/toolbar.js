@@ -1,6 +1,5 @@
 import NavLink from "Components/nav-link.js"
 import Hamburger from "Components/Hamburger.js"
-import Logo from "Components/Logo"
 import { isActiveRoute } from "Utils/index.js"
 
 const ToolBar = () => {
@@ -63,7 +62,7 @@ const ToolBar = () => {
             mdl,
             href: "/",
             classList: "logo",
-            link: m(Logo, { id: "toolbar-logo", class: "frow row-center" }),
+            // link: m(Logo, { id: "toolbar-logo", class: "frow row-center" }),
           }),
         ])
       ),
