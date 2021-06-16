@@ -11,7 +11,7 @@ const MemberRoutes = [
     // icon: Icons.search,
     route: "/safety",
     isNav: false,
-    group: ["navmenu", "safety"],
+    group: ["navmenu"],
     children: [
       "report",
       "district-J",
@@ -33,11 +33,11 @@ const MemberRoutes = [
   },
   {
     id: "report",
-    name: "Report an Incident",
+    name: "File An Internal Report With BACA",
     // icon: Icons.search,
     route: "/safety/report",
     isNav: false,
-    group: ["nav", "members"],
+    group: ["nav", "safety"],
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
@@ -58,7 +58,7 @@ const MemberRoutes = [
     route: `/#`,
     external: "https://www.houstontx.gov/council/j/request.html",
     isNav: false,
-    group: ["external", "members"],
+    group: ["external", "safety"],
     children: [],
     options: [],
   },
@@ -69,7 +69,7 @@ const MemberRoutes = [
     route: `/#`,
     external: "https://seeclickfix.com/houston/report",
     isNav: false,
-    group: ["external", "members"],
+    group: ["external", "safety"],
     children: [],
     options: [],
   },
@@ -81,7 +81,7 @@ const MemberRoutes = [
     external:
       "https://publichealth.harriscountytx.gov/Services-Programs/Services/NeighborhoodNuisance",
     isNav: false,
-    group: ["external", "members"],
+    group: ["external", "safety"],
     children: [],
     options: [],
   },
@@ -93,7 +93,7 @@ const MemberRoutes = [
     external:
       "https://www.houstontx.gov/311/ServiceRequestDirectoryWebpage.htm",
     isNav: false,
-    group: ["external", "members"],
+    group: ["external", "safety"],
     children: [],
     options: [],
   },

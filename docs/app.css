@@ -7411,6 +7411,10 @@
   padding: 8px;
 }
 
+.m-8 {
+  margin: 8px;
+}
+
 body,
 html {
   height: 100%;
@@ -7479,7 +7483,7 @@ a.button:hover h1 {
 }
 
 .nav-logo {
-  width: 100%;
+  width: 275px;
 }
 
 .nav-link:hover,
@@ -7532,6 +7536,11 @@ a.button:hover h1 {
   color: #01200f;
   border: 1px solid #9ec5ab;
   text-align: center;
+}
+
+.center {
+  display: flex;
+  align-content: center;
 }
 
 #content {
@@ -7590,6 +7599,16 @@ h1 {
   left: 0;
   z-index: 100;
   border: #29a10a;
+  background-image: url("images/bnp.webp");
+}
+
+.background-header {
+  position: absolute;
+  background-image: url("images/bnp.webp");
+  width: 100vw;
+  height: 400px;
+  opacity: 0.3;
+  z-index: -1;
 }
 
 .img {
@@ -7644,13 +7663,6 @@ icon.icon#logo-svg {
 .icon-click:hover {
   transition: translate3d(0, 10px, 0);
   fill: #9ec5ab;
-}
-
-#toolbar-logo > .logo logo-text {
-  font-family: "SilverThreadJF";
-  font-size: 10px;
-  text-transform: initial;
-  color: #01200f !important;
 }
 
 .modal {
@@ -7717,36 +7729,19 @@ icon.icon#logo-svg {
 .navbar {
   order: 1;
   height: 40px;
-  padding-top: 0.5rem;
+  padding-top: 100px;
+  background-color: white;
 }
 
 .nav-col {
   max-width: 100px;
 }
 
-.navbar1 {
-  background-color: #01200f;
-  position: relative;
-  z-index: 100;
-}
-.navbar1 .frow a {
-  font-size: 1.2em;
-  color: #9ec5ab;
-}
-.navbar1 .frow a:hover {
-  color: whitesmoke;
-}
-
-.navbar2 a {
-  color: #01200f;
-}
-
 .sub-navbar {
   position: relative;
   order: 2;
+  background-color: white;
   height: 40px;
-  padding-top: 0.5rem;
-  background: whitesmoke;
 }
 .sub-navbar a {
   color: #01200f;
@@ -7877,6 +7872,10 @@ icon.icon#logo-svg {
   font-style: normal;
 }
 
+.toolbar {
+  width: 100%;
+}
+
 .warning {
   color: #e69602;
   padding: 4px;
@@ -7930,7 +7929,7 @@ icon.icon#logo-svg {
 
 .show-child-routes {
   opacity: 1;
-  background-color: #32746d;
+  border: 1px dotted #32746d;
   width: 100%;
   transition: opacity 0.1s ease;
   color: white !important;
@@ -7944,7 +7943,7 @@ icon.icon#logo-svg {
 
 @media screen and (min-width: 624px) {
   .nav-logo {
-    width: 50%;
+    width: 275px;
   }
 
   #masonry img {
@@ -7981,7 +7980,11 @@ icon.icon#logo-svg {
     min-width: 100%;
   }
 }
-@media screen and (min-width: 744px) {
+@media screen and (min-width: 944px) {
+  #header {
+    height: 400px;
+  }
+
   #masonry #masonry img {
     width: 33.3%;
   }

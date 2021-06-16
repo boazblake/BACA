@@ -446,6 +446,58 @@ var AccountAddress = function AccountAddress(_ref) {
 exports.AccountAddress = AccountAddress;
 });
 
+;require.register("Components/authbox.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _navLink = _interopRequireDefault(require("Components/nav-link.js"));
+
+var _index = require("Utils/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var AuthBox = function AuthBox() {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return mdl.state.isAuth() ? [mdl.user.isAdmin && m(_navLink["default"], {
+        mdl: mdl,
+        href: "/dashboard/".concat(mdl.user.name),
+        link: "Dashboard",
+        classList: "".concat((0, _index.isActiveRoute)("/dashboard/".concat(mdl.user.name)), " button hidden-xs")
+      }), m(_navLink["default"], {
+        mdl: mdl,
+        href: "/account/".concat(mdl.user.name),
+        link: "Your Account",
+        classList: "".concat((0, _index.isActiveRoute)("/account/".concat(mdl.user.name)), " button hidden-xs")
+      }), m(_navLink["default"], {
+        mdl: mdl,
+        href: "/logout",
+        link: "Logout",
+        classList: "bold auth-link hidden-xs"
+      })] : m(".frow hidden-xs", [m(_navLink["default"], {
+        mdl: mdl,
+        href: "/login",
+        link: "Login",
+        classList: "".concat((0, _index.isActiveRoute)("/login"), " button auth-link")
+      }), m(_navLink["default"], {
+        mdl: mdl,
+        href: "/register",
+        link: "Register",
+        classList: "".concat((0, _index.isActiveRoute)("/register"), " button auth-link")
+      })]);
+    }
+  };
+};
+
+var _default = AuthBox;
+exports["default"] = _default;
+});
+
 ;require.register("Components/carousel.js", function(exports, require, module) {
 "use strict";
 
@@ -1089,9 +1141,13 @@ var isShowingRoutes = function isShowingRoutes(mdl) {
   return mdl.settings.screenSize !== "phone";
 };
 
+var showNavMenu = function showNavMenu(mdl) {
+  return mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal();
+};
+
 var getStyle = function getStyle(mdl) {
   return {
-    marginTop: isShowingRoutes(mdl) ? isShowingNav(mdl) ? "180px" : "140px" : isShowingNav(mdl) ? "140px" : "100px"
+    paddingTop: isShowingRoutes(mdl) ? isShowingNav(mdl) ? "380px" : "340px" : isShowingNav(mdl) ? "340px" : "300px"
   };
 };
 
@@ -1115,7 +1171,7 @@ var Body = function Body() {
       return m(".body", {
         id: "body",
         style: getStyle(mdl)
-      }, mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal() && m(_navModal["default"], {
+      }, showNavMenu(mdl) && m(_navModal["default"], {
         oncreate: _animations.SlideInLeft,
         onbeforeremove: _animations.SlideOutRight,
         mdl: mdl
@@ -1142,6 +1198,8 @@ exports["default"] = void 0;
 var _clarity = require("@mithril-icons/clarity");
 
 var _navLink = _interopRequireDefault(require("Components/nav-link"));
+
+var _authbox = _interopRequireDefault(require("Components/authbox"));
 
 var _index = require("Utils/index.js");
 
@@ -1211,14 +1269,16 @@ var NavSection = function NavSection(_ref2) {
         style: {
           transform: "rotate(".concat(isSelected() ? 180 : 0, "deg)")
         }
-      })), isSelected() && m(".grid show-child-routes", {
+      })), isSelected() && m(".grid.col-align-bottom show-child-routes", {
         onbeforeremove: (0, _animations.replaceCSS)("show-child-routes", "hide-child-routes")
       }, childRoutes.map(function (r) {
-        return r.group.includes("external") ? m("li.nav-link.col-align-top", m("a.nav-link", {
+        return r.group.includes("external") ? m("li.nav-link", m("a", {
           target: "_blank",
           href: r.external
         }, r.name, m(_clarity.PopOutLine, {
-          width: "15px"
+          margin: "8px",
+          width: "15px",
+          height: "15px"
         }))) : m(NavItem, {
           mdl: mdl,
           href: r.route,
@@ -1252,8 +1312,6 @@ var NavModal = function NavModal(_ref4) {
           return _domOverlay = dom;
         },
         onclick: function onclick(e) {
-          //     log("e")(e.target)
-          //     log("dom")(_domModal)
           if ([_domModal, _domOverlay].includes(e.target)) mdl.state.showNavModal(false);
         }
       }, m(".modal", {
@@ -1264,41 +1322,9 @@ var NavModal = function NavModal(_ref4) {
         id: "nav-modal"
       }, m("ul.nav", {
         id: ""
-      }, [mdl.state.isAuth() ? [mdl.user.isAdmin && m(_navLink["default"], {
-        mdl: mdl,
-        href: "/dashboard/".concat(mdl.user.name),
-        link: "Dashboard",
-        classList: "".concat((0, _index.isActiveRoute)("/dashboard/".concat(mdl.user.name)), " button")
-      }), m(_navLink["default"], {
-        state: state,
-        mdl: mdl,
-        href: "/account/".concat(mdl.user.name),
-        link: "Your Account",
-        classList: "".concat((0, _index.isActiveRoute)("/account/".concat(mdl.user.name)), " button")
-      }), m(_navLink["default"], {
-        mdl: mdl,
-        href: "/logout",
-        link: "Logout",
-        onclick: function onclick() {// localStorage.clear()
-          // sessionStorage.clear()
-          // mdl.state.isAuth(false)
-          // mdl.user = {}
-          // mdl.cart = cart
-          // m.route.set(m.route.get())
-        },
-        classList: "bold auth-link"
-      })] : m(".grid", [m(NavItem, _defineProperty({
-        classList: ".col",
-        mdl: mdl,
-        href: "/login",
-        link: "Login"
-      }, "classList", "".concat((0, _index.isActiveRoute)("/login"), " button para"))), m(NavItem, _defineProperty({
-        classList: ".col",
-        mdl: mdl,
-        href: "/register",
-        link: "Register"
-      }, "classList", "".concat((0, _index.isActiveRoute)("/register"), " button para")))]), //create route accordian
-      routes(mdl).map(function (r) {
+      }, [m(_authbox["default"], {
+        mdl: mdl
+      }), routes(mdl).map(function (r) {
         return r.children.any() ? m(NavSection, {
           mdl: mdl,
           route: r,
@@ -1354,6 +1380,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
+var _toolbar = _interopRequireDefault(require("./toolbar.js"));
+
 var _navbar = _interopRequireDefault(require("./navbar.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -1363,7 +1391,9 @@ var Header = function Header(_ref) {
   return {
     view: function view(_ref2) {
       var mdl = _ref2.attrs.mdl;
-      return m(".header", m(_navbar["default"], {
+      return m(".grid#header", m(_toolbar["default"], {
+        mdl: mdl
+      }), mdl.settings.screenSize == "desktop" && m(_navbar["default"], {
         mdl: mdl
       }));
     }
@@ -1382,41 +1412,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _Hamburger = _interopRequireDefault(require("Components/Hamburger.js"));
-
-var _index = require("Utils/index.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var NavBar = function NavBar() {
-  return {
-    view: function view(_ref) {
-      var mdl = _ref.attrs.mdl;
-      return m(".navbar.grid", mdl.settings.screenSize !== "desktop" ? m(".col", {
-        onclick: function onclick() {
-          mdl.state.showNavModal(true);
-          console.log(mdl.state.showNavModal());
-        }
-      }, m(_Hamburger["default"], {
-        mdl: mdl
-      })) : m(".col", "Members"), m(".col.col-grow-2", m("img.nav-logo", {
-        src: "images/BonhamAcresIcon.webp"
-      })), m(".col", "Safety"));
-    }
-  };
-};
-
-var _default = NavBar;
-exports["default"] = _default;
-});
-
-;require.register("Layouts/Header/sub-nav.js", function(exports, require, module) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
+var _clarity = require("@mithril-icons/clarity");
 
 var _navLink = _interopRequireDefault(require("Components/nav-link.js"));
 
@@ -1426,29 +1422,58 @@ var _animations = require("Styles/animations");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var SubNavBar = function SubNavBar() {
+var Navbar = function Navbar() {
+  var routes = function routes(mdl) {
+    return mdl.Routes.filter(function (r) {
+      return r.group.includes("navmenu");
+    });
+  };
+
+  var subroutes = function subroutes(mdl) {
+    return mdl.Routes.filter(function (r) {
+      return r.group.includes(mdl.state.route.id);
+    });
+  };
+
   return {
     view: function view(_ref) {
-      var _ref$attrs = _ref.attrs,
-          mdl = _ref$attrs.mdl,
-          subRoutes = _ref$attrs.subRoutes;
-      return subRoutes(mdl).any() && m(".sub-navbar animated", {
-        oncreate: _animations.SlideDown,
-        onbeforeremove: _animations.SlideUp,
-        id: "sub-navbar"
-      }, m("nav.frow row-around", [subRoutes(mdl).map(function (r) {
-        return m(_navLink["default"], {
+      var mdl = _ref.attrs.mdl;
+      return [m(".navbar.grid.grid-align-center.m-8.grid-center", {
+        style: {
+          width: "100%"
+        }
+      }, routes(mdl).map(function (r) {
+        return m(".col.col-middle", m(_navLink["default"], {
           mdl: mdl,
           href: r.route,
           link: r.name,
-          classList: (0, _index.isActiveRoute)(r.route)
-        });
-      })]));
+          classList: "col-align-bottom ".concat((0, _index.isActiveRoute)(r.route))
+        }));
+      })), subroutes(mdl).any() && m(".sub-navbar.grid.grid-align-center.m-8.grid-center", {
+        id: "sub-navbar",
+        style: {
+          width: "100%"
+        }
+      }, subroutes(mdl).map(function (r) {
+        return m(".col.col-bottom.col-align-bottom", r.group.includes("external") ? m(".nav-link", m("a", {
+          target: "_blank",
+          href: r.external
+        }, r.name, m(_clarity.PopOutLine, {
+          margin: "8px",
+          width: "15px",
+          height: "15px"
+        }))) : m(_navLink["default"], {
+          mdl: mdl,
+          href: r.route,
+          link: r.name,
+          classList: "col col-middle col-align-middle ".concat((0, _index.isActiveRoute)(r.route))
+        }));
+      }))];
     }
   };
 };
 
-var _default = SubNavBar;
+var _default = Navbar;
 exports["default"] = _default;
 });
 
@@ -1460,60 +1485,32 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _navLink = _interopRequireDefault(require("Components/nav-link.js"));
-
 var _Hamburger = _interopRequireDefault(require("Components/Hamburger.js"));
 
-var _index = require("Utils/index.js");
+var _authbox = _interopRequireDefault(require("Components/authbox.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var ToolBar = function ToolBar() {
+var Toolbar = function Toolbar() {
   return {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return m(".toolbar.my-5", m(".frow row-between nowrap", [m(".frow", [m(".navMenuButton visible-xs", {
+      return m(".toolbar.grid", mdl.settings.screenSize == "desktop" ? m(_authbox["default"], {
+        mdl: mdl
+      }) : m(".col", {
         onclick: function onclick() {
           return mdl.state.showNavModal(true);
         }
       }, m(_Hamburger["default"], {
         mdl: mdl
-      })), mdl.state.isAuth() ? [mdl.user.isAdmin && m(_navLink["default"], {
-        mdl: mdl,
-        href: "/dashboard/".concat(mdl.user.name),
-        link: "Dashboard",
-        classList: "".concat((0, _index.isActiveRoute)("/dashboard/".concat(mdl.user.name)), " button hidden-xs")
-      }), m(_navLink["default"], {
-        mdl: mdl,
-        href: "/account/".concat(mdl.user.name),
-        link: "Your Account",
-        classList: "".concat((0, _index.isActiveRoute)("/account/".concat(mdl.user.name)), " button hidden-xs")
-      }), m(_navLink["default"], {
-        mdl: mdl,
-        href: "/logout",
-        link: "Logout",
-        classList: "bold auth-link hidden-xs"
-      })] : m(".frow hidden-xs", [m(_navLink["default"], {
-        mdl: mdl,
-        href: "/login",
-        link: "Login",
-        classList: "".concat((0, _index.isActiveRoute)("/login"), " button auth-link")
-      }), m(_navLink["default"], {
-        mdl: mdl,
-        href: "/register",
-        link: "Register",
-        classList: "".concat((0, _index.isActiveRoute)("/register"), " button auth-link")
-      })])]), m(_navLink["default"], {
-        mdl: mdl,
-        href: "/",
-        classList: "logo" // link: m(Logo, { id: "toolbar-logo", class: "frow row-center" }),
-
-      })]));
+      })), m(".col.col-grow-2", m(".grid.grid-end", m("img.nav-logo", {
+        src: "images/BonhamAcresIcon.webp"
+      }))));
     }
   };
 };
 
-var _default = ToolBar;
+var _default = Toolbar;
 exports["default"] = _default;
 });
 
@@ -2742,7 +2739,7 @@ var LegalRoutes = [{
   // icon: Icons.home,
   route: "/legal",
   isNav: true,
-  group: ["navmenu", "legal"],
+  group: ["navmenu"],
   children: ["deed-restrictions", "city-ordinances"],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
@@ -3073,7 +3070,7 @@ var MemberRoutes = [{
   // icon: Icons.search,
   route: "/safety",
   isNav: false,
-  group: ["navmenu", "safety"],
+  group: ["navmenu"],
   children: ["report", "district-J", "SeeClickFix", "Harrison-County-Public-Health", "Houston-311-Service-Request/Report"],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
@@ -3092,11 +3089,11 @@ var MemberRoutes = [{
   }
 }, {
   id: "report",
-  name: "Report an Incident",
+  name: "File An Internal Report With BACA",
   // icon: Icons.search,
   route: "/safety/report",
   isNav: false,
-  group: ["nav", "members"],
+  group: ["nav", "safety"],
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
@@ -3120,7 +3117,7 @@ var MemberRoutes = [{
   route: "/#",
   external: "https://www.houstontx.gov/council/j/request.html",
   isNav: false,
-  group: ["external", "members"],
+  group: ["external", "safety"],
   children: [],
   options: []
 }, {
@@ -3130,7 +3127,7 @@ var MemberRoutes = [{
   route: "/#",
   external: "https://seeclickfix.com/houston/report",
   isNav: false,
-  group: ["external", "members"],
+  group: ["external", "safety"],
   children: [],
   options: []
 }, {
@@ -3140,7 +3137,7 @@ var MemberRoutes = [{
   route: "/#",
   external: "https://publichealth.harriscountytx.gov/Services-Programs/Services/NeighborhoodNuisance",
   isNav: false,
-  group: ["external", "members"],
+  group: ["external", "safety"],
   children: [],
   options: []
 }, {
@@ -3150,7 +3147,7 @@ var MemberRoutes = [{
   route: "/#",
   external: "https://www.houstontx.gov/311/ServiceRequestDirectoryWebpage.htm",
   isNav: false,
-  group: ["external", "members"],
+  group: ["external", "safety"],
   children: [],
   options: []
 }];
@@ -3180,7 +3177,7 @@ var SocialRoutes = [{
   // icon: Icons.home,
   route: "/social",
   isNav: true,
-  group: ["navbar", "social", "navmenu"],
+  group: ["navbar", "navmenu"],
   children: ["local-news", "podcast", "blog", "explore", "photos", "calendar", "bfn-park"],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
@@ -3548,7 +3545,7 @@ exports.RemoveChildrenOut = RemoveChildrenOut;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.formatDate = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.uuid = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.log = exports.makeRoute = void 0;
+exports.formatDate = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.uuid = exports.isSelectedRoute = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.log = exports.makeRoute = void 0;
 
 var _ramda = require("ramda");
 
@@ -3717,6 +3714,15 @@ var isActiveRoute = function isActiveRoute(route) {
 };
 
 exports.isActiveRoute = isActiveRoute;
+
+var isSelectedRoute = function isSelectedRoute(route) {
+  if (m.route.get().split("/").length > 1) {
+    var cr = "/".concat(m.route.get().split("/")[1]);
+    return cr == route ? "is-active" : "";
+  } else return m.route.get() == route ? "is-active" : "";
+};
+
+exports.isSelectedRoute = isSelectedRoute;
 
 var uuid = function uuid() {
   return "xxxxxxxx".replace(/[xy]/g, function (c) {

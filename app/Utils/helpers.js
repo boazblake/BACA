@@ -65,16 +65,15 @@ export const _paginate = (offset) => (limit) => (data) =>
     data
   )
 
-export const filterTask = (query) => (prop) => (direction) => (offset) => (
-  limit
-) =>
-  compose(
-    Task.of,
-    map(_paginate(offset)(limit)),
-    map(_direction(direction)),
-    map(_sort(prop)),
-    _search(query)
-  )
+export const filterTask =
+  (query) => (prop) => (direction) => (offset) => (limit) =>
+    compose(
+      Task.of,
+      map(_paginate(offset)(limit)),
+      map(_direction(direction)),
+      map(_sort(prop)),
+      _search(query)
+    )
 
 export const debounce = (wait, now) => (fn) => {
   let timeout = undefined
@@ -115,6 +114,13 @@ export const jsonCopy = (src) => JSON.parse(JSON.stringify(src))
 
 export const isActiveRoute = (route) =>
   m.route.get() == route ? "is-active" : ""
+
+export const isSelectedRoute = (route) => {
+  if (m.route.get().split("/").length > 1) {
+    let cr = `/${m.route.get().split("/")[1]}`
+    return cr == route ? "is-active" : ""
+  } else return m.route.get() == route ? "is-active" : ""
+}
 
 export const uuid = () => {
   return "xxxxxxxx".replace(/[xy]/g, function (c) {

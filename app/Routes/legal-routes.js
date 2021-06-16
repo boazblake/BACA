@@ -9,7 +9,7 @@ const LegalRoutes = [
     // icon: Icons.home,
     route: "/legal",
     isNav: true,
-    group: ["navmenu", "legal"],
+    group: ["navmenu"],
     children: ["deed-restrictions", "city-ordinances"],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {

@@ -1,6 +1,7 @@
 import { AngleLine, PopOutLine } from "@mithril-icons/clarity"
 import NavLink from "Components/nav-link"
-import { log, isActiveRoute } from "Utils/index.js"
+import AuthBox from "Components/authbox"
+import { isActiveRoute } from "Utils/index.js"
 import { replaceCSS } from "Styles/animations.js"
 
 let navItemstate = {
@@ -46,7 +47,7 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
           ),
           isSelected() &&
             m(
-              `.grid show-child-routes`,
+              `.grid.col-align-bottom show-child-routes`,
               {
                 onbeforeremove: replaceCSS(
                   "show-child-routes",
@@ -56,12 +57,16 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
               childRoutes.map((r) =>
                 r.group.includes("external")
                   ? m(
-                      "li.nav-link.col-align-top",
+                      "li.nav-link",
                       m(
-                        "a.nav-link",
+                        "a",
                         { target: "_blank", href: r.external },
                         r.name,
-                        m(PopOutLine, { width: "15px" })
+                        m(PopOutLine, {
+                          margin: "8px",
+                          width: "15px",
+                          height: "15px",
+                        })
                       )
                     )
                   : m(NavItem, {
@@ -89,8 +94,6 @@ const NavModal = ({ attrs: { mdl } }) => {
         {
           oncreate: ({ dom }) => (_domOverlay = dom),
           onclick: (e) => {
-            //     log("e")(e.target)
-            //     log("dom")(_domModal)
             if ([_domModal, _domOverlay].includes(e.target))
               mdl.state.showNavModal(false)
           },
@@ -101,62 +104,8 @@ const NavModal = ({ attrs: { mdl } }) => {
             oncreate: ({ dom }) => (_domModal = dom),
             id: "nav-modal",
           },
-
           m("ul.nav", { id: "" }, [
-            mdl.state.isAuth()
-              ? [
-                  mdl.user.isAdmin &&
-                    m(NavLink, {
-                      mdl,
-                      href: `/dashboard/${mdl.user.name}`,
-                      link: "Dashboard",
-                      classList: `${isActiveRoute(
-                        `/dashboard/${mdl.user.name}`
-                      )} button`,
-                    }),
-                  m(NavLink, {
-                    state,
-                    mdl,
-                    href: `/account/${mdl.user.name}`,
-                    link: "Your Account",
-                    classList: `${isActiveRoute(
-                      `/account/${mdl.user.name}`
-                    )} button`,
-                  }),
-                  m(NavLink, {
-                    mdl,
-                    href: "/logout",
-                    link: "Logout",
-                    onclick: () => {
-                      // localStorage.clear()
-                      // sessionStorage.clear()
-                      // mdl.state.isAuth(false)
-                      // mdl.user = {}
-                      // mdl.cart = cart
-                      // m.route.set(m.route.get())
-                    },
-                    classList: "bold auth-link",
-                  }),
-                ]
-              : m(".grid", [
-                  m(NavItem, {
-                    classList: ".col",
-                    mdl,
-                    href: "/login",
-                    link: "Login",
-                    classList: `${isActiveRoute("/login")} button para`,
-                  }),
-
-                  m(NavItem, {
-                    classList: ".col",
-                    mdl,
-                    href: "/register",
-                    link: "Register",
-                    classList: `${isActiveRoute("/register")} button para`,
-                  }),
-                ]),
-
-            //create route accordian
+            m(AuthBox, { mdl }),
             routes(mdl).map((r) =>
               r.children.any()
                 ? m(NavSection, {

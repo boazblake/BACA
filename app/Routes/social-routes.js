@@ -9,7 +9,7 @@ const SocialRoutes = [
     // icon: Icons.home,
     route: "/social",
     isNav: true,
-    group: ["navbar", "social", "navmenu"],
+    group: ["navbar", "navmenu"],
     children: [
       "local-news",
       "podcast",

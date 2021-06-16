@@ -1,34 +1,67 @@
-import Hamburger from "Components/Hamburger.js"
-import { isActiveRoute } from "Utils/index.js"
+import { PopOutLine } from "@mithril-icons/clarity"
+import NavLink from "Components/nav-link.js"
+import { isActiveRoute, isSelectedRoute } from "Utils/index.js"
+import { SlideDown, SlideUp } from "Styles/animations"
 
-const NavBar = () => {
+const Navbar = () => {
+  const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
+  const subroutes = (mdl) =>
+    mdl.Routes.filter((r) => r.group.includes(mdl.state.route.id))
+
   return {
-    view: ({ attrs: { mdl } }) =>
+    view: ({ attrs: { mdl } }) => [
       m(
-        ".navbar.grid",
-        mdl.settings.screenSize !== "desktop"
-          ? m(
-              ".col",
-              {
-                onclick: () => {
-                  mdl.state.showNavModal(true)
-                  console.log(mdl.state.showNavModal())
-                },
-              },
-              m(Hamburger, {
-                mdl,
-              })
-            )
-          : m(".col", "Members"),
-        m(
-          ".col.col-grow-2",
-          m("img.nav-logo", {
-            src: "images/BonhamAcresIcon.webp",
-          })
-        ),
-        m(".col", "Safety")
+        ".navbar.grid.grid-align-center.m-8.grid-center",
+        { style: { width: "100%" } },
+        routes(mdl).map((r) =>
+          m(
+            ".col.col-middle",
+            m(NavLink, {
+              mdl,
+              href: r.route,
+              link: r.name,
+              classList: `col-align-bottom ${isActiveRoute(r.route)}`,
+            })
+          )
+        )
       ),
+      subroutes(mdl).any() &&
+        m(
+          ".sub-navbar.grid.grid-align-center.m-8.grid-center",
+          {
+            id: "sub-navbar",
+            style: { width: "100%" },
+          },
+          subroutes(mdl).map((r) =>
+            m(
+              ".col.col-bottom.col-align-bottom",
+              r.group.includes("external")
+                ? m(
+                    ".nav-link",
+                    m(
+                      "a",
+                      { target: "_blank", href: r.external },
+                      r.name,
+                      m(PopOutLine, {
+                        margin: "8px",
+                        width: "15px",
+                        height: "15px",
+                      })
+                    )
+                  )
+                : m(NavLink, {
+                    mdl,
+                    href: r.route,
+                    link: r.name,
+                    classList: `col col-middle col-align-middle ${isActiveRoute(
+                      r.route
+                    )}`,
+                  })
+            )
+          )
+        ),
+    ],
   }
 }
 
-export default NavBar
+export default Navbar

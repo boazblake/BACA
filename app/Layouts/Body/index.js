@@ -9,14 +9,17 @@ let isShowingNav = (mdl) =>
 
 let isShowingRoutes = (mdl) => mdl.settings.screenSize !== "phone"
 
+const showNavMenu = (mdl) =>
+  mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal()
+
 const getStyle = (mdl) => ({
-  marginTop: isShowingRoutes(mdl)
+  paddingTop: isShowingRoutes(mdl)
     ? isShowingNav(mdl)
-      ? "180px"
-      : "140px"
+      ? "380px"
+      : "340px"
     : isShowingNav(mdl)
-    ? "140px"
-    : "100px",
+    ? "340px"
+    : "300px",
 })
 
 const PageTitle = () => {
@@ -36,8 +39,7 @@ const Body = () => {
           style: getStyle(mdl),
         },
 
-        mdl.settings.screenSize !== "desktop" &&
-          mdl.state.showNavModal() &&
+        showNavMenu(mdl) &&
           m(NavModal, {
             oncreate: SlideInLeft,
             onbeforeremove: SlideOutRight,
