@@ -112,13 +112,6 @@ exports.npm = {
   enabled: true,
   compilers: ["babel-brunch"],
   globals: { m: "mithril", Stream: "mithril-stream" },
-  styles: {
-    "spectre.css": [
-      "dist/spectre.css",
-      "dist/spectre-exp.css",
-      "dist/spectre-icons.css",
-    ],
-  },
 }
 
 exports.server = {

@@ -1,7 +1,6 @@
 import { PopOutLine } from "@mithril-icons/clarity"
 import NavLink from "Components/nav-link.js"
-import { isActiveRoute, isSelectedRoute } from "Utils/index.js"
-import { SlideDown, SlideUp } from "Styles/animations"
+import { isActiveRoute } from "Utils/index.js"
 
 const Navbar = () => {
   const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
