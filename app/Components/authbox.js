@@ -30,19 +30,19 @@ const AuthBox = () => {
               classList: "bold auth-link hidden-xs",
             }),
           ]
-        : m(".frow hidden-xs", [
+        : m(".grid", [
             m(NavLink, {
               mdl,
               href: "/login",
               link: "Login",
-              classList: `${isActiveRoute("/login")} button auth-link`,
+              classList: `col ${isActiveRoute("/login")} button auth-link`,
             }),
 
             m(NavLink, {
               mdl,
               href: "/register",
               link: "Register",
-              classList: `${isActiveRoute("/register")} button auth-link`,
+              classList: `col ${isActiveRoute("/register")} button auth-link`,
             }),
           ]),
   }

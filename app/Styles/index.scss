@@ -204,7 +204,8 @@ a.button {
   min-height: 200px;
   color: whitesmoke;
   align-items: center;
-  border:rgb(230, 150, 2) > * a {
+  border: rgb(230, 150, 2);
+  * a > {
     margin: 4px;
     color: $dark-green;
   }

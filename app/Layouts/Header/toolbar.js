@@ -7,16 +7,13 @@ const Toolbar = () => {
       m(
         ".toolbar.grid",
         m(
-          ".col.col-grow-2",
-          m(
-            ".grid.grid-start",
-            m("img.nav-logo", {
-              src: "Images/logo.webp",
-            })
-          )
+          ".col",
+          m("img.nav-logo", {
+            src: "Images/logo.webp",
+          })
         ),
         mdl.settings.screenSize == "desktop"
-          ? m(AuthBox, { mdl })
+          ? m(".col", m(AuthBox, { mdl }))
           : m(
               ".grid.grid-end",
               {

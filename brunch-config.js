@@ -82,11 +82,11 @@ exports.plugins = {
     imageExt: ["jpg", "png", "svg"],
     tasks: [
       [
-        { resize: [1200] },
+        // { resize: [1200] },
         { ignoreAspectRatio: true },
         { toFormat: "webp" },
         { withoutEnlargement: true },
-        { quality: 95 },
+        { quality: 100 },
         { withoutAdaptiveFiltering: true },
         { optimiseScans: true },
         // { rename: "{base}-1200.{ext}" },
