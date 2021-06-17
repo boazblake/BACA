@@ -6,26 +6,26 @@ const Toolbar = () => {
     view: ({ attrs: { mdl } }) =>
       m(
         ".toolbar.grid",
+        m(
+          ".col.col-grow-2",
+          m(
+            ".grid.grid-start",
+            m("img.nav-logo", {
+              src: "images/BonhamAcresIcon.webp",
+            })
+          )
+        ),
         mdl.settings.screenSize == "desktop"
           ? m(AuthBox, { mdl })
           : m(
-              ".col",
+              ".grid.grid-end",
               {
                 onclick: () => mdl.state.showNavModal(true),
               },
               m(Hamburger, {
                 mdl,
               })
-            ),
-        m(
-          ".col.col-grow-2",
-          m(
-            ".grid.grid-end",
-            m("img.nav-logo", {
-              src: "images/BonhamAcresIcon.webp",
-            })
-          )
-        )
+            )
       ),
   }
 }

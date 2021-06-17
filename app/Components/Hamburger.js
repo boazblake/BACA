@@ -1,4 +1,4 @@
-import { BarsLine } from "@mithril-icons/clarity/cjs/index"
+import { WindowCloseLine, BarsLine } from "@mithril-icons/clarity"
 
 const Hamburger = () => {
   return {
@@ -6,9 +6,15 @@ const Hamburger = () => {
       mdl.state.isAuth()
         ? m("span", [
             m("span", `Welcome ${mdl.user.name.split(" ")[0]}`),
-            m(".icon-click", m(BarsLine)),
+            m(
+              ".icon-click.",
+              mdl.state.showNavModal() ? m(WindowCloseLine) : m(BarsLine)
+            ),
           ])
-        : m(".icon-click", m(BarsLine)),
+        : m(
+            ".icon-click.",
+            mdl.state.showNavModal() ? m(WindowCloseLine) : m(BarsLine)
+          ),
   }
 }
 

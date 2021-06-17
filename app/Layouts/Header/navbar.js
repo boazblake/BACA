@@ -11,7 +11,7 @@ const Navbar = () => {
   return {
     view: ({ attrs: { mdl } }) => [
       m(
-        ".navbar.grid.grid-align-center.m-8.grid-center",
+        ".navbar.grid.grid-align-center.grid-center.m-8",
         { style: { width: "100%" } },
         routes(mdl).map((r) =>
           m(

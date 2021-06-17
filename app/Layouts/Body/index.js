@@ -13,13 +13,13 @@ const showNavMenu = (mdl) =>
   mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal()
 
 const getStyle = (mdl) => ({
-  paddingTop: isShowingRoutes(mdl)
+  marginTop: isShowingRoutes(mdl)
     ? isShowingNav(mdl)
-      ? "380px"
-      : "340px"
+      ? "280px"
+      : "240px"
     : isShowingNav(mdl)
-    ? "340px"
-    : "300px",
+    ? "240px"
+    : "200px",
 })
 
 const PageTitle = () => {
