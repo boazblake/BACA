@@ -54,19 +54,19 @@ exports.plugins = {
     globPatterns: ["**/*.*"],
     swDest: "docs/sw.js",
   },
-  // swPrecache: {
-  //   swFileName: "service-worker.js",
-  //   options: {
-  //     autorequire: ["app/assets/index.html"],
-  //     staticFileGlobs: [
-  //       "docs/app.css",
-  //       "docs/app.js",
-  //       "docs/vendor.js",
-  //       "docs/index.html",
-  //     ],
-  //     stripPrefix: "docs/",
-  //   },
-  // },
+  swPrecache: {
+    swFileName: "service-worker.js",
+    options: {
+      autorequire: ["app/assets/index.html"],
+      staticFileGlobs: [
+        "docs/app.css",
+        "docs/app.js",
+        "docs/vendor.js",
+        "docs/index.html",
+      ],
+      stripPrefix: "docs/",
+    },
+  },
   "@babel": { presets: ["env"] },
   terser: {
     mangle: false,
