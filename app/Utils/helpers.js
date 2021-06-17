@@ -115,13 +115,6 @@ export const jsonCopy = (src) => JSON.parse(JSON.stringify(src))
 export const isActiveRoute = (route) =>
   m.route.get() == route ? "is-active" : ""
 
-export const isSelectedRoute = (route) => {
-  if (m.route.get().split("/").length > 1) {
-    let cr = `/${m.route.get().split("/")[1]}`
-    return cr == route ? "is-active" : ""
-  } else return m.route.get() == route ? "is-active" : ""
-}
-
 export const uuid = () => {
   return "xxxxxxxx".replace(/[xy]/g, function (c) {
     var r = (Math.random() * 16) | 0,

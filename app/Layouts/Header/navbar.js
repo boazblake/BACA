@@ -1,30 +1,35 @@
 import { PopOutLine } from "@mithril-icons/clarity"
 import NavLink from "Components/nav-link.js"
-import { isActiveRoute } from "Utils/index.js"
+
+const isActiveRoute = (a, b) => (a == b ? "is-active" : "")
 
 const Navbar = () => {
   const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
   const subroutes = (mdl) =>
-    mdl.Routes.filter((r) => r.group.includes(mdl.state.route.id))
-
+    mdl.Routes.filter((r) =>
+      r.group.includes(mdl.state.navState().split("/")[1])
+    )
   return {
-    view: ({ attrs: { mdl } }) => [
-      m(
-        ".navbar.grid.grid-align-center.grid-center.m-8",
-        { style: { width: "100%" } },
-        routes(mdl).map((r) =>
-          m(
-            ".col.col-middle",
-            m(NavLink, {
-              mdl,
-              href: r.route,
-              link: r.name,
-              classList: `col-align-bottom ${isActiveRoute(r.route)}`,
-            })
+    view: ({ attrs: { mdl } }) => {
+      return [
+        m(
+          ".navbar.grid.grid-align-center.grid-center.m-8",
+          { style: { width: "100%" } },
+          routes(mdl).map((r) =>
+            m(
+              ".col.col-middle",
+              m(NavLink, {
+                mdl,
+                href: r.route,
+                link: r.name,
+                classList: `col-align-bottom ${isActiveRoute(
+                  mdl.state.navState(),
+                  r.route
+                )}`,
+              })
+            )
           )
-        )
-      ),
-      subroutes(mdl).any() &&
+        ),
         m(
           ".sub-navbar.grid.grid-align-center.m-8.grid-center",
           {
@@ -53,13 +58,15 @@ const Navbar = () => {
                     href: r.route,
                     link: r.name,
                     classList: `col col-middle col-align-middle ${isActiveRoute(
+                      mdl.state.subnavState(),
                       r.route
                     )}`,
                   })
             )
           )
         ),
-    ],
+      ]
+    },
   }
 }
 

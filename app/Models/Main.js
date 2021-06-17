@@ -1,5 +1,4 @@
 import Routes from "../Routes/index.js"
-import { jsonCopy } from "Utils"
 import http from "Utils/http"
 
 const state = {
@@ -18,6 +17,8 @@ const state = {
   isAuth: Stream(false),
   navSelected: Stream(""),
   showNavModal: Stream(false),
+  navState: Stream("/home"),
+  subnavState: Stream(""),
 }
 const user = {}
 const settings = {}
