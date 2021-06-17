@@ -1,5 +1,5 @@
 import Task from "data.task"
-import { BackEndLess, Paypal, Back4App } from "../../.secrets.js"
+import { Paypal, Back4App } from "../../.secrets.js"
 
 const updatePayPalAuth = (mdl) => (paypal) => (mdl.state.paypal = paypal)
 
@@ -77,19 +77,7 @@ const lookupLocationTask = (query) => {
 
 const getTask = (mdl) => (url) => HttpTask({})("GET")(mdl)(url)(null)
 
-const backEndLessUrl = `${BackEndLess.baseUrl}/${BackEndLess.APP_ID}/${BackEndLess.API_KEY}/`
-const backEnd = {
-  unregistered: BackEndLess.unregistered,
-  getTask: (mdl) => (url) =>
-    HttpTask(BackEndLess.headers())("GET")(mdl)(backEndLessUrl + url)(null),
-  postTask: (mdl) => (url) => (dto) =>
-    HttpTask(BackEndLess.headers())("POST")(mdl)(backEndLessUrl + url)(dto),
-  putTask: (mdl) => (url) => (dto) =>
-    HttpTask(BackEndLess.headers())("PUT")(mdl)(backEndLessUrl + url)(dto),
-}
-
 const paypalUrl = `${Paypal.sandbox.baseUrl}/`
-
 const paypal = {
   getTokenTask: (mdl) =>
     HttpTask(Paypal.sandbox.headers())("POST")(mdl)(
@@ -101,15 +89,6 @@ const paypal = {
     HttpTask(Paypal.sandbox.headers(mdl))("POST")(mdl)(paypalUrl + url)(dto),
   putTask: (mdl) => (url) => (dto) =>
     HttpTask(Paypal.sandbox.headers(mdl))("PUT")(mdl)(paypalUrl + url)(dto),
-}
-
-const store = {
-  baseurl: "https://sette-bambini.herokuapp.com/",
-  getTask: (mdl) => (url) => HttpTask()("GET")(mdl)(store.baseurl + url)(null),
-  postTask: (mdl) => (url) => (dto) =>
-    HttpTask()("POST")(mdl)(store.baseurl + url)(dto),
-  putTask: (mdl) => (url) => (dto) =>
-    HttpTask()("PUT")(mdl)(store.baseurl + url)(dto),
 }
 
 const back4App = {
@@ -128,8 +107,6 @@ const back4App = {
 }
 
 const http = {
-  store,
-  backEnd,
   back4App,
   paypal,
   HttpTask,
