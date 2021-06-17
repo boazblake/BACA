@@ -11,7 +11,7 @@ const Toolbar = () => {
           m(
             ".grid.grid-start",
             m("img.nav-logo", {
-              src: "images/BonhamAcresIcon.webp",
+              src: "Images/BonhamAcresIcon.webp",
             })
           )
         ),
