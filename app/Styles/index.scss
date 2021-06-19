@@ -150,6 +150,8 @@ a.button {
 
 #body {
   margin-top: 100px;
+  background-color: white;
+  z-index: 90;
 }
 
 .bold {
@@ -248,25 +250,26 @@ h1 {
   animation: heartbeat 1.5s ease-in-out infinite both;
 }
 
+.hero {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  z-index: -1;
+  opacity: 0.8;
+  overflow: hidden;
+}
+
 #header {
   grid-area: header;
   position: fixed;
-  width: 100%;
+  width: 100vw;
+  height: 200px;
   margin: 0 auto;
   background: white;
   top: 0;
   left: 0;
   z-index: 100;
   border: #29a10a;
-}
-
-.background-header {
-  position: absolute;
-  background-image: url("images/bnp.webp");
-  width: 100vw;
-  height: 400px;
-  opacity: 0.3;
-  z-index: -1;
 }
 
 .img {
@@ -433,12 +436,21 @@ icon.icon#logo-svg {
 //   }
 // }
 
-.sub-navbar {
-  position: relative;
+#navigation {
+  position: absolute;
+  bottom: -300px;
+  background-color: white;
+  width: 100vw;
+  z-index: 200;
+  margin: 0 auto;
+}
+
+#sub-navbar {
+  position: absolute;
+  width: 100%;
   order: 2;
   background-color: white;
   height: 40px;
-  // padding-top: 10px;
 
   a {
     color: $dark-green;

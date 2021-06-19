@@ -7,19 +7,17 @@ let isShowingNav = (mdl) =>
     .children.map((r) => mdl.Routes.filter(propEq("id", r))[0])
     .any()
 
-let isShowingRoutes = (mdl) => mdl.settings.screenSize !== "phone"
+let isShowingRoutes = (mdl) => mdl.settings.screenSize == "desktop"
 
 const showNavMenu = (mdl) =>
   mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal()
 
 const getStyle = (mdl) => ({
   marginTop: isShowingRoutes(mdl)
-    ? isShowingNav(mdl)
-      ? "280px"
-      : "240px"
-    : isShowingNav(mdl)
-    ? "240px"
-    : "200px",
+    ? isShowingNav(mdl) || mdl.state.subnavState()
+      ? "700px"
+      : "700px"
+    : "550px",
 })
 
 const PageTitle = () => {

@@ -17,6 +17,7 @@ const Toolbar = () => {
           : m(
               ".grid.grid-end",
               {
+                style: { position: "absolute", top: 0, right: "10px" },
                 onclick: () => mdl.state.showNavModal(true),
               },
               m(Hamburger, {

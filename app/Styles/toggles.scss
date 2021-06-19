@@ -1,6 +1,6 @@
 @import "./colors.scss";
 
-.toggle_radio{
+.toggle_radio {
   position: relative;
   // background: $color2;
   margin: 4px auto;
@@ -16,11 +16,11 @@
 .toggle_radio > * {
   float: left;
 }
-.toggle_radio input[type=radio]{
+.toggle_radio input[type="radio"] {
   display: none;
   /*position: fixed;*/
 }
-.toggle_radio label{
+.toggle_radio label {
   // color: $color3;
   z-index: 0;
   display: block;
@@ -37,7 +37,7 @@
   /*margin: 0 2px;*/
   /*background: blue;*/ /*make it blue*/
 }
-.toggle_option_slider{
+.toggle_option_slider {
   /*display: none;*/
   /*background: red;*/
   width: 100px;
@@ -47,22 +47,22 @@
   -webkit-border-radius: 50px;
   -moz-border-radius: 50px;
   border-radius: 50px;
-  -webkit-transition: all .4s ease;
-  -moz-transition: all .4s ease;
-  -o-transition: all .4s ease;
-  -ms-transition: all .4s ease;
-  transition: all .4s ease;
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  transition: all 0.4s ease;
 }
 
-#first_toggle:checked ~ .toggle_option_slider{
+#first_toggle:checked ~ .toggle_option_slider {
   // background:$color1;
   left: 3px;
 }
-#second_toggle:checked ~ .toggle_option_slider{
+#second_toggle:checked ~ .toggle_option_slider {
   // background:$color1;
   left: 109px;
 }
-#third_toggle:checked ~ .toggle_option_slider{
+#third_toggle:checked ~ .toggle_option_slider {
   // background:$color1;
   left: 215px;
 }

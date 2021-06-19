@@ -11,8 +11,7 @@ const SocialRoutes = [
     isNav: true,
     group: ["navbar", "navmenu"],
     children: [
-      "local-news",
-      "podcast",
+      "map-of-bonham-acres",
       "blog",
       "explore",
       "photos",
@@ -92,10 +91,10 @@ const SocialRoutes = [
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
   {
-    id: "local-news",
-    name: "Local News",
+    id: "map-of-bonham-acres",
+    name: "Explore Bonham Acres",
     // icon: Icons.home,
-    route: "/social/local-news",
+    route: "/social/map",
     isNav: true,
     group: ["nav", "social"],
     children: [],
@@ -111,48 +110,6 @@ const SocialRoutes = [
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
-  {
-    id: "podcast",
-    name: "Podcast",
-    // icon: Icons.home,
-    route: "/social/podcast",
-    isNav: true,
-    group: ["nav", "social"],
-    children: [],
-    options: [],
-    onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          })
-    },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
-  },
-
-  {
-    id: "explore",
-    name: "Explore Houston",
-    // icon: Icons.home,
-    route: "/social/explore",
-    isNav: true,
-    group: ["nav", "social"],
-    children: [],
-    options: [],
-    onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          })
-    },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
-  },
-
   {
     id: "bfn-park",
     name: "Bonham Family Nature Park",
