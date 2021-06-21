@@ -4,7 +4,7 @@ import Home from "Pages/home.js"
 import About from "Pages/about.js"
 
 const Logo = m("img", {
-  src: "Images/logo.webp",
+  src: "images/logo.webp",
 })
 
 import { scrollToAnchor } from "Utils/index.js"

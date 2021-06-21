@@ -16,7 +16,7 @@ const Toolbar = () => {
           m(
             "li",
             m("img#nav-logo", {
-              src: "Images/logo.webp",
+              src: "images/logo.webp",
             })
           )
         ),
