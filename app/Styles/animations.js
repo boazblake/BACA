@@ -5,40 +5,40 @@ export const AddToCart = ({ dom }) => dom.classList.toggle("slide-out-tr")
 
 export const AddToCartOut = ({ dom }) => {
   AddToCart({ dom })
-  return new Promise(function (resolve) {
+  return new Promise((resolve) =>
     setTimeout(() => {
       resolve()
     }, 500)
-  })
+  )
 }
 
 export const replaceCSS =
   (a, b) =>
   ({ dom }) => {
     dom.classList.replace(a, b)
-    return new Promise(function (resolve) {
+    return new Promise((resolve) =>
       setTimeout(() => {
         resolve()
       }, 300)
-    })
+    )
   }
 
 export const SlideOutRight = ({ dom }) => {
   dom.classList.replace("slideInLeft", "slideOutLeft")
-  return new Promise(function (resolve) {
+  return new Promise((resolve) =>
     setTimeout(() => {
       resolve()
     }, 300)
-  })
+  )
 }
 
 export const SlideOutLeft = ({ dom }) => {
   dom.classList.replace("slideInRight", "slideOutRight")
-  return new Promise(function (resolve) {
+  return new Promise((resolve) =>
     setTimeout(() => {
       resolve()
     }, 300)
-  })
+  )
 }
 
 export const SlideDown = ({ dom }) => {
@@ -49,11 +49,11 @@ export const SlideDown = ({ dom }) => {
 
 export const SlideUp = ({ dom }) => {
   dom.classList.replace("slideInDown", "slideOutUp")
-  return new Promise(function (resolve) {
+  return new Promise((resolve) =>
     setTimeout(() => {
       resolve()
     }, 300)
-  })
+  )
 }
 
 export const SlideChildrenInRight = ({ dom }) => {

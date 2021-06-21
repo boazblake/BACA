@@ -60,4 +60,4 @@ if (sessionStorage.getItem("user")) {
   Model.state.isAuth(true)
 }
 
-m.route(root, "/about-BonHamAcres", App(Model))
+m.route(root, "/about", App(Model))

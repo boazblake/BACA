@@ -1,15 +1,24 @@
-import Header from "./Header/index.js"
-import Body from "./Body/index.js"
+import Hero from "./hero.js"
+import Navbar from "./navbar.js"
+import SubNavbar from "./subnavbar.js"
+import Main from "./main.js"
 import Footer from "./footer.js"
+import Toolbar from "./toolbar.js"
 
 const Layout = () => {
   return {
     view: ({ children, attrs: { mdl } }) =>
       m(
-        ".layout",
-        { id: "layout", role: "main" },
-        m(Header, { mdl }),
-        m(Body, { mdl, children }),
+        ".",
+        { "data-theme": "light", id: "layout", role: "main" },
+        m(Toolbar, { mdl }),
+        m(Hero, { mdl }),
+        mdl.settings.screenSize == "desktop" && [
+          m(Navbar, { mdl }),
+          m(SubNavbar, { mdl }),
+        ],
+
+        m(Main, { mdl, children }),
         m(Footer, { mdl })
       ),
   }

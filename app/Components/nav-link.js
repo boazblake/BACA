@@ -17,14 +17,15 @@ export const NavLink = () => {
       return m(
         m.route.Link,
         {
+          selector: "a",
           onclick: (e) => e.stopPropagation(),
-          style: {
-            ...handlers(["onmouseover", "onmouseout"], (e) => {
-              return e.type == "mouseover"
-                ? showBorderStyle(e.target.style)
-                : hideBorderStyle(e.target.style)
-            }),
-          },
+          // style: {
+          //   ...handlers(["onmouseover", "onmouseout"], (e) => {
+          //     return e.type == "mouseover"
+          //       ? showBorderStyle(e.target.style)
+          //       : hideBorderStyle(e.target.style)
+          //   }),
+          // },
           href,
           class: `nav-link ${classList} ${
             mdl.state.navSelected() == link ? "is-active" : ""

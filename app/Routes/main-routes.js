@@ -34,7 +34,7 @@ const Routes = [
     id: "about-us",
     name: "About Bonham Acres",
     // icon: Icons.home,
-    route: "/about-BonHamAcres",
+    route: "/about",
     isNav: true,
     group: ["navmenu"],
     children: [],
