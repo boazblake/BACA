@@ -5,7 +5,7 @@ const AuthBox = () => {
   return {
     view: ({ attrs: { mdl } }) =>
       mdl.state.isAuth()
-        ? m("ul.container", [
+        ? m("ul", [
             mdl.user.isAdmin &&
               m(
                 "li",
@@ -35,7 +35,7 @@ const AuthBox = () => {
               })
             ),
           ])
-        : m("ul.container", [
+        : m("ul", [
             m(
               "li",
               m(NavLink, {

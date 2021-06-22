@@ -34,7 +34,7 @@ const Toolbar = () => {
       m(
         "nav#toolbar.navigation",
         m(
-          "ul.container",
+          "ul",
           m(
             "li",
             m("img#nav-logo", {
@@ -45,13 +45,13 @@ const Toolbar = () => {
         mdl.settings.screenSize == "desktop"
           ? m(AuthBox, { mdl })
           : m(
-              "ul.container",
+              "ul",
               {
                 onclick: () =>
                   mdl.state.showNavModal(!mdl.state.showNavModal()),
               },
               m(
-                ".container-fluid",
+                "li",
                 m(Hamburger, {
                   mdl,
                 })

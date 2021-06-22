@@ -3,7 +3,6 @@ import Navbar from "./navbar.js"
 import SubNavbar from "./subnavbar.js"
 import Main from "./main.js"
 import Footer from "./footer.js"
-import Fab from "./fab.js"
 import NavModal from "./nav-modal.js"
 import { SlideOutRight, SlideInLeft } from "Styles/animations.js"
 import Toolbar from "./toolbar.js"
@@ -31,7 +30,6 @@ const Layout = () => {
             onbeforeremove: SlideOutRight,
             mdl,
           }),
-        m(Fab, { mdl }),
         m(Footer, { mdl })
       ),
   }
