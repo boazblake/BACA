@@ -58,11 +58,9 @@ const Hero = () => {
       state.timer && clearInterval(state.timer)
     },
     oncreate: ({ attrs: { mdl } }) => {
-      let handler = () =>
-        mdl.state.image() > images.length - 1
-          ? mdl.state.image(0)
-          : mdl.state.image(mdl.state.image() + 1)
-      state.timer = setInterval(handler, 100)
+      mdl.state.image() > images.length - 1
+        ? mdl.state.image(0)
+        : mdl.state.image(mdl.state.image() + 1)
     },
     view: ({ attrs: { mdl } }) =>
       m(
