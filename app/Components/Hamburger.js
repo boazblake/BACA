@@ -4,7 +4,7 @@ const Hamburger = () => {
   return {
     view: ({ attrs: { mdl } }) =>
       mdl.state.isAuth()
-        ? m("span", [
+        ? m("span.pointer", [
             m("span", `Welcome ${mdl.user.name.split(" ")[0]}`),
             m(
               ".icon-click.",
@@ -12,7 +12,7 @@ const Hamburger = () => {
             ),
           ])
         : m(
-            ".icon-click.",
+            "span.pointer",
             mdl.state.showNavModal() ? m(WindowCloseLine) : m(BarsLine)
           ),
   }

@@ -66,11 +66,11 @@ export const Login = () => {
       mdl.state.isLoading()
         ? "" //m(LogoLoader, { mdl })
         : m(
-            ".grid",
+            ".",
             [
               state.showErrorMsg() && m("code.warning", state.errorMsg()),
               m(
-                "form.grid",
+                "form",
                 {
                   role: "form",
                   id: "login-form",
@@ -78,8 +78,8 @@ export const Login = () => {
                 },
 
                 m(
-                  ".col",
-                  m("input.auth-input", {
+                  "",
+                  m("input", {
                     class: state.isSubmitted
                       ? state.errors.email
                         ? "has-error"
@@ -94,12 +94,11 @@ export const Login = () => {
                     },
                     value: state.data.userModel.email,
                   }),
-                  state.errors.email &&
-                    m("p.auth-input-hint", state.errors.email)
+                  state.errors.email && m("p", state.errors.email)
                 ),
                 m(
-                  ".col",
-                  m("input.auth-input", {
+                  "",
+                  m("input", {
                     class: state.isSubmitted
                       ? state.errors.password
                         ? "has-error"
@@ -114,32 +113,35 @@ export const Login = () => {
                     },
                     value: state.data.userModel.password,
                   }),
-                  state.errors.password &&
-                    m("p.auth-input-hint", state.errors.password)
+                  state.errors.password && m("p", state.errors.password)
                 )
               ),
               state.httpError && m(".toast toast-error", state.httpError),
             ],
             m(
-              "a.button.auth-btn",
+              "button",
               {
-                // type: "submit",
+                role: "button",
                 form: `login-form`,
                 onclick: () => validateForm(mdl)(state.data),
                 class: mdl.state.isLoading() && "loading",
               },
               "Login"
             ),
-            m(".auth-link", [
+            m(
+              ".auth-link",
               "Need to ",
-              m(NavLink, {
-                mdl,
-                href: "/register",
-                link: "register",
-                classList: "bold",
-              }),
-              " ?",
-            ])
+              m(
+                "u",
+                m(NavLink, {
+                  mdl,
+                  href: "/register",
+                  link: "register",
+                  classList: "",
+                })
+              ),
+              " ?"
+            )
           ),
   }
 }

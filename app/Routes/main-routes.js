@@ -14,7 +14,7 @@ const Routes = [
     id: "home",
     name: "Home",
     // icon: Icons.home,
-    route: "/",
+    route: "/about",
     isNav: true,
     group: ["toolbar"],
     children: [],

@@ -38,7 +38,6 @@ small {
 
 /* Header */
 .hero {
-  // background-image: url("images/main.webp");
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -66,6 +65,12 @@ header hgroup > :last-child {
   color: var(--h3);
 }
 header hgroup {
+  z-index: 10;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.7) 40%,
+    rgba(255, 255, 255, 0) 100%
+  );
   margin-bottom: var(--spacing);
 }
 
@@ -77,15 +82,16 @@ header hgroup {
 }
 
 #navbar {
-  top: 45px;
+  height: 100px;
+  top: 50px;
 }
 
 #sub-navbar {
-  top: 85px;
+  top: 115px;
 }
 
 #toolbar {
-  z-index: 20;
+  z-index: 60;
   height: 65px;
   // background-color: rgba(255, 255, 255, 0.1);
   #nav-logo {
@@ -95,9 +101,11 @@ header hgroup {
 
 #modal-container {
   position: fixed;
-  top: 10px;
+  top: 5px;
   width: 100vw;
+  height: 100vh;
   z-index: 50;
+  overflow: auto;
 }
 
 #fab {
@@ -109,6 +117,14 @@ header hgroup {
   height: 80px;
   // background: var(--card-background);
   box-shadow: var(--card-shadow);
+}
+
+.m-r-16 {
+  margin-right: 16px;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 /* Main */

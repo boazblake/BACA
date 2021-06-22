@@ -8,51 +8,59 @@ const AuthBox = () => {
         ? m("ul", [
             mdl.user.isAdmin &&
               m(
-                "li",
+                "li.m-r-16",
                 m(NavLink, {
                   mdl,
                   href: `/dashboard/${mdl.user.name}`,
                   link: "Dashboard",
-                  classList: `${isActiveRoute(`/dashboard/${mdl.user.name}`)}`,
+                  classList: `${isActiveRoute(
+                    `/dashboard/${mdl.user.name}`
+                  )} outline`,
                 })
               ),
             m(
-              "li",
+              "li.m-r-16",
               m(NavLink, {
                 mdl,
                 href: `/account/${mdl.user.name}`,
+                role: "button",
                 link: "Your Account",
-                classList: `${isActiveRoute(`/account/${mdl.user.name}`)}`,
+                classList: `${isActiveRoute(
+                  `/account/${mdl.user.name}`
+                )} outline`,
               })
             ),
             m(
-              "li",
+              "li.m-r-16",
               m(NavLink, {
                 mdl,
                 href: "/logout",
+                role: "button",
                 link: "Logout",
-                classList: "bold  ",
+                classList: "secondary",
               })
             ),
           ])
         : m("ul", [
             m(
-              "li",
+              "li.m-r-16",
               m(NavLink, {
                 mdl,
+                role: "button",
                 href: "/login",
                 link: "Login",
-                classList: `${isActiveRoute("/login")}`,
+                classList: `${isActiveRoute("/login")} outline`,
               })
             ),
 
             m(
-              "li",
+              "li.m-r-16",
               m(NavLink, {
                 mdl,
+                role: "button",
                 href: "/register",
                 link: "Register",
-                classList: `${isActiveRoute("/register")}`,
+                classList: `${isActiveRoute("/register")} outline secondary`,
               })
             ),
           ]),

@@ -33,10 +33,21 @@ const Toolbar = () => {
     view: ({ attrs: { mdl } }) =>
       m(
         "nav#toolbar.navigation",
+        {
+          style: {
+            "background-color": mdl.state.showNavModal()
+              ? "rgba(255, 255, 255, 1)"
+              : "rgba(255, 255, 255, 0.9)",
+          },
+        },
         m(
           "ul",
           m(
-            "li",
+            m.route.Link,
+            {
+              selector: "li.pointer",
+              onclick: () => m.route.set("/about"),
+            },
             m("img#nav-logo", {
               src: "images/logo.webp",
             })

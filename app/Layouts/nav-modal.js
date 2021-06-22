@@ -32,59 +32,52 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
   return {
     view: ({ attrs: { isSelected } }) =>
       m(
-        "table",
+        "details",
         {
           onclick: (e) => toggleRoutes(mdl)(route.id),
         },
+        m("summary", route.name),
+        // m(
+        //   "th",
+        //   m(AngleLine, {
+        //     style: { transform: `rotate(${isSelected() ? 180 : 0}deg)` },
+        //   })
+        // )
         m(
-          "thead",
-          m(
-            "tr",
-            m("th", route.name),
-            m(
-              "th",
-              m(AngleLine, {
-                style: { transform: `rotate(${isSelected() ? 180 : 0}deg)` },
-              })
-            )
-          )
-        ),
-        isSelected() &&
-          m(
-            "tbody.show-child-routes",
-            {
-              onbeforeremove: replaceCSS(
-                "show-child-routes",
-                "hide-child-routes"
-              ),
-            },
+          "ul",
+          // {
+          //   onbeforeremove: replaceCSS(
+          //     "show-child-routes",
+          //     "hide-child-routes"
+          //   ),
+          // },
 
-            childRoutes.map((r) =>
-              r.group.includes("external")
-                ? m(
-                    "tr.container",
-                    m(
-                      "a",
-                      { target: "_blank", href: r.external },
-                      r.name,
-                      m(PopOutLine, {
-                        margin: "8px",
-                        width: "15px",
-                        height: "15px",
-                      })
-                    )
-                  )
-                : m(
-                    "tr.container",
-                    m(NavItem, {
-                      mdl,
-                      href: r.route,
-                      link: r.name,
-                      classList: `p-8 -between ${isActiveRoute(r.route)}`,
+          childRoutes.map((r) =>
+            r.group.includes("external")
+              ? m(
+                  "li.container",
+                  m(
+                    "a",
+                    { target: "_blank", href: r.external },
+                    r.name,
+                    m(PopOutLine, {
+                      margin: "8px",
+                      width: "15px",
+                      height: "15px",
                     })
                   )
-            )
+                )
+              : m(
+                  "li.container",
+                  m(NavItem, {
+                    mdl,
+                    href: r.route,
+                    link: r.name,
+                    classList: `${isActiveRoute(r.route)}`,
+                  })
+                )
           )
+        )
       ),
   }
 }

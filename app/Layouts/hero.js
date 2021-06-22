@@ -52,13 +52,17 @@ const calcHeight = ({ settings: { screenSize } }) => {
   }
 }
 
+const updateBackground = (mdl) => {
+  mdl.state.image() > images.length - 1
+    ? mdl.state.image(0)
+    : mdl.state.image(mdl.state.image() + 1)
+}
+
 const Hero = () => {
   return {
-    onupdate: ({ attrs: { mdl } }) => {
-      mdl.state.image() > images.length - 1
-        ? mdl.state.image(0)
-        : mdl.state.image(mdl.state.image() + 1)
-    },
+    onremove: () => clearInterval(updateBackground),
+    oncreate: ({ attrs: { mdl } }) =>
+      setInterval(() => updateBackground(mdl), 500),
     view: ({ attrs: { mdl } }) =>
       m(
         "section.hero",
@@ -66,15 +70,14 @@ const Hero = () => {
           src: images[mdl.state.image()],
           style: { height: calcHeight(mdl) },
         }),
-        m("header", [
+        m(
+          "header",
           m(
             "hgroup",
-            {
-              style: { zIndex: 10, backgroundColor: "rgba(255,255,255, 0.7)" },
-            },
-            [m("h1", "Bonham Acres"), m("h2", "Houstons best kept secret")]
-          ),
-        ])
+            m("h1", "Bonham Acres"),
+            m("h2", "Houstons best kept secret")
+          )
+        )
       ),
   }
 }

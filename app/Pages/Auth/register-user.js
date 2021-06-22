@@ -67,7 +67,7 @@ const RegisterUser = () => {
       mdl.state.isLoading()
         ? "" // m(LogoLoader, { mdl })
         : [
-            m("input.auth-input", {
+            m("input", {
               class: isSubmitted
                 ? errors.name
                   ? "has-error"
@@ -79,9 +79,9 @@ const RegisterUser = () => {
               onkeyup: (e) => (data.name = e.target.value),
               value: data.name,
             }),
-            errors.name && m("p.auth-input-hint", errors.name),
+            errors.name && m("p", errors.name),
 
-            m("input.auth-input", {
+            m("input", {
               class: isSubmitted
                 ? errors.email
                   ? "has-error"
@@ -93,9 +93,9 @@ const RegisterUser = () => {
               onkeyup: (e) => (data.email = e.target.value),
               value: data.email,
             }),
-            errors.email && m("p.auth-input-hint", errors.email),
+            errors.email && m("p", errors.email),
 
-            m("input.auth-input", {
+            m("input", {
               id: "confirmEmail",
               class: isSubmitted
                 ? errors.confirmEmail
@@ -107,9 +107,9 @@ const RegisterUser = () => {
               onkeyup: (e) => (data.confirmEmail = e.target.value),
               value: data.confirmEmail,
             }),
-            errors.confirmEmail && m("p.auth-input-hint", errors.confirmEmail),
+            errors.confirmEmail && m("p", errors.confirmEmail),
 
-            m("input.auth-input", {
+            m("input", {
               class: isSubmitted
                 ? errors.password
                   ? "has-error"
@@ -121,9 +121,9 @@ const RegisterUser = () => {
               onkeyup: (e) => (data.password = e.target.value),
               value: data.password,
             }),
-            errors.password && m("p.auth-input-hint", errors.password),
+            errors.password && m("p", errors.password),
 
-            m("input.auth-input", {
+            m("input", {
               class: isSubmitted
                 ? errors.confirmPassword
                   ? "has-error"
@@ -135,8 +135,7 @@ const RegisterUser = () => {
               onkeyup: (e) => (data.confirmPassword = e.target.value),
               value: data.confirmPassword,
             }),
-            errors.confirmPassword &&
-              m("p.auth-input-hint", errors.confirmPassword),
+            errors.confirmPassword && m("p", errors.confirmPassword),
           ],
   }
 }
@@ -145,10 +144,10 @@ export const Register = () => {
   return {
     onremove: () => resetState(),
     view: ({ attrs: { mdl } }) => [
-      m(".frow", [
+      m("", [
         state.showErrorMsg() && m("code.warning", state.errorMsg()),
         m(
-          "form.frow",
+          "form",
           {
             role: "form",
             id: "register-form",
@@ -162,7 +161,7 @@ export const Register = () => {
               isSubmitted: state.isSubmitted,
             }),
             m(
-              "a.button.auth-btn",
+              "button",
               {
                 form: `register-form`,
                 onclick: () => validateForm(mdl)(state.data),
@@ -172,12 +171,15 @@ export const Register = () => {
             ),
             m(".auth-link", [
               "Need to ",
-              m(NavLink, {
-                mdl,
-                href: "/login",
-                link: "Login",
-                classList: "bold",
-              }),
+              m(
+                "u",
+                m(NavLink, {
+                  mdl,
+                  href: "/login",
+                  link: "Login",
+                  classList: "",
+                })
+              ),
               " ?",
             ]),
           ]
