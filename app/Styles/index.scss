@@ -6,6 +6,26 @@
   --block-round: 0;
 }
 
+*,
+*:before,
+*:after {
+  box-sizing: border-box !important;
+}
+
+body,
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  max-height: 90vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+}
+
 /* Typography */
 h2,
 h3,
@@ -75,7 +95,7 @@ header hgroup {
 
 #modal-container {
   position: fixed;
-  top: 0;
+  top: 10px;
   width: 100vw;
   z-index: 50;
 }

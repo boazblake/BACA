@@ -14,7 +14,7 @@ const Layout = () => {
   return {
     view: ({ children, attrs: { mdl } }) =>
       m(
-        ".",
+        "#layout",
         { "data-theme": "light", id: "layout", role: "main" },
         m(Toolbar, { mdl }),
         m(Hero, { mdl }),

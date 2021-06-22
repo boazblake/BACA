@@ -54,10 +54,7 @@ const calcHeight = ({ settings: { screenSize } }) => {
 
 const Hero = () => {
   return {
-    onremove: ({ attrs: { mdl } }) => {
-      state.timer && clearInterval(state.timer)
-    },
-    oncreate: ({ attrs: { mdl } }) => {
+    onupdate: ({ attrs: { mdl } }) => {
       mdl.state.image() > images.length - 1
         ? mdl.state.image(0)
         : mdl.state.image(mdl.state.image() + 1)
