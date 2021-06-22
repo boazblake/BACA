@@ -1,5 +1,3 @@
-import Toolbar from "./toolbar.js"
-
 const images = [
   "images/IMG_4029.webp",
   "images/IMG_3989.webp",
@@ -43,8 +41,15 @@ const images = [
   "images/IMG_4028.webp",
 ]
 
-const state = {
-  timer: null,
+const calcHeight = ({ settings: { screenSize } }) => {
+  switch (screenSize) {
+    case "desktop":
+      return "540px"
+    case "tablet":
+      return "340px"
+    case "phone":
+      return "340px"
+  }
 }
 
 const Hero = () => {
@@ -54,27 +59,24 @@ const Hero = () => {
     },
     oncreate: ({ attrs: { mdl } }) => {
       let handler = () =>
-        mdl.state.image() > images.length
+        mdl.state.image() > images.length - 1
           ? mdl.state.image(0)
           : mdl.state.image(mdl.state.image() + 1)
       state.timer = setInterval(handler, 100)
     },
     view: ({ attrs: { mdl } }) =>
       m(
-        ".hero",
-        {
-          style: {
-            "background-image": `url(${images[mdl.state.image()]})`,
-            height: "50vh",
-            // "background-size":
-            // mdl.settings.screenSize == "desktop" ? "cover" : "contain",
-          },
-        },
-        m(Toolbar, { mdl }),
+        "section.hero",
+        m("img.hero-img", {
+          src: images[mdl.state.image()],
+          style: { height: calcHeight(mdl) },
+        }),
         m("header", [
           m(
             "hgroup",
-            { style: { backgroundColor: "rgba(255,255,255, 0.3)" } },
+            {
+              style: { zIndex: 10, backgroundColor: "rgba(255,255,255, 0.7)" },
+            },
             [m("h1", "Bonham Acres"), m("h2", "Houstons best kept secret")]
           ),
         ])

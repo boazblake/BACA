@@ -20,6 +20,8 @@ const state = {
   navState: Stream("/home"),
   subnavState: Stream(""),
   image: Stream(0),
+  fab: Stream(0),
+  swiper: null,
 }
 const user = {}
 const settings = {}

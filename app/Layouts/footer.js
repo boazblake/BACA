@@ -3,7 +3,7 @@ import { isActiveRoute } from "Utils/index.js"
 
 const Footer = () => {
   return {
-    view: ({ attrs: { mdl } }) => m("footer.containe-fluid", "footer"),
+    view: ({ attrs: { mdl } }) => m("footer.container-fluid", "footer"),
   }
 }
 

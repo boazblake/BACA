@@ -36,7 +36,7 @@ const Main = () => {
           show: ![undefined, "/"].includes(m.route.get()),
           name: mdl.state.route.name,
         }),
-        m(".frow centered-column items-stretch", children)
+        children
       ),
   }
 }

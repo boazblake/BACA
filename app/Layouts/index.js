@@ -3,6 +3,13 @@ import Navbar from "./navbar.js"
 import SubNavbar from "./subnavbar.js"
 import Main from "./main.js"
 import Footer from "./footer.js"
+import Fab from "./fab.js"
+import NavModal from "./nav-modal.js"
+import { SlideOutRight, SlideInLeft } from "Styles/animations.js"
+import Toolbar from "./toolbar.js"
+
+const showNavMenu = (mdl) =>
+  mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal()
 
 const Layout = () => {
   return {
@@ -10,6 +17,7 @@ const Layout = () => {
       m(
         ".",
         { "data-theme": "light", id: "layout", role: "main" },
+        m(Toolbar, { mdl }),
         m(Hero, { mdl }),
         mdl.settings.screenSize == "desktop" && [
           m(Navbar, { mdl }),
@@ -17,6 +25,13 @@ const Layout = () => {
         ],
 
         m(Main, { mdl, children }),
+        showNavMenu(mdl) &&
+          m(NavModal, {
+            oncreate: SlideInLeft,
+            onbeforeremove: SlideOutRight,
+            mdl,
+          }),
+        m(Fab, { mdl }),
         m(Footer, { mdl })
       ),
   }

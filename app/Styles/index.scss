@@ -18,14 +18,22 @@ small {
 
 /* Header */
 .hero {
-  background-image: url("images/main.webp");
+  // background-image: url("images/main.webp");
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-position: center center;
   background-attachment: fixed;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 100% auto;
+}
+
+.hero-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 540px;
+  width: 100vw;
 }
 
 header {
@@ -42,13 +50,14 @@ header hgroup {
 }
 
 .navigation {
+  z-index: 10;
   position: sticky;
   top: 0;
   background-color: rgba(255, 255, 255, 0.9);
 }
 
 #sub-navbar {
-  top: 45px;
+  top: 85px;
 }
 
 #toolbar {
@@ -60,8 +69,23 @@ header hgroup {
 }
 
 #modal-container {
-  position: absolute;
+  position: fixed;
+  top: 0;
   width: 100vw;
+}
+
+#nav-modal {
+}
+
+#fab {
+  position: fixed;
+  bottom: 100px;
+  right: 0;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  // background: var(--card-background);
+  box-shadow: var(--card-shadow);
 }
 
 /* Main */
