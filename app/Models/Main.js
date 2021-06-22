@@ -19,6 +19,7 @@ const state = {
   showNavModal: Stream(false),
   navState: Stream("/home"),
   subnavState: Stream(""),
+  image: Stream(0),
 }
 const user = {}
 const settings = {}

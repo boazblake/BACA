@@ -3,7 +3,6 @@ import Navbar from "./navbar.js"
 import SubNavbar from "./subnavbar.js"
 import Main from "./main.js"
 import Footer from "./footer.js"
-import Toolbar from "./toolbar.js"
 
 const Layout = () => {
   return {
@@ -11,7 +10,6 @@ const Layout = () => {
       m(
         ".",
         { "data-theme": "light", id: "layout", role: "main" },
-        m(Toolbar, { mdl }),
         m(Hero, { mdl }),
         mdl.settings.screenSize == "desktop" && [
           m(Navbar, { mdl }),

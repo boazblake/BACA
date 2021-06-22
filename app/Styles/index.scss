@@ -18,11 +18,16 @@ small {
 
 /* Header */
 .hero {
-  background-color: #394046;
   background-image: url("images/main.webp");
-  background-position: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   background-size: cover;
 }
+
 header {
   display: flex;
   flex-direction: column;
