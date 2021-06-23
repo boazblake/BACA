@@ -90,7 +90,7 @@ const NavModal = ({ attrs: { mdl } }) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "article#modal-container.animated",
+        "article#nav-modal-container.animated",
         {
           oncreate: ({ dom }) => (_domOverlay = dom),
           onclick: (e) => {

@@ -99,7 +99,21 @@ header hgroup {
   }
 }
 
-#modal-container {
+.modal-container {
+  position: fixed;
+  top: 5%;
+  left: 10%;
+  width: 80vw;
+  height: 100vh;
+  z-index: 50;
+  overflow: auto;
+
+  > article {
+    height: 500px;
+  }
+}
+
+#nav-modal-container {
   position: fixed;
   top: 5px;
   width: 100vw;

@@ -1,1 +1,4253 @@
-!function(){"use strict";var globals="undefined"==typeof global?self:global;if("function"!=typeof globals.require){var modules={},cache={},aliases={},has={}.hasOwnProperty,expRe=/^\.\.?(\/|$)/,expand=function(root,name){for(var part,results=[],parts=(expRe.test(name)?root+"/"+name:name).split("/"),i=0,length=parts.length;i<length;i++)".."===(part=parts[i])?results.pop():"."!==part&&""!==part&&results.push(part);return results.join("/")},dirname=function(path){return path.split("/").slice(0,-1).join("/")},initModule=function(name,definition){var path,module={id:name,exports:{},hot:hmr&&hmr.createHot(name)};return cache[name]=module,definition(module.exports,(path=name,function(name){var absolute=expand(dirname(path),name);return globals.require(absolute,path)}),module),module.exports},expandAlias=function(name){var val=aliases[name];return val&&name!==val?expandAlias(val):name},require=function(name,loaderPath){null==loaderPath&&(loaderPath="/");var path=expandAlias(name);if(has.call(cache,path))return cache[path].exports;if(has.call(modules,path))return initModule(path,modules[path]);throw new Error("Cannot find module '"+name+"' from '"+loaderPath+"'")};require.alias=function(from,to){aliases[to]=from};var extRe=/\.[^.\/]+$/,indexRe=/\/index(\.[^\/]+)?$/;require.register=require.define=function(bundle,fn){if(bundle&&"object"==typeof bundle)for(var key in bundle)has.call(bundle,key)&&require.register(key,bundle[key]);else modules[bundle]=fn,delete cache[bundle],function(bundle){if(extRe.test(bundle)){var alias=bundle.replace(extRe,"");has.call(aliases,alias)&&aliases[alias].replace(extRe,"")!==alias+"/index"||(aliases[alias]=bundle)}if(indexRe.test(bundle)){var iAlias=bundle.replace(indexRe,"");has.call(aliases,iAlias)||(aliases[iAlias]=bundle)}}(bundle)},require.list=function(){var list=[];for(var item in modules)has.call(modules,item)&&list.push(item);return list};var hmr=globals._hmr&&new globals._hmr((function(name,dep){return expandAlias(expand(dirname(name),dep))}),require,modules,cache);require._cache=cache,require.hmr=hmr&&hmr.wrap,require.brunch=!0,globals.require=require}}(),function(){"undefined"==typeof window||window;require.register("Components/Hamburger.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _clarity=require("@mithril-icons/clarity"),_default=function(){return{view:function(_ref){var mdl=_ref.attrs.mdl;return mdl.state.isAuth()?m("span.pointer",[m("span","Welcome ".concat(mdl.user.name.split(" ")[0])),m(".icon-click.",mdl.state.showNavModal()?m(_clarity.WindowCloseLine):m(_clarity.BarsLine))]):m("span.pointer",mdl.state.showNavModal()?m(_clarity.WindowCloseLine):m(_clarity.BarsLine))}}};exports.default=_default})),require.register("Components/Modal.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _animations=require("Styles/animations"),_default={oncreate:_animations.SlideInLeft,onbeforeremove:_animations.SlideOutRight,view:function(_ref){var _ref$attrs=_ref.attrs,classList=_ref$attrs.classList,isActive=_ref$attrs.isActive,close=_ref$attrs.close,title=_ref$attrs.title,content=_ref$attrs.content,footer=_ref$attrs.footer;return console.log("MODAL",classList,isActive,close,title,content,footer),m("section.modal.".concat(classList),{class:isActive?"active":"",id:"modal"},[m("a.modal-overlay",{"aria-label":"Close",onclick:function(){return close()}}),m(".modal-container",{role:"document"},[m(".modal-header",[m("a.btn btn-clear float-right",{id:"modal-close","aria-label":"Close",onclick:function(){return close()}}),m(".modal-title h3",title)]),m(".modal-body",m(".content",content)),m(".modal-footer",footer)])])}};exports.default=_default})),require.register("Components/Selector.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _storage=require("Utils/storage"),_animations=require("Styles/animations"),_default=function(){var state={error:Stream(null)},ResetState=function(){state.quantity=null,state.gender="Gender"},saveToStorage=function(mdl){(0,_storage.saveStorageTask)(mdl)("sb-cart")(mdl.cart).fork((function(e){console.log("Error saving",e.message),state.error(e.message)}),(function(s){ResetState()}))};return{oninit:function(){return ResetState()},view:function(_ref){var _ref$attrs=_ref.attrs,mdl=_ref$attrs.mdl,product=_ref$attrs.product;return m(".frow",m(".frow content-center gutters row-between pt-20 md-columns",[state.error()&&m("code.warning",state.error()),m(".col-xs-1-3.col-md-1-4",m("h2.pb-10","$".concat(mdl.state.prices[product]))),m(".col-xs-1-3.col-md-1-4",m("label",m("input",{type:"number",inputmode:"numeric",pattern:"[0-9]*",placeholder:"quantity",value:state.quantity,oninput:function(e){return state.quantity=e.target.value}}))),m(".col-xs-1-3.col-md-1-4",m("label",m("select",{value:state.gender,onchange:function(e){return state.gender=e.target.value}},[m("option",{value:null},"Gender"),m("option",{value:"Male"},"Male"),m("option",{value:"Female"},"Female"),m("option",{value:"Unisex"},"Unisex")]))),mdl.addToCart.show()==product&&m(".animated",{oncreate:_animations.AddToCartOut,id:"add-to-cart-img",style:{"background-image":"url(".concat(mdl.addToCart.id(),")")}}),m(".col-xs-1",m("button.width-100",{disabled:null==state.quantity||"Gender"==state.gender,onclick:function(){return function(mdl){return function(product){return function(state){mdl.addToCart.show(product),mdl.cart[product][state.gender]+=parseInt(state.quantity),saveToStorage(mdl)}}}(mdl)(product)(state)}},"Add To Bag"))]))}}};exports.default=_default})),require.register("Components/authbox.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var obj,_navLink=(obj=require("Components/nav-link.js"))&&obj.__esModule?obj:{default:obj},_index=require("Utils/index.js");var _default=function(){return{view:function(_ref){var mdl=_ref.attrs.mdl;return mdl.state.isAuth()?m("ul",[mdl.user.isAdmin&&m("li.m-r-16",m(_navLink.default,{mdl:mdl,href:"/dashboard/".concat(mdl.user.name),link:"Dashboard",classList:"".concat((0,_index.isActiveRoute)("/dashboard/".concat(mdl.user.name))," outline")})),m("li.m-r-16",m(_navLink.default,{mdl:mdl,href:"/account/".concat(mdl.user.name),role:"button",link:"Your Account",classList:"".concat((0,_index.isActiveRoute)("/account/".concat(mdl.user.name))," outline")})),m("li.m-r-16",m(_navLink.default,{mdl:mdl,href:"/logout",role:"button",link:"Logout",classList:"secondary"}))]):m("ul",[m("li.m-r-16",m(_navLink.default,{mdl:mdl,role:"button",href:"/login",link:"Login",classList:"".concat((0,_index.isActiveRoute)("/login")," outline")})),m("li.m-r-16",m(_navLink.default,{mdl:mdl,role:"button",href:"/register",link:"Register",classList:"".concat((0,_index.isActiveRoute)("/register")," outline secondary")}))])}}};exports.default=_default})),require.register("Components/carousel.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var Indicators={view:function(_ref){var _ref$attrs=_ref.attrs,ident=_ref$attrs.ident,state=_ref$attrs.state,children=_ref.children;return m(".frow row-between",children.map((function(src,idx){return m(".clickable.carousel-indicator",{id:"".concat(ident,"-").concat(idx),onclick:function(e){state.prevIdx(state.currentIdx()),state.currentIdx(idx),state.currentId(ident),state.currentEl(e.composedPath()[3].children[0].children[state.currentIdx()])}},m("img.carousel-slide",{class:state.currentIdx()==idx?"is-active":"",src:src,id:"".concat(ident,"-").concat(idx)}))})))}},_default=function(){var state={currentIdx:Stream(0),currentId:Stream(""),currentEl:Stream(null),prevIdx:Stream(0),indicators:Stream([]),coords:Stream({x:null,y:null})},distanceToNext=function(dom){return state.currentIdx()-state.prevIdx()>=0?Array.from(dom.children).slice(state.prevIdx(),state.currentIdx()).reduce((function(acc,c){return acc+c.clientWidth}),0):1+~Array.from(dom.children).slice(state.currentIdx(),state.prevIdx()).reduce((function(acc,c){return acc+c.clientWidth}),0)},intersectionObserver=new IntersectionObserver((function(entries,_){entries.forEach((function(entry){var target=entry.target,indicatorId=target.getAttribute("id"),indicator=state.indicators()[indicatorId];entry.intersectionRatio>=.25?(target.classList.add("is-active"),null==indicator||indicator.classList.add("is-active")):(target.classList.remove("is-active"),null==indicator||indicator.classList.remove("is-active"))}))})),mutationObserver=new MutationObserver((function(entry){console.log(entry)}));return{view:function(_ref2){var children=_ref2.children,ident=_ref2.attrs.ident;return m(".carousel-container",{oncreate:function(_ref3){var dom=_ref3.dom;state.indicators(dom.children[1].children),state.currentEl(dom.children[0].children[state.currentIdx()]),state.coords(dom.getBoundingClientRect()),intersectionObserver.observe(dom),mutationObserver.observe(dom,{childList:!0,subTree:!0,characterDataOldValue:!0})}},m(".carousel-wrapper.width-100",{id:ident,ontouchend:function(e){e.preventDefault(),state.prevIdx(state.currentIdx()),setTimeout((function(){var el=document.elementFromPoint(state.coords().x,state.coords().y),idx=el.getAttribute("id")&&parseInt(el.getAttribute("id").split("-")[1]);state.currentIdx(idx),state.currentId("".concat(ident,"-").concat(idx)),state.currentEl(el),m.redraw()}),1e3)},onupdate:function(_ref4){var dom=_ref4.dom;state.currentEl(dom.children[state.currentIdx()]),state.currentEl()instanceof Element&&intersectionObserver.observe(state.currentEl()),dom.id==state.currentId()&&dom.scrollTo({left:dom.scrollLeft+distanceToNext(dom),behavior:"smooth"})}},children.map((function(src,idx){return m("img.carousel-slide",{src:src,id:"".concat(ident,"-").concat(idx)})}))),m(Indicators,{ident:ident,state:state},children))}}};exports.default=_default})),require.register("Components/grid.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var Fig={view:function(_ref){var children=_ref.children,id=_ref.attrs.id;return m("figure#".concat(id,"-slidy"),{"flex-direction":"column","justify-content":"center","scroll-snap-align":"start"},children)}},_default={onremove:function(){},view:function(_ref2){var obj,key,value,children=_ref2.children,_ref2$attrs=_ref2.attrs,id=_ref2$attrs.id;_ref2$attrs.maxheight,_ref2$attrs.height,_ref2$attrs.overflow,_ref2$attrs.mdl;return m("frow-row",{style:(obj={width:"80%","scroll-snap-type":" mandatory","scroll-snap-points-y":" repeat(3rem)"},key="scroll-snap-type",value=" x mandatory",key in obj?Object.defineProperty(obj,key,{value:value,enumerable:!0,configurable:!0,writable:!0}):obj[key]=value,obj)},children.map((function(child){return m(Fig,{id:id},child)})))}};exports.default=_default})),require.register("Components/nav-link.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=exports.NavLink=void 0;var _excluded=["mdl","href","link","classList"];function ownKeys(object,enumerableOnly){var keys=Object.keys(object);if(Object.getOwnPropertySymbols){var symbols=Object.getOwnPropertySymbols(object);enumerableOnly&&(symbols=symbols.filter((function(sym){return Object.getOwnPropertyDescriptor(object,sym).enumerable}))),keys.push.apply(keys,symbols)}return keys}function _objectWithoutProperties(source,excluded){if(null==source)return{};var key,i,target=function(source,excluded){if(null==source)return{};var key,i,target={},sourceKeys=Object.keys(source);for(i=0;i<sourceKeys.length;i++)key=sourceKeys[i],excluded.indexOf(key)>=0||(target[key]=source[key]);return target}(source,excluded);if(Object.getOwnPropertySymbols){var sourceSymbolKeys=Object.getOwnPropertySymbols(source);for(i=0;i<sourceSymbolKeys.length;i++)key=sourceSymbolKeys[i],excluded.indexOf(key)>=0||Object.prototype.propertyIsEnumerable.call(source,key)&&(target[key]=source[key])}return target}function _defineProperty(obj,key,value){return key in obj?Object.defineProperty(obj,key,{value:value,enumerable:!0,configurable:!0,writable:!0}):obj[key]=value,obj}var NavLink=function(){return{view:function(_ref){var _ref$attrs=_ref.attrs,mdl=_ref$attrs.mdl,href=_ref$attrs.href,link=_ref$attrs.link,classList=_ref$attrs.classList,rest=_objectWithoutProperties(_ref$attrs,_excluded);return m(m.route.Link,function(target){for(var i=1;i<arguments.length;i++){var source=null!=arguments[i]?arguments[i]:{};i%2?ownKeys(Object(source),!0).forEach((function(key){_defineProperty(target,key,source[key])})):Object.getOwnPropertyDescriptors?Object.defineProperties(target,Object.getOwnPropertyDescriptors(source)):ownKeys(Object(source)).forEach((function(key){Object.defineProperty(target,key,Object.getOwnPropertyDescriptor(source,key))}))}return target}({selector:"a",onclick:function(e){return e.stopPropagation()},href:href,class:"nav-link ".concat(classList," ").concat(mdl.state.navSelected()==link?"is-active":"")},rest),link)}}};exports.NavLink=NavLink;var _default=NavLink;exports.default=_default})),require.register("Components/orders.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.Orders=void 0;var _Utils=require("Utils"),_cjs=require("@mithril-icons/clarity/cjs"),_ramda=require("ramda"),state={invoices:[]},calcProductPrice=function(_ref,product){var prices=_ref.prices,cart=_ref.cart;return parseInt(prices[product])*Object.values(cart[product]).reduce(_ramda.add,0)},calcTotalPrice=function(invoice){return Object.keys(invoice.cart).map((function(product){return calcProductPrice(invoice,product)})).reduce(_ramda.add,0)},fetchInvoicesTask=function(mdl){return mdl.http.back4App.getTask(mdl)(function(mdl){var userInvoices='{"userId":"'.concat(mdl.user.objectId,'"}');return"dashboard"==mdl.state.route.id?"classes/Invoices":"classes/Invoices?where=".concat(encodeURI(userInvoices))}(mdl)).map((0,_ramda.prop)("results")).map((0,_ramda.map)((0,_ramda.assoc)("isSelected",!1)))},fetchInvoices=function(_ref2){var mdl=_ref2.attrs.mdl;return fetchInvoicesTask(mdl).fork(function(mdl){return function(e){return log("e")([e,mdl])}}(mdl),(function(invoices){return state.invoices=invoices}))},InvoiceCell=function(){return{view:function(_ref3){var screenSize=_ref3.attrs.mdl.settings.screenSize,children=_ref3.children;return"phone"==screenSize?m("tr",[m("td",{style:{width:"25%"}},m("label",children[0].key)),children]):m("td",{style:{width:"20%"}},children)}}},Invoice=function(_ref4){var mdl=_ref4.attrs.mdl;return{view:function(_ref5){var invoice=_ref5.attrs.invoice;return[m("tr",m(InvoiceCell,{mdl:mdl},m("",{key:"Date"},(0,_Utils.formatDate)(invoice.purchaseTime))),m(InvoiceCell,{mdl:mdl},m("",{key:"Order Id"},invoice.orderID)),m(InvoiceCell,{mdl:mdl},m("",{key:"Name"},"".concat(invoice.shippingDestination.name.full_name," "))),m(InvoiceCell,{mdl:mdl},m("",{key:"Payment Status"},invoice.status)),m(InvoiceCell,{mdl:mdl},m("",{key:"Shipping Status",style:{width:"100%",borderBottom:"1px solid gold"}},invoice.shippingStatus?m("a",{href:invoice.shippingStatus},"Shipping Status"):m("p","Prepparing your order"))),m("td",m(_cjs.AngleLine,{class:"clickable ".concat(!invoice.isSelected&&"point-down"),onclick:function(){return invoice.isSelected=!invoice.isSelected},width:"16px"}))),invoice.isSelected&&m("td",{colspan:5,style:{width:"100%"}},m("tr",m("td",m("label","Shipping Destination"),"".concat(invoice.shippingDestination.address.address_line_1," ").concat(invoice.shippingDestination.address.admin_area_2," ").concat(invoice.shippingDestination.address.admin_area_1," ").concat(invoice.shippingDestination.address.postal_code)),"dashboard"==mdl.state.route.id&&m("td",m("button","Update Shipping Status"))),m("table",{style:{width:"100%",borderBottom:"1px solid gold"}},[m("thead",m("tr",[m("th","Product"),m("th","Quantities"),m("th","Unit Price"),m("th","Unit Total")])),m("tbody",Object.keys(invoice.cart).map((function(product){return m("tr",[m("td",product),m("td",JSON.stringify(invoice.cart[product])),m("td",invoice.prices[product]),m("td",calcProductPrice(invoice,product))])})),m("tr",m("th","Order Total"),m("th",calcTotalPrice(invoice))))]))]}}};exports.Orders=function(){return{onremove:state={invoices:[]},oninit:fetchInvoices,view:function(_ref6){var mdl=_ref6.attrs.mdl;return m("section.overflow-auto",{style:{minWidth:"100%",height:"75vh"}},state.invoices.any()?m("table.dash-table","phone"!=mdl.settings.screenSize&&m("thead.dash-nav",m("tr.mb-5",[m("th","Date"),m("th","Order Id"),m("th","Name"),m("th","Payment Status"),m("th","Shipping Status"),m("th")])),m("tbody",state.invoices.map((function(invoice){return m(Invoice,{mdl:mdl,invoice:invoice})})))):m("h2","No Orders"))}}}})),require.register("Components/paypal.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.PayPal=void 0;var obj,_data=(obj=require("data.task"))&&obj.__esModule?obj:{default:obj},_Utils=require("Utils"),_Models=require("Models");var setTempUser=function(user){return sessionStorage.setItem("sb-user-token",user.sessionToken)},unSetTempUser=function(){return sessionStorage.clear()},addInvoiceTask=function(mdl){return function(invoice){return(0,_Utils.log)("addInvoiceTask")(invoice),mdl.state.isAuth()?saveInvoiceTask(mdl)(invoice):function(mdl){return function(invoice){return mdl.http.back4App.postTask(mdl)("login")({username:mdl.http.back4App.unregistered.email,password:btoa(mdl.http.back4App.unregistered.password)}).map(setTempUser).chain((function(_){return saveInvoiceTask(mdl)(invoice)})).map(unSetTempUser)}}(mdl)(invoice)}},saveInvoiceTask=function(mdl){return function(invoice){return mdl.http.back4App.postTask(mdl)("classes/Invoices")(invoice)}};exports.PayPal=function(){return{view:function(_ref3){var _ref3$attrs=_ref3.attrs,mdl=_ref3$attrs.mdl,state=_ref3$attrs.state;return m(".",{style:{maxHeight:"500px",overflowY:"auto",minWidth:"400px"},oncreate:function(_ref4){var dom=_ref4.dom;return paypal.Buttons({createOrder:function(_,actions){return actions.order.create({purchase_units:[{amount:{value:(0,_Utils.getTotal)(mdl,(0,_Utils.toProducts)(mdl.cart))}}]})},onApprove:function(data,actions){return state.isPaying="start",(0,_Utils.log)("onapprove")(JSON.stringify(state)),function(actions){return(0,_Utils.log)("makePaymentTask")(actions),new _data.default((function(rej,res){return actions.order.capture().then(res,rej)}))}(actions).map((_ref=mdl,user=_ref.user,cart=_ref.cart,prices=_ref.state.prices,function(_ref2){var orderID=_ref2.orderID,payerID=_ref2.payerID;return function(details){return(0,_Utils.log)("formatInvoice")(user),{userId:user.objectId,orderID:orderID,payerID:payerID,purchaseTime:details.create_time,status:details.status,customer:details.payer,shippingDestination:details.purchase_units[0].shipping,cart:cart,prices:prices}}})(data)).chain(addInvoiceTask(mdl)).chain(function(mdl){return function(_){return(0,_Utils.log)("updateCartTask")(),mdl.cart=(0,_Utils.jsonCopy)(_Models.newCart),(0,_Utils.saveStorageTask)(mdl)("sb-cart")(mdl.cart)}}(mdl)).fork(function(state){return function(error){(0,_Utils.log)("state")(state),state.error=error,setTimeout((function(){return state.isPaying="failed"})),console.log("error",error)}}(state),function(mdl,state){return function(_){console.log("succc",state,_),setTimeout((function(){return state.isPaying="success"}))}}(0,state));var _ref,user,cart,prices}}).render(dom)}})}}}})),require.register("Layouts/ProgressBar.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _default=function(){return{view:function(_ref){var _ref$attrs$mdl$state$=_ref.attrs.mdl.state.loadingProgress,value=_ref$attrs$mdl$state$.value,max=_ref$attrs$mdl$state$.max;return m(".progress-bar",m("progress.progress-bar",{id:"progressbar",value:value?value():0,max:max?max():0}))}}};exports.default=_default})),require.register("Layouts/fab.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var obj,_Hamburger=(obj=require("Components/Hamburger.js"))&&obj.__esModule?obj:{default:obj};var _default=function(){return{view:function(_ref){var mdl=_ref.attrs.mdl;return console.log("FAB",mdl.state.fab()),m("button#fab",{style:{right:"-".concat(mdl.state.fab(),"px")},onclick:function(e){return mdl.state.showNavModal(!mdl.state.showNavModal())}},m(_Hamburger.default,{mdl:mdl}))}}};exports.default=_default})),require.register("Layouts/footer.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var obj;(obj=require("Components/nav-link.js"))&&obj.__esModule,require("Utils/index.js");var _default=function(){return{view:function(_ref){_ref.attrs.mdl;return m("footer.container-fluid","footer")}}};exports.default=_default})),require.register("Layouts/hero.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var obj,_images=(obj=require("../images"))&&obj.__esModule?obj:{default:obj};var calcHeight=function(_ref){switch(_ref.settings.screenSize){case"desktop":return"540px";case"tablet":case"phone":return"340px"}},updateBackground=function(mdl){mdl.state.image()>_images.default.length-1?mdl.state.image(0):mdl.state.image(mdl.state.image()+1)},_default=function(){return{onremove:function(){return clearInterval(updateBackground)},oncreate:function(_ref2){var mdl=_ref2.attrs.mdl;return setInterval((function(){return updateBackground(mdl)}),500)},view:function(_ref3){var mdl=_ref3.attrs.mdl;return m("section.hero",m("img.hero-img",{src:_images.default[mdl.state.image()],style:{height:calcHeight(mdl)}}),m("header",m("hgroup",m("h1","Bonham Acres"),m("h2","Houstons best kept secret"))))}}};exports.default=_default})),require.register("Layouts/index.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _hero=_interopRequireDefault(require("./hero.js")),_navbar=_interopRequireDefault(require("./navbar.js")),_subnavbar=_interopRequireDefault(require("./subnavbar.js")),_main=_interopRequireDefault(require("./main.js")),_footer=_interopRequireDefault(require("./footer.js")),_navModal=_interopRequireDefault(require("./nav-modal.js")),_animations=require("Styles/animations.js"),_toolbar=_interopRequireDefault(require("./toolbar.js"));function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}var _default=function(){return{view:function(_ref){var children=_ref.children,mdl=_ref.attrs.mdl;return m("#layout",{"data-theme":"light",id:"layout",role:"main"},m(_toolbar.default,{mdl:mdl}),m(_hero.default,{mdl:mdl}),"desktop"==mdl.settings.screenSize&&[m(_navbar.default,{mdl:mdl}),m(_subnavbar.default,{mdl:mdl})],m(_main.default,{mdl:mdl,children:children}),function(mdl){return"desktop"!==mdl.settings.screenSize&&mdl.state.showNavModal()}(mdl)&&m(_navModal.default,{oncreate:_animations.SlideInLeft,onbeforeremove:_animations.SlideOutRight,mdl:mdl}),m(_footer.default,{mdl:mdl}))}}};exports.default=_default})),require.register("Layouts/main.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;require("ramda");var PageTitle=function(){return{view:function(_ref){var _ref$attrs=_ref.attrs,show=_ref$attrs.show,name=_ref$attrs.name;return show&&m(".text-4x",m("h1.title.mb-20.text-center",name))}}},_default=function(){return{view:function(_ref2){var _ref2$attrs=_ref2.attrs,mdl=_ref2$attrs.mdl,children=_ref2$attrs.children;return m("main",{id:"main"},m(PageTitle,{show:![void 0,"/"].includes(m.route.get()),name:mdl.state.route.name}),children)}}};exports.default=_default})),require.register("Layouts/nav-modal.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _clarity=require("@mithril-icons/clarity"),_navLink=_interopRequireDefault(require("Components/nav-link")),_authbox=_interopRequireDefault(require("Components/authbox")),_index=require("Utils/index.js");require("Styles/animations.js");function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}function ownKeys(object,enumerableOnly){var keys=Object.keys(object);if(Object.getOwnPropertySymbols){var symbols=Object.getOwnPropertySymbols(object);enumerableOnly&&(symbols=symbols.filter((function(sym){return Object.getOwnPropertyDescriptor(object,sym).enumerable}))),keys.push.apply(keys,symbols)}return keys}function _objectSpread(target){for(var i=1;i<arguments.length;i++){var source=null!=arguments[i]?arguments[i]:{};i%2?ownKeys(Object(source),!0).forEach((function(key){_defineProperty(target,key,source[key])})):Object.getOwnPropertyDescriptors?Object.defineProperties(target,Object.getOwnPropertyDescriptors(source)):ownKeys(Object(source)).forEach((function(key){Object.defineProperty(target,key,Object.getOwnPropertyDescriptor(source,key))}))}return target}function _defineProperty(obj,key,value){return key in obj?Object.defineProperty(obj,key,{value:value,enumerable:!0,configurable:!0,writable:!0}):obj[key]=value,obj}var navItemstate={onHover:function(){}},toggleRoutes=function(mdl){return function(id){Object.keys(mdl.navState).map((function(k){return id!==k&&mdl.navState[k](!1)})),mdl.navState[id](!mdl.navState[id]())}},NavItem=function(){return{view:function(_ref){var _ref$attrs=_ref.attrs,mdl=_ref$attrs.mdl,href=_ref$attrs.href,link=_ref$attrs.link,classList=_ref$attrs.classList;return m("li.nav-item",m(_navLink.default,_objectSpread(_objectSpread({mdl:mdl},navItemstate),{},{href:href,link:link,classList:classList})))}}},NavSection=function(_ref2){var _ref2$attrs=_ref2.attrs,mdl=_ref2$attrs.mdl,route=_ref2$attrs.route,toggleRoutes=_ref2$attrs.toggleRoutes,childRoutes=function(mdl,routeIds){return mdl.Routes.filter((function(r){return routeIds.includes(r.id)}))}(mdl,route.children);return{view:function(_ref3){_ref3.attrs.isSelected;return m("details",{onclick:function(e){return toggleRoutes(mdl)(route.id)}},m("summary",route.name),m("ul",childRoutes.map((function(r){return r.group.includes("external")?m("li.container",m("a",{target:"_blank",href:r.external},r.name,m(_clarity.PopOutLine,{margin:"8px",width:"15px",height:"15px"}))):m("li.container",m(NavItem,{mdl:mdl,href:r.route,link:r.name,classList:"".concat((0,_index.isActiveRoute)(r.route))}))}))))}}},_default=function(_ref4){var _domOverlay,_domModal;_ref4.attrs.mdl;return{view:function(_ref5){var mdl=_ref5.attrs.mdl;return m("article#modal-container.animated",{oncreate:function(_ref6){var dom=_ref6.dom;return _domOverlay=dom},onclick:function(e){[_domModal,_domOverlay].includes(e.target)&&mdl.state.showNavModal(!1)}},m("aside#modal",{oncreate:function(_ref7){var dom=_ref7.dom;return _domModal=dom},id:"nav-modal"},m(_authbox.default,{mdl:mdl}),m("ul",function(mdl){return mdl.Routes.filter((function(r){return r.group.includes("navmenu")}))}(mdl).map((function(r){return r.children.any()?m(NavSection,{mdl:mdl,route:r,toggleRoutes:toggleRoutes,isSelected:mdl.navState[r.id]}):m("li",m(NavItem,{mdl:mdl,href:r.route,link:r.name,classList:"".concat((0,_index.isActiveRoute)(r.route))}))})))))}}};exports.default=_default})),require.register("Layouts/navbar.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;require("@mithril-icons/clarity");var obj,_navLink=(obj=require("Components/nav-link.js"))&&obj.__esModule?obj:{default:obj};var _default=function(){return{view:function(_ref){var mdl=_ref.attrs.mdl;return m("nav.navigation.container-fluid#navbar",m("ul",function(mdl){return mdl.Routes.filter((function(r){return r.group.includes("navmenu")}))}(mdl).map((function(r){return m("li",m(_navLink.default,{mdl:mdl,href:r.route,link:r.name,classList:"".concat((a=mdl.state.navState(),b=r.route,a==b?"is-active":""))}));var a,b}))))}}};exports.default=_default})),require.register("Layouts/subnavbar.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var obj,_clarity=require("@mithril-icons/clarity"),_navLink=(obj=require("Components/nav-link.js"))&&obj.__esModule?obj:{default:obj};var _default=function(){var subroutes=function(mdl){return mdl.Routes.filter((function(r){return r.group.includes(mdl.state.navState().split("/")[1])}))};return{view:function(_ref){var mdl=_ref.attrs.mdl;return subroutes(mdl).any()&&m("nav.navigation.container-fluid#sub-navbar",subroutes(mdl).map((function(r){return m("li",r.group.includes("external")?m(".nav-link",m("a",{target:"_blank",href:r.external},r.name,m(_clarity.PopOutLine,{margin:"8px",width:"15px",height:"15px"}))):m(_navLink.default,{mdl:mdl,href:r.route,link:r.name,classList:"col col-middle col-align-middle ".concat((a=mdl.state.subnavState(),b=r.route,a==b?"is-active":""))}));var a,b})))}}};exports.default=_default})),require.register("Layouts/toolbar.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _Hamburger=_interopRequireDefault(require("Components/Hamburger.js")),_authbox=_interopRequireDefault(require("Components/authbox.js"));function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}var _default=function(){return{view:function(_ref){var mdl=_ref.attrs.mdl;return m("nav#toolbar.navigation",{style:{"background-color":mdl.state.showNavModal()?"rgba(255, 255, 255, 1)":"rgba(255, 255, 255, 0.9)"}},m("ul",m(m.route.Link,{selector:"li.pointer",onclick:function(){return m.route.set("/about")}},m("img#nav-logo",{src:"images/logo.webp"}))),"desktop"==mdl.settings.screenSize?m(_authbox.default,{mdl:mdl}):m("ul",{onclick:function(){return mdl.state.showNavModal(!mdl.state.showNavModal())}},m("li",m(_Hamburger.default,{mdl:mdl}))))}}};exports.default=_default})),require.register("Models/Main.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _index=_interopRequireDefault(require("../Routes/index.js")),_http=_interopRequireDefault(require("Utils/http"));function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}var state={paginate:{page:Stream(1),total_pages:Stream(0),total_results:Stream(0)},query:Stream(""),isLoading:Stream(!1),loadingProgress:{max:Stream(null),value:Stream(null)},dragging:{},isAuth:Stream(!1),navSelected:Stream(""),showNavModal:Stream(!1),navState:Stream("/home"),subnavState:Stream(""),image:Stream(0),fab:Stream(0),swiper:null},_default={http:_http.default,Routes:_index.default,state:state,user:{},data:{},errors:{},settings:{},paypal:{},toggleUserModal:function(mdl){return mdl.state.showUserModal(!mdl.state.showUserModal())},toggleAuthModal:function(mdl){return mdl.state.showAuthModal(!mdl.state.showAuthModal())},toggleNavModal:function(mdl){return mdl.state.showNavModal(!mdl.state.showNavModal())}};exports.default=_default})),require.register("Models/index.js",(function(exports,require,module){"use strict";var obj;Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _default=((obj=require("./Main"))&&obj.__esModule?obj:{default:obj}).default;exports.default=_default})),require.register("Pages/Account/index.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _orders=require("Components/orders.js"),_default=function(){return{view:function(_ref){var mdl=_ref.attrs.mdl;return m(".frow-container",m(_orders.Orders,{mdl:mdl}))}}};exports.default=_default})),require.register("Pages/Auth/Validations.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.validateLoginTask=exports.validateUserRegistrationTask=void 0;var _ramda=require("ramda"),_data=require("data.validation"),_Utils=require("Utils"),ValidateRegistration=(0,_data.Success)((0,_ramda.curryN)(3,_ramda.identity)),ValidateLogin=(0,_data.Success)((0,_ramda.curryN)(2,_ramda.identity)),nameLense=(0,_ramda.lensProp)("name"),passwordLense=(0,_ramda.lensProp)("password"),passwordConfirmLense=(0,_ramda.lensProp)("confirmPassword"),emailLense=(0,_ramda.lensProp)("email"),emailConfirmLense=(0,_ramda.lensProp)("confirmEmail"),inputsMatch=function(input1){return function(input2){return input2===input1}};exports.validateUserRegistrationTask=function(data){return ValidateRegistration.ap(function(data){return(0,_data.Success)(data).apLeft((0,_Utils.validate)(_Utils.isRequired,nameLense,"A Name is required",data))}(data)).ap(function(data){return(0,_data.Success)(data).apLeft((0,_Utils.validate)(_Utils.isRequired,emailLense,"An Email is required",data)).apLeft((0,_Utils.validate)(_Utils.isRequired,emailConfirmLense,"An Email is required",data)).apLeft((0,_Utils.validate)(inputsMatch(data.confirmEmail),emailLense,"Emails do not match",data)).apLeft((0,_Utils.validate)(inputsMatch(data.email),emailConfirmLense,"Emails do not match",data)).apLeft((0,_Utils.validate)(_Utils.emailFormat,emailConfirmLense,"Email must be a valid format",data)).apLeft((0,_Utils.validate)(_Utils.emailFormat,emailLense,"Email must be a valid format",data))}(data)).ap(function(data){return(0,_data.Success)(data).apLeft((0,_Utils.validate)(_Utils.isRequired,passwordLense,"A Password is required",data)).apLeft((0,_Utils.validate)(_Utils.isRequired,passwordConfirmLense,"A Password is required",data)).apLeft((0,_Utils.validate)(inputsMatch(data.password),passwordConfirmLense,"Passwords do not match",data)).apLeft((0,_Utils.validate)(inputsMatch(data.confirmPassword),passwordLense,"Passwords do not match",data))}(data)).failureMap(_ramda.mergeAll).toTask()};exports.validateLoginTask=function(data){return ValidateLogin.ap(function(data){return(0,_data.Success)(data).apLeft((0,_Utils.validate)(_Utils.isRequired,emailLense,"An Email is required",data)).apLeft((0,_Utils.validate)(_Utils.emailFormat,emailLense,"Email must be a valid format",data))}(data)).ap(function(data){return(0,_data.Success)(data).apLeft((0,_Utils.validate)(_Utils.isRequired,passwordLense,"A Password is required",data))}(data)).failureMap(_ramda.mergeAll).toTask()}})),require.register("Pages/Auth/fns.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.createAccountTask=exports.registerUserTask=exports.loginTask=exports.loginUserTask=void 0;var _Utils=require("Utils"),_ramda=require("ramda");function ownKeys(object,enumerableOnly){var keys=Object.keys(object);if(Object.getOwnPropertySymbols){var symbols=Object.getOwnPropertySymbols(object);enumerableOnly&&(symbols=symbols.filter((function(sym){return Object.getOwnPropertyDescriptor(object,sym).enumerable}))),keys.push.apply(keys,symbols)}return keys}function _defineProperty(obj,key,value){return key in obj?Object.defineProperty(obj,key,{value:value,enumerable:!0,configurable:!0,writable:!0}):obj[key]=value,obj}var toAccountVM=function(mdl){return function(accnts){var accnt,cart=(accnt=accnts[0].cart,function(cart){return(0,_ramda.mergeDeepWith)(_ramda.add,cart,accnt)})(mdl.cart);return mdl.user.account={objectId:accnts[0].objectId,cart:cart},mdl.user.address=accnts[0].address,mdl.cart=cart,setUserToken(mdl)(mdl.user),cart}},setUserToken=function(mdl){return function(user){return sessionStorage.setItem("sb-user",JSON.stringify(user)),sessionStorage.setItem("sb-user-token",user.sessionToken),mdl.state.isAuth(!0),mdl.user=user,mdl}},loginUserTask=function(mdl){return function(_ref){var email=_ref.email,password=_ref.password,login=encodeURI("username=".concat(email,"&password=").concat(btoa(password)));return mdl.http.back4App.getTask(mdl)("login?".concat(login)).map(setUserToken(mdl))}};exports.loginUserTask=loginUserTask;exports.loginTask=function(mdl){return function(_ref2){var email=_ref2.email,password=_ref2.password;return loginUserTask(mdl)({email:email,password:password}).chain(function(mdl){return function(_){var userAccount=encodeURI('where={"userId":"'.concat(mdl.user.objectId,'"}'));return mdl.http.back4App.getTask(mdl)("classes/Accounts?".concat(userAccount)).map((0,_ramda.prop)("results")).map(toAccountVM(mdl))}}(mdl)).chain((0,_Utils.saveStorageTask)(mdl)("sb-cart"))}};exports.registerUserTask=function(mdl){return function(_ref3){var name=_ref3.name,email=_ref3.email,password=_ref3.password,isAdmin=_ref3.isAdmin;return mdl.http.back4App.postTask(mdl)("users")({username:email,name:name,email:email,password:btoa(password),isAdmin:isAdmin}).map((function(user){return setUserToken(mdl)(function(target){for(var i=1;i<arguments.length;i++){var source=null!=arguments[i]?arguments[i]:{};i%2?ownKeys(Object(source),!0).forEach((function(key){_defineProperty(target,key,source[key])})):Object.getOwnPropertyDescriptors?Object.defineProperties(target,Object.getOwnPropertyDescriptors(source)):ownKeys(Object(source)).forEach((function(key){Object.defineProperty(target,key,Object.getOwnPropertyDescriptor(source,key))}))}return target}({name:name,email:email,password:password,isAdmin:isAdmin},user))}))}};exports.createAccountTask=function(mdl){return mdl.user.account={cart:mdl.cart,address:{}},mdl.http.back4App.postTask(mdl)("classes/Accounts")({cart:mdl.cart,userId:mdl.user.objectId,address:{}}).map((function(_ref4){var objectId=_ref4.objectId;return mdl.user.account.objectId=objectId,mdl}))}})),require.register("Pages/Auth/login-user.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=exports.Login=void 0;var obj,_navLink=(obj=require("Components/nav-link"))&&obj.__esModule?obj:{default:obj},_Utils=require("Utils"),_Validations=require("./Validations.js"),_fns=require("./fns.js");var dataModel={userModel:{name:"",email:"",password:"",confirmEmail:"",confirmPassword:"",isAdmin:!1}},state={isSubmitted:!1,errors:{},httpError:void 0,data:(0,_Utils.jsonCopy)(dataModel),showErrorMsg:Stream(!1),errorMsg:Stream("")},Login=function(){return{onremove:function(){return state.data=(0,_Utils.jsonCopy)(dataModel),state.errors={},state.httpError=void 0,state.isSubmitted=!1,state.showErrorMsg(!1),void state.errorMsg("")},view:function(_ref){var mdl=_ref.attrs.mdl;return mdl.state.isLoading()?"":m(".",[state.showErrorMsg()&&m("code.warning",state.errorMsg()),m("form",{role:"form",id:"login-form",onsubmit:function(e){return e.preventDefault()}},m("",m("input",{class:state.isSubmitted?state.errors.email?"has-error":"has-success":"",id:"reg-email",type:"email",placeholder:"Email",onkeyup:function(e){state.data.userModel.email=e.target.value},value:state.data.userModel.email}),state.errors.email&&m("p",state.errors.email)),m("",m("input",{class:state.isSubmitted?state.errors.password?"has-error":"has-success":"",id:"reg-pass",type:"password",placeholder:"Password",onkeyup:function(e){state.data.userModel.password=e.target.value},value:state.data.userModel.password}),state.errors.password&&m("p",state.errors.password))),state.httpError&&m(".toast toast-error",state.httpError)],m("button",{role:"button",form:"login-form",onclick:function(){return function(mdl){return function(data){state.isSubmitted=!0,(0,_Validations.validateLoginTask)(data.userModel).chain((0,_fns.loginTask)(mdl)).fork((function(errs){errs?(state.errors=errs,state.errorMsg(errs.message),state.showErrorMsg(!0),console.log("failed - state",state)):(state.errorMsg("Issue with logging in. Have you registered?"),state.showErrorMsg(!0),console.log("failed - other?",state))}),(function(_){state.errors={},m.route.set("/")}))}}(mdl)(state.data)},class:mdl.state.isLoading()&&"loading"},"Login"),m(".auth-link","Need to ",m("u",m(_navLink.default,{mdl:mdl,href:"/register",link:"register",classList:""}))," ?"))}}};exports.Login=Login;var _default=Login;exports.default=_default})),require.register("Pages/Auth/register-user.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=exports.Register=exports.validateForm=void 0;var obj,_navLink=(obj=require("Components/nav-link"))&&obj.__esModule?obj:{default:obj},_Utils=require("Utils"),_Validations=require("./Validations"),_fns=require("./fns.js");var dataModel={userModel:{name:"",email:"",password:"",confirmEmail:"",confirmPassword:"",isAdmin:!1}},state={isSubmitted:!1,errors:{},httpError:void 0,data:(0,_Utils.jsonCopy)(dataModel),showErrorMsg:Stream(!1),errorMsg:Stream("")},validateForm=function(mdl){return function(data){state.isSubmitted=!0,(0,_Validations.validateUserRegistrationTask)(data.userModel).chain((0,_fns.registerUserTask)(mdl)).chain(_fns.createAccountTask).fork((function(errs){errs?(state.errors=errs,state.errorMsg(errs.message),state.showErrorMsg(!0),console.log("failed - state",state)):(state.errorMsg("There seems to be a problem please contact web support"),state.showErrorMsg(!0),console.log("failed - state",state))}),(function(mdl){state.errors={},sessionStorage.setItem("sb-user-token",mdl.user.sessionToken),sessionStorage.setItem("sb-user",JSON.stringify(mdl.user)),m.route.set("/")}))}};exports.validateForm=validateForm;var RegisterUser=function(){return{view:function(_ref){var _ref$attrs=_ref.attrs,mdl=_ref$attrs.mdl,data=_ref$attrs.data,errors=_ref$attrs.errors,isSubmitted=_ref$attrs.isSubmitted;return mdl.state.isLoading()?"":[m("input",{class:isSubmitted?errors.name?"has-error":"has-success":"",id:"reg-name",type:"text",placeholder:"Full Name",onkeyup:function(e){return data.name=e.target.value},value:data.name}),errors.name&&m("p",errors.name),m("input",{class:isSubmitted?errors.email?"has-error":"has-success":"",id:"reg-email",type:"email",placeholder:"Email",onkeyup:function(e){return data.email=e.target.value},value:data.email}),errors.email&&m("p",errors.email),m("input",{id:"confirmEmail",class:isSubmitted?errors.confirmEmail?"has-error":"has-success":"",type:"email",placeholder:"Confirm Email",onkeyup:function(e){return data.confirmEmail=e.target.value},value:data.confirmEmail}),errors.confirmEmail&&m("p",errors.confirmEmail),m("input",{class:isSubmitted?errors.password?"has-error":"has-success":"",id:"reg-pass",type:"password",placeholder:"Password",onkeyup:function(e){return data.password=e.target.value},value:data.password}),errors.password&&m("p",errors.password),m("input",{class:isSubmitted?errors.confirmPassword?"has-error":"has-success":"",id:"pass-confirm",type:"password",placeholder:"Confirm Password",onkeyup:function(e){return data.confirmPassword=e.target.value},value:data.confirmPassword}),errors.confirmPassword&&m("p",errors.confirmPassword)]}}},Register=function(){return{onremove:function(){return state.data=(0,_Utils.jsonCopy)(dataModel),state.errors={},state.httpError=void 0,state.isSubmitted=!1,state.showErrorMsg(!1),void state.errorMsg("")},view:function(_ref2){var mdl=_ref2.attrs.mdl;return[m("",[state.showErrorMsg()&&m("code.warning",state.errorMsg()),m("form",{role:"form",id:"register-form",onsubmit:function(e){return e.preventDefault()}},[m(RegisterUser,{mdl:mdl,data:state.data.userModel,errors:state.errors,isSubmitted:state.isSubmitted}),m("button",{form:"register-form",onclick:function(){return validateForm(mdl)(state.data)},class:mdl.state.isLoading()&&"loading"},"Register"),m(".auth-link",["Need to ",m("u",m(_navLink.default,{mdl:mdl,href:"/login",link:"Login",classList:""}))," ?"])])]),state.httpError&&m(".toast toast-error",state.httpError)]}}};exports.Register=Register;var _default=Register;exports.default=_default})),require.register("Pages/Dashboard/index.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _orders=require("Components/orders.js"),_prices=require("./prices.js"),_users=require("./users.js"),_default=function(){var components={prices:_prices.Prices,users:_users.Users,orders:_orders.Orders},navi=["prices","users","orders"];return{view:function(_ref){var mdl=_ref.attrs.mdl;return m(".",{style:{minWidth:"100%",minHeight:"100%"}},m("section.dash-nav.frow row-around",navi.map((function(nav){return m("button",{class:mdl.dash.state.show==nav?"is-active":"",onclick:function(e){return mdl.dash.state.show=nav}},nav.toUpperCase())}))),m("section.frow mt-10",m(components[mdl.dash.state.show],{mdl:mdl})))}}};exports.default=_default})),require.register("Pages/Dashboard/prices.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.Prices=void 0;var obj,_mithril=(obj=require("mithril"))&&obj.__esModule?obj:{default:obj},_ramda=require("ramda"),_Utils=require("Utils");exports.Prices=function(){return{view:function(_ref2){var mdl=_ref2.attrs.mdl;return(0,_mithril.default)("table.dash-table",(0,_ramda.without)("id",Object.keys(mdl.state.prices)).map((function(product){return(0,_mithril.default)("tr",(0,_mithril.default)("td",(0,_mithril.default)("label.col-xs-1-3",product)),(0,_mithril.default)("td",(0,_mithril.default)("input",{type:"number",value:mdl.state.prices[product],onkeyup:function(e){return mdl.state.prices[product]=parseInt(e.target.value)}})))})),(0,_mithril.default)("button",{onclick:function(e){return function(mdl){return mdl.http.back4App.postTask(mdl)("classes/Prices")(mdl.state.prices).fork((0,_Utils.log)("error"),(0,_Utils.log)("succes"))}(mdl)}},"update prices"))}}}})),require.register("Pages/Dashboard/users.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.Users=void 0;var _ramda=require("ramda"),_Utils=require("Utils");exports.Users=function(){var state={users:[],errors:null};return{oninit:function(_ref){var mdl=_ref.attrs.mdl;return mdl.http.back4App.getTask(mdl)("Users").map((0,_ramda.prop)("results")).map((0,_ramda.filter)((0,_ramda.prop)("name"))).fork((0,_Utils.log)("error"),(function(u){return state.users=u}))},view:function(_ref2){var mdl=_ref2.attrs.mdl;return m("table.dash-table",m("thead",m("th"),m("th","is Admin")),state.users.map((function(user){return m("tr.mt-5",m("td",m("label",user.name)),m("td.frow.text-center",m("input",{type:"checkbox",checked:user.isAdmin,onclick:function(){user.isAdmin=!user.isAdmin,function(mdl){return function(user){(0,_Utils.log)("user")(user),mdl.http.back4App.putTask(mdl)("Users/".concat(user.objectId))({isAdmin:user.isAdmin}).fork((0,_Utils.log)("error"),(0,_Utils.log)("succes"))}}(mdl)(user)}})))})))}}}})),require.register("Pages/about.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _default=function(mdl){return{view:function(_ref){_ref.attrs.mdl;return m(".",m("section",m("p","sec1")),m("section",m("p","sec2")),m("section",m("p","sec3")),m("section",m("p","sec1")),m("section",m("p","sec2")),m("section",m("p","sec3")),m("section",m("p","sec2")),m("section",m("p","sec3")),m("section",m("p","sec1")),m("section",m("p","sec2")),m("section",m("p","sec3")))}}};exports.default=_default})),require.register("Pages/blog.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _listOf,_data=_interopRequireDefault(require("data.task")),_Utils=require("Utils"),_images=_interopRequireDefault(require("../images"));function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}function _defineProperty(obj,key,value){return key in obj?Object.defineProperty(obj,key,{value:value,enumerable:!0,configurable:!0,writable:!0}):obj[key]=value,obj}var blogs=(0,_Utils.listOf)(20)((_defineProperty(_listOf={src:_images.default[2],title:"minim veniam, quis nostrud",date:"11/12/2020",author:"Boaz Blake"},"title","minim veniam, quis nostrud"),_defineProperty(_listOf,"text","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),_listOf)),onPageInit=function(state){return function(_ref){var s;_ref.attrs.mdl;_data.default.of(blogs).fork((s=state,function(error){s.errors.init=error,console.log("errror",error)}),function(s){return function(data){s.data=data}}(state))}},_default=function(){var state={errors:{},data:[]};return{oninit:onPageInit(state),onremove:function(){state.errors={},state.data=[]},view:function(_ref2){var mdl=_ref2.attrs.mdl;return m(".container",mdl.state.isAuth()&&m("nav",m("ul",m("li",m("button","add")))),state.data.map((function(_ref3){var title=_ref3.title,text=_ref3.text,src=_ref3.src,date=_ref3.date,author=_ref3.author;return m("article",m(".grid",m("hgroup",m("h2",title),m("h3",date),m("h4","Written By ",author)),m("img",{src:src,style:{border:"1px solid black",borderRadius:"2%",width:"100%"}})),m("hgroup",m("h4",text)))})))}}};exports.default=_default})),require.register("Pages/default.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _default=function(mdl){return{view:function(_ref){_ref.attrs.mdl;return m(".container",m(".",m("section",m("p","sec1")),m("section",m("p","sec2")),m("section",m("p","sec3")),m("section",m("p","sec1")),m("section",m("p","sec2")),m("section",m("p","sec3")),m("section",m("p","sec2")),m("section",m("p","sec3")),m("section",m("p","sec1")),m("section",m("p","sec2")),m("section",m("p","sec3"))))}}};exports.default=_default})),require.register("Pages/faq.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _default=function(mdl){return{view:function(_ref){_ref.attrs.mdl;return m(".frow-container frow-center","")}}};exports.default=_default})),require.register("Pages/home.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _default=function(){return{view:function(_ref){_ref.attrs.mdl;return m(".",{style:{height:"100vh",width:"100vw"}})}}};exports.default=_default})),require.register("Routes/authenticated-routes.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _default2=_interopRequireDefault(require("Pages/default.js")),_index=_interopRequireDefault(require("Pages/Account/index.js")),_Dashboard=_interopRequireDefault(require("Pages/Dashboard")),_index2=_interopRequireDefault(require("Layouts/index.js")),_Utils=require("Utils");function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}var _default=[{id:"account",name:"Account",route:"/account/:name",position:["toolbar"],group:["authenticated"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_Utils.scrollToAnchor)(mdl.state.anchor):window.scroll({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index2.default,{mdl:mdl},m(_index.default,{mdl:mdl}))}},{id:"dashboard",name:"Dashboard",route:"/dashboard/:name",position:["toolbar"],group:["authenticated"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_Utils.scrollToAnchor)(mdl.state.anchor):window.scroll({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index2.default,{mdl:mdl},m(_Dashboard.default,{mdl:mdl}))}},{id:"profile-page",name:"Profile Page",route:"/account/:name/profile",position:["settings-nav"],group:["authenticated"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){console.log("profile page login on match",mdl,args,path,fullroute,isAnchor,!mdl.state.isAuth()),isAnchor?(0,_Utils.scrollToAnchor)(mdl.state.anchor):window.scroll({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index2.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"manage-users",name:"Manage Users",route:"/account/:name/user-management",position:["settings-nav"],group:["authenticated","admin"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){!mdl.user.isAdmin&&m.route.set(m.route.get()),isAnchor?(0,_Utils.scrollToAnchor)(mdl.state.anchor):window.scroll({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index2.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"logout",name:"",route:"/logout",position:[],group:["authenticated","admin"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){window.scroll({top:0,left:0,behavior:"smooth"}),localStorage.clear(),sessionStorage.clear(),mdl.state.isAuth(!1),mdl.user={},console.log("loggout",mdl);var currentRoute=m.route.get();["account"].map((function(r){return currentRoute.includes(r)})).map(log("???")).contains(!0)?m.route.set("/"):m.route.set(currentRoute)},component:function(mdl){return m(_index2.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}}];exports.default=_default})),require.register("Routes/index.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _authenticatedRoutes=_interopRequireDefault(require("./authenticated-routes.js")),_mainRoutes=_interopRequireDefault(require("./main-routes.js")),_legalRoutes=_interopRequireDefault(require("./legal-routes.js")),_safetyRoutes=_interopRequireDefault(require("./safety-routes.js")),_memberRoutes=_interopRequireDefault(require("./member-routes.js")),_socialRoutes=_interopRequireDefault(require("./social-routes.js"));function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}var _default=(0,require("ramda").flatten)([_authenticatedRoutes.default,_mainRoutes.default,_socialRoutes.default,_memberRoutes.default,_legalRoutes.default,_safetyRoutes.default]);exports.default=_default})),require.register("Routes/legal-routes.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _index=_interopRequireDefault(require("Layouts/index.js")),_default2=_interopRequireDefault(require("Pages/default.js")),_index2=require("Utils/index.js");function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}var _default=[{id:"legal",name:"Legal",route:"/legal",isNav:!0,group:["navmenu"],children:["deed-restrictions","city-ordinances"],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"deed-restrictions",name:"Deed Restrictions",route:"/legal/deed-restrictions",isNav:!0,group:["nav","legal"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"city-ordinances",name:"City Ordinances",route:"/legal/city-ordinances",isNav:!0,group:["nav","legal"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}}];exports.default=_default})),require.register("Routes/main-routes.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _index=_interopRequireDefault(require("Layouts/index.js")),_default2=_interopRequireDefault(require("Pages/default.js")),_home=_interopRequireDefault(require("Pages/home.js")),_about=_interopRequireDefault(require("Pages/about.js")),_index2=require("Utils/index.js");function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}m("img",{src:"images/logo.webp"});var _default=[{id:"home",name:"Home",route:"/about",isNav:!0,group:["toolbar"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_home.default,{mdl:mdl}))}},{id:"about-us",name:"About Bonham Acres",route:"/about",isNav:!0,group:["navmenu"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_about.default,{mdl:mdl}))}},{id:"contact",name:"Contact BCA",route:"/contact",isNav:!1,group:["navmenu"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}}];exports.default=_default})),require.register("Routes/member-routes.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _index=_interopRequireDefault(require("Layouts/index.js")),_default2=_interopRequireDefault(require("Pages/default.js")),_loginUser=_interopRequireDefault(require("Pages/Auth/login-user.js")),_registerUser=_interopRequireDefault(require("Pages/Auth/register-user.js")),_index2=require("Utils/index.js");function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}var _default=[{id:"members",name:"Members",route:"/members",isNav:!1,group:["navbar","members"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"login",name:"Account Login",route:"/login",isNav:!1,group:["nav","members"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_loginUser.default,{mdl:mdl}))}},{id:"register",name:"Register Account",route:"/register",isNav:!1,group:["nav","members"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_registerUser.default,{mdl:mdl}))}},{id:"volunteer",name:"Volunteer",route:"/members/volunteer",isNav:!1,group:["nav","members"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"join",name:"Become a Member",route:"/members/join",isNav:!0,group:["nav","members"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}}];exports.default=_default})),require.register("Routes/safety-routes.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _index=_interopRequireDefault(require("Layouts/index.js")),_default2=_interopRequireDefault(require("Pages/default.js")),_index2=(_interopRequireDefault(require("Pages/Auth/login-user.js")),_interopRequireDefault(require("Pages/Auth/register-user.js")),require("Utils/index.js"));function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}var _default=[{id:"safety",name:"Safety",route:"/safety",isNav:!1,group:["navmenu"],children:["report","district-J","SeeClickFix","Harrison-County-Public-Health","Houston-311-Service-Request/Report"],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"report",name:"File An Internal Report With BACA",route:"/safety/report",isNav:!1,group:["nav","safety"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"district-J",name:"District J",route:"/#",external:"https://www.houstontx.gov/council/j/request.html",isNav:!1,group:["external","safety"],children:[],options:[]},{id:"SeeClickFix",name:"SeeClickFix Request",route:"/#",external:"https://seeclickfix.com/houston/report",isNav:!1,group:["external","safety"],children:[],options:[]},{id:"Harrison-County-Public-Health",name:"Harrison County Public Health",route:"/#",external:"https://publichealth.harriscountytx.gov/Services-Programs/Services/NeighborhoodNuisance",isNav:!1,group:["external","safety"],children:[],options:[]},{id:"Houston-311-Service-Request/Report",name:"Houston 311 Service Request/Report",route:"/#",external:"https://www.houstontx.gov/311/ServiceRequestDirectoryWebpage.htm",isNav:!1,group:["external","safety"],children:[],options:[]}];exports.default=_default})),require.register("Routes/social-routes.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _index=_interopRequireDefault(require("Layouts/index.js")),_default2=_interopRequireDefault(require("Pages/default.js")),_blog=_interopRequireDefault(require("Pages/blog.js")),_index2=require("Utils/index.js");function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}var _default=[{id:"social",name:"Social",route:"/social",isNav:!0,group:["navbar","navmenu"],children:["map-of-bonham-acres","blog","explore","photos","calendar","bfn-park"],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"calendar",name:"Events Calendar",route:"/social/calendar",isNav:!0,group:["nav","social"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"photos",name:"Photo Gallery",route:"/social/photos",isNav:!0,group:["nav","social"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"blog",name:"Bonham Acres Community Blog",route:"/social/blog",isNav:!0,group:["nav","social"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_blog.default,{mdl:mdl}))}},{id:"map-of-bonham-acres",name:"Explore Bonham Acres",route:"/social/map",isNav:!0,group:["nav","social"],children:[],options:[],onmatch:function(mdl,args,path,fullroute,isAnchor){isAnchor?(0,_index2.scrollToAnchor)(mdl.state.anchor):window.scrollTo({top:0,left:0,behavior:"smooth"})},component:function(mdl){return m(_index.default,{mdl:mdl},m(_default2.default,{mdl:mdl}))}},{id:"bfn-park",name:"Bonham Family Nature Park",route:"/#",external:"https://www.pct3.com/Parks/Bonham-Family-Nature-Park",isNav:!0,group:["nav","social","external"],children:[],options:[]}];exports.default=_default})),require.register("Styles/animations.js",(function(exports,require,module){"use strict";function _toConsumableArray(arr){return function(arr){if(Array.isArray(arr))return _arrayLikeToArray(arr)}(arr)||function(iter){if("undefined"!=typeof Symbol&&null!=iter[Symbol.iterator]||null!=iter["@@iterator"])return Array.from(iter)}(arr)||function(o,minLen){if(!o)return;if("string"==typeof o)return _arrayLikeToArray(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);"Object"===n&&o.constructor&&(n=o.constructor.name);if("Map"===n||"Set"===n)return Array.from(o);if("Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return _arrayLikeToArray(o,minLen)}(arr)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function _arrayLikeToArray(arr,len){(null==len||len>arr.length)&&(len=arr.length);for(var i=0,arr2=new Array(len);i<len;i++)arr2[i]=arr[i];return arr2}Object.defineProperty(exports,"__esModule",{value:!0}),exports.RemoveChildrenOut=exports.animate=exports.SlideChildrenInDown=exports.StretchInLeft=exports.SlideChildrenInRight=exports.SlideUp=exports.SlideDown=exports.SlideOutLeft=exports.SlideOutRight=exports.replaceCSS=exports.AddToCartOut=exports.AddToCart=exports.SlideInRight=exports.SlideInLeft=exports.SlideInUp=void 0;exports.SlideInUp=function(_ref){return _ref.dom.classList.toggle("slideInUp")};exports.SlideInLeft=function(_ref2){return _ref2.dom.classList.toggle("slideInLeft")};exports.SlideInRight=function(_ref3){return _ref3.dom.classList.toggle("slideInRight")};var AddToCart=function(_ref4){return _ref4.dom.classList.toggle("slide-out-tr")};exports.AddToCart=AddToCart;exports.AddToCartOut=function(_ref5){var dom=_ref5.dom;return AddToCart({dom:dom}),new Promise((function(resolve){return setTimeout((function(){resolve()}),500)}))};exports.replaceCSS=function(a,b){return function(_ref6){return _ref6.dom.classList.replace(a,b),new Promise((function(resolve){return setTimeout((function(){resolve()}),300)}))}};exports.SlideOutRight=function(_ref7){return _ref7.dom.classList.replace("slideInLeft","slideOutLeft"),new Promise((function(resolve){return setTimeout((function(){resolve()}),300)}))};exports.SlideOutLeft=function(_ref8){return _ref8.dom.classList.replace("slideInRight","slideOutRight"),new Promise((function(resolve){return setTimeout((function(){resolve()}),300)}))};exports.SlideDown=function(_ref9){var dom=_ref9.dom;dom.style.opacity=0,dom.classList.toggle("slideInDown"),dom.style.opacity=1};exports.SlideUp=function(_ref10){return _ref10.dom.classList.replace("slideInDown","slideOutUp"),new Promise((function(resolve){return setTimeout((function(){resolve()}),300)}))};exports.SlideChildrenInRight=function(_ref11){return _toConsumableArray(_ref11.dom.children).map((function(child,idx){child.style.opacity=0,setTimeout((function(){child.classList.toggle("slideInLeft"),child.style.opacity=1}),10*(idx+1))}))};exports.StretchInLeft=function(idx){return function(_ref12){var dom=_ref12.dom;return dom.style.opacity=0,setTimeout((function(){dom.classList.toggle("stretchRight"),dom.style.opacity=1}),100*idx+20)}};exports.SlideChildrenInDown=function(idx){return function(_ref13){var dom=_ref13.dom;dom.style.opacity=0,setTimeout((function(){dom.classList.toggle("slideDown"),dom.style.opacity=1}),200*(idx+1))}};exports.animate=function(dir){return function(_ref14){var dom=_ref14.dom;dom.style.opacity=0,setTimeout((function(){dom.classList.toggle(dir),dom.style.opacity=1}),200)}};exports.RemoveChildrenOut=function(_ref15){var dom=_ref15.dom;return new Promise((function(){_toConsumableArray(dom.children).reverse().map((function(child,idx){return setTimeout((function(){child.style.display="none"}),100*idx)}))}))}})),require.register("Utils/helpers.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.formatDate=exports.parsePrices=exports.getTotal=exports.getQuantity=exports.getPrice=exports.toProducts=exports.listOf=exports.uuid=exports.isActiveRoute=exports.jsonCopy=exports.randomEl=exports.scrollToAnchor=exports.getRoute=exports.debounce=exports.filterTask=exports._paginate=exports._direction=exports._sort=exports._search=exports.addTerms=exports.infiniteScroll=exports.isEmpty=exports.log=exports.makeRoute=void 0;var obj,_ramda=require("ramda"),_data=(obj=require("data.task"))&&obj.__esModule?obj:{default:obj};function _slicedToArray(arr,i){return function(arr){if(Array.isArray(arr))return arr}(arr)||function(arr,i){var _i=arr&&("undefined"!=typeof Symbol&&arr[Symbol.iterator]||arr["@@iterator"]);if(null==_i)return;var _s,_e,_arr=[],_n=!0,_d=!1;try{for(_i=_i.call(arr);!(_n=(_s=_i.next()).done)&&(_arr.push(_s.value),!i||_arr.length!==i);_n=!0);}catch(err){_d=!0,_e=err}finally{try{_n||null==_i.return||_i.return()}finally{if(_d)throw _e}}return _arr}(arr,i)||function(o,minLen){if(!o)return;if("string"==typeof o)return _arrayLikeToArray(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);"Object"===n&&o.constructor&&(n=o.constructor.name);if("Map"===n||"Set"===n)return Array.from(o);if("Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return _arrayLikeToArray(o,minLen)}(arr,i)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function _arrayLikeToArray(arr,len){(null==len||len>arr.length)&&(len=arr.length);for(var i=0,arr2=new Array(len);i<len;i++)arr2[i]=arr[i];return arr2}var makeRoute=(0,_ramda.compose)((0,_ramda.join)("-"),(0,_ramda.split)(" "),(0,_ramda.trim)(),(0,_ramda.toLower)());exports.makeRoute=makeRoute;exports.log=function(m){return function(v){return console.log(m,v),v}};exports.isEmpty=function(data){return 0==data.length};exports.infiniteScroll=function(mdl){return function(e){var route=mdl.state.route,setpoint=10*mdl.data[route].data.length*mdl.state.scrollPos;e.target.scrollTop-mdl.state.scrollPos>=setpoint&&(mdl.state.scrollPos++,e.target.scrollTop)}};exports.addTerms=function(item){var terms=(0,_ramda.compose)((0,_ramda.join)(" "),_ramda.values,(0,_ramda.props)(["uuid","id","name"]))(item);return(0,_ramda.assoc)("_terms",terms,item)};var _search=function(query){return(0,_ramda.compose)((0,_ramda.filter)(function(query){return(0,_ramda.compose)((0,_ramda.test)(new RegExp(query,"i")),(0,_ramda.prop)("name"))}(query)))};exports._search=_search;var _sort=function(p){return(0,_ramda.sortBy)((0,_ramda.compose)(_ramda.toLower,toString,(0,_ramda.prop)(p)))};exports._sort=_sort;var _direction=function(dir){return"asc"==dir?_ramda.identity:_ramda.reverse};exports._direction=_direction;var _paginate=function(offset){return function(limit){return function(data){return(0,_ramda.slice)((0,_ramda.max)(0,(0,_ramda.min)(offset,data.length)),(0,_ramda.min)(offset+limit,data.length),data)}}};exports._paginate=_paginate;exports.filterTask=function(query){return function(prop){return function(direction){return function(offset){return function(limit){return(0,_ramda.compose)(_data.default.of,(0,_ramda.map)(_paginate(offset)(limit)),(0,_ramda.map)(_direction(direction)),(0,_ramda.map)(_sort(prop)),_search(query))}}}}};exports.debounce=function(wait,now){return function(fn){var timeout=void 0;return function(){var context=this,args=arguments,later=function(){timeout=void 0,now||fn.apply(context,args)},callNow=now&&!timeout;clearTimeout(timeout),timeout=setTimeout(later,wait),console.log(fn),callNow&&fn.apply(context,args)}}};exports.getRoute=function(){return(0,_ramda.last)(m.route.get().split("/"))};exports.scrollToAnchor=function(anchor){var is=function(el){return null!=el},targetEl=is(anchor)?document.getElementById(anchor):document.body,scrollTop=window.pageYOffset||document.documentElement.scrollTop,target=is(targetEl)?targetEl.getBoundingClientRect().top:0;return window.scroll({top:target+scrollTop-150,left:0,behavior:"smooth"})};exports.randomEl=function(list){return list[Math.floor(Math.random()*list.length)]};exports.jsonCopy=function(src){return JSON.parse(JSON.stringify(src))};exports.isActiveRoute=function(route){return m.route.get()==route?"is-active":""};exports.uuid=function(){return"xxxxxxxx".replace(/[xy]/g,(function(c){var r=16*Math.random()|0;return("x"==c?r:3&r|8).toString(16)}))};exports.listOf=function(x){return function(y){return Array(x).fill(y)}};exports.toProducts=function(cart){return(0,_ramda.toPairs)(cart).map((function(_ref){var _ref2=_slicedToArray(_ref,2),product=_ref2[0],genders=_ref2[1];return[product,(0,_ramda.toPairs)(genders)]}))};var getPrice=function(mdl,title,genders){return mdl.state.prices[title]*getQuantity(genders)};exports.getPrice=getPrice;var getQuantity=function(xs){return(0,_ramda.reduce)(_ramda.add,0,(0,_ramda.filter)((0,_ramda.compose)((0,_ramda.equals)("Number"),_ramda.type),(0,_ramda.flatten)(xs)))};exports.getQuantity=getQuantity;exports.getTotal=function(mdl,products){return getQuantity(products.map((function(p){return getPrice(mdl,p[0],p[1])})))};var parsePrices=(0,_ramda.compose)((function(_ref3){return{Burpies:_ref3.Burpies,Wraps:_ref3.Wraps,Blankets:_ref3.Blankets,Collections:_ref3.Collections}}),_ramda.last,(0,_ramda.prop)("results"));exports.parsePrices=parsePrices;exports.formatDate=function(date){return date.split("T")[0]}})),require.register("Utils/http.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=exports.parseHttpSuccess=exports.parseHttpError=void 0;var obj,_data=(obj=require("data.task"))&&obj.__esModule?obj:{default:obj},_secrets=require("../../.secrets.js");function ownKeys(object,enumerableOnly){var keys=Object.keys(object);if(Object.getOwnPropertySymbols){var symbols=Object.getOwnPropertySymbols(object);enumerableOnly&&(symbols=symbols.filter((function(sym){return Object.getOwnPropertyDescriptor(object,sym).enumerable}))),keys.push.apply(keys,symbols)}return keys}function _objectSpread(target){for(var i=1;i<arguments.length;i++){var source=null!=arguments[i]?arguments[i]:{};i%2?ownKeys(Object(source),!0).forEach((function(key){_defineProperty(target,key,source[key])})):Object.getOwnPropertyDescriptors?Object.defineProperties(target,Object.getOwnPropertyDescriptors(source)):ownKeys(Object(source)).forEach((function(key){Object.defineProperty(target,key,Object.getOwnPropertyDescriptor(source,key))}))}return target}function _defineProperty(obj,key,value){return key in obj?Object.defineProperty(obj,key,{value:value,enumerable:!0,configurable:!0,writable:!0}):obj[key]=value,obj}function onLoad(){return!1}var xhrProgress=function(mdl){return{config:function(xhr){xhr.onprogress=function(mdl){return function(e){e.lengthComputable&&(mdl.state.loadingProgress.max=e.total,mdl.state.loadingProgress.value=e.loaded,m.redraw())}}(mdl),xhr.onload=onLoad,xhr.onloadstart=function(mdl){return function(e){return mdl.state.isLoading(!0),!1}}(mdl),xhr.onloadend=function(mdl){return function(e){return mdl.state.isLoading(!1),mdl.state.loadingProgress.max=0,mdl.state.loadingProgress.value=0,!1}}(mdl)}}},parseHttpError=function(mdl){return function(rej){return function(e){return mdl.state.isLoading(!1),rej(e.response)}}};exports.parseHttpError=parseHttpError;var parseHttpSuccess=function(mdl){return function(res){return function(data){return mdl.state.isLoading(!1),res(data)}}};exports.parseHttpSuccess=parseHttpSuccess;var HttpTask=function(_headers){return function(method){return function(mdl){return function(url){return function(body){return mdl.state.isLoading(!0),new _data.default((function(rej,res){return m.request(_objectSpread({method:method,url:url,headers:_objectSpread({},_headers),body:body,withCredentials:!1},xhrProgress(mdl))).then(parseHttpSuccess(mdl)(res),parseHttpError(mdl)(rej))}))}}}}},paypalUrl="".concat(_secrets.Paypal.sandbox.baseUrl,"/"),_default={back4App:{getTask:function(mdl){return function(url){return HttpTask(_secrets.Back4App.headers(mdl,_secrets.Back4App))("GET")(mdl)("".concat(_secrets.Back4App.baseUrl,"/").concat(url))(null)}},postTask:function(mdl){return function(url){return function(dto){return HttpTask(_secrets.Back4App.headers(mdl,_secrets.Back4App))("POST")(mdl)("".concat(_secrets.Back4App.baseUrl,"/").concat(url))(dto)}}},putTask:function(mdl){return function(url){return function(dto){return HttpTask(_secrets.Back4App.headers(mdl,_secrets.Back4App))("PUT")(mdl)("".concat(_secrets.Back4App.baseUrl,"/").concat(url))(dto)}}}},paypal:{getTokenTask:function(mdl){return HttpTask(_secrets.Paypal.sandbox.headers())("POST")(mdl)(paypalUrl+"v1/oauth2/token/")("grant_type=client_credentials").map(function(mdl){return function(paypal){return mdl.state.paypal=paypal}}(mdl))},getTask:function(mdl){return function(url){return HttpTask(_secrets.Paypal.sandbox.headers(mdl))("GET")(mdl)(paypalUrl+url)(null)}},postTask:function(mdl){return function(url){return function(dto){return HttpTask(_secrets.Paypal.sandbox.headers(mdl))("POST")(mdl)(paypalUrl+url)(dto)}}},putTask:function(mdl){return function(url){return function(dto){return HttpTask(_secrets.Paypal.sandbox.headers(mdl))("PUT")(mdl)(paypalUrl+url)(dto)}}}},HttpTask:HttpTask,getTask:function(mdl){return function(url){return HttpTask({})("GET")(mdl)(url)(null)}},lookupLocationTask:function(query){return new _data.default((function(rej,res){return m.request({method:"GET",url:"https://nominatim.openstreetmap.org/search?q=".concat(query,"&format=json")}).then(res,rej)}))}};exports.default=_default})),require.register("Utils/index.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var _helpers=require("./helpers.js");Object.keys(_helpers).forEach((function(key){"default"!==key&&"__esModule"!==key&&(key in exports&&exports[key]===_helpers[key]||Object.defineProperty(exports,key,{enumerable:!0,get:function(){return _helpers[key]}}))}));var _http=require("./http.js");Object.keys(_http).forEach((function(key){"default"!==key&&"__esModule"!==key&&(key in exports&&exports[key]===_http[key]||Object.defineProperty(exports,key,{enumerable:!0,get:function(){return _http[key]}}))}));var _validation=require("./validation.js");Object.keys(_validation).forEach((function(key){"default"!==key&&"__esModule"!==key&&(key in exports&&exports[key]===_validation[key]||Object.defineProperty(exports,key,{enumerable:!0,get:function(){return _validation[key]}}))}));var _storage=require("./storage.js");Object.keys(_storage).forEach((function(key){"default"!==key&&"__esModule"!==key&&(key in exports&&exports[key]===_storage[key]||Object.defineProperty(exports,key,{enumerable:!0,get:function(){return _storage[key]}}))}))})),require.register("Utils/storage.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.saveStorageTask=exports.getDbStorageTask=exports.saveDbStorageTask=exports.saveLocalStorageTask=exports.getSessionStorageTask=exports.getLocalStorageTask=void 0;var obj,_data=(obj=require("data.task"))&&obj.__esModule?obj:{default:obj};exports.getLocalStorageTask=function(key){return new _data.default((function(rej,res){return localStorage.getItem(key)?rej("nothing here"):res(localStorage.getItem(key))}))};exports.getSessionStorageTask=function(key){return new _data.default((function(rej,res){return sessionStorage.getItem(key)?rej("nothing here"):res(sessionStorage.getItem(key))}))};var saveLocalStorageTask=function(key){return function(value){return localStorage.setItem(key,JSON.stringify(value)),_data.default.of(localStorage.getItem(key))}};exports.saveLocalStorageTask=saveLocalStorageTask;var saveDbStorageTask=function(mdl){return function(cart){return mdl.http.back4App.putTask(mdl)("classes/Accounts/".concat(mdl.user.account.objectId))({cart:JSON.parse(cart)})}};exports.saveDbStorageTask=saveDbStorageTask;exports.getDbStorageTask=function(mdl){return mdl.http.back4App.gettTask(mdl)("classes/Accounts/".concat(mdl.user.account.objectId))};exports.saveStorageTask=function(mdl){return function(key){return function(value){return mdl.state.isAuth()?saveLocalStorageTask(key)(value).chain(saveDbStorageTask(mdl)):saveLocalStorageTask(key)(value)}}}})),require.register("Utils/validation.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.isNilOrEmptyOrAtom=exports.allCaps=exports.inDateRange=exports.unique=exports.maxLengthNullable=exports.onlyNumeric=exports.urlFormat=exports.phoneFormat=exports.onlyAlphaNumericSpaceSpecial=exports.onlyAlphaNumericSpaceUnderscore=exports.onlyAlphaNumericSpace=exports.onlyAlphaNumericUnderscore=exports.onlyAlphaNumeric=exports.onlyAlpha=exports.emailFormat=exports.maxSize=exports.maxLength=exports.isNullOrEmpty=exports.isNotNullOrEmpty=exports.IsNotNil=exports.isRequired=exports.validate=exports.getOrElse=void 0;var obj,_ramda=require("ramda"),_data=require("data.validation"),_data2=(obj=require("data.maybe"))&&obj.__esModule?obj:{default:obj};var getOrElse=function(val){return function(x){return x.getOrElse(val)}};exports.getOrElse=getOrElse;var validate=(0,_ramda.curry)((function(rule,lens,msg,data){return rule((0,_ramda.view)(lens,data))?(0,_data.Success)(data):(0,_data.Failure)([(0,_ramda.set)(lens,msg,{})])}));exports.validate=validate;var isRequired=(0,_ramda.compose)(_ramda.not,_ramda.isEmpty);exports.isRequired=isRequired;var IsNotNil=(0,_ramda.compose)(_ramda.not,_ramda.isNil);exports.IsNotNil=IsNotNil;exports.isNotNullOrEmpty=function(data){return!isNullOrEmpty(data)};var isNullOrEmpty=function(data){return(0,_ramda.isNil)(data)||(0,_ramda.isEmpty)(data)};exports.isNullOrEmpty=isNullOrEmpty;exports.maxLength=function(max){return(0,_ramda.compose)((0,_ramda.gte)(max),_ramda.length)};var maxSize=(0,_ramda.curry)((function(max,value){return(0,_ramda.gte)(max,value)}));exports.maxSize=maxSize;var emailFormat=(0,_ramda.test)(/@/);exports.emailFormat=emailFormat;var onlyAlpha=(0,_ramda.test)(/^[a-zA-Z]*$/);exports.onlyAlpha=onlyAlpha;var onlyAlphaNumeric=(0,_ramda.test)(/^[a-zA-Z0-9]*$/);exports.onlyAlphaNumeric=onlyAlphaNumeric;var onlyAlphaNumericUnderscore=(0,_ramda.test)(/^[a-zA-Z0-9_]*$/);exports.onlyAlphaNumericUnderscore=onlyAlphaNumericUnderscore;var onlyAlphaNumericSpace=(0,_ramda.test)(/^[a-zA-Z0-9\s]*$/);exports.onlyAlphaNumericSpace=onlyAlphaNumericSpace;var onlyAlphaNumericSpaceUnderscore=(0,_ramda.test)(/^[a-zA-Z0-9_\s]*$/);exports.onlyAlphaNumericSpaceUnderscore=onlyAlphaNumericSpaceUnderscore;var onlyAlphaNumericSpaceSpecial=(0,_ramda.test)(/^[a-zA-Z0-9_.~!*''();:@&=+$,/?#[%-\]+\s]*$/);exports.onlyAlphaNumericSpaceSpecial=onlyAlphaNumericSpaceSpecial;var phoneFormat=(0,_ramda.test)(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/);exports.phoneFormat=phoneFormat;var urlFormat=(0,_ramda.test)(/^[a-zA-Z0-9_.~!*''();:@&=+$,/?#[%-\]+]*$/);exports.urlFormat=urlFormat;var onlyNumeric=(0,_ramda.test)(/^[0-9]*$/);exports.onlyNumeric=onlyNumeric;exports.maxLengthNullable=function(max){return(0,_ramda.compose)(getOrElse(!1),(0,_ramda.map)((0,_ramda.gte)(max)),(0,_ramda.map)(_ramda.length),_data2.default.fromNullable)};var unique=(0,_ramda.curry)((function(keys,value){var lookup=_data2.default.fromNullable(keys);return!(0,_ramda.contains)((0,_ramda.toUpper)(value.toString()),(0,_ramda.map)((function(y){return(0,_ramda.toUpper)(y.toString())}),lookup.getOrElse([])))}));exports.unique=unique;var inDateRange=(0,_ramda.curry)((function(start,end,value){return null==value||""===value||new Date(start)<=new Date(value)&&new Date(value)<new Date(end)}));exports.inDateRange=inDateRange;exports.allCaps=function(str){return str.toUpperCase()===str};exports.isNilOrEmptyOrAtom=function(item){return(0,_ramda.isNil)(item)||(0,_ramda.isEmpty)(item)||"{$type:atom}"===item}})),require.register("app.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _default=function(mdl){return mdl.Routes.reduce(function(mdl){return function(acc,route){return acc[route.route]={onmatch:function(args,path,fullroute){mdl.state.showNavModal(!1),route.group.includes("authenticated")&&!mdl.state.isAuth()&&mdl.route.set(m.route.get()),mdl.state.route=route,mdl.state.anchor=path.split("#")[1],mdl.state.navState("/".concat(route.route.split("/")[1])),route.route.split("/")[2]?mdl.state.subnavState(route.route):mdl.state.subnavState(null);var isAnchor=Boolean(mdl.state.anchor);route.onmatch(mdl,args,path,fullroute,isAnchor)},render:function(){return route.component(mdl)}},acc}}(mdl),{})};exports.default=_default})),require.register("images.js",(function(exports,require,module){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _default=["images/IMG_4029.webp","images/IMG_3989.webp","images/IMG_3990.webp","images/IMG_3991.webp","images/IMG_3992.webp","images/IMG_3993.webp","images/IMG_3994.webp","images/IMG_3995.webp","images/IMG_3996.webp","images/IMG_3997.webp","images/IMG_3998.webp","images/IMG_3999.webp","images/IMG_4001.webp","images/IMG_4002.webp","images/IMG_4003.webp","images/IMG_4004.webp","images/IMG_4005.webp","images/IMG_4006.webp","images/IMG_4007.webp","images/IMG_4008.webp","images/IMG_4009.webp","images/IMG_4010.webp","images/IMG_4011.webp","images/IMG_4012.webp","images/IMG_4013.webp","images/IMG_4014.webp","images/IMG_4015.webp","images/IMG_4016.webp","images/IMG_4017.webp","images/IMG_4018.webp","images/IMG_4019.webp","images/IMG_4020.webp","images/IMG_4021.webp","images/IMG_4022.webp","images/IMG_4023.webp","images/IMG_4024.webp","images/IMG_4025.webp","images/IMG_4026.webp","images/IMG_4027.webp","images/IMG_4028.webp"];exports.default=_default})),require.register("index.js",(function(exports,require,module){"use strict";var _funConfig=require("@boazblake/fun-config"),_app=_interopRequireDefault(require("./app.js")),_index=_interopRequireDefault(require("Models/index.js"));function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}_funConfig.FunConfig.configure(),_index.default.navState=_index.default.Routes.reduce((function(acc,r){return r.children.any()&&(acc[r.id]=Stream(!1)),acc}),{});var root=document.body,winW=window.innerWidth;module.hot&&module.hot.accept(),"serviceWorker"in navigator&&window.addEventListener("load",(function(){navigator.serviceWorker.register("./sw.js").then((function(registration){console.log("⚙️ SW registered: ",registration)})).catch((function(registrationError){console.log("🧟 SW registration failed: ",registrationError)}))}));var getProfile=function(w){return w<624?"phone":w<944?"tablet":"desktop"};_index.default.settings.screenSize=getProfile(winW),function checkWidth(winW){var w=window.innerWidth;if(winW!==w){winW=w;var lastProfile=_index.default.settings.screenSize;_index.default.settings.screenSize=getProfile(w),lastProfile!=_index.default.settings.screenSize&&m.redraw()}return requestAnimationFrame(checkWidth)}(winW),sessionStorage.getItem("user")&&(_index.default.user=JSON.parse(sessionStorage.getItem("user")),_index.default.state.isAuth(!0)),m.route(root,"/about",(0,_app.default)(_index.default))})),require.register("initialize.js",(function(exports,require,module){"use strict";document.addEventListener("DOMContentLoaded",(function(){require("./index.js")}))})),require.alias("process/browser.js","process"),require("process"),require.register("___globals___",(function(exports,require,module){window.m=require("mithril"),window.Stream=require("mithril-stream")}))}(),require("___globals___");
+(function() {
+  'use strict';
+
+  var globals = typeof global === 'undefined' ? self : global;
+  if (typeof globals.require === 'function') return;
+
+  var modules = {};
+  var cache = {};
+  var aliases = {};
+  var has = {}.hasOwnProperty;
+
+  var expRe = /^\.\.?(\/|$)/;
+  var expand = function(root, name) {
+    var results = [], part;
+    var parts = (expRe.test(name) ? root + '/' + name : name).split('/');
+    for (var i = 0, length = parts.length; i < length; i++) {
+      part = parts[i];
+      if (part === '..') {
+        results.pop();
+      } else if (part !== '.' && part !== '') {
+        results.push(part);
+      }
+    }
+    return results.join('/');
+  };
+
+  var dirname = function(path) {
+    return path.split('/').slice(0, -1).join('/');
+  };
+
+  var localRequire = function(path) {
+    return function expanded(name) {
+      var absolute = expand(dirname(path), name);
+      return globals.require(absolute, path);
+    };
+  };
+
+  var initModule = function(name, definition) {
+    var hot = hmr && hmr.createHot(name);
+    var module = {id: name, exports: {}, hot: hot};
+    cache[name] = module;
+    definition(module.exports, localRequire(name), module);
+    return module.exports;
+  };
+
+  var expandAlias = function(name) {
+    var val = aliases[name];
+    return (val && name !== val) ? expandAlias(val) : name;
+  };
+
+  var _resolve = function(name, dep) {
+    return expandAlias(expand(dirname(name), dep));
+  };
+
+  var require = function(name, loaderPath) {
+    if (loaderPath == null) loaderPath = '/';
+    var path = expandAlias(name);
+
+    if (has.call(cache, path)) return cache[path].exports;
+    if (has.call(modules, path)) return initModule(path, modules[path]);
+
+    throw new Error("Cannot find module '" + name + "' from '" + loaderPath + "'");
+  };
+
+  require.alias = function(from, to) {
+    aliases[to] = from;
+  };
+
+  var extRe = /\.[^.\/]+$/;
+  var indexRe = /\/index(\.[^\/]+)?$/;
+  var addExtensions = function(bundle) {
+    if (extRe.test(bundle)) {
+      var alias = bundle.replace(extRe, '');
+      if (!has.call(aliases, alias) || aliases[alias].replace(extRe, '') === alias + '/index') {
+        aliases[alias] = bundle;
+      }
+    }
+
+    if (indexRe.test(bundle)) {
+      var iAlias = bundle.replace(indexRe, '');
+      if (!has.call(aliases, iAlias)) {
+        aliases[iAlias] = bundle;
+      }
+    }
+  };
+
+  require.register = require.define = function(bundle, fn) {
+    if (bundle && typeof bundle === 'object') {
+      for (var key in bundle) {
+        if (has.call(bundle, key)) {
+          require.register(key, bundle[key]);
+        }
+      }
+    } else {
+      modules[bundle] = fn;
+      delete cache[bundle];
+      addExtensions(bundle);
+    }
+  };
+
+  require.list = function() {
+    var list = [];
+    for (var item in modules) {
+      if (has.call(modules, item)) {
+        list.push(item);
+      }
+    }
+    return list;
+  };
+
+  var hmr = globals._hmr && new globals._hmr(_resolve, require, modules, cache);
+  require._cache = cache;
+  require.hmr = hmr && hmr.wrap;
+  require.brunch = true;
+  globals.require = require;
+})();
+
+(function() {
+var global = typeof window === 'undefined' ? this : window;
+var process;
+var __makeRelativeRequire = function(require, mappings, pref) {
+  var none = {};
+  var tryReq = function(name, pref) {
+    var val;
+    try {
+      val = require(pref + '/node_modules/' + name);
+      return val;
+    } catch (e) {
+      if (e.toString().indexOf('Cannot find module') === -1) {
+        throw e;
+      }
+
+      if (pref.indexOf('node_modules') !== -1) {
+        var s = pref.split('/');
+        var i = s.lastIndexOf('node_modules');
+        var newPref = s.slice(0, i).join('/');
+        return tryReq(name, newPref);
+      }
+    }
+    return none;
+  };
+  return function(name) {
+    if (name in mappings) name = mappings[name];
+    if (!name) return;
+    if (name[0] !== '.' && pref) {
+      var val = tryReq(name, pref);
+      if (val !== none) return val;
+    }
+    return require(name);
+  }
+};
+require.register("Components/Hamburger.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _clarity = require("@mithril-icons/clarity");
+
+var Hamburger = function Hamburger() {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return mdl.state.isAuth() ? m("span.pointer", [m("span", "Welcome ".concat(mdl.user.name.split(" ")[0])), m(".icon-click.", mdl.state.showNavModal() ? m(_clarity.WindowCloseLine) : m(_clarity.BarsLine))]) : m("span.pointer", mdl.state.showNavModal() ? m(_clarity.WindowCloseLine) : m(_clarity.BarsLine));
+    }
+  };
+};
+
+var _default = Hamburger;
+exports["default"] = _default;
+});
+
+;require.register("Components/Modal.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _animations = require("Styles/animations");
+
+var Modal = {
+  oncreate: _animations.SlideInLeft,
+  onbeforeremove: _animations.SlideOutRight,
+  view: function view(_ref) {
+    var _ref$attrs = _ref.attrs,
+        classList = _ref$attrs.classList,
+        isActive = _ref$attrs.isActive,
+        close = _ref$attrs.close,
+        title = _ref$attrs.title,
+        content = _ref$attrs.content,
+        footer = _ref$attrs.footer;
+    console.log("MODAL", classList, isActive, close, title, content, footer);
+    return m("section.modal.".concat(classList), {
+      "class": isActive ? "active" : "",
+      id: "modal"
+    }, [m("a.modal-overlay", {
+      "aria-label": "Close",
+      onclick: function onclick() {
+        return close();
+      }
+    }), m(".modal-container", {
+      role: "document"
+    }, [m(".modal-header", [m("a.btn btn-clear float-right", {
+      id: "modal-close",
+      "aria-label": "Close",
+      onclick: function onclick() {
+        return close();
+      }
+    }), m(".modal-title h3", title)]), m(".modal-body", m(".content", content)), m(".modal-footer", footer)])]);
+  }
+};
+var _default = Modal;
+exports["default"] = _default;
+});
+
+;require.register("Components/Selector.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _storage = require("Utils/storage");
+
+var _animations = require("Styles/animations");
+
+var Selector = function Selector() {
+  var state = {
+    error: Stream(null)
+  };
+
+  var ResetState = function ResetState() {
+    state.quantity = null;
+    state.gender = "Gender";
+  };
+
+  var saveToStorage = function saveToStorage(mdl) {
+    var onError = function onError(e) {
+      console.log("Error saving", e.message);
+      state.error(e.message);
+    };
+
+    var onSuccess = function onSuccess(s) {
+      ResetState();
+    };
+
+    (0, _storage.saveStorageTask)(mdl)("sb-cart")(mdl.cart).fork(onError, onSuccess);
+  };
+
+  var addToCart = function addToCart(mdl) {
+    return function (product) {
+      return function (state) {
+        mdl.addToCart.show(product);
+        mdl.cart[product][state.gender] += parseInt(state.quantity);
+        saveToStorage(mdl);
+      };
+    };
+  };
+
+  return {
+    oninit: function oninit() {
+      return ResetState();
+    },
+    view: function view(_ref) {
+      var _ref$attrs = _ref.attrs,
+          mdl = _ref$attrs.mdl,
+          product = _ref$attrs.product;
+      return m(".frow", m(".frow content-center gutters row-between pt-20 md-columns", [state.error() && m("code.warning", state.error()), m(".col-xs-1-3.col-md-1-4", m("h2.pb-10", "$".concat(mdl.state.prices[product]))), m(".col-xs-1-3.col-md-1-4", m("label", m("input", {
+        type: "number",
+        inputmode: "numeric",
+        pattern: "[0-9]*",
+        placeholder: "quantity",
+        value: state.quantity,
+        oninput: function oninput(e) {
+          return state.quantity = e.target.value;
+        }
+      }))), m(".col-xs-1-3.col-md-1-4", m("label", m("select", {
+        value: state.gender,
+        onchange: function onchange(e) {
+          return state.gender = e.target.value;
+        }
+      }, [m("option", {
+        value: null
+      }, "Gender"), m("option", {
+        value: "Male"
+      }, "Male"), m("option", {
+        value: "Female"
+      }, "Female"), m("option", {
+        value: "Unisex"
+      }, "Unisex")]))), mdl.addToCart.show() == product && m(".animated", {
+        oncreate: _animations.AddToCartOut,
+        id: "add-to-cart-img",
+        style: {
+          "background-image": "url(".concat(mdl.addToCart.id(), ")")
+        }
+      }), m(".col-xs-1", m("button.width-100", {
+        disabled: state.quantity == undefined || state.gender == "Gender",
+        onclick: function onclick() {
+          return addToCart(mdl)(product)(state);
+        }
+      }, "Add To Bag"))]));
+    }
+  };
+};
+
+var _default = Selector;
+exports["default"] = _default;
+});
+
+;require.register("Components/authbox.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _navLink = _interopRequireDefault(require("Components/nav-link.js"));
+
+var _index = require("Utils/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var AuthBox = function AuthBox() {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return mdl.state.isAuth() ? m("ul", [mdl.user.isAdmin && m("li.m-r-16", m(_navLink["default"], {
+        mdl: mdl,
+        href: "/dashboard/".concat(mdl.user.name),
+        link: "Dashboard",
+        classList: "".concat((0, _index.isActiveRoute)("/dashboard/".concat(mdl.user.name)), " outline")
+      })), m("li.m-r-16", m(_navLink["default"], {
+        mdl: mdl,
+        href: "/account/".concat(mdl.user.name),
+        role: "button",
+        link: "Your Account",
+        classList: "".concat((0, _index.isActiveRoute)("/account/".concat(mdl.user.name)), " outline")
+      })), m("li.m-r-16", m(_navLink["default"], {
+        mdl: mdl,
+        href: "/logout",
+        role: "button",
+        link: "Logout",
+        classList: "secondary"
+      }))]) : m("ul", [m("li.m-r-16", m(_navLink["default"], {
+        mdl: mdl,
+        role: "button",
+        href: "/login",
+        link: "Login",
+        classList: "".concat((0, _index.isActiveRoute)("/login"), " outline")
+      })), m("li.m-r-16", m(_navLink["default"], {
+        mdl: mdl,
+        role: "button",
+        href: "/register",
+        link: "Register",
+        classList: "".concat((0, _index.isActiveRoute)("/register"), " outline secondary")
+      }))]);
+    }
+  };
+};
+
+var _default = AuthBox;
+exports["default"] = _default;
+});
+
+;require.register("Components/carousel.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var Indicators = {
+  view: function view(_ref) {
+    var _ref$attrs = _ref.attrs,
+        ident = _ref$attrs.ident,
+        state = _ref$attrs.state,
+        children = _ref.children;
+    return m(".frow row-between", children.map(function (src, idx) {
+      return m(".clickable.carousel-indicator", {
+        id: "".concat(ident, "-").concat(idx),
+        onclick: function onclick(e) {
+          state.prevIdx(state.currentIdx());
+          state.currentIdx(idx);
+          state.currentId(ident);
+          state.currentEl(e.composedPath()[3].children[0].children[state.currentIdx()]);
+        }
+      }, m("img.carousel-slide", {
+        "class": state.currentIdx() == idx ? "is-active" : "",
+        src: src,
+        id: "".concat(ident, "-").concat(idx)
+      }));
+    }));
+  }
+};
+
+var Carousel = function Carousel() {
+  var state = {
+    currentIdx: Stream(0),
+    currentId: Stream(""),
+    currentEl: Stream(null),
+    prevIdx: Stream(0),
+    indicators: Stream([]),
+    coords: Stream({
+      x: null,
+      y: null
+    })
+  };
+
+  var distanceToNext = function distanceToNext(dom) {
+    return state.currentIdx() - state.prevIdx() >= 0 ? Array.from(dom.children).slice(state.prevIdx(), state.currentIdx()).reduce(function (acc, c) {
+      return acc + c.clientWidth;
+    }, 0) : ~Array.from(dom.children).slice(state.currentIdx(), state.prevIdx()).reduce(function (acc, c) {
+      return acc + c.clientWidth;
+    }, 0) + 1;
+  };
+
+  var intersectionObserver = new IntersectionObserver(function (entries, _) {
+    entries.forEach(function (entry) {
+      var target = entry.target; // console.log("intersectionObserver", target)
+
+      var indicatorId = target.getAttribute("id");
+      var indicator = state.indicators()[indicatorId];
+
+      if (entry.intersectionRatio >= 0.25) {
+        // console.log(target, indicator)
+        target.classList.add("is-active");
+        indicator === null || indicator === void 0 ? void 0 : indicator.classList.add("is-active");
+      } else {
+        // console.log(target, indicator)
+        target.classList.remove("is-active");
+        indicator === null || indicator === void 0 ? void 0 : indicator.classList.remove("is-active");
+      }
+    });
+  });
+  var mutationObserver = new MutationObserver(function (entry) {
+    console.log(entry);
+  });
+  return {
+    view: function view(_ref2) {
+      var children = _ref2.children,
+          ident = _ref2.attrs.ident;
+      return m(".carousel-container", {
+        oncreate: function oncreate(_ref3) {
+          var dom = _ref3.dom;
+          state.indicators(dom.children[1].children);
+          state.currentEl(dom.children[0].children[state.currentIdx()]);
+          state.coords(dom.getBoundingClientRect());
+          intersectionObserver.observe(dom);
+          mutationObserver.observe(dom, {
+            childList: true,
+            subTree: true,
+            characterDataOldValue: true // pass old data to callback
+
+          });
+        }
+      }, m(".carousel-wrapper.width-100", {
+        id: ident,
+        ontouchend: function ontouchend(e) {
+          e.preventDefault();
+          state.prevIdx(state.currentIdx());
+          setTimeout(function () {
+            var el = document.elementFromPoint(state.coords().x, state.coords().y);
+            var idx = el.getAttribute("id") && parseInt(el.getAttribute("id").split("-")[1]);
+            state.currentIdx(idx);
+            state.currentId("".concat(ident, "-").concat(idx));
+            state.currentEl(el);
+            m.redraw();
+          }, 1000);
+        },
+        onupdate: function onupdate(_ref4) {
+          var dom = _ref4.dom;
+          state.currentEl(dom.children[state.currentIdx()]);
+          state.currentEl() instanceof Element && intersectionObserver.observe(state.currentEl());
+          if (dom.id == state.currentId()) dom.scrollTo({
+            left: dom.scrollLeft + distanceToNext(dom),
+            behavior: "smooth"
+          });
+        }
+      }, children.map(function (src, idx) {
+        return m("img.carousel-slide", {
+          src: src,
+          id: "".concat(ident, "-").concat(idx)
+        });
+      })), m(Indicators, {
+        ident: ident,
+        state: state
+      }, children));
+    }
+  };
+};
+
+var _default = Carousel;
+exports["default"] = _default;
+});
+
+;require.register("Components/grid.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var getOverFlow = function getOverFlow(mdl, overflow) {
+  console.log(mdl.settings.screenSize, mdl.settings.screenSize == "phone" ? "none" : overflow);
+  return mdl.settings.screenSize == "phone" ? "none" : overflow;
+};
+
+var Fig = {
+  view: function view(_ref) {
+    var children = _ref.children,
+        id = _ref.attrs.id;
+    return m("figure#".concat(id, "-slidy"), {
+      "flex-direction": "column",
+      "justify-content": "center",
+      "scroll-snap-align": "start"
+    }, children);
+  }
+};
+var Grid = {
+  onremove: function onremove() {},
+  view: function view(_ref2) {
+    var children = _ref2.children,
+        _ref2$attrs = _ref2.attrs,
+        id = _ref2$attrs.id,
+        maxheight = _ref2$attrs.maxheight,
+        height = _ref2$attrs.height,
+        overflow = _ref2$attrs.overflow,
+        mdl = _ref2$attrs.mdl;
+    return m("frow-row", {
+      style: _defineProperty({
+        width: "80%",
+        "scroll-snap-type": " mandatory",
+        "scroll-snap-points-y": " repeat(3rem)"
+      }, "scroll-snap-type", " x mandatory")
+    }, children.map(function (child) {
+      return m(Fig, {
+        id: id
+      }, child);
+    }));
+  }
+};
+var _default = Grid;
+exports["default"] = _default;
+});
+
+;require.register("Components/nav-link.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = exports.NavLink = void 0;
+var _excluded = ["mdl", "href", "link", "classList"];
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var handlers = function handlers(types, fn) {
+  return types.reduce(function (acc, type) {
+    return Object.assign(acc, _defineProperty({}, type, fn));
+  }, {});
+};
+
+var showBorderStyle = function showBorderStyle(style) {
+  style.border = "1px solid black";
+  return style;
+};
+
+var hideBorderStyle = function hideBorderStyle(style) {
+  style.border = "";
+  return style;
+};
+
+var NavLink = function NavLink() {
+  return {
+    view: function view(_ref) {
+      var _ref$attrs = _ref.attrs,
+          mdl = _ref$attrs.mdl,
+          href = _ref$attrs.href,
+          link = _ref$attrs.link,
+          classList = _ref$attrs.classList,
+          rest = _objectWithoutProperties(_ref$attrs, _excluded);
+
+      return m(m.route.Link, _objectSpread({
+        selector: "a",
+        onclick: function onclick(e) {
+          return e.stopPropagation();
+        },
+        // style: {
+        //   ...handlers(["onmouseover", "onmouseout"], (e) => {
+        //     return e.type == "mouseover"
+        //       ? showBorderStyle(e.target.style)
+        //       : hideBorderStyle(e.target.style)
+        //   }),
+        // },
+        href: href,
+        "class": "nav-link ".concat(classList, " ").concat(mdl.state.navSelected() == link ? "is-active" : "")
+      }, rest), link);
+    }
+  };
+};
+
+exports.NavLink = NavLink;
+var _default = NavLink;
+exports["default"] = _default;
+});
+
+;require.register("Components/orders.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Orders = void 0;
+
+var _Utils = require("Utils");
+
+var _cjs = require("@mithril-icons/clarity/cjs");
+
+var _ramda = require("ramda");
+
+var STATE = function STATE() {
+  return {
+    invoices: []
+  };
+};
+
+var state = STATE();
+
+var calcProductPrice = function calcProductPrice(_ref, product) {
+  var prices = _ref.prices,
+      cart = _ref.cart;
+  return parseInt(prices[product]) * Object.values(cart[product]).reduce(_ramda.add, 0);
+};
+
+var calcTotalPrice = function calcTotalPrice(invoice) {
+  return Object.keys(invoice.cart).map(function (product) {
+    return calcProductPrice(invoice, product);
+  }).reduce(_ramda.add, 0);
+};
+
+var invoiceUrl = function invoiceUrl(mdl) {
+  var userInvoices = "{\"userId\":\"".concat(mdl.user.objectId, "\"}");
+  return mdl.state.route.id == "dashboard" ? "classes/Invoices" : "classes/Invoices?where=".concat(encodeURI(userInvoices));
+};
+
+var fetchInvoicesTask = function fetchInvoicesTask(mdl) {
+  return mdl.http.back4App.getTask(mdl)(invoiceUrl(mdl)).map((0, _ramda.prop)("results")).map((0, _ramda.map)((0, _ramda.assoc)("isSelected", false)));
+};
+
+var onFetchInvoiceError = function onFetchInvoiceError(mdl) {
+  return function (e) {
+    return log("e")([e, mdl]);
+  };
+};
+
+var onFetchInvoiceSuccess = function onFetchInvoiceSuccess(_) {
+  return function (invoices) {
+    return state.invoices = invoices;
+  };
+};
+
+var fetchInvoices = function fetchInvoices(_ref2) {
+  var mdl = _ref2.attrs.mdl;
+  return fetchInvoicesTask(mdl).fork(onFetchInvoiceError(mdl), onFetchInvoiceSuccess(mdl));
+};
+
+var InvoiceCell = function InvoiceCell() {
+  return {
+    view: function view(_ref3) {
+      var screenSize = _ref3.attrs.mdl.settings.screenSize,
+          children = _ref3.children;
+      return screenSize == "phone" ? m("tr", [m("td", {
+        style: {
+          width: "25%"
+        }
+      }, m("label", children[0].key)), children]) : m("td", {
+        style: {
+          width: "20%"
+        }
+      }, children);
+    }
+  };
+};
+
+var Invoice = function Invoice(_ref4) {
+  var mdl = _ref4.attrs.mdl;
+  return {
+    view: function view(_ref5) {
+      var invoice = _ref5.attrs.invoice;
+      return [m("tr", m(InvoiceCell, {
+        mdl: mdl
+      }, m("", {
+        key: "Date"
+      }, (0, _Utils.formatDate)(invoice.purchaseTime))), m(InvoiceCell, {
+        mdl: mdl
+      }, m("", {
+        key: "Order Id"
+      }, invoice.orderID)), m(InvoiceCell, {
+        mdl: mdl
+      }, m("", {
+        key: "Name"
+      }, "".concat(invoice.shippingDestination.name.full_name, " "))), m(InvoiceCell, {
+        mdl: mdl
+      }, m("", {
+        key: "Payment Status"
+      }, invoice.status)), m(InvoiceCell, {
+        mdl: mdl
+      }, m("", {
+        key: "Shipping Status",
+        style: {
+          width: "100%",
+          borderBottom: "1px solid gold"
+        }
+      }, invoice.shippingStatus ? m("a", {
+        href: invoice.shippingStatus
+      }, "Shipping Status") : m("p", "Prepparing your order"))), m("td", m(_cjs.AngleLine, {
+        "class": "clickable ".concat(!invoice.isSelected && "point-down"),
+        onclick: function onclick() {
+          return invoice.isSelected = !invoice.isSelected;
+        },
+        width: "16px"
+      }))), invoice.isSelected && m("td", {
+        colspan: 5,
+        style: {
+          width: "100%"
+        }
+      }, m("tr", m("td", m("label", "Shipping Destination"), "".concat(invoice.shippingDestination.address.address_line_1, " ").concat(invoice.shippingDestination.address.admin_area_2, " ").concat(invoice.shippingDestination.address.admin_area_1, " ").concat(invoice.shippingDestination.address.postal_code)), mdl.state.route.id == "dashboard" && m("td", m("button", "Update Shipping Status"))), m("table", {
+        style: {
+          width: "100%",
+          borderBottom: "1px solid gold"
+        }
+      }, [m("thead", m("tr", [m("th", "Product"), m("th", "Quantities"), m("th", "Unit Price"), m("th", "Unit Total")])), m("tbody", Object.keys(invoice.cart).map(function (product) {
+        return m("tr", [m("td", product), m("td", JSON.stringify(invoice.cart[product])), m("td", invoice.prices[product]), m("td", calcProductPrice(invoice, product))]);
+      }), m("tr", m("th", "Order Total"), m("th", calcTotalPrice(invoice))))]))];
+    }
+  };
+};
+
+var Orders = function Orders() {
+  return {
+    onremove: state = STATE(),
+    oninit: fetchInvoices,
+    view: function view(_ref6) {
+      var mdl = _ref6.attrs.mdl;
+      return m("section.overflow-auto", {
+        style: {
+          minWidth: "100%",
+          height: "75vh"
+        }
+      }, state.invoices.any() ? m("table.dash-table", mdl.settings.screenSize != "phone" && m("thead.dash-nav", m("tr.mb-5", [m("th", "Date"), m("th", "Order Id"), m("th", "Name"), m("th", "Payment Status"), m("th", "Shipping Status"), m("th")])), m("tbody", state.invoices.map(function (invoice) {
+        return m(Invoice, {
+          mdl: mdl,
+          invoice: invoice
+        });
+      }))) : m("h2", "No Orders"));
+    }
+  };
+};
+
+exports.Orders = Orders;
+});
+
+;require.register("Components/paypal.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PayPal = void 0;
+
+var _data = _interopRequireDefault(require("data.task"));
+
+var _Utils = require("Utils");
+
+var _Models = require("Models");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var makePaymentTask = function makePaymentTask(actions) {
+  (0, _Utils.log)("makePaymentTask")(actions);
+  return new _data["default"](function (rej, res) {
+    return actions.order.capture().then(res, rej);
+  });
+};
+
+var formatInvoice = function formatInvoice(_ref) {
+  var user = _ref.user,
+      cart = _ref.cart,
+      prices = _ref.state.prices;
+  return function (_ref2) {
+    var orderID = _ref2.orderID,
+        payerID = _ref2.payerID;
+    return function (details) {
+      (0, _Utils.log)("formatInvoice")(user);
+      return {
+        userId: user.objectId,
+        orderID: orderID,
+        payerID: payerID,
+        purchaseTime: details.create_time,
+        status: details.status,
+        customer: details.payer,
+        shippingDestination: details.purchase_units[0].shipping,
+        cart: cart,
+        prices: prices
+      };
+    };
+  };
+};
+
+var setTempUser = function setTempUser(user) {
+  return sessionStorage.setItem("baca-user-token", user["sessionToken"]);
+};
+
+var unSetTempUser = function unSetTempUser() {
+  return sessionStorage.clear();
+};
+
+var updateCartTask = function updateCartTask(mdl) {
+  return function (_) {
+    (0, _Utils.log)("updateCartTask")();
+    mdl.cart = (0, _Utils.jsonCopy)(_Models.newCart);
+    return (0, _Utils.saveStorageTask)(mdl)("sb-cart")(mdl.cart);
+  };
+};
+
+var saveUnregisteredInvoiceTask = function saveUnregisteredInvoiceTask(mdl) {
+  return function (invoice) {
+    return mdl.http.back4App.postTask(mdl)("login")({
+      username: mdl.http.back4App.unregistered.email,
+      password: btoa(mdl.http.back4App.unregistered.password)
+    }).map(setTempUser).chain(function (_) {
+      return saveInvoiceTask(mdl)(invoice);
+    }).map(unSetTempUser);
+  };
+};
+
+var addInvoiceTask = function addInvoiceTask(mdl) {
+  return function (invoice) {
+    (0, _Utils.log)("addInvoiceTask")(invoice);
+    return mdl.state.isAuth() ? saveInvoiceTask(mdl)(invoice) : saveUnregisteredInvoiceTask(mdl)(invoice);
+  };
+};
+
+var saveInvoiceTask = function saveInvoiceTask(mdl) {
+  return function (invoice) {
+    return mdl.http.back4App.postTask(mdl)("classes/Invoices")(invoice);
+  };
+};
+
+var onSuccess = function onSuccess(mdl, state) {
+  return function (_) {
+    console.log("succc", state, _);
+    setTimeout(function () {
+      return state.isPaying = "success";
+    });
+  };
+};
+
+var onError = function onError(state) {
+  return function (error) {
+    (0, _Utils.log)("state")(state);
+    state.error = error;
+    setTimeout(function () {
+      return state.isPaying = "failed";
+    });
+    console.log("error", error);
+  };
+};
+
+var PayPal = function PayPal() {
+  return {
+    view: function view(_ref3) {
+      var _ref3$attrs = _ref3.attrs,
+          mdl = _ref3$attrs.mdl,
+          state = _ref3$attrs.state;
+      return m(".", {
+        style: {
+          maxHeight: "500px",
+          overflowY: "auto",
+          minWidth: "400px"
+        },
+        oncreate: function oncreate(_ref4) {
+          var dom = _ref4.dom;
+          return paypal.Buttons({
+            createOrder: function createOrder(_, actions) {
+              return actions.order.create({
+                purchase_units: [{
+                  amount: {
+                    value: (0, _Utils.getTotal)(mdl, (0, _Utils.toProducts)(mdl.cart))
+                  }
+                }]
+              });
+            },
+            onApprove: function onApprove(data, actions) {
+              state.isPaying = "start";
+              (0, _Utils.log)("onapprove")(JSON.stringify(state));
+              return makePaymentTask(actions).map(formatInvoice(mdl)(data)).chain(addInvoiceTask(mdl)).chain(updateCartTask(mdl)).fork(onError(state), onSuccess(mdl, state));
+            }
+          }).render(dom);
+        }
+      });
+    }
+  };
+};
+
+exports.PayPal = PayPal;
+});
+
+;require.register("Layouts/ProgressBar.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var ProgressBar = function ProgressBar() {
+  return {
+    view: function view(_ref) {
+      var _ref$attrs$mdl$state$ = _ref.attrs.mdl.state.loadingProgress,
+          value = _ref$attrs$mdl$state$.value,
+          max = _ref$attrs$mdl$state$.max;
+      return m(".progress-bar", m("progress.progress-bar", {
+        id: "progressbar",
+        value: value ? value() : 0,
+        max: max ? max() : 0
+      }));
+    }
+  };
+};
+
+var _default = ProgressBar;
+exports["default"] = _default;
+});
+
+;require.register("Layouts/fab.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _Hamburger = _interopRequireDefault(require("Components/Hamburger.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var Fab = function Fab() {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      console.log("FAB", mdl.state.fab());
+      return m("button#fab", {
+        style: {
+          right: "-".concat(mdl.state.fab(), "px")
+        },
+        onclick: function onclick(e) {
+          return mdl.state.showNavModal(!mdl.state.showNavModal());
+        }
+      }, m(_Hamburger["default"], {
+        mdl: mdl
+      }));
+    }
+  };
+};
+
+var _default = Fab;
+exports["default"] = _default;
+});
+
+;require.register("Layouts/footer.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _navLink = _interopRequireDefault(require("Components/nav-link.js"));
+
+var _index = require("Utils/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var Footer = function Footer() {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return m("footer.container-fluid", "footer");
+    }
+  };
+};
+
+var _default = Footer;
+exports["default"] = _default;
+});
+
+;require.register("Layouts/hero.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _images = _interopRequireDefault(require("../images"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var calcHeight = function calcHeight(_ref) {
+  var screenSize = _ref.settings.screenSize;
+
+  switch (screenSize) {
+    case "desktop":
+      return "540px";
+
+    case "tablet":
+      return "340px";
+
+    case "phone":
+      return "340px";
+  }
+};
+
+var updateBackground = function updateBackground(mdl) {
+  mdl.state.image() > _images["default"].length - 1 ? mdl.state.image(0) : mdl.state.image(mdl.state.image() + 1);
+};
+
+var Hero = function Hero() {
+  return {
+    onremove: function onremove() {
+      return clearInterval(updateBackground);
+    },
+    oncreate: function oncreate(_ref2) {
+      var mdl = _ref2.attrs.mdl;
+      return setInterval(function () {
+        return updateBackground(mdl);
+      }, 500);
+    },
+    view: function view(_ref3) {
+      var mdl = _ref3.attrs.mdl;
+      return m("section.hero", m("img.hero-img", {
+        src: _images["default"][mdl.state.image()],
+        style: {
+          height: calcHeight(mdl)
+        }
+      }), m("header", m("hgroup", m("h1", "Bonham Acres"), m("h2", "Houstons best kept secret"))));
+    }
+  };
+};
+
+var _default = Hero;
+exports["default"] = _default;
+});
+
+;require.register("Layouts/index.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _hero = _interopRequireDefault(require("./hero.js"));
+
+var _navbar = _interopRequireDefault(require("./navbar.js"));
+
+var _subnavbar = _interopRequireDefault(require("./subnavbar.js"));
+
+var _main = _interopRequireDefault(require("./main.js"));
+
+var _footer = _interopRequireDefault(require("./footer.js"));
+
+var _navModal = _interopRequireDefault(require("./nav-modal.js"));
+
+var _animations = require("Styles/animations.js");
+
+var _toolbar = _interopRequireDefault(require("./toolbar.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var showNavMenu = function showNavMenu(mdl) {
+  return mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal();
+};
+
+var Layout = function Layout() {
+  return {
+    view: function view(_ref) {
+      var children = _ref.children,
+          mdl = _ref.attrs.mdl;
+      return m("#layout", {
+        "data-theme": "light",
+        id: "layout",
+        role: "main"
+      }, m(_toolbar["default"], {
+        mdl: mdl
+      }), m(_hero["default"], {
+        mdl: mdl
+      }), mdl.settings.screenSize == "desktop" && [m(_navbar["default"], {
+        mdl: mdl
+      }), m(_subnavbar["default"], {
+        mdl: mdl
+      })], m(_main["default"], {
+        mdl: mdl,
+        children: children
+      }), showNavMenu(mdl) && m(_navModal["default"], {
+        oncreate: _animations.SlideInLeft,
+        onbeforeremove: _animations.SlideOutRight,
+        mdl: mdl
+      }), m(_footer["default"], {
+        mdl: mdl
+      }));
+    }
+  };
+};
+
+var _default = Layout;
+exports["default"] = _default;
+});
+
+;require.register("Layouts/main.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var Main = function Main() {
+  return {
+    view: function view(_ref) {
+      var _ref$attrs = _ref.attrs,
+          mdl = _ref$attrs.mdl,
+          children = _ref$attrs.children;
+      return m("main.container", m("h1", mdl.state.route.name), children);
+    }
+  };
+};
+
+var _default = Main;
+exports["default"] = _default;
+});
+
+;require.register("Layouts/nav-modal.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _clarity = require("@mithril-icons/clarity");
+
+var _navLink = _interopRequireDefault(require("Components/nav-link"));
+
+var _authbox = _interopRequireDefault(require("Components/authbox"));
+
+var _index = require("Utils/index.js");
+
+var _animations = require("Styles/animations.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var navItemstate = {
+  onHover: function onHover() {}
+};
+
+var toggleRoutes = function toggleRoutes(mdl) {
+  return function (id) {
+    var keys = Object.keys(mdl.navState);
+    keys.map(function (k) {
+      return id !== k && mdl.navState[k](false);
+    });
+    mdl.navState[id](!mdl.navState[id]());
+  };
+};
+
+var NavItem = function NavItem() {
+  return {
+    view: function view(_ref) {
+      var _ref$attrs = _ref.attrs,
+          mdl = _ref$attrs.mdl,
+          href = _ref$attrs.href,
+          link = _ref$attrs.link,
+          classList = _ref$attrs.classList;
+      return m("li.nav-item", m(_navLink["default"], _objectSpread(_objectSpread({
+        mdl: mdl
+      }, navItemstate), {}, {
+        href: href,
+        link: link,
+        classList: classList
+      })));
+    }
+  };
+};
+
+var getChildRoutes = function getChildRoutes(mdl, routeIds) {
+  return mdl.Routes.filter(function (r) {
+    return routeIds.includes(r.id);
+  });
+};
+
+var NavSection = function NavSection(_ref2) {
+  var _ref2$attrs = _ref2.attrs,
+      mdl = _ref2$attrs.mdl,
+      route = _ref2$attrs.route,
+      toggleRoutes = _ref2$attrs.toggleRoutes;
+  var childRoutes = getChildRoutes(mdl, route.children);
+  return {
+    view: function view(_ref3) {
+      var isSelected = _ref3.attrs.isSelected;
+      return m("details", {
+        onclick: function onclick(e) {
+          return toggleRoutes(mdl)(route.id);
+        }
+      }, m("summary", route.name), // m(
+      //   "th",
+      //   m(AngleLine, {
+      //     style: { transform: `rotate(${isSelected() ? 180 : 0}deg)` },
+      //   })
+      // )
+      m("ul", // {
+      //   onbeforeremove: replaceCSS(
+      //     "show-child-routes",
+      //     "hide-child-routes"
+      //   ),
+      // },
+      childRoutes.map(function (r) {
+        return r.group.includes("external") ? m("li.container", m("a", {
+          target: "_blank",
+          href: r.external
+        }, r.name, m(_clarity.PopOutLine, {
+          margin: "8px",
+          width: "15px",
+          height: "15px"
+        }))) : m("li.container", m(NavItem, {
+          mdl: mdl,
+          href: r.route,
+          link: r.name,
+          classList: "".concat((0, _index.isActiveRoute)(r.route))
+        }));
+      })));
+    }
+  };
+};
+
+var NavModal = function NavModal(_ref4) {
+  var mdl = _ref4.attrs.mdl;
+
+  var routes = function routes(mdl) {
+    return mdl.Routes.filter(function (r) {
+      return r.group.includes("navmenu");
+    });
+  };
+
+  var _domOverlay;
+
+  var _domModal;
+
+  return {
+    view: function view(_ref5) {
+      var mdl = _ref5.attrs.mdl;
+      return m("article#nav-modal-container.animated", {
+        oncreate: function oncreate(_ref6) {
+          var dom = _ref6.dom;
+          return _domOverlay = dom;
+        },
+        onclick: function onclick(e) {
+          if ([_domModal, _domOverlay].includes(e.target)) mdl.state.showNavModal(false);
+        }
+      }, m("aside#modal", {
+        oncreate: function oncreate(_ref7) {
+          var dom = _ref7.dom;
+          return _domModal = dom;
+        },
+        id: "nav-modal"
+      }, m(_authbox["default"], {
+        mdl: mdl
+      }), m("ul", routes(mdl).map(function (r) {
+        return r.children.any() ? m(NavSection, {
+          mdl: mdl,
+          route: r,
+          toggleRoutes: toggleRoutes,
+          isSelected: mdl.navState[r.id]
+        }) : m("li", m(NavItem, {
+          mdl: mdl,
+          href: r.route,
+          link: r.name,
+          classList: "".concat((0, _index.isActiveRoute)(r.route))
+        }));
+      }))));
+    }
+  };
+};
+
+var _default = NavModal;
+exports["default"] = _default;
+});
+
+;require.register("Layouts/navbar.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _clarity = require("@mithril-icons/clarity");
+
+var _navLink = _interopRequireDefault(require("Components/nav-link.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var isActiveRoute = function isActiveRoute(a, b) {
+  return a == b ? "is-active" : "";
+};
+
+var Navbar = function Navbar() {
+  var routes = function routes(mdl) {
+    return mdl.Routes.filter(function (r) {
+      return r.group.includes("navmenu");
+    });
+  };
+
+  var subroutes = function subroutes(mdl) {
+    return mdl.Routes.filter(function (r) {
+      return r.group.includes(mdl.state.navState().split("/")[1]);
+    });
+  };
+
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return m("nav.navigation.container-fluid#navbar", m("ul", routes(mdl).map(function (r) {
+        return m("li", m(_navLink["default"], {
+          mdl: mdl,
+          href: r.route,
+          link: r.name,
+          classList: "".concat(isActiveRoute(mdl.state.navState(), r.route))
+        }));
+      })));
+    }
+  };
+};
+
+var _default = Navbar;
+exports["default"] = _default;
+});
+
+;require.register("Layouts/subnavbar.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _clarity = require("@mithril-icons/clarity");
+
+var _navLink = _interopRequireDefault(require("Components/nav-link.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var isActiveRoute = function isActiveRoute(a, b) {
+  return a == b ? "is-active" : "";
+};
+
+var SubNavbar = function SubNavbar() {
+  var routes = function routes(mdl) {
+    return mdl.Routes.filter(function (r) {
+      return r.group.includes("navmenu");
+    });
+  };
+
+  var subroutes = function subroutes(mdl) {
+    return mdl.Routes.filter(function (r) {
+      return r.group.includes(mdl.state.navState().split("/")[1]);
+    });
+  };
+
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return subroutes(mdl).any() && m("nav.navigation.container-fluid#sub-navbar", subroutes(mdl).map(function (r) {
+        return m("li", r.group.includes("external") ? m(".nav-link", m("a", {
+          target: "_blank",
+          href: r.external
+        }, r.name, m(_clarity.PopOutLine, {
+          margin: "8px",
+          width: "15px",
+          height: "15px"
+        }))) : m(_navLink["default"], {
+          mdl: mdl,
+          href: r.route,
+          link: r.name,
+          classList: "col col-middle col-align-middle ".concat(isActiveRoute(mdl.state.subnavState(), r.route))
+        }));
+      }));
+    }
+  };
+};
+
+var _default = SubNavbar;
+exports["default"] = _default;
+});
+
+;require.register("Layouts/toolbar.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _Hamburger = _interopRequireDefault(require("Components/Hamburger.js"));
+
+var _authbox = _interopRequireDefault(require("Components/authbox.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var Toolbar = function Toolbar() {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return m("nav#toolbar.navigation", {
+        style: {
+          "background-color": mdl.state.showNavModal() ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.9)"
+        }
+      }, m("ul", m(m.route.Link, {
+        selector: "li.pointer",
+        onclick: function onclick() {
+          return m.route.set("/about");
+        }
+      }, m("img#nav-logo", {
+        src: "images/logo.webp"
+      }))), mdl.settings.screenSize == "desktop" ? m(_authbox["default"], {
+        mdl: mdl
+      }) : m("ul", {
+        onclick: function onclick() {
+          return mdl.state.showNavModal(!mdl.state.showNavModal());
+        }
+      }, m("li", m(_Hamburger["default"], {
+        mdl: mdl
+      }))));
+    }
+  };
+};
+
+var _default = Toolbar;
+exports["default"] = _default;
+});
+
+;require.register("Models/Main.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _index = _interopRequireDefault(require("../Routes/index.js"));
+
+var _http = _interopRequireDefault(require("Utils/http"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var state = {
+  paginate: {
+    page: Stream(1),
+    total_pages: Stream(0),
+    total_results: Stream(0)
+  },
+  query: Stream(""),
+  isLoading: Stream(false),
+  loadingProgress: {
+    max: Stream(null),
+    value: Stream(null)
+  },
+  dragging: {},
+  isAuth: Stream(false),
+  navSelected: Stream(""),
+  showNavModal: Stream(false),
+  navState: Stream("/home"),
+  subnavState: Stream(""),
+  image: Stream(0),
+  fab: Stream(0),
+  swiper: null
+};
+var user = {};
+var settings = {};
+var data = {};
+var errors = {};
+var Model = {
+  http: _http["default"],
+  Routes: _index["default"],
+  state: state,
+  user: user,
+  data: data,
+  errors: errors,
+  settings: settings,
+  paypal: {},
+  toggleUserModal: function toggleUserModal(mdl) {
+    return mdl.state.showUserModal(!mdl.state.showUserModal());
+  },
+  toggleAuthModal: function toggleAuthModal(mdl) {
+    return mdl.state.showAuthModal(!mdl.state.showAuthModal());
+  },
+  toggleNavModal: function toggleNavModal(mdl) {
+    return mdl.state.showNavModal(!mdl.state.showNavModal());
+  }
+};
+var _default = Model;
+exports["default"] = _default;
+});
+
+;require.register("Models/index.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _Main = _interopRequireDefault(require("./Main"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _default = _Main["default"];
+exports["default"] = _default;
+});
+
+;require.register("Pages/Account/index.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _orders = require("Components/orders.js");
+
+var Account = function Account() {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return m(".frow-container", m(_orders.Orders, {
+        mdl: mdl
+      }));
+    }
+  };
+};
+
+var _default = Account;
+exports["default"] = _default;
+});
+
+;require.register("Pages/Auth/Validations.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.validateLoginTask = exports.validateUserRegistrationTask = void 0;
+
+var _ramda = require("ramda");
+
+var _data = require("data.validation");
+
+var _Utils = require("Utils");
+
+var ValidateRegistration = (0, _data.Success)((0, _ramda.curryN)(3, _ramda.identity));
+var ValidateLogin = (0, _data.Success)((0, _ramda.curryN)(2, _ramda.identity));
+var nameLense = (0, _ramda.lensProp)("name");
+var passwordLense = (0, _ramda.lensProp)("password");
+var passwordConfirmLense = (0, _ramda.lensProp)("confirmPassword");
+var emailLense = (0, _ramda.lensProp)("email");
+var emailConfirmLense = (0, _ramda.lensProp)("confirmEmail");
+var NAME_REQUIRED_MSG = "A Name is required";
+var PASSWORD_REQUIRED_MSG = "A Password is required";
+var EMAIL_REQUIRED_MSG = "An Email is required";
+var EMAILS_MUST_MATCH = "Emails do not match";
+var INVALID_EMAIL_FORMAT = "Email must be a valid format";
+var PASSWORDS_MUST_MATCH = "Passwords do not match";
+
+var inputsMatch = function inputsMatch(input1) {
+  return function (input2) {
+    return input2 === input1;
+  };
+};
+
+var validateName = function validateName(data) {
+  return (0, _data.Success)(data).apLeft((0, _Utils.validate)(_Utils.isRequired, nameLense, NAME_REQUIRED_MSG, data));
+};
+
+var validateEmails = function validateEmails(data) {
+  return (0, _data.Success)(data).apLeft((0, _Utils.validate)(_Utils.isRequired, emailLense, EMAIL_REQUIRED_MSG, data)).apLeft((0, _Utils.validate)(_Utils.isRequired, emailConfirmLense, EMAIL_REQUIRED_MSG, data)).apLeft((0, _Utils.validate)(inputsMatch(data.confirmEmail), emailLense, EMAILS_MUST_MATCH, data)).apLeft((0, _Utils.validate)(inputsMatch(data.email), emailConfirmLense, EMAILS_MUST_MATCH, data)).apLeft((0, _Utils.validate)(_Utils.emailFormat, emailConfirmLense, INVALID_EMAIL_FORMAT, data)).apLeft((0, _Utils.validate)(_Utils.emailFormat, emailLense, INVALID_EMAIL_FORMAT, data));
+};
+
+var validateEmail = function validateEmail(data) {
+  return (0, _data.Success)(data).apLeft((0, _Utils.validate)(_Utils.isRequired, emailLense, EMAIL_REQUIRED_MSG, data)).apLeft((0, _Utils.validate)(_Utils.emailFormat, emailLense, INVALID_EMAIL_FORMAT, data));
+};
+
+var validatePasswords = function validatePasswords(data) {
+  return (0, _data.Success)(data).apLeft((0, _Utils.validate)(_Utils.isRequired, passwordLense, PASSWORD_REQUIRED_MSG, data)).apLeft((0, _Utils.validate)(_Utils.isRequired, passwordConfirmLense, PASSWORD_REQUIRED_MSG, data)).apLeft((0, _Utils.validate)(inputsMatch(data.password), passwordConfirmLense, PASSWORDS_MUST_MATCH, data)).apLeft((0, _Utils.validate)(inputsMatch(data.confirmPassword), passwordLense, PASSWORDS_MUST_MATCH, data));
+};
+
+var validatePassword = function validatePassword(data) {
+  return (0, _data.Success)(data).apLeft((0, _Utils.validate)(_Utils.isRequired, passwordLense, PASSWORD_REQUIRED_MSG, data));
+};
+
+var validateUserRegistrationTask = function validateUserRegistrationTask(data) {
+  return ValidateRegistration.ap(validateName(data)).ap(validateEmails(data)).ap(validatePasswords(data)).failureMap(_ramda.mergeAll).toTask();
+};
+
+exports.validateUserRegistrationTask = validateUserRegistrationTask;
+
+var validateLoginTask = function validateLoginTask(data) {
+  return ValidateLogin.ap(validateEmail(data)).ap(validatePassword(data)).failureMap(_ramda.mergeAll).toTask();
+};
+
+exports.validateLoginTask = validateLoginTask;
+});
+
+;require.register("Pages/Auth/fns.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createAccountTask = exports.registerUserTask = exports.loginTask = exports.loginUserTask = void 0;
+
+var _Utils = require("Utils");
+
+var _ramda = require("ramda");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var mergeCarts = function mergeCarts(accnt) {
+  return function (cart) {
+    return (0, _ramda.mergeDeepWith)(_ramda.add, cart, accnt);
+  };
+};
+
+var toAccountVM = function toAccountVM(mdl) {
+  return function (accnts) {
+    mdl.user.accounts = accnts;
+    return mdl; // let cart = mergeCarts(accnts[0].cart)(mdl.cart)
+    // mdl.user.account = { objectId: accnts[0].objectId, cart }
+    // mdl.user.address = accnts[0].address
+    // mdl.cart = cart
+    // setUserToken(mdl)(mdl.user)
+    // return cart
+  };
+};
+
+var setUserToken = function setUserToken(mdl) {
+  return function (user) {
+    sessionStorage.setItem("baca-user", JSON.stringify(user));
+    sessionStorage.setItem("baca-user-token", user["sessionToken"]);
+    mdl.state.isAuth(true);
+    mdl.user = user;
+    return mdl;
+  };
+};
+
+var loginUserTask = function loginUserTask(mdl) {
+  return function (_ref) {
+    var email = _ref.email,
+        password = _ref.password;
+    var login = encodeURI("username=".concat(email, "&password=").concat(btoa(password)));
+    return mdl.http.back4App.getTask(mdl)("login?".concat(login)).map(setUserToken(mdl));
+  };
+};
+
+exports.loginUserTask = loginUserTask;
+
+var getUserAccountTask = function getUserAccountTask(mdl) {
+  return function (_) {
+    var userAccount = encodeURI("where={\"userId\":\"".concat(mdl.user.objectId, "\"}"));
+    return mdl.http.back4App.getTask(mdl)("classes/Accounts?".concat(userAccount)).map((0, _ramda.prop)("results")).map(toAccountVM(mdl));
+  };
+};
+
+var loginTask = function loginTask(mdl) {
+  return function (_ref2) {
+    var email = _ref2.email,
+        password = _ref2.password;
+    return loginUserTask(mdl)({
+      email: email,
+      password: password
+    }).chain(getUserAccountTask(mdl));
+  };
+};
+
+exports.loginTask = loginTask;
+
+var registerUserTask = function registerUserTask(mdl) {
+  return function (_ref3) {
+    var name = _ref3.name,
+        email = _ref3.email,
+        password = _ref3.password,
+        isAdmin = _ref3.isAdmin;
+    return mdl.http.back4App.postTask(mdl)("users")({
+      username: email,
+      name: name,
+      email: email,
+      password: btoa(password),
+      isAdmin: isAdmin
+    }).map(function (user) {
+      return setUserToken(mdl)(_objectSpread({
+        name: name,
+        email: email,
+        password: password,
+        isAdmin: isAdmin
+      }, user));
+    });
+  };
+};
+
+exports.registerUserTask = registerUserTask;
+
+var createAccountTask = function createAccountTask(mdl) {
+  mdl.user.account = {
+    address: {}
+  };
+  return mdl.http.back4App.postTask(mdl)("classes/Accounts")({
+    userId: mdl.user.objectId,
+    address: {}
+  }).map(function (_ref4) {
+    var objectId = _ref4.objectId;
+    mdl.user.account.objectId = objectId;
+    return mdl;
+  });
+};
+
+exports.createAccountTask = createAccountTask;
+});
+
+;require.register("Pages/Auth/login-user.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = exports.Login = void 0;
+
+var _navLink = _interopRequireDefault(require("Components/nav-link"));
+
+var _Utils = require("Utils");
+
+var _Validations = require("./Validations.js");
+
+var _fns = require("./fns.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+// import LogoLoader from "Components/LogoLoader"
+var validateForm = function validateForm(mdl) {
+  return function (data) {
+    var onError = function onError(errs) {
+      if (errs) {
+        state.errors = errs;
+        state.errorMsg(errs.message);
+        state.showErrorMsg(true);
+        console.log("failed - state", state);
+      } else {
+        state.errorMsg("Issue with logging in. Have you registered?");
+        state.showErrorMsg(true);
+        console.log("failed - other?", state);
+      }
+    };
+
+    var onSuccess = function onSuccess(mdl) {
+      return function (_) {
+        state.errors = {};
+        m.route.set("/");
+      };
+    };
+
+    state.isSubmitted = true;
+    (0, _Validations.validateLoginTask)(data.userModel).chain((0, _fns.loginTask)(mdl)).fork(onError, onSuccess(mdl));
+  };
+};
+
+var userModel = {
+  name: "",
+  email: "",
+  password: "",
+  confirmEmail: "",
+  confirmPassword: "",
+  isAdmin: false
+};
+var dataModel = {
+  userModel: userModel
+};
+var state = {
+  isSubmitted: false,
+  errors: {},
+  httpError: undefined,
+  data: (0, _Utils.jsonCopy)(dataModel),
+  showErrorMsg: Stream(false),
+  errorMsg: Stream("")
+};
+
+var resetState = function resetState() {
+  state.data = (0, _Utils.jsonCopy)(dataModel);
+  state.errors = {};
+  state.httpError = undefined;
+  state.isSubmitted = false;
+  state.showErrorMsg(false);
+  state.errorMsg("");
+};
+
+var Login = function Login() {
+  return {
+    onremove: function onremove() {
+      return resetState();
+    },
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return mdl.state.isLoading() ? "" //m(LogoLoader, { mdl })
+      : m(".", [state.showErrorMsg() && m("code.warning", state.errorMsg()), m("form", {
+        role: "form",
+        id: "login-form",
+        onsubmit: function onsubmit(e) {
+          return e.preventDefault();
+        }
+      }, m("", m("input", {
+        "class": state.isSubmitted ? state.errors.email ? "has-error" : "has-success" : "",
+        id: "reg-email",
+        type: "email",
+        placeholder: "Email",
+        onkeyup: function onkeyup(e) {
+          // state.isSubmitted && validateForm(mdl)(state.data)
+          state.data.userModel.email = e.target.value;
+        },
+        value: state.data.userModel.email
+      }), state.errors.email && m("p", state.errors.email)), m("", m("input", {
+        "class": state.isSubmitted ? state.errors.password ? "has-error" : "has-success" : "",
+        id: "reg-pass",
+        type: "password",
+        placeholder: "Password",
+        onkeyup: function onkeyup(e) {
+          // state.isSubmitted && validateForm(mdl)(state.data)
+          state.data.userModel.password = e.target.value;
+        },
+        value: state.data.userModel.password
+      }), state.errors.password && m("p", state.errors.password))), state.httpError && m(".toast toast-error", state.httpError)], m("button", {
+        role: "button",
+        form: "login-form",
+        onclick: function onclick() {
+          return validateForm(mdl)(state.data);
+        },
+        "class": mdl.state.isLoading() && "loading"
+      }, "Login"), m(".auth-link", "Need to ", m("u", m(_navLink["default"], {
+        mdl: mdl,
+        href: "/register",
+        link: "register",
+        classList: ""
+      })), " ?"));
+    }
+  };
+};
+
+exports.Login = Login;
+var _default = Login;
+exports["default"] = _default;
+});
+
+;require.register("Pages/Auth/register-user.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = exports.Register = exports.validateForm = void 0;
+
+var _navLink = _interopRequireDefault(require("Components/nav-link"));
+
+var _Utils = require("Utils");
+
+var _Validations = require("./Validations");
+
+var _fns = require("./fns.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+// import LogoLoader from "Components/LogoLoader"
+var userModel = {
+  name: "",
+  email: "",
+  password: "",
+  confirmEmail: "",
+  confirmPassword: "",
+  isAdmin: false
+};
+var dataModel = {
+  userModel: userModel
+};
+var state = {
+  isSubmitted: false,
+  errors: {},
+  httpError: undefined,
+  data: (0, _Utils.jsonCopy)(dataModel),
+  showErrorMsg: Stream(false),
+  errorMsg: Stream("")
+};
+
+var resetState = function resetState() {
+  state.data = (0, _Utils.jsonCopy)(dataModel);
+  state.errors = {};
+  state.httpError = undefined;
+  state.isSubmitted = false;
+  state.showErrorMsg(false);
+  state.errorMsg("");
+};
+
+var validateForm = function validateForm(mdl) {
+  return function (data) {
+    var onError = function onError(errs) {
+      if (errs) {
+        state.errors = errs;
+        state.errorMsg(errs.message);
+        state.showErrorMsg(true);
+        console.log("failed - state", state);
+      } else {
+        state.errorMsg("There seems to be a problem please contact web support");
+        state.showErrorMsg(true);
+        console.log("failed - state", state);
+      }
+    };
+
+    var onSuccess = function onSuccess(mdl) {
+      state.errors = {};
+      sessionStorage.setItem("baca-user-token", mdl.user["sessionToken"]);
+      sessionStorage.setItem("baca-user", JSON.stringify(mdl.user));
+      m.route.set("/");
+    };
+
+    state.isSubmitted = true;
+    (0, _Validations.validateUserRegistrationTask)(data.userModel).chain((0, _fns.registerUserTask)(mdl)).chain(_fns.createAccountTask).fork(onError, onSuccess);
+  };
+};
+
+exports.validateForm = validateForm;
+
+var RegisterUser = function RegisterUser() {
+  return {
+    view: function view(_ref) {
+      var _ref$attrs = _ref.attrs,
+          mdl = _ref$attrs.mdl,
+          data = _ref$attrs.data,
+          errors = _ref$attrs.errors,
+          isSubmitted = _ref$attrs.isSubmitted;
+      return mdl.state.isLoading() ? "" // m(LogoLoader, { mdl })
+      : [m("input", {
+        "class": isSubmitted ? errors.name ? "has-error" : "has-success" : "",
+        id: "reg-name",
+        type: "text",
+        placeholder: "Full Name",
+        onkeyup: function onkeyup(e) {
+          return data.name = e.target.value;
+        },
+        value: data.name
+      }), errors.name && m("p", errors.name), m("input", {
+        "class": isSubmitted ? errors.email ? "has-error" : "has-success" : "",
+        id: "reg-email",
+        type: "email",
+        placeholder: "Email",
+        onkeyup: function onkeyup(e) {
+          return data.email = e.target.value;
+        },
+        value: data.email
+      }), errors.email && m("p", errors.email), m("input", {
+        id: "confirmEmail",
+        "class": isSubmitted ? errors.confirmEmail ? "has-error" : "has-success" : "",
+        type: "email",
+        placeholder: "Confirm Email",
+        onkeyup: function onkeyup(e) {
+          return data.confirmEmail = e.target.value;
+        },
+        value: data.confirmEmail
+      }), errors.confirmEmail && m("p", errors.confirmEmail), m("input", {
+        "class": isSubmitted ? errors.password ? "has-error" : "has-success" : "",
+        id: "reg-pass",
+        type: "password",
+        placeholder: "Password",
+        onkeyup: function onkeyup(e) {
+          return data.password = e.target.value;
+        },
+        value: data.password
+      }), errors.password && m("p", errors.password), m("input", {
+        "class": isSubmitted ? errors.confirmPassword ? "has-error" : "has-success" : "",
+        id: "pass-confirm",
+        type: "password",
+        placeholder: "Confirm Password",
+        onkeyup: function onkeyup(e) {
+          return data.confirmPassword = e.target.value;
+        },
+        value: data.confirmPassword
+      }), errors.confirmPassword && m("p", errors.confirmPassword)];
+    }
+  };
+};
+
+var Register = function Register() {
+  return {
+    onremove: function onremove() {
+      return resetState();
+    },
+    view: function view(_ref2) {
+      var mdl = _ref2.attrs.mdl;
+      return [m("", [state.showErrorMsg() && m("code.warning", state.errorMsg()), m("form", {
+        role: "form",
+        id: "register-form",
+        onsubmit: function onsubmit(e) {
+          return e.preventDefault();
+        }
+      }, [m(RegisterUser, {
+        mdl: mdl,
+        data: state.data.userModel,
+        errors: state.errors,
+        isSubmitted: state.isSubmitted
+      }), m("button", {
+        form: "register-form",
+        onclick: function onclick() {
+          return validateForm(mdl)(state.data);
+        },
+        "class": mdl.state.isLoading() && "loading"
+      }, "Register"), m(".auth-link", ["Need to ", m("u", m(_navLink["default"], {
+        mdl: mdl,
+        href: "/login",
+        link: "Login",
+        classList: ""
+      })), " ?"])])]), state.httpError && m(".toast toast-error", state.httpError)];
+    }
+  };
+};
+
+exports.Register = Register;
+var _default = Register;
+exports["default"] = _default;
+});
+
+;require.register("Pages/Dashboard/index.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _orders = require("Components/orders.js");
+
+var _prices = require("./prices.js");
+
+var _users = require("./users.js");
+
+var Dashboard = function Dashboard() {
+  var components = {
+    prices: _prices.Prices,
+    users: _users.Users,
+    orders: _orders.Orders
+  };
+  var navi = ["prices", "users", "orders"];
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return m(".", {
+        style: {
+          minWidth: "100%",
+          minHeight: "100%"
+        }
+      }, m("section.dash-nav.frow row-around", navi.map(function (nav) {
+        return m("button", {
+          "class": mdl.dash.state.show == nav ? "is-active" : "",
+          onclick: function onclick(e) {
+            return mdl.dash.state.show = nav;
+          }
+        }, nav.toUpperCase());
+      })), m("section.frow mt-10", m(components[mdl.dash.state.show], {
+        mdl: mdl
+      })));
+    }
+  };
+};
+
+var _default = Dashboard;
+exports["default"] = _default;
+});
+
+;require.register("Pages/Dashboard/prices.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Prices = void 0;
+
+var _mithril = _interopRequireDefault(require("mithril"));
+
+var _ramda = require("ramda");
+
+var _Utils = require("Utils");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var Prices = function Prices() {
+  var getPrices = function getPrices(_ref) {
+    var mdl = _ref.attrs.mdl;
+    return mdl.http.back4App.getTask(mdl)("classes/Prices").map(_Utils.parsePrices).fork((0, _Utils.log)("error"), function (prices) {
+      return mdl.state.prices = prices;
+    });
+  };
+
+  var updatePrices = function updatePrices(mdl) {
+    return mdl.http.back4App.postTask(mdl)("classes/Prices")(mdl.state.prices).fork((0, _Utils.log)("error"), (0, _Utils.log)("succes"));
+  };
+
+  return {
+    view: function view(_ref2) {
+      var mdl = _ref2.attrs.mdl;
+      return (0, _mithril["default"])("table.dash-table", (0, _ramda.without)("id", Object.keys(mdl.state.prices)).map(function (product) {
+        return (0, _mithril["default"])("tr", (0, _mithril["default"])("td", (0, _mithril["default"])("label.col-xs-1-3", product)), (0, _mithril["default"])("td", (0, _mithril["default"])("input", {
+          type: "number",
+          value: mdl.state.prices[product],
+          onkeyup: function onkeyup(e) {
+            return mdl.state.prices[product] = parseInt(e.target.value);
+          }
+        })));
+      }), (0, _mithril["default"])("button", {
+        onclick: function onclick(e) {
+          return updatePrices(mdl);
+        }
+      }, "update prices"));
+    }
+  };
+};
+
+exports.Prices = Prices;
+});
+
+;require.register("Pages/Dashboard/users.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Users = void 0;
+
+var _ramda = require("ramda");
+
+var _Utils = require("Utils");
+
+var Users = function Users() {
+  var state = {
+    users: [],
+    errors: null
+  };
+
+  var getUsers = function getUsers(_ref) {
+    var mdl = _ref.attrs.mdl;
+    return mdl.http.back4App.getTask(mdl)("Users").map((0, _ramda.prop)("results")).map((0, _ramda.filter)((0, _ramda.prop)("name"))).fork((0, _Utils.log)("error"), function (u) {
+      return state.users = u;
+    });
+  };
+
+  var updateUserAdminLevel = function updateUserAdminLevel(mdl) {
+    return function (user) {
+      (0, _Utils.log)("user")(user);
+      mdl.http.back4App.putTask(mdl)("Users/".concat(user.objectId))({
+        isAdmin: user.isAdmin
+      }).fork((0, _Utils.log)("error"), (0, _Utils.log)("succes"));
+    };
+  };
+
+  return {
+    oninit: getUsers,
+    view: function view(_ref2) {
+      var mdl = _ref2.attrs.mdl;
+      return m("table.dash-table", m("thead", m("th"), m("th", "is Admin")), state.users.map(function (user) {
+        return m("tr.mt-5", m("td", m("label", user.name)), m("td.frow.text-center", m("input", {
+          type: "checkbox",
+          checked: user.isAdmin,
+          onclick: function onclick() {
+            user.isAdmin = !user.isAdmin;
+            updateUserAdminLevel(mdl)(user);
+          }
+        })));
+      }));
+    }
+  };
+};
+
+exports.Users = Users;
+});
+
+;require.register("Pages/about.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var About = function About(mdl) {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return m(".", m("section", m("p", "sec1")), m("section", m("p", "sec2")), m("section", m("p", "sec3")), m("section", m("p", "sec1")), m("section", m("p", "sec2")), m("section", m("p", "sec3")), m("section", m("p", "sec2")), m("section", m("p", "sec3")), m("section", m("p", "sec1")), m("section", m("p", "sec2")), m("section", m("p", "sec3")));
+    }
+  };
+};
+
+var _default = About;
+exports["default"] = _default;
+});
+
+;require.register("Pages/blog-editor.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _mithril = require("mithril");
+
+var state = {
+  images: [],
+  showModal: Stream(false)
+};
+
+var BlogEditor = function BlogEditor(mdl) {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return (0, _mithril.m)("form", (0, _mithril.m)("label", "Title", (0, _mithril.m)("input")), (0, _mithril.m)("label", (0, _mithril.m)("a.secondary", {
+        role: "button",
+        onclick: function onclick() {
+          return state.showModal(!state.showModal());
+        }
+      }, "Add An Image")), state.showModal() && (0, _mithril.m)("section.modal-container", (0, _mithril.m)("article", (0, _mithril.m)("input", {
+        type: "file"
+      }), (0, _mithril.m)("grid", (0, _mithril.m)("a.m-r-16.contrast", {
+        role: "button"
+      }, "Cancel"), (0, _mithril.m)("a", {
+        role: "button"
+      }, "Upload")))), (0, _mithril.m)("aside", state.images.map(function (src) {
+        return (0, _mithril.m)("img", {
+          src: src
+        });
+      })), (0, _mithril.m)("label", "Contents", (0, _mithril.m)("textarea", {
+        style: {
+          height: "300px"
+        }
+      })), (0, _mithril.m)("button", {}, "Submit"));
+    }
+  };
+};
+
+var _default = BlogEditor;
+exports["default"] = _default;
+});
+
+;require.register("Pages/blog.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _data = _interopRequireDefault(require("data.task"));
+
+var _Utils = require("Utils");
+
+var _images = _interopRequireDefault(require("../images"));
+
+var _listOf;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var blogs = (0, _Utils.listOf)(20)((_listOf = {
+  src: _images["default"][2],
+  title: "minim veniam, quis nostrud",
+  date: "11/12/2020",
+  author: "Boaz Blake"
+}, _defineProperty(_listOf, "title", "minim veniam, quis nostrud"), _defineProperty(_listOf, "text", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."), _listOf));
+
+var fetchBlopgsTask = function fetchBlopgsTask(mdl) {
+  return _data["default"].of(blogs);
+};
+
+var onPageInit = function onPageInit(state) {
+  return function (_ref) {
+    var mdl = _ref.attrs.mdl;
+
+    var onError = function onError(s) {
+      return function (error) {
+        s.errors.init = error;
+        console.log("errror", error);
+      };
+    };
+
+    var onSuccess = function onSuccess(s) {
+      return function (data) {
+        s.data = data;
+      };
+    };
+
+    fetchBlopgsTask(mdl).fork(onError(state), onSuccess(state));
+  };
+};
+
+var Blog = function Blog() {
+  var state = {
+    errors: {},
+    data: []
+  };
+  return {
+    oninit: onPageInit(state),
+    onremove: function onremove() {
+      state.errors = {};
+      state.data = [];
+    },
+    view: function view(_ref2) {
+      var mdl = _ref2.attrs.mdl;
+      return m(".container", mdl.state.isAuth() && m("nav", m("ul", m("li", m(m.route.Link, {
+        selector: "a",
+        href: "/social/blog-editor",
+        role: "button"
+      }, "Add A Blog")))), state.data.map(function (_ref3) {
+        var title = _ref3.title,
+            text = _ref3.text,
+            src = _ref3.src,
+            date = _ref3.date,
+            author = _ref3.author;
+        return m("article", m(".grid", m("hgroup", m("h2", title), m("h3", date), m("h4", "Written By ", author)), m("img", {
+          src: src,
+          style: {
+            border: "1px solid black",
+            borderRadius: "2%",
+            width: "100%"
+          }
+        })), m("hgroup", m("h4", text)));
+      }));
+    }
+  };
+};
+
+var _default = Blog;
+exports["default"] = _default;
+});
+
+;require.register("Pages/default.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var Default = function Default(mdl) {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return m(".container", m(".", m("section", m("p", "sec1")), m("section", m("p", "sec2")), m("section", m("p", "sec3")), m("section", m("p", "sec1")), m("section", m("p", "sec2")), m("section", m("p", "sec3")), m("section", m("p", "sec2")), m("section", m("p", "sec3")), m("section", m("p", "sec1")), m("section", m("p", "sec2")), m("section", m("p", "sec3"))));
+    }
+  };
+};
+
+var _default = Default;
+exports["default"] = _default;
+});
+
+;require.register("Pages/faq.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var Faq = function Faq(mdl) {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return m(".frow-container frow-center", "");
+    }
+  };
+};
+
+var _default = Faq;
+exports["default"] = _default;
+});
+
+;require.register("Pages/home.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var Home = function Home() {
+  return {
+    view: function view(_ref) {
+      var mdl = _ref.attrs.mdl;
+      return m(".", {
+        style: {
+          height: "100vh",
+          width: "100vw"
+        }
+      });
+    }
+  };
+};
+
+var _default = Home;
+exports["default"] = _default;
+});
+
+;require.register("Routes/authenticated-routes.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _default2 = _interopRequireDefault(require("Pages/default.js"));
+
+var _index = _interopRequireDefault(require("Pages/Account/index.js"));
+
+var _Dashboard = _interopRequireDefault(require("Pages/Dashboard"));
+
+var _index2 = _interopRequireDefault(require("Layouts/index.js"));
+
+var _Utils = require("Utils");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var AuthenticatedRoutes = [{
+  id: "account",
+  name: "Account",
+  // icon: Icons.logo,
+  route: "/account/:name",
+  position: ["toolbar"],
+  group: ["authenticated"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index2["default"], {
+      mdl: mdl
+    }, m(_index["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "dashboard",
+  name: "Dashboard",
+  // icon: Icons.logo,
+  route: "/dashboard/:name",
+  position: ["toolbar"],
+  group: ["authenticated"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index2["default"], {
+      mdl: mdl
+    }, m(_Dashboard["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "profile-page",
+  name: "Profile Page",
+  // icon: Icons.home,
+  route: "/account/:name/profile",
+  position: ["settings-nav"],
+  group: ["authenticated"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    console.log("profile page login on match", mdl, args, path, fullroute, isAnchor, !mdl.state.isAuth());
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index2["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "manage-users",
+  name: "Manage Users",
+  // icon: Icons.users,
+  route: "/account/:name/user-management",
+  position: ["settings-nav"],
+  group: ["authenticated", "admin"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    // console.log(
+    //   "manage users on match",
+    //   mdl,
+    //   args,
+    //   path,
+    //   fullroute,
+    //   isAnchor,
+    //   mdl.state.isAuth(),
+    //   mdl.user.isAdmin
+    // )
+    !mdl.user.isAdmin && m.route.set(m.route.get());
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index2["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "logout",
+  name: "",
+  // icon: Icons.users,
+  route: "/logout",
+  position: [],
+  group: ["authenticated", "admin"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+    localStorage.clear();
+    sessionStorage.clear();
+    mdl.state.isAuth(false);
+    mdl.user = {};
+    console.log("loggout", mdl);
+    var routes = ["account"];
+    var currentRoute = m.route.get();
+    routes.map(function (r) {
+      return currentRoute.includes(r);
+    }).map(log("???")).contains(true) ? m.route.set("/") : m.route.set(currentRoute);
+  },
+  component: function component(mdl) {
+    return m(_index2["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}];
+var _default = AuthenticatedRoutes;
+exports["default"] = _default;
+});
+
+;require.register("Routes/index.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _authenticatedRoutes = _interopRequireDefault(require("./authenticated-routes.js"));
+
+var _mainRoutes = _interopRequireDefault(require("./main-routes.js"));
+
+var _legalRoutes = _interopRequireDefault(require("./legal-routes.js"));
+
+var _safetyRoutes = _interopRequireDefault(require("./safety-routes.js"));
+
+var _memberRoutes = _interopRequireDefault(require("./member-routes.js"));
+
+var _socialRoutes = _interopRequireDefault(require("./social-routes.js"));
+
+var _ramda = require("ramda");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var Routes = (0, _ramda.flatten)([_authenticatedRoutes["default"], _mainRoutes["default"], _socialRoutes["default"], _memberRoutes["default"], _legalRoutes["default"], _safetyRoutes["default"]]);
+var _default = Routes;
+exports["default"] = _default;
+});
+
+;require.register("Routes/legal-routes.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _index = _interopRequireDefault(require("Layouts/index.js"));
+
+var _default2 = _interopRequireDefault(require("Pages/default.js"));
+
+var _index2 = require("Utils/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var LegalRoutes = [{
+  id: "legal",
+  name: "Legal",
+  // icon: Icons.home,
+  route: "/legal",
+  isNav: true,
+  group: ["navmenu"],
+  children: ["deed-restrictions", "city-ordinances"],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "deed-restrictions",
+  name: "Deed Restrictions",
+  // icon: Icons.home,
+  route: "/legal/deed-restrictions",
+  isNav: true,
+  group: ["nav", "legal"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "city-ordinances",
+  name: "City Ordinances",
+  // icon: Icons.home,
+  route: "/legal/city-ordinances",
+  isNav: true,
+  group: ["nav", "legal"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}];
+var _default = LegalRoutes;
+exports["default"] = _default;
+});
+
+;require.register("Routes/main-routes.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _index = _interopRequireDefault(require("Layouts/index.js"));
+
+var _default2 = _interopRequireDefault(require("Pages/default.js"));
+
+var _home = _interopRequireDefault(require("Pages/home.js"));
+
+var _about = _interopRequireDefault(require("Pages/about.js"));
+
+var _index2 = require("Utils/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var Logo = m("img", {
+  src: "images/logo.webp"
+});
+var Routes = [{
+  id: "home",
+  name: "Home",
+  // icon: Icons.home,
+  route: "/about",
+  isNav: true,
+  group: ["toolbar"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_home["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "about-us",
+  name: "About Bonham Acres",
+  // icon: Icons.home,
+  route: "/about",
+  isNav: true,
+  group: ["navmenu"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_about["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "contact",
+  name: "Contact BCA",
+  // icon: Icons.search,
+  route: "/contact",
+  isNav: false,
+  group: ["navmenu"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}];
+var _default = Routes;
+exports["default"] = _default;
+});
+
+;require.register("Routes/member-routes.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _index = _interopRequireDefault(require("Layouts/index.js"));
+
+var _default2 = _interopRequireDefault(require("Pages/default.js"));
+
+var _loginUser = _interopRequireDefault(require("Pages/Auth/login-user.js"));
+
+var _registerUser = _interopRequireDefault(require("Pages/Auth/register-user.js"));
+
+var _index2 = require("Utils/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var MemberRoutes = [{
+  id: "members",
+  name: "Members",
+  // icon: Icons.search,
+  route: "/members",
+  isNav: false,
+  group: ["navbar", "members"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "login",
+  name: "Account Login",
+  // icon: Icons.search,
+  route: "/login",
+  isNav: false,
+  group: ["nav", "members"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_loginUser["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "register",
+  name: "Register Account",
+  // icon: Icons.search,
+  route: "/register",
+  isNav: false,
+  group: ["nav", "members"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_registerUser["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "volunteer",
+  name: "Volunteer",
+  // icon: Icons.search,
+  route: "/members/volunteer",
+  isNav: false,
+  group: ["nav", "members"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "join",
+  name: "Become a Member",
+  // icon: Icons.search,
+  route: "/members/join",
+  isNav: true,
+  group: ["nav", "members"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}];
+var _default = MemberRoutes;
+exports["default"] = _default;
+});
+
+;require.register("Routes/safety-routes.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _index = _interopRequireDefault(require("Layouts/index.js"));
+
+var _default2 = _interopRequireDefault(require("Pages/default.js"));
+
+var _loginUser = _interopRequireDefault(require("Pages/Auth/login-user.js"));
+
+var _registerUser = _interopRequireDefault(require("Pages/Auth/register-user.js"));
+
+var _index2 = require("Utils/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var MemberRoutes = [{
+  id: "safety",
+  name: "Safety",
+  // icon: Icons.search,
+  route: "/safety",
+  isNav: false,
+  group: ["navmenu"],
+  children: ["report", "district-J", "SeeClickFix", "Harrison-County-Public-Health", "Houston-311-Service-Request/Report"],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "report",
+  name: "File An Internal Report With BACA",
+  // icon: Icons.search,
+  route: "/safety/report",
+  isNav: false,
+  group: ["nav", "safety"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "district-J",
+  name: "District J",
+  // icon: Icons.search,
+  route: "/#",
+  external: "https://www.houstontx.gov/council/j/request.html",
+  isNav: false,
+  group: ["external", "safety"],
+  children: [],
+  options: []
+}, {
+  id: "SeeClickFix",
+  name: "SeeClickFix Request",
+  // icon: Icons.search,
+  route: "/#",
+  external: "https://seeclickfix.com/houston/report",
+  isNav: false,
+  group: ["external", "safety"],
+  children: [],
+  options: []
+}, {
+  id: "Harrison-County-Public-Health",
+  name: "Harrison County Public Health",
+  // icon: Icons.search,
+  route: "/#",
+  external: "https://publichealth.harriscountytx.gov/Services-Programs/Services/NeighborhoodNuisance",
+  isNav: false,
+  group: ["external", "safety"],
+  children: [],
+  options: []
+}, {
+  id: "Houston-311-Service-Request/Report",
+  name: "Houston 311 Service Request/Report",
+  // icon: Icons.search,
+  route: "/#",
+  external: "https://www.houstontx.gov/311/ServiceRequestDirectoryWebpage.htm",
+  isNav: false,
+  group: ["external", "safety"],
+  children: [],
+  options: []
+}];
+var _default = MemberRoutes;
+exports["default"] = _default;
+});
+
+;require.register("Routes/social-routes.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _index = _interopRequireDefault(require("Layouts/index.js"));
+
+var _default2 = _interopRequireDefault(require("Pages/default.js"));
+
+var _blog = _interopRequireDefault(require("Pages/blog.js"));
+
+var _index2 = require("Utils/index.js");
+
+var _blogEditor = _interopRequireDefault(require("Pages/blog-editor"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var SocialRoutes = [{
+  id: "social",
+  name: "Social",
+  // icon: Icons.home,
+  route: "/social",
+  isNav: true,
+  group: ["navbar", "navmenu"],
+  children: ["map-of-bonham-acres", "blog", "explore", "photos", "calendar", "bfn-park"],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "calendar",
+  name: "Events Calendar",
+  // icon: Icons.home,
+  route: "/social/calendar",
+  isNav: true,
+  group: ["nav", "social"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "photos",
+  name: "Photo Gallery",
+  // icon: Icons.home,
+  route: "/social/photos",
+  isNav: true,
+  group: ["nav", "social"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "blog",
+  name: "Bonham Acres Community Blog",
+  // icon: Icons.home,
+  route: "/social/blog",
+  isNav: true,
+  group: ["nav", "social"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_blog["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "blog-editor",
+  name: "Blog Editor",
+  // icon: Icons.home,
+  route: "/social/blog-editor",
+  isNav: false,
+  group: ["social"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_blogEditor["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "map-of-bonham-acres",
+  name: "Explore Bonham Acres",
+  // icon: Icons.home,
+  route: "/social/map",
+  isNav: true,
+  group: ["nav", "social"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_default2["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "bfn-park",
+  name: "Bonham Family Nature Park",
+  // icon: Icons.home,
+  route: "/#",
+  external: "https://www.pct3.com/Parks/Bonham-Family-Nature-Park",
+  isNav: true,
+  group: ["nav", "social", "external"],
+  children: [],
+  options: []
+}];
+var _default = SocialRoutes;
+exports["default"] = _default;
+});
+
+;require.register("Styles/animations.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RemoveChildrenOut = exports.animate = exports.SlideChildrenInDown = exports.StretchInLeft = exports.SlideChildrenInRight = exports.SlideUp = exports.SlideDown = exports.SlideOutLeft = exports.SlideOutRight = exports.replaceCSS = exports.AddToCartOut = exports.AddToCart = exports.SlideInRight = exports.SlideInLeft = exports.SlideInUp = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+var SlideInUp = function SlideInUp(_ref) {
+  var dom = _ref.dom;
+  return dom.classList.toggle("slideInUp");
+};
+
+exports.SlideInUp = SlideInUp;
+
+var SlideInLeft = function SlideInLeft(_ref2) {
+  var dom = _ref2.dom;
+  return dom.classList.toggle("slideInLeft");
+};
+
+exports.SlideInLeft = SlideInLeft;
+
+var SlideInRight = function SlideInRight(_ref3) {
+  var dom = _ref3.dom;
+  return dom.classList.toggle("slideInRight");
+};
+
+exports.SlideInRight = SlideInRight;
+
+var AddToCart = function AddToCart(_ref4) {
+  var dom = _ref4.dom;
+  return dom.classList.toggle("slide-out-tr");
+};
+
+exports.AddToCart = AddToCart;
+
+var AddToCartOut = function AddToCartOut(_ref5) {
+  var dom = _ref5.dom;
+  AddToCart({
+    dom: dom
+  });
+  return new Promise(function (resolve) {
+    return setTimeout(function () {
+      resolve();
+    }, 500);
+  });
+};
+
+exports.AddToCartOut = AddToCartOut;
+
+var replaceCSS = function replaceCSS(a, b) {
+  return function (_ref6) {
+    var dom = _ref6.dom;
+    dom.classList.replace(a, b);
+    return new Promise(function (resolve) {
+      return setTimeout(function () {
+        resolve();
+      }, 300);
+    });
+  };
+};
+
+exports.replaceCSS = replaceCSS;
+
+var SlideOutRight = function SlideOutRight(_ref7) {
+  var dom = _ref7.dom;
+  dom.classList.replace("slideInLeft", "slideOutLeft");
+  return new Promise(function (resolve) {
+    return setTimeout(function () {
+      resolve();
+    }, 300);
+  });
+};
+
+exports.SlideOutRight = SlideOutRight;
+
+var SlideOutLeft = function SlideOutLeft(_ref8) {
+  var dom = _ref8.dom;
+  dom.classList.replace("slideInRight", "slideOutRight");
+  return new Promise(function (resolve) {
+    return setTimeout(function () {
+      resolve();
+    }, 300);
+  });
+};
+
+exports.SlideOutLeft = SlideOutLeft;
+
+var SlideDown = function SlideDown(_ref9) {
+  var dom = _ref9.dom;
+  dom.style.opacity = 0;
+  dom.classList.toggle("slideInDown");
+  dom.style.opacity = 1;
+};
+
+exports.SlideDown = SlideDown;
+
+var SlideUp = function SlideUp(_ref10) {
+  var dom = _ref10.dom;
+  dom.classList.replace("slideInDown", "slideOutUp");
+  return new Promise(function (resolve) {
+    return setTimeout(function () {
+      resolve();
+    }, 300);
+  });
+};
+
+exports.SlideUp = SlideUp;
+
+var SlideChildrenInRight = function SlideChildrenInRight(_ref11) {
+  var dom = _ref11.dom;
+
+  var children = _toConsumableArray(dom.children);
+
+  return children.map(function (child, idx) {
+    child.style.opacity = 0;
+    setTimeout(function () {
+      child.classList.toggle("slideInLeft");
+      child.style.opacity = 1;
+    }, (idx + 1) * 10);
+  });
+};
+
+exports.SlideChildrenInRight = SlideChildrenInRight;
+
+var StretchInLeft = function StretchInLeft(idx) {
+  return function (_ref12) {
+    var dom = _ref12.dom;
+    dom.style.opacity = 0;
+    return setTimeout(function () {
+      dom.classList.toggle("stretchRight");
+      dom.style.opacity = 1;
+    }, idx * 100 + 20);
+  };
+};
+
+exports.StretchInLeft = StretchInLeft;
+
+var SlideChildrenInDown = function SlideChildrenInDown(idx) {
+  return function (_ref13) {
+    var dom = _ref13.dom;
+    dom.style.opacity = 0;
+    setTimeout(function () {
+      dom.classList.toggle("slideDown");
+      dom.style.opacity = 1;
+    }, (idx + 1) * 200);
+  };
+};
+
+exports.SlideChildrenInDown = SlideChildrenInDown;
+
+var animate = function animate(dir) {
+  return function (_ref14) {
+    var dom = _ref14.dom;
+    dom.style.opacity = 0;
+    setTimeout(function () {
+      dom.classList.toggle(dir);
+      dom.style.opacity = 1;
+    }, 200);
+  };
+};
+
+exports.animate = animate;
+
+var RemoveChildrenOut = function RemoveChildrenOut(_ref15) {
+  var dom = _ref15.dom;
+  return new Promise(function () {
+    ;
+
+    _toConsumableArray(dom.children).reverse().map(function (child, idx) {
+      return setTimeout(function () {
+        child.style.display = "none";
+      }, idx * 100);
+    });
+  });
+};
+
+exports.RemoveChildrenOut = RemoveChildrenOut;
+});
+
+;require.register("Utils/helpers.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.formatDate = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.listOf = exports.uuid = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.log = exports.makeRoute = void 0;
+
+var _ramda = require("ramda");
+
+var _data = _interopRequireDefault(require("data.task"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var makeRoute = (0, _ramda.compose)((0, _ramda.join)("-"), (0, _ramda.split)(" "), (0, _ramda.trim)(), (0, _ramda.toLower)());
+exports.makeRoute = makeRoute;
+
+var log = function log(m) {
+  return function (v) {
+    console.log(m, v);
+    return v;
+  };
+};
+
+exports.log = log;
+
+var isEmpty = function isEmpty(data) {
+  return data.length == 0;
+};
+
+exports.isEmpty = isEmpty;
+
+var infiniteScroll = function infiniteScroll(mdl) {
+  return function (e) {
+    var route = mdl.state.route;
+    var length = mdl.data[route].data.length;
+    var setpoint = 10 * length * mdl.state.scrollPos;
+
+    if (e.target.scrollTop - mdl.state.scrollPos >= setpoint) {
+      mdl.state.scrollPos++ + e.target.scrollTop;
+    }
+  };
+};
+
+exports.infiniteScroll = infiniteScroll;
+
+var addTerms = function addTerms(item) {
+  var terms = (0, _ramda.compose)((0, _ramda.join)(" "), _ramda.values, (0, _ramda.props)(["uuid", "id", "name"]))(item);
+  return (0, _ramda.assoc)("_terms", terms, item);
+};
+
+exports.addTerms = addTerms;
+
+var byTerms = function byTerms(query) {
+  return (0, _ramda.compose)((0, _ramda.test)(new RegExp(query, "i")), (0, _ramda.prop)("name"));
+};
+
+var _search = function _search(query) {
+  return (0, _ramda.compose)((0, _ramda.filter)(byTerms(query)));
+};
+
+exports._search = _search;
+
+var _sort = function _sort(p) {
+  return (0, _ramda.sortBy)((0, _ramda.compose)(_ramda.toLower, toString, (0, _ramda.prop)(p)));
+};
+
+exports._sort = _sort;
+
+var _direction = function _direction(dir) {
+  return dir == "asc" ? _ramda.identity : _ramda.reverse;
+};
+
+exports._direction = _direction;
+
+var _paginate = function _paginate(offset) {
+  return function (limit) {
+    return function (data) {
+      return (0, _ramda.slice)((0, _ramda.max)(0, (0, _ramda.min)(offset, data.length)), (0, _ramda.min)(offset + limit, data.length), data);
+    };
+  };
+};
+
+exports._paginate = _paginate;
+
+var filterTask = function filterTask(query) {
+  return function (prop) {
+    return function (direction) {
+      return function (offset) {
+        return function (limit) {
+          return (0, _ramda.compose)(_data["default"].of, (0, _ramda.map)(_paginate(offset)(limit)), (0, _ramda.map)(_direction(direction)), (0, _ramda.map)(_sort(prop)), _search(query));
+        };
+      };
+    };
+  };
+};
+
+exports.filterTask = filterTask;
+
+var debounce = function debounce(wait, now) {
+  return function (fn) {
+    var timeout = undefined;
+    return function () {
+      var context = this;
+      var args = arguments;
+
+      var later = function later() {
+        timeout = undefined;
+        if (!now) fn.apply(context, args);
+      };
+
+      var callNow = now && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      console.log(fn);
+      if (callNow) fn.apply(context, args);
+    };
+  };
+};
+
+exports.debounce = debounce;
+
+var getRoute = function getRoute() {
+  return (0, _ramda.last)(m.route.get().split("/"));
+};
+
+exports.getRoute = getRoute;
+
+var scrollToAnchor = function scrollToAnchor(anchor) {
+  var is = function is(el) {
+    return el !== undefined && el !== null;
+  }; //if you pass an undefined anchor it will scroll to the top of the body
+
+
+  var targetEl = is(anchor) ? document.getElementById(anchor) : document.body;
+  var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  var target = is(targetEl) ? targetEl.getBoundingClientRect().top : 0;
+  return window.scroll({
+    top: target + scrollTop - 150,
+    left: 0,
+    behavior: "smooth"
+  });
+};
+
+exports.scrollToAnchor = scrollToAnchor;
+
+var randomEl = function randomEl(list) {
+  return list[Math.floor(Math.random() * list.length)];
+};
+
+exports.randomEl = randomEl;
+
+var jsonCopy = function jsonCopy(src) {
+  return JSON.parse(JSON.stringify(src));
+};
+
+exports.jsonCopy = jsonCopy;
+
+var isActiveRoute = function isActiveRoute(route) {
+  return m.route.get() == route ? "is-active" : "";
+};
+
+exports.isActiveRoute = isActiveRoute;
+
+var uuid = function uuid() {
+  return "xxxxxxxx".replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0,
+        v = c == "x" ? r : r & 0x3 | 0x8;
+    return v.toString(16);
+  });
+};
+
+exports.uuid = uuid;
+
+var listOf = function listOf(x) {
+  return function (y) {
+    return Array(x).fill(y);
+  };
+};
+
+exports.listOf = listOf;
+
+var toProducts = function toProducts(cart) {
+  return (0, _ramda.toPairs)(cart).map(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        product = _ref2[0],
+        genders = _ref2[1];
+
+    return [product, (0, _ramda.toPairs)(genders)];
+  });
+};
+
+exports.toProducts = toProducts;
+
+var getPrice = function getPrice(mdl, title, genders) {
+  return mdl.state.prices[title] * getQuantity(genders);
+};
+
+exports.getPrice = getPrice;
+
+var getQuantity = function getQuantity(xs) {
+  return (0, _ramda.reduce)(_ramda.add, 0, (0, _ramda.filter)((0, _ramda.compose)((0, _ramda.equals)("Number"), _ramda.type), (0, _ramda.flatten)(xs)));
+};
+
+exports.getQuantity = getQuantity;
+
+var getTotal = function getTotal(mdl, products) {
+  return getQuantity(products.map(function (p) {
+    return getPrice(mdl, p[0], p[1]);
+  }));
+};
+
+exports.getTotal = getTotal;
+
+var toPriceModel = function toPriceModel(_ref3) {
+  var Burpies = _ref3.Burpies,
+      Wraps = _ref3.Wraps,
+      Blankets = _ref3.Blankets,
+      Collections = _ref3.Collections;
+  return {
+    Burpies: Burpies,
+    Wraps: Wraps,
+    Blankets: Blankets,
+    Collections: Collections
+  };
+};
+
+var parsePrices = (0, _ramda.compose)(toPriceModel, _ramda.last, (0, _ramda.prop)("results"));
+exports.parsePrices = parsePrices;
+
+var formatDate = function formatDate(date) {
+  return date.split("T")[0];
+};
+
+exports.formatDate = formatDate;
+});
+
+;require.register("Utils/http.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = exports.parseHttpSuccess = exports.parseHttpError = void 0;
+
+var _data = _interopRequireDefault(require("data.task"));
+
+var _secrets = require("../../.secrets.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var updatePayPalAuth = function updatePayPalAuth(mdl) {
+  return function (paypal) {
+    return mdl.state.paypal = paypal;
+  };
+};
+
+var onProgress = function onProgress(mdl) {
+  return function (e) {
+    if (e.lengthComputable) {
+      mdl.state.loadingProgress.max = e.total;
+      mdl.state.loadingProgress.value = e.loaded;
+      m.redraw();
+    }
+  };
+};
+
+function onLoad() {
+  return false;
+}
+
+var onLoadStart = function onLoadStart(mdl) {
+  return function (e) {
+    mdl.state.isLoading(true);
+    return false;
+  };
+};
+
+var onLoadEnd = function onLoadEnd(mdl) {
+  return function (e) {
+    mdl.state.isLoading(false);
+    mdl.state.loadingProgress.max = 0;
+    mdl.state.loadingProgress.value = 0;
+    return false;
+  };
+};
+
+var xhrProgress = function xhrProgress(mdl) {
+  return {
+    config: function config(xhr) {
+      xhr.onprogress = onProgress(mdl);
+      xhr.onload = onLoad;
+      xhr.onloadstart = onLoadStart(mdl);
+      xhr.onloadend = onLoadEnd(mdl);
+    }
+  };
+};
+
+var parseHttpError = function parseHttpError(mdl) {
+  return function (rej) {
+    return function (e) {
+      mdl.state.isLoading(false);
+      return rej(e.response);
+    };
+  };
+};
+
+exports.parseHttpError = parseHttpError;
+
+var parseHttpSuccess = function parseHttpSuccess(mdl) {
+  return function (res) {
+    return function (data) {
+      mdl.state.isLoading(false);
+      return res(data);
+    };
+  };
+};
+
+exports.parseHttpSuccess = parseHttpSuccess;
+
+var HttpTask = function HttpTask(_headers) {
+  return function (method) {
+    return function (mdl) {
+      return function (url) {
+        return function (body) {
+          mdl.state.isLoading(true);
+          return new _data["default"](function (rej, res) {
+            return m.request(_objectSpread({
+              method: method,
+              url: url,
+              headers: _objectSpread({}, _headers),
+              body: body,
+              withCredentials: false
+            }, xhrProgress(mdl))).then(parseHttpSuccess(mdl)(res), parseHttpError(mdl)(rej));
+          });
+        };
+      };
+    };
+  };
+};
+
+var lookupLocationTask = function lookupLocationTask(query) {
+  return new _data["default"](function (rej, res) {
+    return m.request({
+      method: "GET",
+      url: "https://nominatim.openstreetmap.org/search?q=".concat(query, "&format=json")
+    }).then(res, rej);
+  });
+};
+
+var getTask = function getTask(mdl) {
+  return function (url) {
+    return HttpTask({})("GET")(mdl)(url)(null);
+  };
+};
+
+var paypalUrl = "".concat(_secrets.Paypal.sandbox.baseUrl, "/");
+var paypal = {
+  getTokenTask: function getTokenTask(mdl) {
+    return HttpTask(_secrets.Paypal.sandbox.headers())("POST")(mdl)(paypalUrl + "v1/oauth2/token/")("grant_type=client_credentials").map(updatePayPalAuth(mdl));
+  },
+  getTask: function getTask(mdl) {
+    return function (url) {
+      return HttpTask(_secrets.Paypal.sandbox.headers(mdl))("GET")(mdl)(paypalUrl + url)(null);
+    };
+  },
+  postTask: function postTask(mdl) {
+    return function (url) {
+      return function (dto) {
+        return HttpTask(_secrets.Paypal.sandbox.headers(mdl))("POST")(mdl)(paypalUrl + url)(dto);
+      };
+    };
+  },
+  putTask: function putTask(mdl) {
+    return function (url) {
+      return function (dto) {
+        return HttpTask(_secrets.Paypal.sandbox.headers(mdl))("PUT")(mdl)(paypalUrl + url)(dto);
+      };
+    };
+  }
+};
+var back4App = {
+  getTask: function getTask(mdl) {
+    return function (url) {
+      return HttpTask(_secrets.Back4App.headers(mdl, _secrets.Back4App))("GET")(mdl)("".concat(_secrets.Back4App.baseUrl, "/").concat(url))(null);
+    };
+  },
+  postTask: function postTask(mdl) {
+    return function (url) {
+      return function (dto) {
+        return HttpTask(_secrets.Back4App.headers(mdl, _secrets.Back4App))("POST")(mdl)("".concat(_secrets.Back4App.baseUrl, "/").concat(url))(dto);
+      };
+    };
+  },
+  putTask: function putTask(mdl) {
+    return function (url) {
+      return function (dto) {
+        return HttpTask(_secrets.Back4App.headers(mdl, _secrets.Back4App))("PUT")(mdl)("".concat(_secrets.Back4App.baseUrl, "/").concat(url))(dto);
+      };
+    };
+  }
+};
+var http = {
+  back4App: back4App,
+  paypal: paypal,
+  HttpTask: HttpTask,
+  getTask: getTask,
+  lookupLocationTask: lookupLocationTask
+};
+var _default = http;
+exports["default"] = _default;
+});
+
+;require.register("Utils/index.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _helpers = require("./helpers.js");
+
+Object.keys(_helpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _helpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _helpers[key];
+    }
+  });
+});
+
+var _http = require("./http.js");
+
+Object.keys(_http).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _http[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _http[key];
+    }
+  });
+});
+
+var _validation = require("./validation.js");
+
+Object.keys(_validation).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _validation[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _validation[key];
+    }
+  });
+});
+
+var _storage = require("./storage.js");
+
+Object.keys(_storage).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _storage[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _storage[key];
+    }
+  });
+});
+});
+
+;require.register("Utils/storage.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.saveStorageTask = exports.getDbStorageTask = exports.saveDbStorageTask = exports.saveLocalStorageTask = exports.getSessionStorageTask = exports.getLocalStorageTask = void 0;
+
+var _data = _interopRequireDefault(require("data.task"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var getLocalStorageTask = function getLocalStorageTask(key) {
+  return new _data["default"](function (rej, res) {
+    return localStorage.getItem(key) ? rej("nothing here") : res(localStorage.getItem(key));
+  });
+};
+
+exports.getLocalStorageTask = getLocalStorageTask;
+
+var getSessionStorageTask = function getSessionStorageTask(key) {
+  return new _data["default"](function (rej, res) {
+    return sessionStorage.getItem(key) ? rej("nothing here") : res(sessionStorage.getItem(key));
+  });
+};
+
+exports.getSessionStorageTask = getSessionStorageTask;
+
+var saveLocalStorageTask = function saveLocalStorageTask(key) {
+  return function (value) {
+    localStorage.setItem(key, JSON.stringify(value));
+    return _data["default"].of(localStorage.getItem(key));
+  };
+};
+
+exports.saveLocalStorageTask = saveLocalStorageTask;
+
+var saveDbStorageTask = function saveDbStorageTask(mdl) {
+  return function (cart) {
+    return mdl.http.back4App.putTask(mdl)("classes/Accounts/".concat(mdl.user.account.objectId))({
+      cart: JSON.parse(cart)
+    });
+  };
+};
+
+exports.saveDbStorageTask = saveDbStorageTask;
+
+var getDbStorageTask = function getDbStorageTask(mdl) {
+  return mdl.http.back4App.gettTask(mdl)("classes/Accounts/".concat(mdl.user.account.objectId));
+};
+
+exports.getDbStorageTask = getDbStorageTask;
+
+var saveStorageTask = function saveStorageTask(mdl) {
+  return function (key) {
+    return function (value) {
+      return mdl.state.isAuth() ? saveLocalStorageTask(key)(value).chain(saveDbStorageTask(mdl)) : saveLocalStorageTask(key)(value);
+    };
+  };
+};
+
+exports.saveStorageTask = saveStorageTask;
+});
+
+;require.register("Utils/validation.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isNilOrEmptyOrAtom = exports.allCaps = exports.inDateRange = exports.unique = exports.maxLengthNullable = exports.onlyNumeric = exports.urlFormat = exports.phoneFormat = exports.onlyAlphaNumericSpaceSpecial = exports.onlyAlphaNumericSpaceUnderscore = exports.onlyAlphaNumericSpace = exports.onlyAlphaNumericUnderscore = exports.onlyAlphaNumeric = exports.onlyAlpha = exports.emailFormat = exports.maxSize = exports.maxLength = exports.isNullOrEmpty = exports.isNotNullOrEmpty = exports.IsNotNil = exports.isRequired = exports.validate = exports.getOrElse = void 0;
+
+var _ramda = require("ramda");
+
+var _data = require("data.validation");
+
+var _data2 = _interopRequireDefault(require("data.maybe"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var getOrElse = function getOrElse(val) {
+  return function (x) {
+    return x.getOrElse(val);
+  };
+};
+
+exports.getOrElse = getOrElse;
+var validate = (0, _ramda.curry)(function (rule, lens, msg, data) {
+  return rule((0, _ramda.view)(lens, data)) ? (0, _data.Success)(data) : (0, _data.Failure)([(0, _ramda.set)(lens, msg, {})]);
+});
+exports.validate = validate;
+var isRequired = (0, _ramda.compose)(_ramda.not, _ramda.isEmpty);
+exports.isRequired = isRequired;
+var IsNotNil = (0, _ramda.compose)(_ramda.not, _ramda.isNil);
+exports.IsNotNil = IsNotNil;
+
+var isNotNullOrEmpty = function isNotNullOrEmpty(data) {
+  return !isNullOrEmpty(data);
+};
+
+exports.isNotNullOrEmpty = isNotNullOrEmpty;
+
+var isNullOrEmpty = function isNullOrEmpty(data) {
+  return (0, _ramda.isNil)(data) || (0, _ramda.isEmpty)(data);
+};
+
+exports.isNullOrEmpty = isNullOrEmpty;
+
+var maxLength = function maxLength(max) {
+  return (0, _ramda.compose)((0, _ramda.gte)(max), _ramda.length);
+};
+
+exports.maxLength = maxLength;
+var maxSize = (0, _ramda.curry)(function (max, value) {
+  return (0, _ramda.gte)(max, value);
+});
+exports.maxSize = maxSize;
+var emailFormat = (0, _ramda.test)(/@/);
+exports.emailFormat = emailFormat;
+var onlyAlpha = (0, _ramda.test)(/^[a-zA-Z]*$/);
+exports.onlyAlpha = onlyAlpha;
+var onlyAlphaNumeric = (0, _ramda.test)(/^[a-zA-Z0-9]*$/);
+exports.onlyAlphaNumeric = onlyAlphaNumeric;
+var onlyAlphaNumericUnderscore = (0, _ramda.test)(/^[a-zA-Z0-9_]*$/);
+exports.onlyAlphaNumericUnderscore = onlyAlphaNumericUnderscore;
+var onlyAlphaNumericSpace = (0, _ramda.test)(/^[a-zA-Z0-9\s]*$/);
+exports.onlyAlphaNumericSpace = onlyAlphaNumericSpace;
+var onlyAlphaNumericSpaceUnderscore = (0, _ramda.test)(/^[a-zA-Z0-9_\s]*$/);
+exports.onlyAlphaNumericSpaceUnderscore = onlyAlphaNumericSpaceUnderscore;
+var onlyAlphaNumericSpaceSpecial = (0, _ramda.test)(/^[a-zA-Z0-9_.~!*''();:@&=+$,/?#[%-\]+\s]*$/);
+exports.onlyAlphaNumericSpaceSpecial = onlyAlphaNumericSpaceSpecial;
+var phoneFormat = (0, _ramda.test)(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/);
+exports.phoneFormat = phoneFormat;
+var urlFormat = (0, _ramda.test)(/^[a-zA-Z0-9_.~!*''();:@&=+$,/?#[%-\]+]*$/);
+exports.urlFormat = urlFormat;
+var onlyNumeric = (0, _ramda.test)(/^[0-9]*$/);
+exports.onlyNumeric = onlyNumeric;
+
+var maxLengthNullable = function maxLengthNullable(max) {
+  return (0, _ramda.compose)(getOrElse(false), (0, _ramda.map)((0, _ramda.gte)(max)), (0, _ramda.map)(_ramda.length), _data2["default"].fromNullable);
+};
+
+exports.maxLengthNullable = maxLengthNullable;
+var unique = (0, _ramda.curry)(function (keys, value) {
+  var lookup = _data2["default"].fromNullable(keys);
+
+  return !(0, _ramda.contains)((0, _ramda.toUpper)(value.toString()), (0, _ramda.map)(function (y) {
+    return (0, _ramda.toUpper)(y.toString());
+  }, lookup.getOrElse([])));
+});
+exports.unique = unique;
+var inDateRange = (0, _ramda.curry)(function (start, end, value) {
+  if (value == null || value === '') {
+    return true;
+  }
+
+  return new Date(start) <= new Date(value) && new Date(value) < new Date(end);
+});
+exports.inDateRange = inDateRange;
+
+var allCaps = function allCaps(str) {
+  return str.toUpperCase() === str;
+};
+
+exports.allCaps = allCaps;
+
+var isNilOrEmptyOrAtom = function isNilOrEmptyOrAtom(item) {
+  return (0, _ramda.isNil)(item) || (0, _ramda.isEmpty)(item) || item === '{$type:atom}';
+};
+
+exports.isNilOrEmptyOrAtom = isNilOrEmptyOrAtom;
+});
+
+;require.register("app.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var toRoutes = function toRoutes(mdl) {
+  return function (acc, route) {
+    acc[route.route] = {
+      onmatch: function onmatch(args, path, fullroute) {
+        mdl.state.showNavModal(false);
+
+        if (route.group.includes("authenticated") && !mdl.state.isAuth()) {
+          mdl.route.set(m.route.get());
+        }
+
+        mdl.state.route = route;
+        mdl.state.anchor = path.split("#")[1];
+        mdl.state.navState("/".concat(route.route.split("/")[1]));
+        route.route.split("/")[2] ? mdl.state.subnavState(route.route) : mdl.state.subnavState(null);
+        var isAnchor = Boolean(mdl.state.anchor);
+        route.onmatch(mdl, args, path, fullroute, isAnchor);
+      },
+      render: function render() {
+        return route.component(mdl);
+      }
+    };
+    return acc;
+  };
+};
+
+var App = function App(mdl) {
+  return mdl.Routes.reduce(toRoutes(mdl), {});
+};
+
+var _default = App;
+exports["default"] = _default;
+});
+
+;require.register("images.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var Images = ["images/IMG_4029.webp", "images/IMG_3989.webp", "images/IMG_3990.webp", "images/IMG_3991.webp", "images/IMG_3992.webp", "images/IMG_3993.webp", "images/IMG_3994.webp", "images/IMG_3995.webp", "images/IMG_3996.webp", "images/IMG_3997.webp", "images/IMG_3998.webp", "images/IMG_3999.webp", "images/IMG_4001.webp", "images/IMG_4002.webp", "images/IMG_4003.webp", "images/IMG_4004.webp", "images/IMG_4005.webp", "images/IMG_4006.webp", "images/IMG_4007.webp", "images/IMG_4008.webp", "images/IMG_4009.webp", "images/IMG_4010.webp", "images/IMG_4011.webp", "images/IMG_4012.webp", "images/IMG_4013.webp", "images/IMG_4014.webp", "images/IMG_4015.webp", "images/IMG_4016.webp", "images/IMG_4017.webp", "images/IMG_4018.webp", "images/IMG_4019.webp", "images/IMG_4020.webp", "images/IMG_4021.webp", "images/IMG_4022.webp", "images/IMG_4023.webp", "images/IMG_4024.webp", "images/IMG_4025.webp", "images/IMG_4026.webp", "images/IMG_4027.webp", "images/IMG_4028.webp"];
+var _default = Images;
+exports["default"] = _default;
+});
+
+;require.register("index.js", function(exports, require, module) {
+"use strict";
+
+var _funConfig = require("@boazblake/fun-config");
+
+var _app = _interopRequireDefault(require("./app.js"));
+
+var _index = _interopRequireDefault(require("Models/index.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+_funConfig.FunConfig.configure();
+
+_index["default"].navState = _index["default"].Routes.reduce(function (acc, r) {
+  if (r.children.any()) acc[r.id] = Stream(false);
+  return acc;
+}, {});
+var root = document.body;
+var winW = window.innerWidth;
+
+if (module.hot) {
+  module.hot.accept();
+}
+
+if ('development' !== "production") {
+  console.log("Looks like we are in development mode!");
+} else {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("./sw.js").then(function (registration) {
+        console.log("⚙️ SW registered: ", registration);
+      })["catch"](function (registrationError) {
+        console.log("🧟 SW registration failed: ", registrationError);
+      });
+    });
+  }
+} // set display profiles
+
+
+var getProfile = function getProfile(w) {
+  if (w < 624) return "phone";
+  if (w < 944) return "tablet";
+  return "desktop";
+};
+
+var checkWidth = function checkWidth(winW) {
+  var w = window.innerWidth;
+
+  if (winW !== w) {
+    winW = w;
+    var lastProfile = _index["default"].settings.screenSize;
+    _index["default"].settings.screenSize = getProfile(w);
+    if (lastProfile != _index["default"].settings.screenSize) m.redraw();
+  }
+
+  return requestAnimationFrame(checkWidth);
+};
+
+_index["default"].settings.screenSize = getProfile(winW);
+checkWidth(winW);
+
+if (sessionStorage.getItem("baca-user")) {
+  _index["default"].user = JSON.parse(sessionStorage.getItem("baca-user"));
+
+  _index["default"].state.isAuth(true);
+}
+
+m.route(root, "/about", (0, _app["default"])(_index["default"]));
+});
+
+;require.register("initialize.js", function(exports, require, module) {
+"use strict";
+
+document.addEventListener("DOMContentLoaded", function () {
+  require("./index.js");
+});
+});
+
+;require.alias("process/browser.js", "process");process = require('process');require.register("___globals___", function(exports, require, module) {
+  
+
+// Auto-loaded modules from config.npm.globals.
+window.m = require("mithril");
+window.Stream = require("mithril-stream");
+
+
+});})();require('___globals___');
+
+
+//# sourceMappingURL=app.js.map

@@ -49,8 +49,8 @@ export const validateForm = (mdl) => (data) => {
 
   const onSuccess = (mdl) => {
     state.errors = {}
-    sessionStorage.setItem("sb-user-token", mdl.user["sessionToken"])
-    sessionStorage.setItem("sb-user", JSON.stringify(mdl.user))
+    sessionStorage.setItem("baca-user-token", mdl.user["sessionToken"])
+    sessionStorage.setItem("baca-user", JSON.stringify(mdl.user))
     m.route.set("/")
   }
 

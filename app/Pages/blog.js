@@ -42,7 +42,25 @@ const Blog = () => {
     view: ({ attrs: { mdl } }) =>
       m(
         ".container",
-        mdl.state.isAuth() && m("nav", m("ul", m("li", m("button", "add")))),
+        mdl.state.isAuth() &&
+          m(
+            "nav",
+            m(
+              "ul",
+              m(
+                "li",
+                m(
+                  m.route.Link,
+                  {
+                    selector: "a",
+                    href: "/social/blog-editor",
+                    role: "button",
+                  },
+                  "Add A Blog"
+                )
+              )
+            )
+          ),
         state.data.map(({ title, text, src, date, author }) =>
           m(
             "article",

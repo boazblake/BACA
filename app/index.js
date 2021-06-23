@@ -55,8 +55,8 @@ Model.settings.screenSize = getProfile(winW)
 
 checkWidth(winW)
 
-if (sessionStorage.getItem("user")) {
-  Model.user = JSON.parse(sessionStorage.getItem("user"))
+if (sessionStorage.getItem("baca-user")) {
+  Model.user = JSON.parse(sessionStorage.getItem("baca-user"))
   Model.state.isAuth(true)
 }
 
