@@ -1,10 +1,12 @@
-import { handlers } from "Utils"
+import { handlers, exists } from "Utils"
+import Task from "data.task"
 
 const state = {
   title: "",
   author: "",
   text: "",
   img: "",
+  thumb: "",
   file: null,
   showModal: Stream(false),
   errors: {
@@ -12,37 +14,84 @@ const state = {
   },
 }
 
+const setupEditor = ({ attrs: { mdl } }) => {
+  const onError = (e) => console.log(e)
+  const onSuccess = ({ title, text, img, thumb, objectId }) => {
+    state.title = title
+    state.text = text
+    state.img = img
+    state.thumb = thumb
+    state.objectId = objectId
+  }
+
+  let id = m.route.get().split(":")[1]
+  if (exists(id)) {
+    console.log("id", exists(id))
+    mdl.http.back4App
+      .getTask(mdl)(`Classes/Blogs/${id}`)
+      .fork(onError, onSuccess)
+  }
+}
+
+const isInvalid = () => !exists(state.title) || !exists(state.text)
+
 const onSubmitError = (e) => (state.errors.img = e)
-const onImgSuccess = ({
-  data: {
-    image: { url },
-  },
-}) => {
-  state.img = url
+const onImgSuccess = ({ image, thumb }) => {
+  state.img = image
+  state.thumb = thumb
   state.showModal(false)
 }
+
+const saveImgToGalleryTask =
+  (mdl) =>
+  ({ data: { image, medium, thumb } }) => {
+    mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
+      album: "blog",
+      image: image.url,
+      medium: medium.url,
+      thumb: thumb.url,
+    })
+    return Task.of({ image: image.url, medium: medium.url, thumb: thumb.url })
+  }
 
 const uploadImage = (mdl) => (file) => {
   const image = new FormData()
   image.append("image", file)
-  mdl.http.imgBB.postTask(mdl)(image).fork(onSubmitError, onImgSuccess)
+  mdl.http.imgBB
+    .postTask(mdl)(image)
+    .chain(saveImgToGalleryTask(mdl))
+    .fork(onSubmitError, onImgSuccess)
 }
 
-const onSubmitSuccess = (d) => console.log(d)
+const toBlogs = () => m.route.set("/social/blog")
+
+const onSubmitSuccess = () => toBlogs()
 
 const submitBlog =
   (mdl) =>
-  ({ title, img, text, date, author }) => {
+  ({ title, img, text, thumb }) => {
     let dto = {
       title,
       img,
       text,
       author: mdl.user.name,
+      thumb,
     }
-    mdl.http.back4App
-      .postTask(mdl)("Classes/Blogs")(dto)
-      .fork(onSubmitError, onSubmitSuccess)
+    const updateOrSubmitBlog = state.objectId
+      ? mdl.http.back4App.putTask(mdl)(`Classes/Blogs/${state.objectId}`)(dto)
+      : mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto)
+
+    updateOrSubmitBlog.fork(onSubmitError, onSubmitSuccess)
   }
+
+const deleteBlog = (mdl) => {
+  console.log(
+    mdl.http.back4App.deleteTask(mdl)(`Classes/Blogs/${state.objectId}`)
+  )
+  mdl.http.back4App
+    .deleteTask(mdl)(`Classes/Blogs/${state.objectId}`)
+    .fork(toBlogs, toBlogs)
+}
 
 const BlogEditor = (mdl) => {
   const onInput = handlers(["oninput"], (e) => {
@@ -54,6 +103,7 @@ const BlogEditor = (mdl) => {
   })
 
   return {
+    oninit: setupEditor,
     view: ({ attrs: { mdl } }) =>
       m(
         ".grid",
@@ -69,17 +119,19 @@ const BlogEditor = (mdl) => {
                 role: "button",
                 onclick: () => state.showModal(!state.showModal()),
               },
-              "Add An Image"
+              state.thumb ? "Update Image" : "Add An Image"
             )
           ),
+          state.thumb && m("aside", m("img", { src: state.thumb })),
           state.showModal() &&
             m(
               "article.modal-container",
+              m("header", m(".grid", m("a", "Upload"), m("a", "Select"))),
+              m("form", m("input", { type: "file", id: "file" })),
               m(
-                "form",
-                m("input", { type: "file", id: "file" }),
+                "footer",
                 m(
-                  "grid",
+                  ".grid",
                   m(
                     "a.m-r-16.contrast",
                     { onclick: () => state.showModal(false), role: "button" },
@@ -101,20 +153,39 @@ const BlogEditor = (mdl) => {
           m(
             "label",
             "Contents",
-            m("textarea", { id: "text", style: { height: "300px" } })
+            m("textarea", {
+              value: state.text,
+              id: "text",
+              style: { height: "300px" },
+            })
           ),
           m(
-            "button",
-            {
-              onclick: (e) => {
-                e.preventDefault()
-                submitBlog(mdl)(state)
-              },
-            },
-            "Submit"
+            "nav.grid",
+            m(
+              "ul",
+              { style: { width: "100%" } },
+              m("li", m("button", { onclick: toBlogs }, "Cancel")),
+              m(
+                "li",
+                m(
+                  "button",
+                  {
+                    disabled: isInvalid(),
+                    onclick: (e) => {
+                      e.preventDefault()
+                      submitBlog(mdl)(state)
+                    },
+                  },
+                  state.objectId ? "Update" : "Submit"
+                )
+              ),
+              m(
+                "li",
+                m("button", { onclick: (e) => deleteBlog(mdl) }, "Delete")
+              )
+            )
           )
-        ),
-        state.img && m("aside", m("img", { src: state.img }))
+        )
       ),
   }
 }

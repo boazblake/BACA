@@ -4,10 +4,9 @@ import NavLink from "Components/nav-link.js"
 const isActiveRoute = (a, b) => (a == b ? "is-active" : "")
 
 const SubNavbar = () => {
-  const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
   const subroutes = (mdl) =>
-    mdl.Routes.filter((r) =>
-      r.group.includes(mdl.state.navState().split("/")[1])
+    mdl.Routes.filter(
+      (r) => r.isNav && r.group.includes(mdl.state.navState().split("/")[1])
     )
   return {
     view: ({ attrs: { mdl } }) =>

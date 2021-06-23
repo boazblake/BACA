@@ -74,7 +74,7 @@ const SocialRoutes = [
   },
   {
     id: "blog",
-    name: "Bonham Acres Community Blog",
+    name: "Blog",
     // icon: Icons.home,
     route: "/social/blog",
     isNav: true,
@@ -96,7 +96,7 @@ const SocialRoutes = [
     id: "blog-editor",
     name: "Blog Editor",
     // icon: Icons.home,
-    route: "/social/blog-editor",
+    route: "/social/blog-editor:objectId",
     isNav: false,
     group: ["social"],
     children: [],

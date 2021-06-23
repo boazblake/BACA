@@ -21,7 +21,7 @@ const state = {
   subnavState: Stream(""),
   image: Stream(0),
   fab: Stream(0),
-  swiper: null,
+  editBlog: Stream(false),
 }
 const user = {}
 const settings = {}

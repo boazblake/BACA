@@ -104,6 +104,10 @@ const back4App = {
     HttpTask(BACK4APP.headers(mdl, BACK4APP))("PUT")(mdl)(
       `${BACK4APP.baseUrl}/${url}`
     )(dto),
+  deleteTask: (mdl) => (url) =>
+    HttpTask(BACK4APP.headers(mdl, BACK4APP))("DELETE")(mdl)(
+      `${BACK4APP.baseUrl}/${url}`
+    )(),
 }
 
 const imgBB = {
