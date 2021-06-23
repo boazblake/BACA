@@ -5,65 +5,51 @@ const AuthBox = () => {
   return {
     view: ({ attrs: { mdl } }) =>
       mdl.state.isAuth()
-        ? m("ul", [
+        ? m(
+            ".grouped",
             mdl.user.isAdmin &&
-              m(
-                "li.m-r-16",
-                m(NavLink, {
-                  mdl,
-                  href: `/dashboard/${mdl.user.name}`,
-                  link: "Dashboard",
-                  classList: `${isActiveRoute(
-                    `/dashboard/${mdl.user.name}`
-                  )} outline`,
-                })
-              ),
-            m(
-              "li.m-r-16",
               m(NavLink, {
                 mdl,
-                href: `/account/${mdl.user.name}`,
-                role: "button",
-                link: "Your Account",
+                href: `/dashboard/${mdl.user.name}`,
+                link: "Dashboard",
                 classList: `${isActiveRoute(
-                  `/account/${mdl.user.name}`
+                  `/dashboard/${mdl.user.name}`
                 )} outline`,
-              })
-            ),
-            m(
-              "li.m-r-16",
-              m(NavLink, {
-                mdl,
-                href: "/logout",
-                role: "button",
-                link: "Logout",
-                classList: "secondary",
-              })
-            ),
-          ])
-        : m("ul", [
-            m(
-              "li.m-r-16",
-              m(NavLink, {
-                mdl,
-                role: "button",
-                href: "/login",
-                link: "Login",
-                classList: `${isActiveRoute("/login")} outline`,
-              })
-            ),
-
-            m(
-              "li.m-r-16",
-              m(NavLink, {
-                mdl,
-                role: "button",
-                href: "/register",
-                link: "Register",
-                classList: `${isActiveRoute("/register")} outline secondary`,
-              })
-            ),
-          ]),
+              }),
+            m(NavLink, {
+              mdl,
+              href: `/account/${mdl.user.name}`,
+              role: "button",
+              link: "Your Account",
+              classList: `${isActiveRoute(
+                `/account/${mdl.user.name}`
+              )} outline`,
+            }),
+            m(NavLink, {
+              mdl,
+              href: "/logout",
+              role: "button",
+              link: "Logout",
+              classList: "secondary",
+            })
+          )
+        : m(
+            ".grouped",
+            m(NavLink, {
+              mdl,
+              role: "button",
+              href: "/login",
+              link: "Login",
+              classList: `${isActiveRoute("/login")} outline`,
+            }),
+            m(NavLink, {
+              mdl,
+              role: "button",
+              href: "/register",
+              link: "Register",
+              classList: `${isActiveRoute("/register")} outline secondary`,
+            })
+          ),
   }
 }
 

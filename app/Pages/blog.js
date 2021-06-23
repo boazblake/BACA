@@ -36,7 +36,7 @@ const Blog = () => {
                 objectId,
               }) =>
                 m(
-                  "article",
+                  "article.card",
                   m(
                     ".grid",
                     m(
@@ -82,13 +82,12 @@ const Blog = () => {
                 )
             )
           : m(
-              "article",
+              "article.card",
               m(
                 m.route.Link,
                 {
-                  selector: "a",
                   href: "/social/blog-editor:",
-                  role: "button",
+                  class: "button primary",
                 },
                 "Add The First Blog Post !"
               )

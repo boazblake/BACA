@@ -14,11 +14,10 @@ const Toolbar = () => {
           },
         },
         m(
-          "ul.nav-left",
+          ".nav-left",
           m(
             m.route.Link,
             {
-              selector: "li.pointer",
               onclick: () => m.route.set("/about"),
             },
             m("img#nav-logo", {
@@ -28,38 +27,29 @@ const Toolbar = () => {
         ),
         mdl.state.isAuth() &&
           m(
-            "nav",
+            ".nav-center",
+
             m(
-              "ul.nav-center",
-              m(
-                "li",
-                m(
-                  m.route.Link,
-                  {
-                    selector: "a",
-                    href: "/social/blog-editor:",
-                    role: "button",
-                  },
-                  "Add A Blog Post"
-                )
-              )
+              m.route.Link,
+              {
+                href: "/social/blog-editor:",
+                class: "button primary",
+              },
+              "Add A Blog Post"
             )
           ),
 
         mdl.settings.screenSize == "desktop"
           ? m(".nav-right", m(AuthBox, { mdl }))
           : m(
-              "ul.nav-right",
+              ".nav-right",
               {
                 onclick: () =>
                   mdl.state.showNavModal(!mdl.state.showNavModal()),
               },
-              m(
-                "li",
-                m(Hamburger, {
-                  mdl,
-                })
-              )
+              m(Hamburger, {
+                mdl,
+              })
             )
       ),
   }

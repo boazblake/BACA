@@ -330,36 +330,36 @@ var AuthBox = function AuthBox() {
   return {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return mdl.state.isAuth() ? m("ul", [mdl.user.isAdmin && m("li.m-r-16", m(_navLink["default"], {
+      return mdl.state.isAuth() ? m(".grouped", mdl.user.isAdmin && m(_navLink["default"], {
         mdl: mdl,
         href: "/dashboard/".concat(mdl.user.name),
         link: "Dashboard",
         classList: "".concat((0, _index.isActiveRoute)("/dashboard/".concat(mdl.user.name)), " outline")
-      })), m("li.m-r-16", m(_navLink["default"], {
+      }), m(_navLink["default"], {
         mdl: mdl,
         href: "/account/".concat(mdl.user.name),
         role: "button",
         link: "Your Account",
         classList: "".concat((0, _index.isActiveRoute)("/account/".concat(mdl.user.name)), " outline")
-      })), m("li.m-r-16", m(_navLink["default"], {
+      }), m(_navLink["default"], {
         mdl: mdl,
         href: "/logout",
         role: "button",
         link: "Logout",
         classList: "secondary"
-      }))]) : m("ul", [m("li.m-r-16", m(_navLink["default"], {
+      })) : m(".grouped", m(_navLink["default"], {
         mdl: mdl,
         role: "button",
         href: "/login",
         link: "Login",
         classList: "".concat((0, _index.isActiveRoute)("/login"), " outline")
-      })), m("li.m-r-16", m(_navLink["default"], {
+      }), m(_navLink["default"], {
         mdl: mdl,
         role: "button",
         href: "/register",
         link: "Register",
         classList: "".concat((0, _index.isActiveRoute)("/register"), " outline secondary")
-      }))]);
+      }));
     }
   };
 };
@@ -595,7 +595,6 @@ var NavLink = function NavLink() {
           rest = _objectWithoutProperties(_ref$attrs, _excluded);
 
       return m(m.route.Link, _objectSpread({
-        selector: "a",
         onclick: function onclick(e) {
           return e.stopPropagation();
         },
@@ -1325,14 +1324,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _clarity = require("@mithril-icons/clarity");
-
 var _navLink = _interopRequireDefault(require("Components/nav-link.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var isActiveRoute = function isActiveRoute(a, b) {
-  return a == b ? "is-active" : "";
+  return a == b ? "active" : "";
 };
 
 var Navbar = function Navbar() {
@@ -1351,14 +1348,14 @@ var Navbar = function Navbar() {
   return {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return m("nav.navigation.container-fluid#navbar", m("ul", routes(mdl).map(function (r) {
-        return m("li", m(_navLink["default"], {
+      return m("nav.nav.navigation.container-fluid#navbar", routes(mdl).map(function (r) {
+        return m(_navLink["default"], {
           mdl: mdl,
           href: r.route,
           link: r.name,
-          classList: "".concat(isActiveRoute(mdl.state.navState(), r.route))
-        }));
-      })));
+          classList: "clear ".concat(isActiveRoute(mdl.state.navState(), r.route))
+        });
+      }));
     }
   };
 };
@@ -1382,7 +1379,7 @@ var _navLink = _interopRequireDefault(require("Components/nav-link.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var isActiveRoute = function isActiveRoute(a, b) {
-  return a == b ? "is-active" : "";
+  return a == b ? "active" : "";
 };
 
 var SubNavbar = function SubNavbar() {
@@ -1395,8 +1392,8 @@ var SubNavbar = function SubNavbar() {
   return {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return subroutes(mdl).any() && m("nav.navigation.container-fluid#sub-navbar", subroutes(mdl).map(function (r) {
-        return m("li", r.group.includes("external") ? m(".nav-link", m("a", {
+      return subroutes(mdl).any() && m("nav.nav.navigation.container-fluid#sub-navbar", subroutes(mdl).map(function (r) {
+        return r.group.includes("external") ? m(".nav-link clear", m("a", {
           target: "_blank",
           href: r.external
         }, r.name, m(_clarity.PopOutLine, {
@@ -1407,8 +1404,8 @@ var SubNavbar = function SubNavbar() {
           mdl: mdl,
           href: r.route,
           link: r.name,
-          classList: "col col-middle col-align-middle ".concat(isActiveRoute(mdl.state.subnavState(), r.route))
-        }));
+          classList: "clear ".concat(isActiveRoute(mdl.state.subnavState(), r.route))
+        });
       }));
     }
   };
@@ -1440,26 +1437,24 @@ var Toolbar = function Toolbar() {
         style: {
           "background-color": mdl.state.showNavModal() ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.9)"
         }
-      }, m("ul.nav-left", m(m.route.Link, {
-        selector: "li.pointer",
+      }, m(".nav-left", m(m.route.Link, {
         onclick: function onclick() {
           return m.route.set("/about");
         }
       }, m("img#nav-logo", {
         src: "images/logo.webp"
-      }))), mdl.state.isAuth() && m("nav", m("ul.nav-center", m("li", m(m.route.Link, {
-        selector: "a",
+      }))), mdl.state.isAuth() && m(".nav-center", m(m.route.Link, {
         href: "/social/blog-editor:",
-        role: "button"
-      }, "Add A Blog Post")))), mdl.settings.screenSize == "desktop" ? m(".nav-right", m(_authbox["default"], {
+        "class": "button primary"
+      }, "Add A Blog Post")), mdl.settings.screenSize == "desktop" ? m(".nav-right", m(_authbox["default"], {
         mdl: mdl
-      })) : m("ul.nav-right", {
+      })) : m(".nav-right", {
         onclick: function onclick() {
           return mdl.state.showNavModal(!mdl.state.showNavModal());
         }
-      }, m("li", m(_Hamburger["default"], {
+      }, m(_Hamburger["default"], {
         mdl: mdl
-      }))));
+      })));
     }
   };
 };
@@ -2492,7 +2487,7 @@ var Blog = function Blog() {
             updatedAt = _ref4.updatedAt,
             author = _ref4.author,
             objectId = _ref4.objectId;
-        return (0, _mithril["default"])("article", (0, _mithril["default"])(".grid", (0, _mithril["default"])("hgroup", (0, _mithril["default"])("h2", title), (0, _mithril["default"])("h3", createdAt, updatedAt !== createdAt && "updated on: ", updatedAt), (0, _mithril["default"])("h4", "Written By ", author)), (0, _mithril["default"])("img", {
+        return (0, _mithril["default"])("article.card", (0, _mithril["default"])(".grid", (0, _mithril["default"])("hgroup", (0, _mithril["default"])("h2", title), (0, _mithril["default"])("h3", createdAt, updatedAt !== createdAt && "updated on: ", updatedAt), (0, _mithril["default"])("h4", "Written By ", author)), (0, _mithril["default"])("img", {
           src: thumb || "images/main.webp",
           style: {
             border: "1px solid black",
@@ -2508,10 +2503,9 @@ var Blog = function Blog() {
             _mithril["default"].route.set("/social/blog-editor:".concat(objectId));
           }
         }, "Edit")));
-      }) : (0, _mithril["default"])("article", (0, _mithril["default"])(_mithril["default"].route.Link, {
-        selector: "a",
+      }) : (0, _mithril["default"])("article.card", (0, _mithril["default"])(_mithril["default"].route.Link, {
         href: "/social/blog-editor:",
-        role: "button"
+        "class": "button primary"
       }, "Add The First Blog Post !")));
     }
   };

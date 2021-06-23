@@ -1,285 +1,68 @@
 /**
- * Welcome to your Workbox-powered service worker!
+ * Copyright 2016 Google Inc. All rights reserved.
  *
- * You'll need to register this file in your web app and you should
- * disable HTTP caching for this file too.
- * See https://goo.gl/nhQhGp
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The rest of the code is auto-generated. Please don't update this file
- * directly; instead, make changes to your Workbox build configuration
- * and re-run your build process.
- * See https://goo.gl/2aRDsh
- */
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+// DO NOT EDIT THIS GENERATED OUTPUT DIRECTLY!
+// This file should be overwritten as part of your build process.
+// If you need to extend the behavior of the generated service worker, the best approach is to write
+// additional code and include it using the importScripts option:
+//   https://github.com/GoogleChrome/sw-precache#importscripts-arraystring
+//
+// Alternatively, it's possible to make changes to the underlying template file and then use that as the
+// new base for generating output, via the templateFilePath option:
+//   https://github.com/GoogleChrome/sw-precache#templatefilepath-string
+//
+// If you go that route, make sure that whenever you update your sw-precache dependency, you reconcile any
+// changes made to this original template file with your modified copy.
 
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
+// This generated service worker JavaScript will precache your site's resources.
+// The code needs to be saved in a .js file at the top-level of your site, and registered
+// from your pages in order to be used. See
+// https://github.com/googlechrome/sw-precache/blob/master/demo/app/js/service-worker-registration.js
+// for an example of how you can register this script and handle various service worker events.
 
-/**
- * The workboxSW.precacheAndRoute() method efficiently caches and responds to
- * requests for URLs in the manifest.
- * See https://goo.gl/S9QRab
- */
-self.__precacheManifest = [
-  {
-    "url": "app.css",
-    "revision": "e6a0344d5ce102d43ce4d0cf38fff5e9"
-  },
-  {
-    "url": "app.css.gz",
-    "revision": "57d80928521d5e26bab5a8cf957641c2"
-  },
-  {
-    "url": "app.css.map",
-    "revision": "056851195414c78640068cf1463934de"
-  },
-  {
-    "url": "app.js",
-    "revision": "253fd2d2ae872ae771ddbc90b8e5f5a3"
-  },
-  {
-    "url": "app.js.gz",
-    "revision": "d80536b0a1148907f28aa194cfda5a98"
-  },
-  {
-    "url": "app.js.map",
-    "revision": "9996ab71954beb2ad78c850adcc3cd8f"
-  },
-  {
-    "url": "icons/icon-192x192.png",
-    "revision": "5b677f2775bfea90ba43b9a5fb765a6e"
-  },
-  {
-    "url": "icons/icon-256x256.png",
-    "revision": "e18d9d8b48138cc3d9115f518af945f5"
-  },
-  {
-    "url": "icons/icon-384x384.png",
-    "revision": "9d3c5d9b21dcf43de7c7d649f7935664"
-  },
-  {
-    "url": "icons/icon-512x512.png",
-    "revision": "d9fd34b3338468a9a9233aba8ebdab0f"
-  },
-  {
-    "url": "images/BNP.jpeg",
-    "revision": "2c80785f543c8498af6aaf32cca58093"
-  },
-  {
-    "url": "images/BNP.webp",
-    "revision": "ca3e1ee76f3bb57d2d8179233a8462a1"
-  },
-  {
-    "url": "images/BNP1.jpeg",
-    "revision": "f30df42107180c811eed7d32a2f05509"
-  },
-  {
-    "url": "images/BNP1.webp",
-    "revision": "d5d2562ee855b496c2182aeee399ed09"
-  },
-  {
-    "url": "images/IMG_3989.webp",
-    "revision": "7372f3227941048792d12f58186f18fc"
-  },
-  {
-    "url": "images/IMG_3990.webp",
-    "revision": "42a96d4d315760f0599494816cf17712"
-  },
-  {
-    "url": "images/IMG_3991.webp",
-    "revision": "3418e230f1283c78492ecc11962be1ca"
-  },
-  {
-    "url": "images/IMG_3992.webp",
-    "revision": "3f6c47f2b9a736436ddc71d38a3d142c"
-  },
-  {
-    "url": "images/IMG_3993.webp",
-    "revision": "4dd46165a8e2f49c08fc9d022d7989f6"
-  },
-  {
-    "url": "images/IMG_3994.webp",
-    "revision": "7fbf8caa2ac37fb9b74b02d006c64da9"
-  },
-  {
-    "url": "images/IMG_3995.webp",
-    "revision": "7036baae12f69ab42750db368adb748b"
-  },
-  {
-    "url": "images/IMG_3996.webp",
-    "revision": "d04c29ddd51f6e663bf0236457e0970f"
-  },
-  {
-    "url": "images/IMG_3997.webp",
-    "revision": "74455dcc72712c42703f7d0cbb8ac0e4"
-  },
-  {
-    "url": "images/IMG_3998.webp",
-    "revision": "9bca3d16c157f803ac7af598681d8d63"
-  },
-  {
-    "url": "images/IMG_3999.webp",
-    "revision": "9b84c7dd76a53b83191d06d56c1853f5"
-  },
-  {
-    "url": "images/IMG_4001.webp",
-    "revision": "d46e8b93f508ee7de4ad111044a62eb7"
-  },
-  {
-    "url": "images/IMG_4002.webp",
-    "revision": "3f53d441d38bcb3c53a5d4cba512d7ed"
-  },
-  {
-    "url": "images/IMG_4003.webp",
-    "revision": "64076ac0ab1703c6c8751c24f2435772"
-  },
-  {
-    "url": "images/IMG_4004.webp",
-    "revision": "25f03fb488a42feadc223980709ebfb6"
-  },
-  {
-    "url": "images/IMG_4005.webp",
-    "revision": "78683f3f8348055f86bd4e81d67d3193"
-  },
-  {
-    "url": "images/IMG_4006.webp",
-    "revision": "ac72ee98d0d206363b93c182af833d0a"
-  },
-  {
-    "url": "images/IMG_4007.webp",
-    "revision": "bcbbbd1f6365f7a8be26b250b2b80343"
-  },
-  {
-    "url": "images/IMG_4008.webp",
-    "revision": "b27b3353fe01a48e44ee1724348f72df"
-  },
-  {
-    "url": "images/IMG_4009.webp",
-    "revision": "d47fa856d17aec5aead987e8496276de"
-  },
-  {
-    "url": "images/IMG_4010.webp",
-    "revision": "a946fdd9d40360a60ab1c2771033db75"
-  },
-  {
-    "url": "images/IMG_4011.webp",
-    "revision": "2ffea0cca03e6a7b9962915282e91c5a"
-  },
-  {
-    "url": "images/IMG_4012.webp",
-    "revision": "d29eb3f4fe29bbeb27f15a9a6357a295"
-  },
-  {
-    "url": "images/IMG_4013.webp",
-    "revision": "d9d92b14b10557f7cd1b29348681ba03"
-  },
-  {
-    "url": "images/IMG_4014.webp",
-    "revision": "2b026731485d9f1d06dd581ccc81ad42"
-  },
-  {
-    "url": "images/IMG_4015.webp",
-    "revision": "94a1c9c1a3b41428605b30eeea45afa8"
-  },
-  {
-    "url": "images/IMG_4016.webp",
-    "revision": "91e26306973aaba4b6df98915f9c5d40"
-  },
-  {
-    "url": "images/IMG_4017.webp",
-    "revision": "d9fae13b60d9c6c6ddf4b8182b931105"
-  },
-  {
-    "url": "images/IMG_4018.webp",
-    "revision": "c7813ed9a4188b9a8b8f1fa24bf1d70b"
-  },
-  {
-    "url": "images/IMG_4019.webp",
-    "revision": "5801e01ef3243f337da4a3a971f5e938"
-  },
-  {
-    "url": "images/IMG_4020.webp",
-    "revision": "36be4739d9999d2e61fc22f356997c79"
-  },
-  {
-    "url": "images/IMG_4021.webp",
-    "revision": "3ce21fa732ccbe26c3313f741437764b"
-  },
-  {
-    "url": "images/IMG_4022.webp",
-    "revision": "2d571046ffcc03e0cbd9a50d07743968"
-  },
-  {
-    "url": "images/IMG_4023.webp",
-    "revision": "26a58bac4215cb4d0818517f376c0938"
-  },
-  {
-    "url": "images/IMG_4024.webp",
-    "revision": "6bf1663c726004cb593de4deba48b73d"
-  },
-  {
-    "url": "images/IMG_4025.webp",
-    "revision": "ed0fe24c055cb824b3b911c520ffde82"
-  },
-  {
-    "url": "images/IMG_4026.webp",
-    "revision": "8ef2b97ac54b71a0bc6f7d65e711a69f"
-  },
-  {
-    "url": "images/IMG_4027.webp",
-    "revision": "23ad47bbcd8178a6cede8ff55e5503b4"
-  },
-  {
-    "url": "images/IMG_4028.webp",
-    "revision": "5e8d1abc30949c37fcd849fb9e0c6587"
-  },
-  {
-    "url": "images/IMG_4029.webp",
-    "revision": "ea6140462a8a647075b8ff5d6d71fb8f"
-  },
-  {
-    "url": "images/logo.jpeg",
-    "revision": "ec5f7b7fd3fdeb068228f9537ed05310"
-  },
-  {
-    "url": "images/logo.webp",
-    "revision": "0dc2223d19cfa06815c645e409de4b20"
-  },
-  {
-    "url": "images/main.jpg",
-    "revision": "c1682e981da965d758666e27b27650d3"
-  },
-  {
-    "url": "images/main.webp",
-    "revision": "8c7b24466716c5622c98a92c718bda1b"
-  },
-  {
-    "url": "images/test.JPG",
-    "revision": "7182208fedf74b002c29c7f77f30b96d"
-  },
-  {
-    "url": "index.html",
-    "revision": "ad183e76e9f6b00040aa764470e812ac"
-  },
-  {
-    "url": "index.html.gz",
-    "revision": "54de369edc3ed0c823e4883072e75001"
-  },
-  {
-    "url": "manifest.json",
-    "revision": "1764325a3207a28490a880008475f88a"
-  },
-  {
-    "url": "vendor.js.gz",
-    "revision": "05a50db047fefd50161cc5def1de45da"
-  }
-].concat(self.__precacheManifest || []);
-workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
-nalResponse.body) :
+/* eslint-env worker, serviceworker */
+/* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
+'use strict';
+
+var precacheConfig = [["docs/app.css","d17d5bdb61481ffa370e36fa1e3d96c9"],["docs/app.css.gz","57d80928521d5e26bab5a8cf957641c2"],["docs/app.css.map","85eafdff77b90e662556e94df2aa9620"],["docs/app.js","a670333f9f3f9834bbbfdb64db51718b"],["docs/app.js.gz","d80536b0a1148907f28aa194cfda5a98"],["docs/app.js.map","707e8421a88b5d3935addb037f3638e5"],["docs/icons/icon-192x192.png","5b677f2775bfea90ba43b9a5fb765a6e"],["docs/icons/icon-256x256.png","e18d9d8b48138cc3d9115f518af945f5"],["docs/icons/icon-384x384.png","9d3c5d9b21dcf43de7c7d649f7935664"],["docs/icons/icon-512x512.png","d9fd34b3338468a9a9233aba8ebdab0f"],["docs/images/BNP.jpeg","2c80785f543c8498af6aaf32cca58093"],["docs/images/BNP.webp","ca3e1ee76f3bb57d2d8179233a8462a1"],["docs/images/BNP1.jpeg","f30df42107180c811eed7d32a2f05509"],["docs/images/BNP1.webp","d5d2562ee855b496c2182aeee399ed09"],["docs/images/IMG_3989.webp","7372f3227941048792d12f58186f18fc"],["docs/images/IMG_3990.webp","42a96d4d315760f0599494816cf17712"],["docs/images/IMG_3991.webp","3418e230f1283c78492ecc11962be1ca"],["docs/images/IMG_3992.webp","3f6c47f2b9a736436ddc71d38a3d142c"],["docs/images/IMG_3993.webp","4dd46165a8e2f49c08fc9d022d7989f6"],["docs/images/IMG_3994.webp","7fbf8caa2ac37fb9b74b02d006c64da9"],["docs/images/IMG_3995.webp","7036baae12f69ab42750db368adb748b"],["docs/images/IMG_3996.webp","d04c29ddd51f6e663bf0236457e0970f"],["docs/images/IMG_3997.webp","74455dcc72712c42703f7d0cbb8ac0e4"],["docs/images/IMG_3998.webp","9bca3d16c157f803ac7af598681d8d63"],["docs/images/IMG_3999.webp","9b84c7dd76a53b83191d06d56c1853f5"],["docs/images/IMG_4001.webp","d46e8b93f508ee7de4ad111044a62eb7"],["docs/images/IMG_4002.webp","3f53d441d38bcb3c53a5d4cba512d7ed"],["docs/images/IMG_4003.webp","64076ac0ab1703c6c8751c24f2435772"],["docs/images/IMG_4004.webp","25f03fb488a42feadc223980709ebfb6"],["docs/images/IMG_4005.webp","78683f3f8348055f86bd4e81d67d3193"],["docs/images/IMG_4006.webp","ac72ee98d0d206363b93c182af833d0a"],["docs/images/IMG_4007.webp","bcbbbd1f6365f7a8be26b250b2b80343"],["docs/images/IMG_4008.webp","b27b3353fe01a48e44ee1724348f72df"],["docs/images/IMG_4009.webp","d47fa856d17aec5aead987e8496276de"],["docs/images/IMG_4010.webp","a946fdd9d40360a60ab1c2771033db75"],["docs/images/IMG_4011.webp","2ffea0cca03e6a7b9962915282e91c5a"],["docs/images/IMG_4012.webp","d29eb3f4fe29bbeb27f15a9a6357a295"],["docs/images/IMG_4013.webp","d9d92b14b10557f7cd1b29348681ba03"],["docs/images/IMG_4014.webp","2b026731485d9f1d06dd581ccc81ad42"],["docs/images/IMG_4015.webp","94a1c9c1a3b41428605b30eeea45afa8"],["docs/images/IMG_4016.webp","91e26306973aaba4b6df98915f9c5d40"],["docs/images/IMG_4017.webp","d9fae13b60d9c6c6ddf4b8182b931105"],["docs/images/IMG_4018.webp","c7813ed9a4188b9a8b8f1fa24bf1d70b"],["docs/images/IMG_4019.webp","5801e01ef3243f337da4a3a971f5e938"],["docs/images/IMG_4020.webp","36be4739d9999d2e61fc22f356997c79"],["docs/images/IMG_4021.webp","3ce21fa732ccbe26c3313f741437764b"],["docs/images/IMG_4022.webp","2d571046ffcc03e0cbd9a50d07743968"],["docs/images/IMG_4023.webp","26a58bac4215cb4d0818517f376c0938"],["docs/images/IMG_4024.webp","6bf1663c726004cb593de4deba48b73d"],["docs/images/IMG_4025.webp","ed0fe24c055cb824b3b911c520ffde82"],["docs/images/IMG_4026.webp","8ef2b97ac54b71a0bc6f7d65e711a69f"],["docs/images/IMG_4027.webp","23ad47bbcd8178a6cede8ff55e5503b4"],["docs/images/IMG_4028.webp","5e8d1abc30949c37fcd849fb9e0c6587"],["docs/images/IMG_4029.webp","ea6140462a8a647075b8ff5d6d71fb8f"],["docs/images/logo.jpeg","ec5f7b7fd3fdeb068228f9537ed05310"],["docs/images/logo.webp","0dc2223d19cfa06815c645e409de4b20"],["docs/images/main.jpg","c1682e981da965d758666e27b27650d3"],["docs/images/main.webp","8c7b24466716c5622c98a92c718bda1b"],["docs/images/test.JPG","7182208fedf74b002c29c7f77f30b96d"],["docs/index.html","ad183e76e9f6b00040aa764470e812ac"],["docs/index.html.gz","54de369edc3ed0c823e4883072e75001"],["docs/manifest.json","1764325a3207a28490a880008475f88a"],["docs/vendor.js.gz","05a50db047fefd50161cc5def1de45da"]];
+var cacheName = 'sw-precache-v3--' + (self.registration ? self.registration.scope : '');
+
+
+var ignoreUrlParametersMatching = [/^utm_/];
+
+
+
+var addDirectoryIndex = function(originalUrl, index) {
+    var url = new URL(originalUrl);
+    if (url.pathname.slice(-1) === '/') {
+      url.pathname += index;
+    }
+    return url.toString();
+  };
+
+var cleanResponse = function(originalResponse) {
+    // If this is not a redirected response, then we don't have to do anything.
+    if (!originalResponse.redirected) {
+      return Promise.resolve(originalResponse);
+    }
+
+    // Firefox 50 and below doesn't support the Response.body stream, so we may
+    // need to read the entire body to memory as a Blob.
+    var bodyPromise = 'body' in originalResponse ?
+      Promise.resolve(originalResponse.body) :
       originalResponse.blob();
 
     return bodyPromise.then(function(body) {

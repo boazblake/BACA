@@ -1,7 +1,6 @@
-import { PopOutLine } from "@mithril-icons/clarity"
 import NavLink from "Components/nav-link.js"
 
-const isActiveRoute = (a, b) => (a == b ? "is-active" : "")
+const isActiveRoute = (a, b) => (a == b ? "active" : "")
 
 const Navbar = () => {
   const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
@@ -12,20 +11,14 @@ const Navbar = () => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "nav.navigation.container-fluid#navbar",
-        m(
-          "ul",
-          routes(mdl).map((r) =>
-            m(
-              "li",
-              m(NavLink, {
-                mdl,
-                href: r.route,
-                link: r.name,
-                classList: `${isActiveRoute(mdl.state.navState(), r.route)}`,
-              })
-            )
-          )
+        "nav.nav.navigation.container-fluid#navbar",
+        routes(mdl).map((r) =>
+          m(NavLink, {
+            mdl,
+            href: r.route,
+            link: r.name,
+            classList: `clear ${isActiveRoute(mdl.state.navState(), r.route)}`,
+          })
         )
       ),
   }

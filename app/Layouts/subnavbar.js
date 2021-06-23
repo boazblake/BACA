@@ -1,7 +1,7 @@
 import { PopOutLine } from "@mithril-icons/clarity"
 import NavLink from "Components/nav-link.js"
 
-const isActiveRoute = (a, b) => (a == b ? "is-active" : "")
+const isActiveRoute = (a, b) => (a == b ? "active" : "")
 
 const SubNavbar = () => {
   const subroutes = (mdl) =>
@@ -12,34 +12,31 @@ const SubNavbar = () => {
     view: ({ attrs: { mdl } }) =>
       subroutes(mdl).any() &&
       m(
-        "nav.navigation.container-fluid#sub-navbar",
+        "nav.nav.navigation.container-fluid#sub-navbar",
         subroutes(mdl).map((r) =>
-          m(
-            "li",
-            r.group.includes("external")
-              ? m(
-                  ".nav-link",
-                  m(
-                    "a",
-                    { target: "_blank", href: r.external },
-                    r.name,
-                    m(PopOutLine, {
-                      margin: "8px",
-                      width: "15px",
-                      height: "15px",
-                    })
-                  )
+          r.group.includes("external")
+            ? m(
+                ".nav-link clear",
+                m(
+                  "a",
+                  { target: "_blank", href: r.external },
+                  r.name,
+                  m(PopOutLine, {
+                    margin: "8px",
+                    width: "15px",
+                    height: "15px",
+                  })
                 )
-              : m(NavLink, {
-                  mdl,
-                  href: r.route,
-                  link: r.name,
-                  classList: `col col-middle col-align-middle ${isActiveRoute(
-                    mdl.state.subnavState(),
-                    r.route
-                  )}`,
-                })
-          )
+              )
+            : m(NavLink, {
+                mdl,
+                href: r.route,
+                link: r.name,
+                classList: `clear ${isActiveRoute(
+                  mdl.state.subnavState(),
+                  r.route
+                )}`,
+              })
         )
       ),
   }
