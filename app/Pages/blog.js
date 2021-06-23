@@ -11,30 +11,30 @@ const blogs = listOf(20)({
   text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 })
 
+const state = {
+  errors: {},
+  blogs: [],
+}
+
 const fetchBlopgsTask = (mdl) => Task.of(blogs)
 
-const onPageInit =
-  (state) =>
-  ({ attrs: { mdl } }) => {
-    const onError = (s) => (error) => {
-      s.errors.init = error
-      console.log("errror", error)
-    }
-
-    const onSuccess = (s) => (data) => {
-      s.data = data
-    }
-
-    fetchBlopgsTask(mdl).fork(onError(state), onSuccess(state))
+const loadBlogs = ({ attrs: { mdl } }) => {
+  const onError = (error) => {
+    state.errors = error
+    console.log("errror", error)
   }
+
+  const onSuccess = ({ results }) => {
+    state.blogs = results
+    console.log(state)
+  }
+
+  mdl.http.back4App.getTask(mdl)("Classes/Blogs").fork(onError, onSuccess)
+}
 
 const Blog = () => {
-  const state = {
-    errors: {},
-    data: [],
-  }
   return {
-    oninit: onPageInit(state),
+    oninit: loadBlogs,
     onremove: () => {
       state.errors = {}
       state.data = []
@@ -61,7 +61,7 @@ const Blog = () => {
               )
             )
           ),
-        state.data.map(({ title, text, img, date, author }) =>
+        state.blogs.map(({ title, text, img, createdAt, updatedAt, author }) =>
           m(
             "article",
             m(
@@ -69,7 +69,12 @@ const Blog = () => {
               m(
                 "hgroup",
                 m("h2", title),
-                m("h3", date),
+                m(
+                  "h3",
+                  createdAt,
+                  updatedAt !== createdAt && "updated on: ",
+                  updatedAt
+                ),
                 m("h4", "Written By ", author)
               ),
               m("img", {

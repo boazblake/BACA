@@ -2259,16 +2259,51 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var state = {
   title: "",
   author: "",
-  date: "",
   text: "",
   img: "",
   file: null,
-  showModal: Stream(false)
+  showModal: Stream(false),
+  errors: {
+    img: null
+  }
+};
+
+var onSubmitError = function onSubmitError(e) {
+  return state.errors.img = e;
+};
+
+var onImgSuccess = function onImgSuccess(_ref) {
+  var url = _ref.data.image.url;
+  state.img = url;
+  state.showModal(false);
 };
 
 var uploadImage = function uploadImage(mdl) {
   return function (file) {
-    return mdl.http.imgBB.postTask(mdl)(file).fork(onSuccess, onError);
+    var image = new FormData();
+    image.append("image", file);
+    mdl.http.imgBB.postTask(mdl)(image).fork(onSubmitError, onImgSuccess);
+  };
+};
+
+var onSubmitSuccess = function onSubmitSuccess(d) {
+  return console.log(d);
+};
+
+var submitBlog = function submitBlog(mdl) {
+  return function (_ref2) {
+    var title = _ref2.title,
+        img = _ref2.img,
+        text = _ref2.text,
+        date = _ref2.date,
+        author = _ref2.author;
+    var dto = {
+      title: title,
+      img: img,
+      text: text,
+      author: mdl.user.name
+    };
+    mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto).fork(onSubmitError, onSubmitSuccess);
   };
 };
 
@@ -2281,9 +2316,9 @@ var BlogEditor = function BlogEditor(mdl) {
     }
   });
   return {
-    view: function view(_ref) {
-      var mdl = _ref.attrs.mdl;
-      return m("form", _objectSpread({}, onInput), m("label", "Title", m("input", {
+    view: function view(_ref3) {
+      var mdl = _ref3.attrs.mdl;
+      return m(".grid", m("form", _objectSpread({}, onInput), m("label", "Title", m("input", {
         id: "title",
         value: state.title
       })), m("label", m("a.secondary", {
@@ -2304,10 +2339,9 @@ var BlogEditor = function BlogEditor(mdl) {
           return uploadImage(mdl)(state.file);
         },
         role: "button",
-        type: "submit"
-      }, "Upload")))), m("aside", m("img", {
-        src: state.img
-      })), m("label", "Contents", m("textarea", {
+        type: "submit",
+        disabled: !state.file
+      }, "Upload")))), m("label", "Contents", m("textarea", {
         id: "text",
         style: {
           height: "300px"
@@ -2315,9 +2349,11 @@ var BlogEditor = function BlogEditor(mdl) {
       })), m("button", {
         onclick: function onclick(e) {
           e.preventDefault();
-          console.log(state);
+          submitBlog(mdl)(state);
         }
-      }, "Submit"));
+      }, "Submit")), state.img && m("aside", m("img", {
+        src: state.img
+      })));
     }
   };
 };
@@ -2352,56 +2388,53 @@ var blogs = (0, _Utils.listOf)(20)((_listOf = {
   date: "11/12/2020",
   author: "Boaz Blake"
 }, _defineProperty(_listOf, "title", "minim veniam, quis nostrud"), _defineProperty(_listOf, "text", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."), _listOf));
+var state = {
+  errors: {},
+  blogs: []
+};
 
 var fetchBlopgsTask = function fetchBlopgsTask(mdl) {
   return _data["default"].of(blogs);
 };
 
-var onPageInit = function onPageInit(state) {
-  return function (_ref) {
-    var mdl = _ref.attrs.mdl;
+var loadBlogs = function loadBlogs(_ref) {
+  var mdl = _ref.attrs.mdl;
 
-    var onError = function onError(s) {
-      return function (error) {
-        s.errors.init = error;
-        console.log("errror", error);
-      };
-    };
-
-    var onSuccess = function onSuccess(s) {
-      return function (data) {
-        s.data = data;
-      };
-    };
-
-    fetchBlopgsTask(mdl).fork(onError(state), onSuccess(state));
+  var onError = function onError(error) {
+    state.errors = error;
+    console.log("errror", error);
   };
+
+  var onSuccess = function onSuccess(_ref2) {
+    var results = _ref2.results;
+    state.blogs = results;
+    console.log(state);
+  };
+
+  mdl.http.back4App.getTask(mdl)("Classes/Blogs").fork(onError, onSuccess);
 };
 
 var Blog = function Blog() {
-  var state = {
-    errors: {},
-    data: []
-  };
   return {
-    oninit: onPageInit(state),
+    oninit: loadBlogs,
     onremove: function onremove() {
       state.errors = {};
       state.data = [];
     },
-    view: function view(_ref2) {
-      var mdl = _ref2.attrs.mdl;
+    view: function view(_ref3) {
+      var mdl = _ref3.attrs.mdl;
       return m(".container", mdl.state.isAuth() && m("nav", m("ul", m("li", m(m.route.Link, {
         selector: "a",
         href: "/social/blog-editor",
         role: "button"
-      }, "Add A Blog")))), state.data.map(function (_ref3) {
-        var title = _ref3.title,
-            text = _ref3.text,
-            img = _ref3.img,
-            date = _ref3.date,
-            author = _ref3.author;
-        return m("article", m(".grid", m("hgroup", m("h2", title), m("h3", date), m("h4", "Written By ", author)), m("img", {
+      }, "Add A Blog")))), state.blogs.map(function (_ref4) {
+        var title = _ref4.title,
+            text = _ref4.text,
+            img = _ref4.img,
+            createdAt = _ref4.createdAt,
+            updatedAt = _ref4.updatedAt,
+            author = _ref4.author;
+        return m("article", m(".grid", m("hgroup", m("h2", title), m("h3", createdAt, updatedAt !== createdAt && "updated on: ", updatedAt), m("h4", "Written By ", author)), m("img", {
           src: img,
           style: {
             border: "1px solid black",
@@ -3913,7 +3946,8 @@ var back4App = {
 var imgBB = {
   postTask: function postTask(mdl) {
     return function (dto) {
-      return HttpTask(_secrets.BACK4APP.headers(mdl, _secrets.BACK4APP))("POST")(mdl)("".concat(_secrets.IMGBB.url, "&key=").concat(_secrets.IMGBB.apiKey))(dto);
+      dto.set("key", _secrets.IMGBB.apiKey);
+      return HttpTask()("POST")(mdl)("".concat(_secrets.IMGBB.url, "?key=").concat(_secrets.IMGBB.apiKey))(dto);
     };
   }
 };

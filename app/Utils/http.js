@@ -107,10 +107,10 @@ const back4App = {
 }
 
 const imgBB = {
-  postTask: (mdl) => (dto) =>
-    HttpTask(BACK4APP.headers(mdl, BACK4APP))("POST")(mdl)(
-      `${IMGBB.url}&key=${IMGBB.apiKey}`
-    )(dto),
+  postTask: (mdl) => (dto) => {
+    dto.set("key", IMGBB.apiKey)
+    return HttpTask()("POST")(mdl)(`${IMGBB.url}?key=${IMGBB.apiKey}`)(dto)
+  },
 }
 
 const http = {
