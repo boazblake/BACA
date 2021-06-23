@@ -1386,15 +1386,9 @@ var isActiveRoute = function isActiveRoute(a, b) {
 };
 
 var SubNavbar = function SubNavbar() {
-  var routes = function routes(mdl) {
-    return mdl.Routes.filter(function (r) {
-      return r.group.includes("navmenu");
-    });
-  };
-
   var subroutes = function subroutes(mdl) {
     return mdl.Routes.filter(function (r) {
-      return r.group.includes(mdl.state.navState().split("/")[1]);
+      return r.isNav && r.group.includes(mdl.state.navState().split("/")[1]);
     });
   };
 
@@ -1442,20 +1436,24 @@ var Toolbar = function Toolbar() {
   return {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return m("nav#toolbar.navigation", {
+      return m("nav#toolbar.navigation.nav", {
         style: {
           "background-color": mdl.state.showNavModal() ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.9)"
         }
-      }, m("ul", m(m.route.Link, {
+      }, m("ul.nav-left", m(m.route.Link, {
         selector: "li.pointer",
         onclick: function onclick() {
           return m.route.set("/about");
         }
       }, m("img#nav-logo", {
         src: "images/logo.webp"
-      }))), mdl.settings.screenSize == "desktop" ? m(_authbox["default"], {
+      }))), mdl.state.isAuth() && m("nav", m("ul.nav-center", m("li", m(m.route.Link, {
+        selector: "a",
+        href: "/social/blog-editor:",
+        role: "button"
+      }, "Add A Blog Post")))), mdl.settings.screenSize == "desktop" ? m(".nav-right", m(_authbox["default"], {
         mdl: mdl
-      }) : m("ul", {
+      })) : m("ul.nav-right", {
         onclick: function onclick() {
           return mdl.state.showNavModal(!mdl.state.showNavModal());
         }
@@ -1504,7 +1502,7 @@ var state = {
   subnavState: Stream(""),
   image: Stream(0),
   fab: Stream(0),
-  swiper: null
+  editBlog: Stream(false)
 };
 var user = {};
 var settings = {};
@@ -2250,6 +2248,10 @@ exports["default"] = void 0;
 
 var _Utils = require("Utils");
 
+var _data = _interopRequireDefault(require("data.task"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2261,6 +2263,7 @@ var state = {
   author: "",
   text: "",
   img: "",
+  thumb: "",
   file: null,
   showModal: Stream(false),
   errors: {
@@ -2268,43 +2271,107 @@ var state = {
   }
 };
 
+var setupEditor = function setupEditor(_ref) {
+  var mdl = _ref.attrs.mdl;
+
+  var onError = function onError(e) {
+    return console.log(e);
+  };
+
+  var onSuccess = function onSuccess(_ref2) {
+    var title = _ref2.title,
+        text = _ref2.text,
+        img = _ref2.img,
+        thumb = _ref2.thumb,
+        objectId = _ref2.objectId;
+    state.title = title;
+    state.text = text;
+    state.img = img;
+    state.thumb = thumb;
+    state.objectId = objectId;
+  };
+
+  var id = m.route.get().split(":")[1];
+
+  if ((0, _Utils.exists)(id)) {
+    console.log("id", (0, _Utils.exists)(id));
+    mdl.http.back4App.getTask(mdl)("Classes/Blogs/".concat(id)).fork(onError, onSuccess);
+  }
+};
+
+var isInvalid = function isInvalid() {
+  return !(0, _Utils.exists)(state.title) || !(0, _Utils.exists)(state.text);
+};
+
 var onSubmitError = function onSubmitError(e) {
   return state.errors.img = e;
 };
 
-var onImgSuccess = function onImgSuccess(_ref) {
-  var url = _ref.data.image.url;
-  state.img = url;
+var onImgSuccess = function onImgSuccess(_ref3) {
+  var image = _ref3.image,
+      thumb = _ref3.thumb;
+  state.img = image;
+  state.thumb = thumb;
   state.showModal(false);
+};
+
+var saveImgToGalleryTask = function saveImgToGalleryTask(mdl) {
+  return function (_ref4) {
+    var _ref4$data = _ref4.data,
+        image = _ref4$data.image,
+        medium = _ref4$data.medium,
+        thumb = _ref4$data.thumb;
+    mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
+      album: "blog",
+      image: image.url,
+      medium: medium.url,
+      thumb: thumb.url
+    });
+    return _data["default"].of({
+      image: image.url,
+      medium: medium.url,
+      thumb: thumb.url
+    });
+  };
 };
 
 var uploadImage = function uploadImage(mdl) {
   return function (file) {
     var image = new FormData();
     image.append("image", file);
-    mdl.http.imgBB.postTask(mdl)(image).fork(onSubmitError, onImgSuccess);
+    mdl.http.imgBB.postTask(mdl)(image).chain(saveImgToGalleryTask(mdl)).fork(onSubmitError, onImgSuccess);
   };
 };
 
-var onSubmitSuccess = function onSubmitSuccess(d) {
-  return console.log(d);
+var toBlogs = function toBlogs() {
+  return m.route.set("/social/blog");
+};
+
+var onSubmitSuccess = function onSubmitSuccess() {
+  return toBlogs();
 };
 
 var submitBlog = function submitBlog(mdl) {
-  return function (_ref2) {
-    var title = _ref2.title,
-        img = _ref2.img,
-        text = _ref2.text,
-        date = _ref2.date,
-        author = _ref2.author;
+  return function (_ref5) {
+    var title = _ref5.title,
+        img = _ref5.img,
+        text = _ref5.text,
+        thumb = _ref5.thumb;
     var dto = {
       title: title,
       img: img,
       text: text,
-      author: mdl.user.name
+      author: mdl.user.name,
+      thumb: thumb
     };
-    mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto).fork(onSubmitError, onSubmitSuccess);
+    var updateOrSubmitBlog = state.objectId ? mdl.http.back4App.putTask(mdl)("Classes/Blogs/".concat(state.objectId))(dto) : mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto);
+    updateOrSubmitBlog.fork(onSubmitError, onSubmitSuccess);
   };
+};
+
+var deleteBlog = function deleteBlog(mdl) {
+  console.log(mdl.http.back4App.deleteTask(mdl)("Classes/Blogs/".concat(state.objectId)));
+  mdl.http.back4App.deleteTask(mdl)("Classes/Blogs/".concat(state.objectId)).fork(toBlogs, toBlogs);
 };
 
 var BlogEditor = function BlogEditor(mdl) {
@@ -2316,8 +2383,9 @@ var BlogEditor = function BlogEditor(mdl) {
     }
   });
   return {
-    view: function view(_ref3) {
-      var mdl = _ref3.attrs.mdl;
+    oninit: setupEditor,
+    view: function view(_ref6) {
+      var mdl = _ref6.attrs.mdl;
       return m(".grid", m("form", _objectSpread({}, onInput), m("label", "Title", m("input", {
         id: "title",
         value: state.title
@@ -2326,10 +2394,12 @@ var BlogEditor = function BlogEditor(mdl) {
         onclick: function onclick() {
           return state.showModal(!state.showModal());
         }
-      }, "Add An Image")), state.showModal() && m("article.modal-container", m("form", m("input", {
+      }, state.thumb ? "Update Image" : "Add An Image")), state.thumb && m("aside", m("img", {
+        src: state.thumb
+      })), state.showModal() && m("article.modal-container", m("header", m(".grid", m("a", "Upload"), m("a", "Select"))), m("form", m("input", {
         type: "file",
         id: "file"
-      }), m("grid", m("a.m-r-16.contrast", {
+      })), m("footer", m(".grid", m("a.m-r-16.contrast", {
         onclick: function onclick() {
           return state.showModal(false);
         },
@@ -2342,18 +2412,28 @@ var BlogEditor = function BlogEditor(mdl) {
         type: "submit",
         disabled: !state.file
       }, "Upload")))), m("label", "Contents", m("textarea", {
+        value: state.text,
         id: "text",
         style: {
           height: "300px"
         }
-      })), m("button", {
+      })), m("nav.grid", m("ul", {
+        style: {
+          width: "100%"
+        }
+      }, m("li", m("button", {
+        onclick: toBlogs
+      }, "Cancel")), m("li", m("button", {
+        disabled: isInvalid(),
         onclick: function onclick(e) {
           e.preventDefault();
           submitBlog(mdl)(state);
         }
-      }, "Submit")), state.img && m("aside", m("img", {
-        src: state.img
-      })));
+      }, state.objectId ? "Update" : "Submit")), m("li", m("button", {
+        onclick: function onclick(e) {
+          return deleteBlog(mdl);
+        }
+      }, "Delete"))))));
     }
   };
 };
@@ -2370,45 +2450,25 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _data = _interopRequireDefault(require("data.task"));
-
-var _Utils = require("Utils");
-
-var _images = _interopRequireDefault(require("../images"));
-
-var _listOf;
+var _mithril = _interopRequireDefault(require("mithril"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var blogs = (0, _Utils.listOf)(20)((_listOf = {
-  src: _images["default"][2],
-  title: "minim veniam, quis nostrud",
-  date: "11/12/2020",
-  author: "Boaz Blake"
-}, _defineProperty(_listOf, "title", "minim veniam, quis nostrud"), _defineProperty(_listOf, "text", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."), _listOf));
 var state = {
   errors: {},
   blogs: []
-};
-
-var fetchBlopgsTask = function fetchBlopgsTask(mdl) {
-  return _data["default"].of(blogs);
 };
 
 var loadBlogs = function loadBlogs(_ref) {
   var mdl = _ref.attrs.mdl;
 
   var onError = function onError(error) {
-    state.errors = error;
-    console.log("errror", error);
+    return state.errors = error;
   };
 
   var onSuccess = function onSuccess(_ref2) {
     var results = _ref2.results;
-    state.blogs = results;
-    console.log(state);
+    return state.blogs = results;
   };
 
   mdl.http.back4App.getTask(mdl)("Classes/Blogs").fork(onError, onSuccess);
@@ -2423,26 +2483,36 @@ var Blog = function Blog() {
     },
     view: function view(_ref3) {
       var mdl = _ref3.attrs.mdl;
-      return m(".container", mdl.state.isAuth() && m("nav", m("ul", m("li", m(m.route.Link, {
-        selector: "a",
-        href: "/social/blog-editor",
-        role: "button"
-      }, "Add A Blog")))), state.blogs.map(function (_ref4) {
+      return (0, _mithril["default"])(".container", state.blogs.any() ? state.blogs.map(function (_ref4) {
         var title = _ref4.title,
             text = _ref4.text,
             img = _ref4.img,
+            thumb = _ref4.thumb,
             createdAt = _ref4.createdAt,
             updatedAt = _ref4.updatedAt,
-            author = _ref4.author;
-        return m("article", m(".grid", m("hgroup", m("h2", title), m("h3", createdAt, updatedAt !== createdAt && "updated on: ", updatedAt), m("h4", "Written By ", author)), m("img", {
-          src: img,
+            author = _ref4.author,
+            objectId = _ref4.objectId;
+        return (0, _mithril["default"])("article", (0, _mithril["default"])(".grid", (0, _mithril["default"])("hgroup", (0, _mithril["default"])("h2", title), (0, _mithril["default"])("h3", createdAt, updatedAt !== createdAt && "updated on: ", updatedAt), (0, _mithril["default"])("h4", "Written By ", author)), (0, _mithril["default"])("img", {
+          src: thumb || "images/main.webp",
           style: {
             border: "1px solid black",
             borderRadius: "2%",
-            width: "100%"
+            width: "182px"
           }
-        })), m("hgroup", m("h4", text)));
-      }));
+        })), (0, _mithril["default"])("hgroup", (0, _mithril["default"])("h4", text.slice(0, 100), "...."), (0, _mithril["default"])("a", {
+          role: "button"
+        }, "continue reading")), author == mdl.user.name && (0, _mithril["default"])("footer", (0, _mithril["default"])("button", {
+          onclick: function onclick() {
+            mdl.state.editBlog(objectId);
+
+            _mithril["default"].route.set("/social/blog-editor:".concat(objectId));
+          }
+        }, "Edit")));
+      }) : (0, _mithril["default"])("article", (0, _mithril["default"])(_mithril["default"].route.Link, {
+        selector: "a",
+        href: "/social/blog-editor:",
+        role: "button"
+      }, "Add The First Blog Post !")));
     }
   };
 };
@@ -3062,7 +3132,7 @@ var MemberRoutes = [{
   name: "Safety",
   // icon: Icons.search,
   route: "/safety",
-  isNav: false,
+  isNav: true,
   group: ["navmenu"],
   children: ["report", "district-J", "SeeClickFix", "Harrison-County-Public-Health", "Houston-311-Service-Request/Report"],
   options: [],
@@ -3085,7 +3155,7 @@ var MemberRoutes = [{
   name: "File An Internal Report With BACA",
   // icon: Icons.search,
   route: "/safety/report",
-  isNav: false,
+  isNav: true,
   group: ["nav", "safety"],
   children: [],
   options: [],
@@ -3109,7 +3179,7 @@ var MemberRoutes = [{
   // icon: Icons.search,
   route: "/#",
   external: "https://www.houstontx.gov/council/j/request.html",
-  isNav: false,
+  isNav: true,
   group: ["external", "safety"],
   children: [],
   options: []
@@ -3119,7 +3189,7 @@ var MemberRoutes = [{
   // icon: Icons.search,
   route: "/#",
   external: "https://seeclickfix.com/houston/report",
-  isNav: false,
+  isNav: true,
   group: ["external", "safety"],
   children: [],
   options: []
@@ -3129,7 +3199,7 @@ var MemberRoutes = [{
   // icon: Icons.search,
   route: "/#",
   external: "https://publichealth.harriscountytx.gov/Services-Programs/Services/NeighborhoodNuisance",
-  isNav: false,
+  isNav: true,
   group: ["external", "safety"],
   children: [],
   options: []
@@ -3139,7 +3209,7 @@ var MemberRoutes = [{
   // icon: Icons.search,
   route: "/#",
   external: "https://www.houstontx.gov/311/ServiceRequestDirectoryWebpage.htm",
-  isNav: false,
+  isNav: true,
   group: ["external", "safety"],
   children: [],
   options: []
@@ -3239,7 +3309,7 @@ var SocialRoutes = [{
   }
 }, {
   id: "blog",
-  name: "Bonham Acres Community Blog",
+  name: "Blog",
   // icon: Icons.home,
   route: "/social/blog",
   isNav: true,
@@ -3264,7 +3334,7 @@ var SocialRoutes = [{
   id: "blog-editor",
   name: "Blog Editor",
   // icon: Icons.home,
-  route: "/social/blog-editor",
+  route: "/social/blog-editor:objectId",
   isNav: false,
   group: ["social"],
   children: [],
@@ -3519,7 +3589,7 @@ exports.RemoveChildrenOut = RemoveChildrenOut;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.handlers = exports.formatDate = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.listOf = exports.uuid = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.log = exports.makeRoute = void 0;
+exports.exists = exports.handlers = exports.formatDate = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.listOf = exports.uuid = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.log = exports.makeRoute = void 0;
 
 var _ramda = require("ramda");
 
@@ -3770,6 +3840,12 @@ var handlers = function handlers(types, fn) {
 };
 
 exports.handlers = handlers;
+
+var exists = function exists(xs) {
+  return xs.length > 1;
+};
+
+exports.exists = exists;
 });
 
 ;require.register("Utils/http.js", function(exports, require, module) {
@@ -3940,6 +4016,11 @@ var back4App = {
       return function (dto) {
         return HttpTask(_secrets.BACK4APP.headers(mdl, _secrets.BACK4APP))("PUT")(mdl)("".concat(_secrets.BACK4APP.baseUrl, "/").concat(url))(dto);
       };
+    };
+  },
+  deleteTask: function deleteTask(mdl) {
+    return function (url) {
+      return HttpTask(_secrets.BACK4APP.headers(mdl, _secrets.BACK4APP))("DELETE")(mdl)("".concat(_secrets.BACK4APP.baseUrl, "/").concat(url))();
     };
   }
 };

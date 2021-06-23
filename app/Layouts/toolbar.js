@@ -5,7 +5,7 @@ const Toolbar = () => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "nav#toolbar.navigation",
+        "nav#toolbar.navigation.nav",
         {
           style: {
             "background-color": mdl.state.showNavModal()
@@ -14,7 +14,7 @@ const Toolbar = () => {
           },
         },
         m(
-          "ul",
+          "ul.nav-left",
           m(
             m.route.Link,
             {
@@ -26,10 +26,30 @@ const Toolbar = () => {
             })
           )
         ),
+        mdl.state.isAuth() &&
+          m(
+            "nav",
+            m(
+              "ul.nav-center",
+              m(
+                "li",
+                m(
+                  m.route.Link,
+                  {
+                    selector: "a",
+                    href: "/social/blog-editor:",
+                    role: "button",
+                  },
+                  "Add A Blog Post"
+                )
+              )
+            )
+          ),
+
         mdl.settings.screenSize == "desktop"
-          ? m(AuthBox, { mdl })
+          ? m(".nav-right", m(AuthBox, { mdl }))
           : m(
-              "ul",
+              "ul.nav-right",
               {
                 onclick: () =>
                   mdl.state.showNavModal(!mdl.state.showNavModal()),
