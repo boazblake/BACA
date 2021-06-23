@@ -1,5 +1,5 @@
 import Task from "data.task"
-import { Paypal, Back4App } from "../../.secrets.js"
+import { PAYPAL, BACK4APP, IMGBB } from "../../.secrets.js"
 
 const updatePayPalAuth = (mdl) => (paypal) => (mdl.state.paypal = paypal)
 
@@ -77,36 +77,44 @@ const lookupLocationTask = (query) => {
 
 const getTask = (mdl) => (url) => HttpTask({})("GET")(mdl)(url)(null)
 
-const paypalUrl = `${Paypal.sandbox.baseUrl}/`
+const paypalUrl = `${PAYPAL.sandbox.baseUrl}/`
 const paypal = {
   getTokenTask: (mdl) =>
-    HttpTask(Paypal.sandbox.headers())("POST")(mdl)(
+    HttpTask(PAYPAL.sandbox.headers())("POST")(mdl)(
       paypalUrl + "v1/oauth2/token/"
     )(`grant_type=client_credentials`).map(updatePayPalAuth(mdl)),
   getTask: (mdl) => (url) =>
-    HttpTask(Paypal.sandbox.headers(mdl))("GET")(mdl)(paypalUrl + url)(null),
+    HttpTask(PAYPAL.sandbox.headers(mdl))("GET")(mdl)(paypalUrl + url)(null),
   postTask: (mdl) => (url) => (dto) =>
-    HttpTask(Paypal.sandbox.headers(mdl))("POST")(mdl)(paypalUrl + url)(dto),
+    HttpTask(PAYPAL.sandbox.headers(mdl))("POST")(mdl)(paypalUrl + url)(dto),
   putTask: (mdl) => (url) => (dto) =>
-    HttpTask(Paypal.sandbox.headers(mdl))("PUT")(mdl)(paypalUrl + url)(dto),
+    HttpTask(PAYPAL.sandbox.headers(mdl))("PUT")(mdl)(paypalUrl + url)(dto),
 }
 
 const back4App = {
   getTask: (mdl) => (url) =>
-    HttpTask(Back4App.headers(mdl, Back4App))("GET")(mdl)(
-      `${Back4App.baseUrl}/${url}`
+    HttpTask(BACK4APP.headers(mdl, BACK4APP))("GET")(mdl)(
+      `${BACK4APP.baseUrl}/${url}`
     )(null),
   postTask: (mdl) => (url) => (dto) =>
-    HttpTask(Back4App.headers(mdl, Back4App))("POST")(mdl)(
-      `${Back4App.baseUrl}/${url}`
+    HttpTask(BACK4APP.headers(mdl, BACK4APP))("POST")(mdl)(
+      `${BACK4APP.baseUrl}/${url}`
     )(dto),
   putTask: (mdl) => (url) => (dto) =>
-    HttpTask(Back4App.headers(mdl, Back4App))("PUT")(mdl)(
-      `${Back4App.baseUrl}/${url}`
+    HttpTask(BACK4APP.headers(mdl, BACK4APP))("PUT")(mdl)(
+      `${BACK4APP.baseUrl}/${url}`
+    )(dto),
+}
+
+const imgBB = {
+  postTask: (mdl) => (dto) =>
+    HttpTask(BACK4APP.headers(mdl, BACK4APP))("POST")(mdl)(
+      `${IMGBB.url}&key=${IMGBB.apiKey}`
     )(dto),
 }
 
 const http = {
+  imgBB,
   back4App,
   paypal,
   HttpTask,

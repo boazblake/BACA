@@ -61,7 +61,7 @@ const Blog = () => {
               )
             )
           ),
-        state.data.map(({ title, text, src, date, author }) =>
+        state.data.map(({ title, text, img, date, author }) =>
           m(
             "article",
             m(
@@ -73,7 +73,7 @@ const Blog = () => {
                 m("h4", "Written By ", author)
               ),
               m("img", {
-                src,
+                src: img,
                 style: {
                   border: "1px solid black",
                   borderRadius: "2%",

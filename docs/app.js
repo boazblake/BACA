@@ -559,23 +559,20 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = exports.NavLink = void 0;
+
+var _Utils = require("Utils");
+
 var _excluded = ["mdl", "href", "link", "classList"];
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var handlers = function handlers(types, fn) {
-  return types.reduce(function (acc, type) {
-    return Object.assign(acc, _defineProperty({}, type, fn));
-  }, {});
-};
 
 var showBorderStyle = function showBorderStyle(style) {
   style.border = "1px solid black";
@@ -2251,37 +2248,76 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _mithril = require("mithril");
+var _Utils = require("Utils");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var state = {
-  images: [],
+  title: "",
+  author: "",
+  date: "",
+  text: "",
+  img: "",
+  file: null,
   showModal: Stream(false)
 };
 
+var uploadImage = function uploadImage(mdl) {
+  return function (file) {
+    return mdl.http.imgBB.postTask(mdl)(file).fork(onSuccess, onError);
+  };
+};
+
 var BlogEditor = function BlogEditor(mdl) {
+  var onInput = (0, _Utils.handlers)(["oninput"], function (e) {
+    if (e.target.id == "file") {
+      state[e.target.id] = e.target.files[0];
+    } else {
+      state[e.target.id] = e.target.value;
+    }
+  });
   return {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return (0, _mithril.m)("form", (0, _mithril.m)("label", "Title", (0, _mithril.m)("input")), (0, _mithril.m)("label", (0, _mithril.m)("a.secondary", {
+      return m("form", _objectSpread({}, onInput), m("label", "Title", m("input", {
+        id: "title",
+        value: state.title
+      })), m("label", m("a.secondary", {
         role: "button",
         onclick: function onclick() {
           return state.showModal(!state.showModal());
         }
-      }, "Add An Image")), state.showModal() && (0, _mithril.m)("section.modal-container", (0, _mithril.m)("article", (0, _mithril.m)("input", {
-        type: "file"
-      }), (0, _mithril.m)("grid", (0, _mithril.m)("a.m-r-16.contrast", {
+      }, "Add An Image")), state.showModal() && m("article.modal-container", m("form", m("input", {
+        type: "file",
+        id: "file"
+      }), m("grid", m("a.m-r-16.contrast", {
+        onclick: function onclick() {
+          return state.showModal(false);
+        },
         role: "button"
-      }, "Cancel"), (0, _mithril.m)("a", {
-        role: "button"
-      }, "Upload")))), (0, _mithril.m)("aside", state.images.map(function (src) {
-        return (0, _mithril.m)("img", {
-          src: src
-        });
-      })), (0, _mithril.m)("label", "Contents", (0, _mithril.m)("textarea", {
+      }, "Cancel"), m("a", {
+        onclick: function onclick(e) {
+          return uploadImage(mdl)(state.file);
+        },
+        role: "button",
+        type: "submit"
+      }, "Upload")))), m("aside", m("img", {
+        src: state.img
+      })), m("label", "Contents", m("textarea", {
+        id: "text",
         style: {
           height: "300px"
         }
-      })), (0, _mithril.m)("button", {}, "Submit"));
+      })), m("button", {
+        onclick: function onclick(e) {
+          e.preventDefault();
+          console.log(state);
+        }
+      }, "Submit"));
     }
   };
 };
@@ -2362,11 +2398,11 @@ var Blog = function Blog() {
       }, "Add A Blog")))), state.data.map(function (_ref3) {
         var title = _ref3.title,
             text = _ref3.text,
-            src = _ref3.src,
+            img = _ref3.img,
             date = _ref3.date,
             author = _ref3.author;
         return m("article", m(".grid", m("hgroup", m("h2", title), m("h3", date), m("h4", "Written By ", author)), m("img", {
-          src: src,
+          src: img,
           style: {
             border: "1px solid black",
             borderRadius: "2%",
@@ -3450,13 +3486,15 @@ exports.RemoveChildrenOut = RemoveChildrenOut;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.formatDate = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.listOf = exports.uuid = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.log = exports.makeRoute = void 0;
+exports.handlers = exports.formatDate = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.listOf = exports.uuid = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.log = exports.makeRoute = void 0;
 
 var _ramda = require("ramda");
 
 var _data = _interopRequireDefault(require("data.task"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -3691,6 +3729,14 @@ var formatDate = function formatDate(date) {
 };
 
 exports.formatDate = formatDate;
+
+var handlers = function handlers(types, fn) {
+  return types.reduce(function (acc, type) {
+    return Object.assign(acc, _defineProperty({}, type, fn));
+  }, {});
+};
+
+exports.handlers = handlers;
 });
 
 ;require.register("Utils/http.js", function(exports, require, module) {
@@ -3818,27 +3864,27 @@ var getTask = function getTask(mdl) {
   };
 };
 
-var paypalUrl = "".concat(_secrets.Paypal.sandbox.baseUrl, "/");
+var paypalUrl = "".concat(_secrets.PAYPAL.sandbox.baseUrl, "/");
 var paypal = {
   getTokenTask: function getTokenTask(mdl) {
-    return HttpTask(_secrets.Paypal.sandbox.headers())("POST")(mdl)(paypalUrl + "v1/oauth2/token/")("grant_type=client_credentials").map(updatePayPalAuth(mdl));
+    return HttpTask(_secrets.PAYPAL.sandbox.headers())("POST")(mdl)(paypalUrl + "v1/oauth2/token/")("grant_type=client_credentials").map(updatePayPalAuth(mdl));
   },
   getTask: function getTask(mdl) {
     return function (url) {
-      return HttpTask(_secrets.Paypal.sandbox.headers(mdl))("GET")(mdl)(paypalUrl + url)(null);
+      return HttpTask(_secrets.PAYPAL.sandbox.headers(mdl))("GET")(mdl)(paypalUrl + url)(null);
     };
   },
   postTask: function postTask(mdl) {
     return function (url) {
       return function (dto) {
-        return HttpTask(_secrets.Paypal.sandbox.headers(mdl))("POST")(mdl)(paypalUrl + url)(dto);
+        return HttpTask(_secrets.PAYPAL.sandbox.headers(mdl))("POST")(mdl)(paypalUrl + url)(dto);
       };
     };
   },
   putTask: function putTask(mdl) {
     return function (url) {
       return function (dto) {
-        return HttpTask(_secrets.Paypal.sandbox.headers(mdl))("PUT")(mdl)(paypalUrl + url)(dto);
+        return HttpTask(_secrets.PAYPAL.sandbox.headers(mdl))("PUT")(mdl)(paypalUrl + url)(dto);
       };
     };
   }
@@ -3846,25 +3892,33 @@ var paypal = {
 var back4App = {
   getTask: function getTask(mdl) {
     return function (url) {
-      return HttpTask(_secrets.Back4App.headers(mdl, _secrets.Back4App))("GET")(mdl)("".concat(_secrets.Back4App.baseUrl, "/").concat(url))(null);
+      return HttpTask(_secrets.BACK4APP.headers(mdl, _secrets.BACK4APP))("GET")(mdl)("".concat(_secrets.BACK4APP.baseUrl, "/").concat(url))(null);
     };
   },
   postTask: function postTask(mdl) {
     return function (url) {
       return function (dto) {
-        return HttpTask(_secrets.Back4App.headers(mdl, _secrets.Back4App))("POST")(mdl)("".concat(_secrets.Back4App.baseUrl, "/").concat(url))(dto);
+        return HttpTask(_secrets.BACK4APP.headers(mdl, _secrets.BACK4APP))("POST")(mdl)("".concat(_secrets.BACK4APP.baseUrl, "/").concat(url))(dto);
       };
     };
   },
   putTask: function putTask(mdl) {
     return function (url) {
       return function (dto) {
-        return HttpTask(_secrets.Back4App.headers(mdl, _secrets.Back4App))("PUT")(mdl)("".concat(_secrets.Back4App.baseUrl, "/").concat(url))(dto);
+        return HttpTask(_secrets.BACK4APP.headers(mdl, _secrets.BACK4APP))("PUT")(mdl)("".concat(_secrets.BACK4APP.baseUrl, "/").concat(url))(dto);
       };
     };
   }
 };
+var imgBB = {
+  postTask: function postTask(mdl) {
+    return function (dto) {
+      return HttpTask(_secrets.BACK4APP.headers(mdl, _secrets.BACK4APP))("POST")(mdl)("".concat(_secrets.IMGBB.url, "&key=").concat(_secrets.IMGBB.apiKey))(dto);
+    };
+  }
+};
 var http = {
+  imgBB: imgBB,
   back4App: back4App,
   paypal: paypal,
   HttpTask: HttpTask,

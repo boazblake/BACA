@@ -1,5 +1,4 @@
-const handlers = (types, fn) =>
-  types.reduce((acc, type) => Object.assign(acc, { [type]: fn }), {})
+import { handlers } from "Utils"
 
 const showBorderStyle = (style) => {
   style.border = "1px solid black"
