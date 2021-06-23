@@ -123,7 +123,7 @@ export const uuid = () => {
   })
 }
 
-export const listOf = (x) => Array(x).fill(1)
+export const listOf = (x) => (y) => Array(x).fill(y)
 
 export const toProducts = (cart) =>
   toPairs(cart).map(([product, genders]) => [product, toPairs(genders)])

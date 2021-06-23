@@ -1,63 +1,32 @@
 import Task from "data.task"
+import { listOf } from "Utils"
+import Images from "../images"
 
-const fetchBurpRagsTask = (mdl) =>
-  Task.of([
-    {
-      imgSrc: 220,
-      title: "Title",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      imgSrc: 0,
-      title: "Title",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      imgSrc: 220,
-      title: "Title",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      imgSrc: 200,
-      title: "Title",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      imgSrc: 250,
-      title: "Title",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      imgSrc: 220,
-      title: "Title",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      imgSrc: 2,
-      title: "Title",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-  ])
+const blogs = listOf(20)({
+  src: Images[2],
+  title: "minim veniam, quis nostrud",
+  date: "11/12/2020",
+  author: "Boaz Blake",
+  title: "minim veniam, quis nostrud",
+  text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+})
 
-const onPageInit = (state) => ({ attrs: { mdl } }) => {
-  const onError = (s) => (error) => {
-    s.errors.init = error
-    console.log("errror", error)
+const fetchBlopgsTask = (mdl) => Task.of(blogs)
+
+const onPageInit =
+  (state) =>
+  ({ attrs: { mdl } }) => {
+    const onError = (s) => (error) => {
+      s.errors.init = error
+      console.log("errror", error)
+    }
+
+    const onSuccess = (s) => (data) => {
+      s.data = data
+    }
+
+    fetchBlopgsTask(mdl).fork(onError(state), onSuccess(state))
   }
-
-  const onSuccess = (s) => (data) => {
-    s.data = data
-  }
-
-  fetchBurpRagsTask(mdl).fork(onError(state), onSuccess(state))
-}
 
 const Blog = () => {
   const state = {
@@ -71,14 +40,33 @@ const Blog = () => {
       state.data = []
     },
     view: ({ attrs: { mdl } }) =>
-      m(".frow-container frow-center", { id: "masonry" }, [
-        state.data.map((img) =>
-          m("img.Sirv", {
-            oncreate: SlideUp,
-            "data-src": `${img}?w=500&scale.option=fill`,
-          })
-        ),
-      ]),
+      m(
+        ".container",
+        mdl.state.isAuth() && m("nav", m("ul", m("li", m("button", "add")))),
+        state.data.map(({ title, text, src, date, author }) =>
+          m(
+            "article",
+            m(
+              ".grid",
+              m(
+                "hgroup",
+                m("h2", title),
+                m("h3", date),
+                m("h4", "Written By ", author)
+              ),
+              m("img", {
+                src,
+                style: {
+                  border: "1px solid black",
+                  borderRadius: "2%",
+                  width: "100%",
+                },
+              })
+            ),
+            m("hgroup", m("h4", text))
+          )
+        )
+      ),
   }
 }
 

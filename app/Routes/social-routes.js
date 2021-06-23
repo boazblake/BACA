@@ -1,5 +1,6 @@
 import Layout from "Layouts/index.js"
 import Default from "Pages/default.js"
+import Blog from "Pages/blog.js"
 import { scrollToAnchor } from "Utils/index.js"
 
 const SocialRoutes = [
@@ -72,7 +73,7 @@ const SocialRoutes = [
   },
   {
     id: "blog",
-    name: "Blog",
+    name: "Bonham Acres Community Blog",
     // icon: Icons.home,
     route: "/social/blog",
     isNav: true,
@@ -88,7 +89,7 @@ const SocialRoutes = [
             behavior: "smooth",
           })
     },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
+    component: (mdl) => m(Layout, { mdl }, m(Blog, { mdl })),
   },
   {
     id: "map-of-bonham-acres",
