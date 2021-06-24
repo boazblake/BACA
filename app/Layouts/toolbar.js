@@ -5,7 +5,7 @@ const Toolbar = () => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "nav#toolbar.sticky-nav.nav",
+        "nav#toolbar.sticky-nav.nav.is-horizontal-align",
         {
           style: {
             "background-color": mdl.state.showNavModal()
@@ -26,7 +26,7 @@ const Toolbar = () => {
           )
         ),
         mdl.state.isAuth() &&
-          mdl.settings.screenSize == "desktop" &&
+          mdl.settings.screenSize !== "phone" &&
           m(
             ".nav-center",
 

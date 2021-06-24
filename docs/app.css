@@ -3483,6 +3483,14 @@
   --block-round: 0;
 }
 
+body.dark {
+  --bg-color: #000;
+  --bg-secondary-color: #131316;
+  --font-color: #f5f5f5;
+  --color-grey: #ccc;
+  --color-darkGrey: #777;
+}
+
 *,
 *:before,
 *:after {
@@ -3520,10 +3528,6 @@ hgroup > :last-child {
 
 small {
   color: var(--muted-text);
-}
-
-#toolbar {
-  flex-wrap: wrap;
 }
 
 /* Header */
@@ -3582,9 +3586,15 @@ header hgroup {
 #toolbar {
   z-index: 60;
   height: 65px;
+  flex-wrap: wrap;
 }
 #toolbar #nav-logo {
   width: 180px;
+}
+
+.modal {
+  background: white;
+  padding: 25px;
 }
 
 .modal-container {
@@ -3638,6 +3648,10 @@ main .grid > * {
   main > .grid {
     grid-column-gap: var(--spacing);
     grid-template-columns: auto 25%;
+  }
+
+  .hero {
+    margin-bottom: 150px;
   }
 }
 form.grid {

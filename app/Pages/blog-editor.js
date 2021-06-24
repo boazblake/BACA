@@ -1,5 +1,6 @@
 import { handlers, exists } from "Utils"
 import Task from "data.task"
+import m from "mithril"
 
 const state = {
   title: "",
@@ -9,9 +10,31 @@ const state = {
   thumb: "",
   file: null,
   showModal: Stream(false),
+  images: [],
+  modalState: Stream("upload"),
   errors: {
     img: null,
   },
+}
+
+const resetEditorState = (state) => {
+  state.images = []
+  state.modalState("upload")
+}
+const resetModalState = (state) => {
+  state.title = ""
+  state.author = ""
+  state.text = ""
+  state.img = ""
+  state.thumb = ""
+  state.file = null
+  state.showModal(false)
+}
+
+const fetchBlogImages = ({ attrs: { mdl, state } }) => {
+  const onError = (e) => console.log(e)
+  const onSuccess = ({ results }) => (state.images = results)
+  mdl.http.back4App.getTask(mdl)("Classes/Gallery").fork(onError, onSuccess)
 }
 
 const setupEditor = ({ attrs: { mdl } }) => {
@@ -26,7 +49,6 @@ const setupEditor = ({ attrs: { mdl } }) => {
 
   let id = m.route.get().split(":")[1]
   if (exists(id)) {
-    console.log("id", exists(id))
     mdl.http.back4App
       .getTask(mdl)(`Classes/Blogs/${id}`)
       .fork(onError, onSuccess)
@@ -44,15 +66,17 @@ const onImgSuccess = ({ image, thumb }) => {
 
 const saveImgToGalleryTask =
   (mdl) =>
-  ({ data: { image, medium, thumb } }) => {
-    mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
-      album: "blog",
-      image: image.url,
-      medium: medium.url,
-      thumb: thumb.url,
-    })
-    return Task.of({ image: image.url, medium: medium.url, thumb: thumb.url })
-  }
+  ({ data: { image, medium, thumb } }) =>
+    mdl.http.back4App
+      .postTask(mdl)("Classes/Gallery")({
+        album: "blog",
+        image: image.url,
+        medium: medium.url,
+        thumb: thumb.url,
+      })
+      .chain((_) =>
+        Task.of({ image: image.url, medium: medium.url, thumb: thumb.url })
+      )
 
 const uploadImage = (mdl) => (file) => {
   const image = new FormData()
@@ -89,6 +113,62 @@ const deleteBlog = (mdl) =>
     .deleteTask(mdl)(`Classes/Blogs/${state.objectId}`)
     .fork(toBlogs, toBlogs)
 
+const Modal = () => {
+  return {
+    onremove: () => resetModalState(state),
+    oninit: fetchBlogImages,
+    view: ({ attrs: { mdl, state } }) =>
+      m(
+        "section.modal-container",
+        m(
+          "article.modal.container.grid",
+          m(
+            "header",
+            m(
+              ".tabs.row",
+              m(
+                `a.pointer.${state.modalState() == "upload" ? "active" : ""}`,
+                { onclick: (e) => state.modalState("upload") },
+                "Upload"
+              ),
+              m(
+                `a.pointer.${state.modalState() == "select" ? "active" : ""}`,
+                { onclick: (e) => state.modalState("select") },
+                "Select"
+              )
+            )
+          ),
+          m(
+            "form",
+            state.modalState() == "upload"
+              ? m("input", { type: "file", id: "file" })
+              : state.images.map(({ thumb }) =>
+                  m("figure", m("img", { src: thumb }))
+                )
+          ),
+
+          m(
+            "footer",
+            m(
+              ".tabs",
+              m("button", { onclick: () => state.showModal(false) }, "Cancel"),
+              m(
+                "button",
+                {
+                  onclick: (e) => uploadImage(mdl)(state.file),
+                  role: "button",
+                  type: "submit",
+                  disabled: !state.file,
+                },
+                "Upload"
+              )
+            )
+          )
+        )
+      ),
+  }
+}
+
 const BlogEditor = (mdl) => {
   const onInput = handlers(["oninput"], (e) => {
     if (e.target.id == "file") {
@@ -99,6 +179,7 @@ const BlogEditor = (mdl) => {
   })
 
   return {
+    onremove: () => resetEditorState(state),
     oninit: setupEditor,
     view: ({ attrs: { mdl } }) =>
       m(
@@ -120,36 +201,7 @@ const BlogEditor = (mdl) => {
             state.thumb ? "Update Image" : "Add An Image"
           ),
           state.thumb && m("aside", m("img", { src: state.thumb })),
-          state.showModal() &&
-            m(
-              "section.modal-container",
-              m(
-                "article.container",
-                m("header", m(".grid", m("a", "Upload"), m("a", "Select"))),
-                m("form", m("input", { type: "file", id: "file" })),
-                m(
-                  "footer",
-                  m(
-                    ".grid",
-                    m(
-                      "button",
-                      { onclick: () => state.showModal(false) },
-                      "Cancel"
-                    ),
-                    m(
-                      "button",
-                      {
-                        onclick: (e) => uploadImage(mdl)(state.file),
-                        role: "button",
-                        type: "submit",
-                        disabled: !state.file,
-                      },
-                      "Upload"
-                    )
-                  )
-                )
-              )
-            ),
+          state.showModal() && m(Modal, { state, mdl }),
           m(
             "p",
             m("label", "Contents"),

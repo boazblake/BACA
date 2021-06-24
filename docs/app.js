@@ -1036,7 +1036,7 @@ var calcHeight = function calcHeight(_ref) {
 };
 
 var updateBackground = function updateBackground(mdl) {
-  mdl.state.image() > _images["default"].length - 1 ? mdl.state.image(0) : mdl.state.image(mdl.state.image() + 1);
+  mdl.state.image() == _images["default"].length - 1 ? mdl.state.image(0) : mdl.state.image(mdl.state.image() + 1);
 };
 
 var Hero = function Hero() {
@@ -1336,7 +1336,7 @@ var Navbar = function Navbar() {
   return {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return m("nav.nav#navbar", routes(mdl).map(function (r) {
+      return m("nav.nav#navbar.is-full-width", routes(mdl).map(function (r) {
         return m(_navLink["default"], {
           mdl: mdl,
           href: r.route,
@@ -1380,7 +1380,7 @@ var SubNavbar = function SubNavbar() {
   return {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return subroutes(mdl).any() && m("nav.nav#sub-navbar", subroutes(mdl).map(function (r) {
+      return subroutes(mdl).any() && m("nav.nav#sub-navbar.is-full-width", subroutes(mdl).map(function (r) {
         return r.group.includes("external") ? m("a.clear", {
           target: "_blank",
           href: r.external
@@ -1421,7 +1421,7 @@ var Toolbar = function Toolbar() {
   return {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return m("nav#toolbar.sticky-nav.nav", {
+      return m("nav#toolbar.sticky-nav.nav.is-horizontal-align", {
         style: {
           "background-color": mdl.state.showNavModal() ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.9)"
         }
@@ -1431,7 +1431,7 @@ var Toolbar = function Toolbar() {
         }
       }, m("img#nav-logo", {
         src: "images/logo.webp"
-      }))), mdl.state.isAuth() && mdl.settings.screenSize == "desktop" && m(".nav-center", m(m.route.Link, {
+      }))), mdl.state.isAuth() && mdl.settings.screenSize !== "phone" && m(".nav-center", m(m.route.Link, {
         href: "/social/blog-editor:",
         "class": "button primary"
       }, "Add A Blog Post")), mdl.settings.screenSize == "desktop" ? m(".nav-right", m(_authbox["default"], {
@@ -2233,6 +2233,8 @@ var _Utils = require("Utils");
 
 var _data = _interopRequireDefault(require("data.task"));
 
+var _mithril = _interopRequireDefault(require("mithril"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -2249,24 +2251,58 @@ var state = {
   thumb: "",
   file: null,
   showModal: Stream(false),
+  images: [],
+  modalState: Stream("upload"),
   errors: {
     img: null
   }
 };
 
-var setupEditor = function setupEditor(_ref) {
-  var mdl = _ref.attrs.mdl;
+var resetEditorState = function resetEditorState(state) {
+  state.images = [];
+  state.modalState("upload");
+};
+
+var resetModalState = function resetModalState(state) {
+  state.title = "";
+  state.author = "";
+  state.text = "";
+  state.img = "";
+  state.thumb = "";
+  state.file = null;
+  state.showModal(false);
+};
+
+var fetchBlogImages = function fetchBlogImages(_ref) {
+  var _ref$attrs = _ref.attrs,
+      mdl = _ref$attrs.mdl,
+      state = _ref$attrs.state;
 
   var onError = function onError(e) {
     return console.log(e);
   };
 
   var onSuccess = function onSuccess(_ref2) {
-    var title = _ref2.title,
-        text = _ref2.text,
-        img = _ref2.img,
-        thumb = _ref2.thumb,
-        objectId = _ref2.objectId;
+    var results = _ref2.results;
+    return state.images = results;
+  };
+
+  mdl.http.back4App.getTask(mdl)("Classes/Gallery").fork(onError, onSuccess);
+};
+
+var setupEditor = function setupEditor(_ref3) {
+  var mdl = _ref3.attrs.mdl;
+
+  var onError = function onError(e) {
+    return console.log(e);
+  };
+
+  var onSuccess = function onSuccess(_ref4) {
+    var title = _ref4.title,
+        text = _ref4.text,
+        img = _ref4.img,
+        thumb = _ref4.thumb,
+        objectId = _ref4.objectId;
     state.title = title;
     state.text = text;
     state.img = img;
@@ -2274,10 +2310,9 @@ var setupEditor = function setupEditor(_ref) {
     state.objectId = objectId;
   };
 
-  var id = m.route.get().split(":")[1];
+  var id = _mithril["default"].route.get().split(":")[1];
 
   if ((0, _Utils.exists)(id)) {
-    console.log("id", (0, _Utils.exists)(id));
     mdl.http.back4App.getTask(mdl)("Classes/Blogs/".concat(id)).fork(onError, onSuccess);
   }
 };
@@ -2290,30 +2325,31 @@ var onSubmitError = function onSubmitError(e) {
   return state.errors.img = e;
 };
 
-var onImgSuccess = function onImgSuccess(_ref3) {
-  var image = _ref3.image,
-      thumb = _ref3.thumb;
+var onImgSuccess = function onImgSuccess(_ref5) {
+  var image = _ref5.image,
+      thumb = _ref5.thumb;
   state.img = image;
   state.thumb = thumb;
   state.showModal(false);
 };
 
 var saveImgToGalleryTask = function saveImgToGalleryTask(mdl) {
-  return function (_ref4) {
-    var _ref4$data = _ref4.data,
-        image = _ref4$data.image,
-        medium = _ref4$data.medium,
-        thumb = _ref4$data.thumb;
-    mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
+  return function (_ref6) {
+    var _ref6$data = _ref6.data,
+        image = _ref6$data.image,
+        medium = _ref6$data.medium,
+        thumb = _ref6$data.thumb;
+    return mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
       album: "blog",
       image: image.url,
       medium: medium.url,
       thumb: thumb.url
-    });
-    return _data["default"].of({
-      image: image.url,
-      medium: medium.url,
-      thumb: thumb.url
+    }).chain(function (_) {
+      return _data["default"].of({
+        image: image.url,
+        medium: medium.url,
+        thumb: thumb.url
+      });
     });
   };
 };
@@ -2327,7 +2363,7 @@ var uploadImage = function uploadImage(mdl) {
 };
 
 var toBlogs = function toBlogs() {
-  return m.route.set("/social/blog");
+  return _mithril["default"].route.set("/social/blog");
 };
 
 var onSubmitSuccess = function onSubmitSuccess() {
@@ -2335,11 +2371,11 @@ var onSubmitSuccess = function onSubmitSuccess() {
 };
 
 var submitBlog = function submitBlog(mdl) {
-  return function (_ref5) {
-    var title = _ref5.title,
-        img = _ref5.img,
-        text = _ref5.text,
-        thumb = _ref5.thumb;
+  return function (_ref7) {
+    var title = _ref7.title,
+        img = _ref7.img,
+        text = _ref7.text,
+        thumb = _ref7.thumb;
     var dto = {
       title: title,
       img: img,
@@ -2356,6 +2392,48 @@ var deleteBlog = function deleteBlog(mdl) {
   return mdl.http.back4App.deleteTask(mdl)("Classes/Blogs/".concat(state.objectId)).fork(toBlogs, toBlogs);
 };
 
+var Modal = function Modal() {
+  return {
+    onremove: function onremove() {
+      return resetModalState(state);
+    },
+    oninit: fetchBlogImages,
+    view: function view(_ref8) {
+      var _ref8$attrs = _ref8.attrs,
+          mdl = _ref8$attrs.mdl,
+          state = _ref8$attrs.state;
+      return (0, _mithril["default"])("section.modal-container", (0, _mithril["default"])("article.modal.container.grid", (0, _mithril["default"])("header", (0, _mithril["default"])(".tabs.row", (0, _mithril["default"])("a.pointer.".concat(state.modalState() == "upload" ? "active" : ""), {
+        onclick: function onclick(e) {
+          return state.modalState("upload");
+        }
+      }, "Upload"), (0, _mithril["default"])("a.pointer.".concat(state.modalState() == "select" ? "active" : ""), {
+        onclick: function onclick(e) {
+          return state.modalState("select");
+        }
+      }, "Select"))), (0, _mithril["default"])("form", state.modalState() == "upload" ? (0, _mithril["default"])("input", {
+        type: "file",
+        id: "file"
+      }) : state.images.map(function (_ref9) {
+        var thumb = _ref9.thumb;
+        return (0, _mithril["default"])("figure", (0, _mithril["default"])("img", {
+          src: thumb
+        }));
+      })), (0, _mithril["default"])("footer", (0, _mithril["default"])(".tabs", (0, _mithril["default"])("button", {
+        onclick: function onclick() {
+          return state.showModal(false);
+        }
+      }, "Cancel"), (0, _mithril["default"])("button", {
+        onclick: function onclick(e) {
+          return uploadImage(mdl)(state.file);
+        },
+        role: "button",
+        type: "submit",
+        disabled: !state.file
+      }, "Upload")))));
+    }
+  };
+};
+
 var BlogEditor = function BlogEditor(mdl) {
   var onInput = (0, _Utils.handlers)(["oninput"], function (e) {
     if (e.target.id == "file") {
@@ -2365,47 +2443,39 @@ var BlogEditor = function BlogEditor(mdl) {
     }
   });
   return {
+    onremove: function onremove() {
+      return resetEditorState(state);
+    },
     oninit: setupEditor,
-    view: function view(_ref6) {
-      var mdl = _ref6.attrs.mdl;
-      return m(".grid", m("form", _objectSpread({}, onInput), m("p", m("label", "Title"), m("input", {
+    view: function view(_ref10) {
+      var mdl = _ref10.attrs.mdl;
+      return (0, _mithril["default"])(".grid", (0, _mithril["default"])("form", _objectSpread({}, onInput), (0, _mithril["default"])("p", (0, _mithril["default"])("label", "Title"), (0, _mithril["default"])("input", {
         id: "title",
         value: state.title
-      })), m("button.secondary", {
+      })), (0, _mithril["default"])("button.secondary", {
         onclick: function onclick() {
           return state.showModal(!state.showModal());
         }
-      }, state.thumb ? "Update Image" : "Add An Image"), state.thumb && m("aside", m("img", {
+      }, state.thumb ? "Update Image" : "Add An Image"), state.thumb && (0, _mithril["default"])("aside", (0, _mithril["default"])("img", {
         src: state.thumb
-      })), state.showModal() && m("section.modal-container", m("article.container", m("header", m(".grid", m("a", "Upload"), m("a", "Select"))), m("form", m("input", {
-        type: "file",
-        id: "file"
-      })), m("footer", m(".grid", m("button", {
-        onclick: function onclick() {
-          return state.showModal(false);
-        }
-      }, "Cancel"), m("button", {
-        onclick: function onclick(e) {
-          return uploadImage(mdl)(state.file);
-        },
-        role: "button",
-        type: "submit",
-        disabled: !state.file
-      }, "Upload"))))), m("p", m("label", "Contents"), m("textarea", {
+      })), state.showModal() && (0, _mithril["default"])(Modal, {
+        state: state,
+        mdl: mdl
+      }), (0, _mithril["default"])("p", (0, _mithril["default"])("label", "Contents"), (0, _mithril["default"])("textarea", {
         value: state.text,
         id: "text",
         style: {
           height: "300px"
         }
-      })), m("nav.grid", m("button", {
+      })), (0, _mithril["default"])("nav.grid", (0, _mithril["default"])("button", {
         onclick: toBlogs
-      }, "Cancel"), m("button", {
+      }, "Cancel"), (0, _mithril["default"])("button", {
         disabled: isInvalid(),
         onclick: function onclick(e) {
           e.preventDefault();
           submitBlog(mdl)(state);
         }
-      }, state.objectId ? "Update" : "Submit"), m("button", {
+      }, state.objectId ? "Update" : "Submit"), (0, _mithril["default"])("button", {
         onclick: function onclick(e) {
           return deleteBlog(mdl);
         }

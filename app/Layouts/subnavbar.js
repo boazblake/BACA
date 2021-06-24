@@ -12,7 +12,7 @@ const SubNavbar = () => {
     view: ({ attrs: { mdl } }) =>
       subroutes(mdl).any() &&
       m(
-        "nav.nav#sub-navbar",
+        "nav.nav#sub-navbar.is-full-width",
         subroutes(mdl).map((r) =>
           r.group.includes("external")
             ? m(

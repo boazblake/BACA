@@ -11,7 +11,7 @@ const Navbar = () => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "nav.nav#navbar",
+        "nav.nav#navbar.is-full-width",
         routes(mdl).map((r) =>
           m(NavLink, {
             mdl,
