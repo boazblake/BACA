@@ -1,7 +1,11 @@
 const Main = () => {
   return {
     view: ({ attrs: { mdl, children } }) =>
-      m("main.container", m("h1", mdl.state.route.name), children),
+      m(
+        "main.container",
+        m("header", m("h1.bold", mdl.state.route.name)),
+        children
+      ),
   }
 }
 

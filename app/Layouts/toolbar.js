@@ -5,7 +5,7 @@ const Toolbar = () => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "nav#toolbar.navigation.nav",
+        "nav#toolbar.sticky-nav.nav",
         {
           style: {
             "background-color": mdl.state.showNavModal()
@@ -26,6 +26,7 @@ const Toolbar = () => {
           )
         ),
         mdl.state.isAuth() &&
+          mdl.settings.screenSize == "desktop" &&
           m(
             ".nav-center",
 

@@ -84,14 +84,10 @@ const submitBlog =
     updateOrSubmitBlog.fork(onSubmitError, onSubmitSuccess)
   }
 
-const deleteBlog = (mdl) => {
-  console.log(
-    mdl.http.back4App.deleteTask(mdl)(`Classes/Blogs/${state.objectId}`)
-  )
+const deleteBlog = (mdl) =>
   mdl.http.back4App
     .deleteTask(mdl)(`Classes/Blogs/${state.objectId}`)
     .fork(toBlogs, toBlogs)
-}
 
 const BlogEditor = (mdl) => {
   const onInput = handlers(["oninput"], (e) => {
@@ -110,49 +106,53 @@ const BlogEditor = (mdl) => {
         m(
           "form",
           { ...onInput },
-          m("label", "Title", m("input", { id: "title", value: state.title })),
           m(
-            "label",
-            m(
-              "a.secondary",
-              {
-                role: "button",
-                onclick: () => state.showModal(!state.showModal()),
-              },
-              state.thumb ? "Update Image" : "Add An Image"
-            )
+            "p",
+            m("label", "Title"),
+            m("input", { id: "title", value: state.title })
+          ),
+
+          m(
+            "button.secondary",
+            {
+              onclick: () => state.showModal(!state.showModal()),
+            },
+            state.thumb ? "Update Image" : "Add An Image"
           ),
           state.thumb && m("aside", m("img", { src: state.thumb })),
           state.showModal() &&
             m(
-              "article.modal-container",
-              m("header", m(".grid", m("a", "Upload"), m("a", "Select"))),
-              m("form", m("input", { type: "file", id: "file" })),
+              "section.modal-container",
               m(
-                "footer",
+                "article.container",
+                m("header", m(".grid", m("a", "Upload"), m("a", "Select"))),
+                m("form", m("input", { type: "file", id: "file" })),
                 m(
-                  ".grid",
+                  "footer",
                   m(
-                    "a.m-r-16.contrast",
-                    { onclick: () => state.showModal(false), role: "button" },
-                    "Cancel"
-                  ),
-                  m(
-                    "a",
-                    {
-                      onclick: (e) => uploadImage(mdl)(state.file),
-                      role: "button",
-                      type: "submit",
-                      disabled: !state.file,
-                    },
-                    "Upload"
+                    ".grid",
+                    m(
+                      "button",
+                      { onclick: () => state.showModal(false) },
+                      "Cancel"
+                    ),
+                    m(
+                      "button",
+                      {
+                        onclick: (e) => uploadImage(mdl)(state.file),
+                        role: "button",
+                        type: "submit",
+                        disabled: !state.file,
+                      },
+                      "Upload"
+                    )
                   )
                 )
               )
             ),
           m(
-            "label",
-            "Contents",
+            "p",
+            m("label", "Contents"),
             m("textarea", {
               value: state.text,
               id: "text",
@@ -161,29 +161,19 @@ const BlogEditor = (mdl) => {
           ),
           m(
             "nav.grid",
+            m("button", { onclick: toBlogs }, "Cancel"),
             m(
-              "ul",
-              { style: { width: "100%" } },
-              m("li", m("button", { onclick: toBlogs }, "Cancel")),
-              m(
-                "li",
-                m(
-                  "button",
-                  {
-                    disabled: isInvalid(),
-                    onclick: (e) => {
-                      e.preventDefault()
-                      submitBlog(mdl)(state)
-                    },
-                  },
-                  state.objectId ? "Update" : "Submit"
-                )
-              ),
-              m(
-                "li",
-                m("button", { onclick: (e) => deleteBlog(mdl) }, "Delete")
-              )
-            )
+              "button",
+              {
+                disabled: isInvalid(),
+                onclick: (e) => {
+                  e.preventDefault()
+                  submitBlog(mdl)(state)
+                },
+              },
+              state.objectId ? "Update" : "Submit"
+            ),
+            m("button", { onclick: (e) => deleteBlog(mdl) }, "Delete")
           )
         )
       ),

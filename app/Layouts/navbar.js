@@ -11,7 +11,7 @@ const Navbar = () => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "nav.nav.navigation.container-fluid#navbar",
+        "nav.nav#navbar",
         routes(mdl).map((r) =>
           m(NavLink, {
             mdl,

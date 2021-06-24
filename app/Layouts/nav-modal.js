@@ -37,45 +37,28 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
           onclick: (e) => toggleRoutes(mdl)(route.id),
         },
         m("summary", route.name),
-        // m(
-        //   "th",
-        //   m(AngleLine, {
-        //     style: { transform: `rotate(${isSelected() ? 180 : 0}deg)` },
-        //   })
-        // )
+
         m(
-          "ul",
-          // {
-          //   onbeforeremove: replaceCSS(
-          //     "show-child-routes",
-          //     "hide-child-routes"
-          //   ),
-          // },
+          "nav",
 
           childRoutes.map((r) =>
             r.group.includes("external")
               ? m(
-                  "li.container",
-                  m(
-                    "a",
-                    { target: "_blank", href: r.external },
-                    r.name,
-                    m(PopOutLine, {
-                      margin: "8px",
-                      width: "15px",
-                      height: "15px",
-                    })
-                  )
-                )
-              : m(
-                  "li.container",
-                  m(NavItem, {
-                    mdl,
-                    href: r.route,
-                    link: r.name,
-                    classList: `${isActiveRoute(r.route)}`,
+                  "a",
+                  { target: "_blank", href: r.external },
+                  r.name,
+                  m(PopOutLine, {
+                    margin: "8px",
+                    width: "15px",
+                    height: "15px",
                   })
                 )
+              : m(NavItem, {
+                  mdl,
+                  href: r.route,
+                  link: r.name,
+                  classList: `${isActiveRoute(r.route)}`,
+                })
           )
         )
       ),
@@ -90,7 +73,7 @@ const NavModal = ({ attrs: { mdl } }) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "article#nav-modal-container.animated",
+        "section.modal-container.animated",
         {
           oncreate: ({ dom }) => (_domOverlay = dom),
           onclick: (e) => {
@@ -99,14 +82,14 @@ const NavModal = ({ attrs: { mdl } }) => {
           },
         },
         m(
-          `aside#modal`,
+          `article#modal`,
           {
             oncreate: ({ dom }) => (_domModal = dom),
             id: "nav-modal",
           },
           m(AuthBox, { mdl }),
           m(
-            "ul",
+            "nav",
             routes(mdl).map((r) =>
               r.children.any()
                 ? m(NavSection, {
@@ -115,15 +98,12 @@ const NavModal = ({ attrs: { mdl } }) => {
                     toggleRoutes,
                     isSelected: mdl.navState[r.id],
                   })
-                : m(
-                    "li",
-                    m(NavItem, {
-                      mdl,
-                      href: r.route,
-                      link: r.name,
-                      classList: `${isActiveRoute(r.route)}`,
-                    })
-                  )
+                : m(NavItem, {
+                    mdl,
+                    href: r.route,
+                    link: r.name,
+                    classList: `${isActiveRoute(r.route)}`,
+                  })
             )
           )
         )

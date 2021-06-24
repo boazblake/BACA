@@ -12,27 +12,24 @@ const SubNavbar = () => {
     view: ({ attrs: { mdl } }) =>
       subroutes(mdl).any() &&
       m(
-        "nav.nav.navigation.container-fluid#sub-navbar",
+        "nav.nav#sub-navbar",
         subroutes(mdl).map((r) =>
           r.group.includes("external")
             ? m(
-                ".nav-link clear",
-                m(
-                  "a",
-                  { target: "_blank", href: r.external },
-                  r.name,
-                  m(PopOutLine, {
-                    margin: "8px",
-                    width: "15px",
-                    height: "15px",
-                  })
-                )
+                "a.clear",
+                { target: "_blank", href: r.external },
+                r.name,
+                m(PopOutLine, {
+                  margin: "8px",
+                  width: "15px",
+                  height: "15px",
+                })
               )
             : m(NavLink, {
                 mdl,
                 href: r.route,
                 link: r.name,
-                classList: `clear ${isActiveRoute(
+                classList: `nav-link clear ${isActiveRoute(
                   mdl.state.subnavState(),
                   r.route
                 )}`,

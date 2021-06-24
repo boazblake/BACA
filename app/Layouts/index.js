@@ -18,10 +18,8 @@ const Layout = () => {
         { "data-theme": "light", id: "layout", role: "main" },
         m(Toolbar, { mdl }),
         m(Hero, { mdl }),
-        mdl.settings.screenSize == "desktop" && [
-          m(Navbar, { mdl }),
-          m(SubNavbar, { mdl }),
-        ],
+        mdl.settings.screenSize == "desktop" &&
+          m("nav.navigation", m(Navbar, { mdl }), m(SubNavbar, { mdl })),
 
         m(Main, { mdl, children }),
         showNavMenu(mdl) &&
