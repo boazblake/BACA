@@ -5059,6 +5059,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+markdown-wasm@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.npmjs.org/markdown-wasm/-/markdown-wasm-1.1.2.tgz#d7055b7358884f8f30b286dea600cf2a807b5cc1"
+  integrity sha512-tlepP32bgDetkRxx/neVKvEroQ8bR1PoSKvdrTOE+9j05Uoe9Lq+86E8PAciWQ2xr1EWKueNYMkQOmcPT7EwIg==
+
 math-random@^1.0.1:
   version "1.0.4"
   resolved "https://registry.npmjs.org/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"
@@ -5224,12 +5229,19 @@ minizlib@^1.2.1:
   dependencies:
     minipass "^2.9.0"
 
+mithril-markdown@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.npmjs.org/mithril-markdown/-/mithril-markdown-0.4.0.tgz#a1b78a2e078293d114d7668c0cb0f702c0720e4c"
+  integrity sha512-MhwTZRDK0TaNIIukSa52Wz/GrZgmnEmnE1rtc0V4lO6446/d2mRBjF9J3GNyWzVg5d5USYuDRlPn5FG/3lBgHg==
+  dependencies:
+    mithril "^2.0.4"
+
 mithril-stream@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/mithril-stream/-/mithril-stream-2.0.0.tgz#b33a9b8d1f1a93b50f79e13a3454d3a39d7e39fb"
   integrity sha512-7anPud4n2FMGIXBQATVpFzclkddXHmJ1TzlqOP9STybk8JZYOPAD2otMYiMDc6sPrTNDY5S6GPDlYNIUY8Qs3Q==
 
-mithril@2.0.4:
+mithril@2.0.4, mithril@^2.0.4:
   version "2.0.4"
   resolved "https://registry.npmjs.org/mithril/-/mithril-2.0.4.tgz#d125969d992b924c7185d24ff92d997e5c00116b"
   integrity sha512-mgw+DMZlhMS4PpprF6dl7ZoeZq5GGcAuWnrg5e12MvaGauc4jzWsDZtVGRCktsiQczOEUr2K5teKbE5k44RlOg==
@@ -6784,6 +6796,11 @@ slash@^3.0.0:
   resolved "https://registry.npmjs.org/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
 
+slimdown-js@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.npmjs.org/slimdown-js/-/slimdown-js-0.4.1.tgz#56db346ce805af4b202753830cb90734e0c9ad8d"
+  integrity sha512-lUEEwNYnndbdek3FeYMxfsbkGb2+r+2n61HyMQaGwNFpgCHBnRY5NPMN6yag48G31dP2ETMQ50XafV+3XXk2KA==
+
 snake-case@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/snake-case/-/snake-case-2.1.0.tgz#41bdb1b73f30ec66a04d4e2cad1b76387d4d6d9f"
@@ -6820,6 +6837,11 @@ snapdragon@^0.8.1:
     source-map "^0.5.6"
     source-map-resolve "^0.5.0"
     use "^3.1.0"
+
+snarkdown@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/snarkdown/-/snarkdown-2.0.0.tgz#b1feb4db91b9f94a8ebbd7a50f3e99aee18b1e03"
+  integrity sha512-MgL/7k/AZdXCTJiNgrO7chgDqaB9FGM/1Tvlcenenb7div6obaDATzs16JhFyHHBGodHT3B7RzRc5qk8pFhg3A==
 
 sort-keys-length@^1.0.0:
   version "1.0.1"

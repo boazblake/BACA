@@ -2,7 +2,7 @@ import Default from "Pages/default.js"
 import Account from "Pages/Account/index.js"
 import Dashboard from "Pages/Dashboard"
 import Layout from "Layouts/index.js"
-import { scrollToAnchor } from "Utils"
+import { scrollToAnchor, PageTitle } from "Utils"
 
 const AuthenticatedRoutes = [
   {
@@ -17,10 +17,10 @@ const AuthenticatedRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scroll({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Account, { mdl })),
@@ -37,10 +37,10 @@ const AuthenticatedRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scroll({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Dashboard, { mdl })),
@@ -66,10 +66,10 @@ const AuthenticatedRoutes = [
       )
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scroll({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
@@ -97,10 +97,10 @@ const AuthenticatedRoutes = [
       !mdl.user.isAdmin && m.route.set(m.route.get())
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scroll({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
@@ -115,7 +115,7 @@ const AuthenticatedRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      window.scroll({
+      PageTitle().scroll({
         top: 0,
         left: 0,
         behavior: "smooth",

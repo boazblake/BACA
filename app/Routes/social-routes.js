@@ -1,8 +1,11 @@
 import Layout from "Layouts/index.js"
 import Default from "Pages/default.js"
-import Blog from "Pages/blog.js"
-import { scrollToAnchor } from "Utils/index.js"
-import BlogEditor from "Pages/blog-editor"
+import Blog from "Pages/Blog/blog.js"
+import BlogEditor from "Pages/Blog/blog-editor"
+import BlogPost from "Pages/Blog/blog-post"
+import Gallery from "Pages/Gallery/gallery.js"
+import Album from "Pages/Gallery/album.js"
+import { scrollToAnchor, PageTitle } from "Utils"
 
 const SocialRoutes = [
   {
@@ -16,7 +19,7 @@ const SocialRoutes = [
       "map-of-bonham-acres",
       "blog",
       "explore",
-      "photos",
+      "gallery",
       "calendar",
       "bfn-park",
     ],
@@ -24,10 +27,10 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
@@ -44,19 +47,19 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
   {
-    id: "photos",
+    id: "gallery",
     name: "Photo Gallery",
     // icon: Icons.home,
-    route: "/social/photos",
+    route: "/social/gallery",
     isNav: true,
     group: ["nav", "social"],
     children: [],
@@ -64,13 +67,33 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
+    component: (mdl) => m(Layout, { mdl }, m(Gallery, { mdl })),
+  },
+  {
+    id: "album",
+    name: "Photo Gallery Album",
+    // icon: Icons.home,
+    route: "/social/gallery/album:album",
+    isNav: false,
+    group: ["nav", "social"],
+    children: [],
+    options: [],
+    onmatch: (mdl, args, path, fullroute, isAnchor) => {
+      isAnchor
+        ? scrollToAnchor(mdl.state.anchor)
+        : PageTitle().scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "start",
+          })
+    },
+    component: (mdl) => m(Layout, { mdl }, m(Album, { mdl })),
   },
   {
     id: "blog",
@@ -84,10 +107,10 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Blog, { mdl })),
@@ -104,13 +127,33 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(BlogEditor, { mdl })),
+  },
+  {
+    id: "blog-post",
+    name: "",
+    // icon: Icons.home,
+    route: "/social/blog-post:objectId",
+    isNav: false,
+    group: ["social"],
+    children: [],
+    options: [],
+    onmatch: (mdl, args, path, fullroute, isAnchor) => {
+      isAnchor
+        ? scrollToAnchor(mdl.state.anchor)
+        : PageTitle().scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "start",
+          })
+    },
+    component: (mdl) => m(Layout, { mdl }, m(BlogPost, { mdl })),
   },
   {
     id: "map-of-bonham-acres",
@@ -124,10 +167,10 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),

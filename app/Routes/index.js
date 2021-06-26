@@ -14,4 +14,5 @@ const Routes = flatten([
   LegalRoutes,
   SafetyRoutes,
 ])
+
 export default Routes

@@ -116,7 +116,9 @@
 })();
 
 (function() {
-var global = typeof window === 'undefined' ? this : window;
+var global = typeof window === 'undefined' ? this : window;require.register("fs", function(exports, require, module) {
+  module.exports = {};
+});
 var process;
 var __makeRelativeRequire = function(require, mappings, pref) {
   var none = {};
@@ -1145,7 +1147,7 @@ var Main = function Main() {
       var _ref$attrs = _ref.attrs,
           mdl = _ref$attrs.mdl,
           children = _ref$attrs.children;
-      return m("main.container", m("header", m("h1.bold", mdl.state.route.name)), children);
+      return m("main.container", m("header", m("h1#page-title.bold", mdl.state.route.name)), children);
     }
   };
 };
@@ -1275,7 +1277,7 @@ var NavModal = function NavModal(_ref4) {
         onclick: function onclick(e) {
           if ([_domModal, _domOverlay].includes(e.target)) mdl.state.showNavModal(false);
         }
-      }, m("article#modal", {
+      }, m("article.modal.card", {
         oncreate: function oncreate(_ref7) {
           var dom = _ref7.dom;
           return _domModal = dom;
@@ -1425,16 +1427,11 @@ var Toolbar = function Toolbar() {
         style: {
           "background-color": mdl.state.showNavModal() ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.9)"
         }
-      }, m(".nav-left", m(m.route.Link, {
-        onclick: function onclick() {
-          return m.route.set("/about");
-        }
-      }, m("img#nav-logo", {
+      }, m("figure.nav-left", m(m.route.Link, {
+        selector: "img",
+        href: "/about",
         src: "images/logo.webp"
-      }))), mdl.state.isAuth() && mdl.settings.screenSize !== "phone" && m(".nav-center", m(m.route.Link, {
-        href: "/social/blog-editor:",
-        "class": "button primary"
-      }, "Add A Blog Post")), mdl.settings.screenSize == "desktop" ? m(".nav-right", m(_authbox["default"], {
+      })), mdl.settings.screenSize == "desktop" ? m(".nav-right", m(_authbox["default"], {
         mdl: mdl
       })) : m(".nav-right", {
         onclick: function onclick() {
@@ -2047,6 +2044,494 @@ var _default = Register;
 exports["default"] = _default;
 });
 
+;require.register("Pages/Blog/blog-editor.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _Utils = require("Utils");
+
+var _data = _interopRequireDefault(require("data.task"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var state = {
+  editor: "",
+  title: "",
+  author: "",
+  text: "",
+  img: "",
+  thumb: "",
+  file: null,
+  showModal: Stream(false),
+  images: [],
+  modalState: Stream("upload"),
+  isEditing: Stream(true),
+  showHelp: Stream(false),
+  errors: {
+    img: null
+  }
+};
+
+var resetModalState = function resetModalState(state) {
+  state.images = [];
+  state.modalState("upload");
+};
+
+var resetEditorState = function resetEditorState(state) {
+  state.title = "";
+  state.author = "";
+  state.text = "";
+  state.img = "";
+  state.thumb = "";
+  state.file = null;
+  state.isEditing(true);
+  state.showModal(false);
+  state.showHelp(false);
+};
+
+var fetchBlogImages = function fetchBlogImages(_ref) {
+  var _ref$attrs = _ref.attrs,
+      mdl = _ref$attrs.mdl,
+      state = _ref$attrs.state;
+
+  var onError = function onError(e) {
+    return console.log(e);
+  };
+
+  var onSuccess = function onSuccess(_ref2) {
+    var results = _ref2.results;
+    return state.images = results;
+  };
+
+  mdl.http.back4App.getTask(mdl)("Classes/Gallery").fork(onError, onSuccess);
+};
+
+var setupEditor = function setupEditor(_ref3) {
+  var mdl = _ref3.attrs.mdl;
+
+  var onError = function onError(e) {
+    return console.log(e);
+  };
+
+  var onSuccess = function onSuccess(_ref4) {
+    var title = _ref4.title,
+        text = _ref4.text,
+        img = _ref4.img,
+        thumb = _ref4.thumb,
+        objectId = _ref4.objectId;
+    state.title = title;
+    state.text = text;
+    state.img = img;
+    state.thumb = thumb;
+    state.objectId = objectId;
+  };
+
+  var id = m.route.get().split(":")[1];
+
+  if ((0, _Utils.exists)(id)) {
+    mdl.http.back4App.getTask(mdl)("Classes/Blogs/".concat(id)).fork(onError, onSuccess);
+  }
+};
+
+var isInvalid = function isInvalid() {
+  return !(0, _Utils.exists)(state.title) || !(0, _Utils.exists)(state.text);
+};
+
+var onSubmitError = function onSubmitError(e) {
+  return state.errors.img = e;
+};
+
+var onImgSuccess = function onImgSuccess(_ref5) {
+  var image = _ref5.image,
+      thumb = _ref5.thumb;
+  state.img = image;
+  state.thumb = thumb;
+  state.showModal(false);
+};
+
+var saveImgToGalleryTask = function saveImgToGalleryTask(mdl) {
+  return function (_ref6) {
+    var _ref6$data = _ref6.data,
+        image = _ref6$data.image,
+        medium = _ref6$data.medium,
+        thumb = _ref6$data.thumb;
+    return mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
+      album: "blog",
+      image: image.url,
+      medium: medium.url,
+      thumb: thumb.url
+    }).chain(function (_) {
+      return _data["default"].of({
+        image: image.url,
+        medium: medium.url,
+        thumb: thumb.url
+      });
+    });
+  };
+};
+
+var uploadImage = function uploadImage(mdl) {
+  return function (file) {
+    var image = new FormData();
+    image.append("image", file);
+    mdl.http.imgBB.postTask(mdl)(image).chain(saveImgToGalleryTask(mdl)).fork(onSubmitError, onImgSuccess);
+  };
+};
+
+var handleImage = function handleImage(mdl) {
+  return function (file) {
+    return file ? uploadImage(mdl)(file) : state.showModal(false);
+  };
+};
+
+var toBlogs = function toBlogs() {
+  return m.route.set("/social/blog");
+};
+
+var onSubmitSuccess = function onSubmitSuccess() {
+  return toBlogs();
+};
+
+var submitBlog = function submitBlog(mdl) {
+  return function (_ref7) {
+    var title = _ref7.title,
+        img = _ref7.img,
+        text = _ref7.text,
+        thumb = _ref7.thumb;
+    var dto = {
+      title: title,
+      img: img,
+      text: text,
+      author: mdl.user.name,
+      thumb: thumb
+    };
+    var updateOrSubmitBlog = state.objectId ? mdl.http.back4App.putTask(mdl)("Classes/Blogs/".concat(state.objectId))(dto) : mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto);
+    updateOrSubmitBlog.fork(onSubmitError, onSubmitSuccess);
+  };
+};
+
+var assignImg = function assignImg(img, thumb) {
+  if (state.img == img) {
+    state.img = "";
+    state.thumb = "";
+  } else {
+    state.img = img;
+    state.thumb = thumb;
+  }
+};
+
+var deleteBlog = function deleteBlog(mdl) {
+  return mdl.http.back4App.deleteTask(mdl)("Classes/Blogs/".concat(state.objectId)).fork(toBlogs, toBlogs);
+};
+
+var Modal = function Modal() {
+  return {
+    onremove: function onremove() {
+      return resetModalState(state);
+    },
+    oninit: fetchBlogImages,
+    view: function view(_ref8) {
+      var _ref8$attrs = _ref8.attrs,
+          mdl = _ref8$attrs.mdl,
+          state = _ref8$attrs.state;
+      return m("section.modal-container", m("article.modal.card.grid", m("header", m(".tabs.row", m("a.pointer.".concat(state.modalState() == "upload" ? "active" : ""), {
+        onclick: function onclick(e) {
+          return state.modalState("upload");
+        }
+      }, "Upload New Image"), m("a.pointer.".concat(state.modalState() == "select" ? "active" : ""), {
+        onclick: function onclick(e) {
+          return state.modalState("select");
+        }
+      }, "Select From Database"))), m("form", state.modalState() == "upload" ? m("input", {
+        type: "file",
+        id: "file"
+      }) : state.images.map(function (_ref9) {
+        var image = _ref9.image,
+            thumb = _ref9.thumb;
+        return m("figure.button.".concat(thumb == state.thumb ? "primary" : "outline"), {
+          onclick: function onclick(e) {
+            return assignImg(image, thumb);
+          }
+        }, m("img", {
+          src: thumb
+        }));
+      })), m("footer", m(".tabs", m("button", {
+        onclick: function onclick() {
+          return state.showModal(false);
+        }
+      }, "Cancel"), m("button", {
+        onclick: function onclick(e) {
+          return handleImage(mdl)(state.file);
+        },
+        role: "button",
+        type: "submit",
+        disabled: !state.file && !(0, _Utils.exists)(state.img)
+      }, state.modalState() == "select" ? "Use" : "Upload")))));
+    }
+  };
+};
+
+var BlogEditor = function BlogEditor() {
+  var onInput = (0, _Utils.handlers)(["oninput"], function (e) {
+    if (e.target.id == "file") {
+      state[e.target.id] = e.target.files[0];
+    } else {
+      state[e.target.id] = e.target.value;
+    }
+  });
+  return {
+    onremove: function onremove() {
+      return resetEditorState(state);
+    },
+    oninit: setupEditor,
+    view: function view(_ref10) {
+      var mdl = _ref10.attrs.mdl;
+      // console.log(JSON.stringify(state))
+      return m(".grid", m("form", _objectSpread({}, onInput), m("", m("label", "Title"), m("input", {
+        id: "title",
+        value: state.title
+      })), state.thumb && m("aside", m("img", {
+        src: state.thumb
+      })), m("button.secondary", {
+        onclick: function onclick(e) {
+          e.preventDefault();
+          state.showModal(!state.showModal());
+        }
+      }, state.thumb ? "Update Image" : "Add An Image"), state.showModal() && m(Modal, {
+        state: state,
+        mdl: mdl
+      }), m("", m("label", "Contents"), m("button", {
+        onclick: function onclick(e) {
+          e.preventDefault();
+          state.isEditing(!state.isEditing());
+        }
+      }, state.isEditing() ? "Preview" : "Edit"), m("button", {
+        onclick: function onclick(e) {
+          e.preventDefault();
+          state.showHelp(true);
+        }
+      }, "How To Use"), state.showHelp() && m("section.modal-container", {
+        onclick: function onclick(e) {
+          state.showHelp(false);
+        }
+      }, m(".modal.card", m("h3", "Headings"), m("h4", "use #"), m("h3", "Italics & Bold"), m("h4", "use *"), m("h3", "Lists"), m("h4", "use + or -"), m("h3", "Links"), m("h4", "use []()"))), state.isEditing() ? m("textarea", {
+        value: state.text,
+        id: "text",
+        style: {
+          height: "300px"
+        }
+      }) : m("hgroup", m("h4", m.trust(HtmlSanitizer.SanitizeHtml((0, _Utils.parseMarkdown)(state.text)))))), m("nav.grid", m(m.route.Link, {
+        selector: "button",
+        href: "/social/blog"
+      }, "Cancel"), m("button", {
+        disabled: isInvalid(),
+        onclick: function onclick(e) {
+          e.preventDefault();
+          submitBlog(mdl)(state);
+        }
+      }, state.objectId ? "Update" : "Submit"), m("button", {
+        onclick: function onclick(e) {
+          return deleteBlog(mdl);
+        }
+      }, "Delete"))));
+    }
+  };
+};
+
+var _default = BlogEditor;
+exports["default"] = _default;
+});
+
+;require.register("Pages/Blog/blog-post.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _Utils = require("Utils");
+
+var _blog = require("./blog");
+
+var state = {
+  blog: null
+};
+
+var toBlogs = function toBlogs() {
+  return m.route.set("/social/blog");
+};
+
+var deleteBlog = function deleteBlog(mdl) {
+  return mdl.http.back4App.deleteTask(mdl)("Classes/Blogs/".concat(state.objectId)).fork(toBlogs, toBlogs);
+};
+
+var fetchBlogPost = function fetchBlogPost(_ref) {
+  var mdl = _ref.attrs.mdl;
+
+  var onError = function onError(e) {
+    return console.log(e);
+  };
+
+  var onSuccess = function onSuccess(blog) {
+    return state.blog = blog;
+  };
+
+  var id = m.route.get().split(":")[1];
+  mdl.http.back4App.getTask(mdl)("Classes/Blogs/".concat(id)).map(_blog.toViewModel).fork(onError, onSuccess);
+};
+
+var BlogPost = {
+  oninit: fetchBlogPost,
+  view: function view(_ref2) {
+    var mdl = _ref2.attrs.mdl;
+    return mdl.state.isLoading() ? m("article.card", "LOADING POST") : m("", m("article.card", m(".row", m("hgroup.col", m("h2.bold", state.blog.title), m("h3", state.blog.createdAt, state.blog.updatedAt !== state.blog.createdAt && ["updated on: ", state.blog.updatedAt]), m("h4", "Added By ", state.blog.author)), m("figure.col.is-horizontal-align", m("img.", {
+      src: state.blog.thumb || "images/main.webp",
+      style: {
+        border: "1px solid black",
+        borderRadius: "2%",
+        width: "182px"
+      }
+    }))), m("hgroup.col", m("h4", m.trust(HtmlSanitizer.SanitizeHtml((0, _Utils.parseMarkdown)(state.blog.text))))), state.blog.author == mdl.user.name && m("footer.grouped", m(m.route.Link, {
+      selector: "button",
+      href: "/social/blog-editor:".concat(state.blog.objectId)
+    }, "Edit"), m("button", {
+      onclick: function onclick() {
+        return deleteBlog(mdl);
+      }
+    }, "Delete"))), m(m.route.Link, {
+      selector: "button",
+      href: "/social/blog",
+      "class": "primary"
+    }, "Back To Blogs"));
+  }
+};
+var _default = BlogPost;
+exports["default"] = _default;
+});
+
+;require.register("Pages/Blog/blog-preview.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var BlogPreview = {
+  view: function view(_ref) {
+    var _ref$attrs = _ref.attrs,
+        mdl = _ref$attrs.mdl,
+        _ref$attrs$post = _ref$attrs.post,
+        title = _ref$attrs$post.title,
+        text = _ref$attrs$post.text,
+        thumb = _ref$attrs$post.thumb,
+        createdAt = _ref$attrs$post.createdAt,
+        updatedAt = _ref$attrs$post.updatedAt,
+        author = _ref$attrs$post.author,
+        objectId = _ref$attrs$post.objectId;
+    return m("article.card.col-6", m(".row", m("hgroup.col", m("h2.bold", title), m("h3", createdAt, updatedAt !== createdAt && ["updated on: ", updatedAt]), m("h4", "Added By ", author)), m("figure.col.is-horizontal-align", m("img.", {
+      src: thumb || "images/main.webp",
+      style: {
+        border: "1px solid black",
+        borderRadius: "2%",
+        width: "182px"
+      }
+    }))), m("hgroup.col", m("h4", text.slice(0, 100), "....", m(m.route.Link, // "a.pointer",
+    {
+      href: "/social/blog-post:".concat(objectId)
+    }, "continue reading"))), author == mdl.user.name && m("footer", m(m.route.Link, {
+      selector: "button",
+      href: "/social/blog-editor:".concat(objectId)
+    }, "Edit")));
+  }
+};
+var _default = BlogPreview;
+exports["default"] = _default;
+});
+
+;require.register("Pages/Blog/blog.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = exports.toViewModel = exports.formatLensDate = void 0;
+
+var _Utils = require("Utils");
+
+var _ramda = require("ramda");
+
+var _blogPreview = _interopRequireDefault(require("./blog-preview.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var state = {
+  errors: {},
+  blogs: []
+};
+
+var formatLensDate = function formatLensDate(prpty) {
+  return (0, _ramda.over)((0, _ramda.lensProp)(prpty), _Utils.formatDate);
+};
+
+exports.formatLensDate = formatLensDate;
+var toViewModel = (0, _ramda.compose)(formatLensDate("updatedAt"), formatLensDate("createdAt"));
+exports.toViewModel = toViewModel;
+
+var loadBlogs = function loadBlogs(_ref) {
+  var mdl = _ref.attrs.mdl;
+
+  var onError = function onError(error) {
+    return state.errors = error;
+  };
+
+  var onSuccess = function onSuccess(_ref2) {
+    var results = _ref2.results;
+    return state.blogs = results.map(toViewModel);
+  };
+
+  mdl.http.back4App.getTask(mdl)("Classes/Blogs").fork(onError, onSuccess);
+};
+
+var Blog = function Blog() {
+  return {
+    oninit: loadBlogs,
+    onremove: function onremove() {
+      state.errors = {};
+      state.data = [];
+    },
+    view: function view(_ref3) {
+      var mdl = _ref3.attrs.mdl;
+      return mdl.state.isLoading() ? m("article.modal", "LOADING") : m(".container", mdl.state.isAuth() && m("nav.nav", m(".nav-left", m(m.route.Link, {
+        href: "/social/blog-editor:",
+        "class": "button primary"
+      }, "Add A Blog Post"))), m(".row", state.blogs.any() ? state.blogs.map(function (post) {
+        return m(_blogPreview["default"], {
+          mdl: mdl,
+          post: post
+        });
+      }) : m("article.card", mdl.state.isAuth() ? m(m.route.Link, {
+        href: "/social/blog-editor:",
+        "class": "button primary"
+      }, "Add The First Post !") : m("h1", "Log in to add the First Post!"))));
+    }
+  };
+};
+
+var _default = Blog;
+exports["default"] = _default;
+});
+
 ;require.register("Pages/Dashboard/index.js", function(exports, require, module) {
 "use strict";
 
@@ -2200,6 +2685,194 @@ var Users = function Users() {
 exports.Users = Users;
 });
 
+;require.register("Pages/Gallery/album.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var state = {
+  album: [],
+  title: ""
+};
+
+var fetchAlbum = function fetchAlbum(_ref) {
+  var mdl = _ref.attrs.mdl;
+  var album = m.route.get().split(":")[1];
+  var byAlbumName = encodeURI("where={\"album\":\"".concat(album, "\"}"));
+
+  var onError = function onError(e) {
+    return console.log(e);
+  };
+
+  var onSuccess = function onSuccess(_ref2) {
+    var results = _ref2.results;
+    state.album = results;
+    state.title = album;
+  };
+
+  mdl.http.back4App.getTask(mdl)("Classes/Gallery?".concat(byAlbumName)).fork(onError, onSuccess);
+};
+
+var Album = {
+  oninit: fetchAlbum,
+  view: function view(_ref3) {
+    var mdl = _ref3.attrs.mdl;
+    return m(".container", m("nav", m(m.route.Link, {
+      selector: "button",
+      href: "/social/gallery",
+      "class": "primary"
+    }, "Back To Gallery")), m("h2", state.title.toUpperCase()), mdl.state.isLoading() ? "LOADING" : m(".row", state.album.map(function (pic) {
+      return m("figure.col-4", m("img", {
+        src: pic.thumb
+      }) // m("figcaption", pic.caption)
+      );
+    })));
+  }
+};
+var _default = Album;
+exports["default"] = _default;
+});
+
+;require.register("Pages/Gallery/gallery.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _mithril = _interopRequireDefault(require("mithril"));
+
+var _ramda = require("ramda");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var state = {
+  albums: [],
+  showNewAlbumModal: Stream(false),
+  newAlbum: {
+    title: "",
+    img: ""
+  }
+};
+var groupByAlbum = (0, _ramda.compose)((0, _ramda.groupBy)((0, _ramda.prop)("album")), (0, _ramda.prop)("results"));
+
+var fetchAllAlbums = function fetchAllAlbums(_ref) {
+  var mdl = _ref.attrs.mdl;
+
+  var onError = function onError(e) {
+    return console.log(e);
+  };
+
+  var onSuccess = function onSuccess(albums) {
+    return state.albums = albums;
+  };
+
+  mdl.http.back4App.getTask(mdl)("Classes/Gallery").map(groupByAlbum).fork(onError, onSuccess);
+};
+
+var saveImgToGalleryTask = function saveImgToGalleryTask(mdl) {
+  return function (_ref2) {
+    var _ref2$data = _ref2.data,
+        image = _ref2$data.image,
+        medium = _ref2$data.medium,
+        thumb = _ref2$data.thumb;
+    return mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
+      album: state.newAlbum.title,
+      image: image.url,
+      // medium: medium.url,
+      thumb: thumb.url
+    });
+  };
+};
+
+var createtNewAlbum = function createtNewAlbum(mdl) {
+  var onError = function onError(e) {
+    return console.log(e);
+  };
+
+  var onSuccess = function onSuccess() {
+    state.newAlbum = {
+      title: "",
+      img: ""
+    };
+    state.showNewAlbumModal(false);
+    fetchAllAlbums({
+      attrs: {
+        mdl: mdl
+      }
+    });
+  };
+
+  var image = new FormData();
+  image.append("image", state.newAlbum.img);
+  mdl.http.imgBB.postTask(mdl)(image).chain(saveImgToGalleryTask(mdl)).fork(onError, onSuccess);
+};
+
+var AlbumCover = {
+  view: function view(_ref3) {
+    var _ref3$attrs$album = _ref3.attrs.album,
+        thumb = _ref3$attrs$album.thumb,
+        album = _ref3$attrs$album.album;
+    return (0, _mithril["default"])(_mithril["default"].route.Link, {
+      selector: "figure",
+      "class": "button clear card col-4",
+      href: "social/gallery/album:".concat(album)
+    }, (0, _mithril["default"])("img", {
+      src: thumb
+    }), (0, _mithril["default"])("figcaption", album));
+  }
+};
+var NewAlbumModal = {
+  view: function view(_ref4) {
+    var mdl = _ref4.attrs.mdl;
+    return (0, _mithril["default"])(".modal-container", (0, _mithril["default"])(".modal.card", (0, _mithril["default"])("form", (0, _mithril["default"])("label", "Album Title", (0, _mithril["default"])("input", {
+      oninput: function oninput(e) {
+        return state.newAlbum.title = e.target.value;
+      }
+    })), (0, _mithril["default"])("label", "Add A Photo", (0, _mithril["default"])("input", {
+      type: "file",
+      oninput: function oninput(e) {
+        return state.newAlbum.img = e.target.files[0];
+      }
+    })), (0, _mithril["default"])(".footer.is-right", (0, _mithril["default"])("button", {
+      onclick: function onclick(e) {
+        e.preventDefault();
+        state.showNewAlbumModal(false);
+      }
+    }, "cancel"), (0, _mithril["default"])("button", {
+      onclick: function onclick(e) {
+        e.preventDefault();
+        createtNewAlbum(mdl);
+      }
+    }, "Create Album")))));
+  }
+};
+var Gallery = {
+  oninit: fetchAllAlbums,
+  view: function view(_ref5) {
+    var mdl = _ref5.attrs.mdl;
+    return mdl.state.isLoading() ? (0, _mithril["default"])("article.modal", "LOADING") : (0, _mithril["default"])(".container", mdl.state.isAuth() && (0, _mithril["default"])("nav.nav", (0, _mithril["default"])(".nav-left", (0, _mithril["default"])("button", {
+      onclick: function onclick(e) {
+        return state.showNewAlbumModal(true);
+      },
+      "class": "button primary"
+    }, "Add A New Album"), state.showNewAlbumModal() && (0, _mithril["default"])(NewAlbumModal, {
+      mdl: mdl
+    }))), (0, _mithril["default"])(".row", Object.keys(state.albums).map(function (album) {
+      return (0, _mithril["default"])(AlbumCover, {
+        mdl: mdl,
+        album: state.albums[album][0]
+      });
+    })));
+  }
+};
+var _default = Gallery;
+exports["default"] = _default;
+});
+
 ;require.register("Pages/about.js", function(exports, require, module) {
 "use strict";
 
@@ -2218,398 +2891,6 @@ var About = function About(mdl) {
 };
 
 var _default = About;
-exports["default"] = _default;
-});
-
-;require.register("Pages/blog-editor.js", function(exports, require, module) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _Utils = require("Utils");
-
-var _data = _interopRequireDefault(require("data.task"));
-
-var _mithril = _interopRequireDefault(require("mithril"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var state = {
-  title: "",
-  author: "",
-  text: "",
-  img: "",
-  thumb: "",
-  file: null,
-  showModal: Stream(false),
-  images: [],
-  modalState: Stream("upload"),
-  errors: {
-    img: null
-  }
-};
-
-var resetEditorState = function resetEditorState(state) {
-  state.images = [];
-  state.modalState("upload");
-};
-
-var resetModalState = function resetModalState(state) {
-  state.title = "";
-  state.author = "";
-  state.text = "";
-  state.img = "";
-  state.thumb = "";
-  state.file = null;
-  state.showModal(false);
-};
-
-var fetchBlogImages = function fetchBlogImages(_ref) {
-  var _ref$attrs = _ref.attrs,
-      mdl = _ref$attrs.mdl,
-      state = _ref$attrs.state;
-
-  var onError = function onError(e) {
-    return console.log(e);
-  };
-
-  var onSuccess = function onSuccess(_ref2) {
-    var results = _ref2.results;
-    return state.images = results;
-  };
-
-  mdl.http.back4App.getTask(mdl)("Classes/Gallery").fork(onError, onSuccess);
-};
-
-var setupEditor = function setupEditor(_ref3) {
-  var mdl = _ref3.attrs.mdl;
-
-  var onError = function onError(e) {
-    return console.log(e);
-  };
-
-  var onSuccess = function onSuccess(_ref4) {
-    var title = _ref4.title,
-        text = _ref4.text,
-        img = _ref4.img,
-        thumb = _ref4.thumb,
-        objectId = _ref4.objectId;
-    state.title = title;
-    state.text = text;
-    state.img = img;
-    state.thumb = thumb;
-    state.objectId = objectId;
-  };
-
-  var id = _mithril["default"].route.get().split(":")[1];
-
-  if ((0, _Utils.exists)(id)) {
-    mdl.http.back4App.getTask(mdl)("Classes/Blogs/".concat(id)).fork(onError, onSuccess);
-  }
-};
-
-var isInvalid = function isInvalid() {
-  return !(0, _Utils.exists)(state.title) || !(0, _Utils.exists)(state.text);
-};
-
-var onSubmitError = function onSubmitError(e) {
-  return state.errors.img = e;
-};
-
-var onImgSuccess = function onImgSuccess(_ref5) {
-  var image = _ref5.image,
-      thumb = _ref5.thumb;
-  state.img = image;
-  state.thumb = thumb;
-  state.showModal(false);
-};
-
-var saveImgToGalleryTask = function saveImgToGalleryTask(mdl) {
-  return function (_ref6) {
-    var _ref6$data = _ref6.data,
-        image = _ref6$data.image,
-        medium = _ref6$data.medium,
-        thumb = _ref6$data.thumb;
-    return mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
-      album: "blog",
-      image: image.url,
-      medium: medium.url,
-      thumb: thumb.url
-    }).chain(function (_) {
-      return _data["default"].of({
-        image: image.url,
-        medium: medium.url,
-        thumb: thumb.url
-      });
-    });
-  };
-};
-
-var uploadImage = function uploadImage(mdl) {
-  return function (file) {
-    var image = new FormData();
-    image.append("image", file);
-    mdl.http.imgBB.postTask(mdl)(image).chain(saveImgToGalleryTask(mdl)).fork(onSubmitError, onImgSuccess);
-  };
-};
-
-var toBlogs = function toBlogs() {
-  return _mithril["default"].route.set("/social/blog");
-};
-
-var onSubmitSuccess = function onSubmitSuccess() {
-  return toBlogs();
-};
-
-var submitBlog = function submitBlog(mdl) {
-  return function (_ref7) {
-    var title = _ref7.title,
-        img = _ref7.img,
-        text = _ref7.text,
-        thumb = _ref7.thumb;
-    var dto = {
-      title: title,
-      img: img,
-      text: text,
-      author: mdl.user.name,
-      thumb: thumb
-    };
-    var updateOrSubmitBlog = state.objectId ? mdl.http.back4App.putTask(mdl)("Classes/Blogs/".concat(state.objectId))(dto) : mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto);
-    updateOrSubmitBlog.fork(onSubmitError, onSubmitSuccess);
-  };
-};
-
-var deleteBlog = function deleteBlog(mdl) {
-  return mdl.http.back4App.deleteTask(mdl)("Classes/Blogs/".concat(state.objectId)).fork(toBlogs, toBlogs);
-};
-
-var Modal = function Modal() {
-  return {
-    onremove: function onremove() {
-      return resetModalState(state);
-    },
-    oninit: fetchBlogImages,
-    view: function view(_ref8) {
-      var _ref8$attrs = _ref8.attrs,
-          mdl = _ref8$attrs.mdl,
-          state = _ref8$attrs.state;
-      return (0, _mithril["default"])("section.modal-container", (0, _mithril["default"])("article.modal.container.grid", (0, _mithril["default"])("header", (0, _mithril["default"])(".tabs.row", (0, _mithril["default"])("a.pointer.".concat(state.modalState() == "upload" ? "active" : ""), {
-        onclick: function onclick(e) {
-          return state.modalState("upload");
-        }
-      }, "Upload"), (0, _mithril["default"])("a.pointer.".concat(state.modalState() == "select" ? "active" : ""), {
-        onclick: function onclick(e) {
-          return state.modalState("select");
-        }
-      }, "Select"))), (0, _mithril["default"])("form", state.modalState() == "upload" ? (0, _mithril["default"])("input", {
-        type: "file",
-        id: "file"
-      }) : state.images.map(function (_ref9) {
-        var thumb = _ref9.thumb;
-        return (0, _mithril["default"])("figure", (0, _mithril["default"])("img", {
-          src: thumb
-        }));
-      })), (0, _mithril["default"])("footer", (0, _mithril["default"])(".tabs", (0, _mithril["default"])("button", {
-        onclick: function onclick() {
-          return state.showModal(false);
-        }
-      }, "Cancel"), (0, _mithril["default"])("button", {
-        onclick: function onclick(e) {
-          return uploadImage(mdl)(state.file);
-        },
-        role: "button",
-        type: "submit",
-        disabled: !state.file
-      }, "Upload")))));
-    }
-  };
-};
-
-var BlogEditor = function BlogEditor(mdl) {
-  var onInput = (0, _Utils.handlers)(["oninput"], function (e) {
-    if (e.target.id == "file") {
-      state[e.target.id] = e.target.files[0];
-    } else {
-      state[e.target.id] = e.target.value;
-    }
-  });
-  return {
-    onremove: function onremove() {
-      return resetEditorState(state);
-    },
-    oninit: setupEditor,
-    view: function view(_ref10) {
-      var mdl = _ref10.attrs.mdl;
-      return (0, _mithril["default"])(".grid", (0, _mithril["default"])("form", _objectSpread({}, onInput), (0, _mithril["default"])("p", (0, _mithril["default"])("label", "Title"), (0, _mithril["default"])("input", {
-        id: "title",
-        value: state.title
-      })), (0, _mithril["default"])("button.secondary", {
-        onclick: function onclick() {
-          return state.showModal(!state.showModal());
-        }
-      }, state.thumb ? "Update Image" : "Add An Image"), state.thumb && (0, _mithril["default"])("aside", (0, _mithril["default"])("img", {
-        src: state.thumb
-      })), state.showModal() && (0, _mithril["default"])(Modal, {
-        state: state,
-        mdl: mdl
-      }), (0, _mithril["default"])("p", (0, _mithril["default"])("label", "Contents"), (0, _mithril["default"])("textarea", {
-        value: state.text,
-        id: "text",
-        style: {
-          height: "300px"
-        }
-      })), (0, _mithril["default"])("nav.grid", (0, _mithril["default"])("button", {
-        onclick: toBlogs
-      }, "Cancel"), (0, _mithril["default"])("button", {
-        disabled: isInvalid(),
-        onclick: function onclick(e) {
-          e.preventDefault();
-          submitBlog(mdl)(state);
-        }
-      }, state.objectId ? "Update" : "Submit"), (0, _mithril["default"])("button", {
-        onclick: function onclick(e) {
-          return deleteBlog(mdl);
-        }
-      }, "Delete"))));
-    }
-  };
-};
-
-var _default = BlogEditor;
-exports["default"] = _default;
-});
-
-;require.register("Pages/blog-post.js", function(exports, require, module) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var formatTextForView = function formatTextForView(text, state) {
-  return state.show() ? [text, m("a.pointer", {
-    onclick: function onclick() {
-      return state.show(!state.show());
-    }
-  }, "read less")] : [text.slice(0, 100), "....", m("a.pointer", {
-    onclick: function onclick() {
-      return state.show(!state.show());
-    }
-  }, "continue reading")];
-};
-
-var BlogPost = function BlogPost() {
-  var state = {
-    show: Stream(false)
-  };
-  return {
-    view: function view(_ref) {
-      var _ref$attrs = _ref.attrs,
-          mdl = _ref$attrs.mdl,
-          _ref$attrs$post = _ref$attrs.post,
-          title = _ref$attrs$post.title,
-          text = _ref$attrs$post.text,
-          thumb = _ref$attrs$post.thumb,
-          createdAt = _ref$attrs$post.createdAt,
-          updatedAt = _ref$attrs$post.updatedAt,
-          author = _ref$attrs$post.author,
-          objectId = _ref$attrs$post.objectId;
-      return m("article.card", m(".row", m("hgroup.col", m("h2.bold", title), m("h3", createdAt, updatedAt !== createdAt && ["updated on: ", updatedAt]), m("h4", "Written By ", author)), m("figure.col.is-horizontal-align", m("img.", {
-        src: thumb || "images/main.webp",
-        style: {
-          border: "1px solid black",
-          borderRadius: "2%",
-          width: "182px"
-        }
-      }))), m("hgroup.col", m("h4", formatTextForView(text, state))), author == mdl.user.name && m("footer", m("button", {
-        onclick: function onclick() {
-          mdl.state.editBlog(objectId);
-          m.route.set("/social/blog-editor:".concat(objectId));
-        }
-      }, "Edit")));
-    }
-  };
-};
-
-var _default = BlogPost;
-exports["default"] = _default;
-});
-
-;require.register("Pages/blog.js", function(exports, require, module) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _Utils = require("Utils");
-
-var _ramda = require("ramda");
-
-var _blogPost = _interopRequireDefault(require("./blog-post.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var state = {
-  errors: {},
-  blogs: []
-};
-
-var formatLensDate = function formatLensDate(prpty) {
-  return (0, _ramda.over)((0, _ramda.lensProp)(prpty), _Utils.formatDate);
-};
-
-var toViewModel = (0, _ramda.compose)(formatLensDate("updatedAt"), formatLensDate("createdAt"));
-
-var loadBlogs = function loadBlogs(_ref) {
-  var mdl = _ref.attrs.mdl;
-
-  var onError = function onError(error) {
-    return state.errors = error;
-  };
-
-  var onSuccess = function onSuccess(_ref2) {
-    var results = _ref2.results;
-    return state.blogs = results.map(toViewModel);
-  };
-
-  mdl.http.back4App.getTask(mdl)("Classes/Blogs").fork(onError, onSuccess);
-};
-
-var Blog = function Blog() {
-  return {
-    oninit: loadBlogs,
-    onremove: function onremove() {
-      state.errors = {};
-      state.data = [];
-    },
-    view: function view(_ref3) {
-      var mdl = _ref3.attrs.mdl;
-      return m(".container", state.blogs.any() ? state.blogs.map(function (post) {
-        return m(_blogPost["default"], {
-          mdl: mdl,
-          post: post
-        });
-      }) : m("article.card", mdl.state.isAuth() ? m(m.route.Link, {
-        href: "/social/blog-editor:",
-        "class": "button primary"
-      }, "Add The First Post !") : m("h1", "Log in to add the First Post!")));
-    }
-  };
-};
-
-var _default = Blog;
 exports["default"] = _default;
 });
 
@@ -2711,10 +2992,10 @@ var AuthenticatedRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : window.scroll({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -2734,10 +3015,10 @@ var AuthenticatedRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : window.scroll({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -2758,10 +3039,10 @@ var AuthenticatedRoutes = [{
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
     console.log("profile page login on match", mdl, args, path, fullroute, isAnchor, !mdl.state.isAuth());
-    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : window.scroll({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -2792,10 +3073,10 @@ var AuthenticatedRoutes = [{
     //   mdl.user.isAdmin
     // )
     !mdl.user.isAdmin && m.route.set(m.route.get());
-    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : window.scroll({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -2815,7 +3096,7 @@ var AuthenticatedRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    window.scroll({
+    (0, _Utils.PageTitle)().scroll({
       top: 0,
       left: 0,
       behavior: "smooth"
@@ -2898,10 +3179,10 @@ var LegalRoutes = [{
   children: ["deed-restrictions", "city-ordinances"],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : (0, _index2.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -2921,10 +3202,10 @@ var LegalRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : (0, _index2.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -2944,10 +3225,10 @@ var LegalRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : (0, _index2.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -2995,10 +3276,10 @@ var Routes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : (0, _index2.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3018,8 +3299,8 @@ var Routes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scroll({
+      top: 140,
       left: 0,
       behavior: "smooth"
     });
@@ -3041,10 +3322,10 @@ var Routes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : (0, _index2.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3075,7 +3356,7 @@ var _loginUser = _interopRequireDefault(require("Pages/Auth/login-user.js"));
 
 var _registerUser = _interopRequireDefault(require("Pages/Auth/register-user.js"));
 
-var _index2 = require("Utils/index.js");
+var _Utils = require("Utils");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -3089,10 +3370,10 @@ var MemberRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3112,10 +3393,10 @@ var MemberRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3135,10 +3416,10 @@ var MemberRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3158,10 +3439,10 @@ var MemberRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3181,10 +3462,10 @@ var MemberRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3211,11 +3492,7 @@ var _index = _interopRequireDefault(require("Layouts/index.js"));
 
 var _default2 = _interopRequireDefault(require("Pages/default.js"));
 
-var _loginUser = _interopRequireDefault(require("Pages/Auth/login-user.js"));
-
-var _registerUser = _interopRequireDefault(require("Pages/Auth/register-user.js"));
-
-var _index2 = require("Utils/index.js");
+var _Utils = require("Utils");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -3229,10 +3506,10 @@ var MemberRoutes = [{
   children: ["report", "district-J", "SeeClickFix", "Harrison-County-Public-Health", "Houston-311-Service-Request/Report"],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3252,10 +3529,10 @@ var MemberRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3322,11 +3599,17 @@ var _index = _interopRequireDefault(require("Layouts/index.js"));
 
 var _default2 = _interopRequireDefault(require("Pages/default.js"));
 
-var _blog = _interopRequireDefault(require("Pages/blog.js"));
+var _blog = _interopRequireDefault(require("Pages/Blog/blog.js"));
 
-var _index2 = require("Utils/index.js");
+var _blogEditor = _interopRequireDefault(require("Pages/Blog/blog-editor"));
 
-var _blogEditor = _interopRequireDefault(require("Pages/blog-editor"));
+var _blogPost = _interopRequireDefault(require("Pages/Blog/blog-post"));
+
+var _gallery = _interopRequireDefault(require("Pages/Gallery/gallery.js"));
+
+var _album = _interopRequireDefault(require("Pages/Gallery/album.js"));
+
+var _Utils = require("Utils");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -3337,13 +3620,13 @@ var SocialRoutes = [{
   route: "/social",
   isNav: true,
   group: ["navbar", "navmenu"],
-  children: ["map-of-bonham-acres", "blog", "explore", "photos", "calendar", "bfn-park"],
+  children: ["map-of-bonham-acres", "blog", "explore", "gallery", "calendar", "bfn-park"],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3363,10 +3646,10 @@ var SocialRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3377,25 +3660,48 @@ var SocialRoutes = [{
     }));
   }
 }, {
-  id: "photos",
+  id: "gallery",
   name: "Photo Gallery",
   // icon: Icons.home,
-  route: "/social/photos",
+  route: "/social/gallery",
   isNav: true,
   group: ["nav", "social"],
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
     return m(_index["default"], {
       mdl: mdl
-    }, m(_default2["default"], {
+    }, m(_gallery["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "album",
+  name: "Photo Gallery Album",
+  // icon: Icons.home,
+  route: "/social/gallery/album:album",
+  isNav: false,
+  group: ["nav", "social"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_album["default"], {
       mdl: mdl
     }));
   }
@@ -3409,10 +3715,10 @@ var SocialRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3432,16 +3738,39 @@ var SocialRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
     return m(_index["default"], {
       mdl: mdl
     }, m(_blogEditor["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
+  id: "blog-post",
+  name: "",
+  // icon: Icons.home,
+  route: "/social/blog-post:objectId",
+  isNav: false,
+  group: ["social"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_blogPost["default"], {
       mdl: mdl
     }));
   }
@@ -3455,10 +3784,10 @@ var SocialRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
+    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.PageTitle)().scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "start"
     });
   },
   component: function component(mdl) {
@@ -3681,7 +4010,7 @@ exports.RemoveChildrenOut = RemoveChildrenOut;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.exists = exports.handlers = exports.formatDate = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.listOf = exports.uuid = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.log = exports.makeRoute = void 0;
+exports.PageTitle = exports.oneExists = exports.exists = exports.handlers = exports.formatDate = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.listOf = exports.uuid = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.log = exports.makeRoute = void 0;
 
 var _ramda = require("ramda");
 
@@ -3938,6 +4267,18 @@ var exists = function exists(xs) {
 };
 
 exports.exists = exists;
+
+var oneExists = function oneExists(xs, ys) {
+  return exists(xs) || exists(ys);
+};
+
+exports.oneExists = oneExists;
+
+var PageTitle = function PageTitle() {
+  return document.getElementById("page-title");
+};
+
+exports.PageTitle = PageTitle;
 });
 
 ;require.register("Utils/http.js", function(exports, require, module) {
@@ -4194,6 +4535,146 @@ Object.keys(_storage).forEach(function (key) {
     }
   });
 });
+
+var _markdown = require("./markdown.js");
+
+Object.keys(_markdown).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _markdown[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _markdown[key];
+    }
+  });
+});
+});
+
+;require.register("Utils/markdown.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.parseMarkdown = void 0;
+
+/***   Regex Markdown Parser by chalarangelo   ***/
+// Replaces 'regex' with 'replacement' in 'str'
+// Curry function, usage: replaceRegex(regexVar, replacementVar) (strVar)
+var replaceRegex = function replaceRegex(regex, replacement) {
+  return function (str) {
+    return str.replace(regex, replacement);
+  };
+}; // Regular expressions for Markdown (a bit strict, but they work)
+
+
+var codeBlockRegex = /((\n\t)(.*))+/g;
+var inlineCodeRegex = /(`)(.*?)\1/g;
+var imageRegex = /!\[([^\[]+)\]\(([^\)]+)\)/g;
+var linkRegex = /\[([^\[]+)\]\(([^\)]+)\)/g;
+var headingRegex = /\n(#+\s*)(.*)/g;
+var boldItalicsRegex = /(\*{1,2})(.*?)\1/g;
+var strikethroughRegex = /(\~\~)(.*?)\1/g;
+var blockquoteRegex = /\n(&gt;|\>)(.*)/g;
+var horizontalRuleRegex = /\n((\-{3,})|(={3,}))/g;
+var unorderedListRegex = /(\n\s*(\-|\+)\s.*)+/g;
+var orderedListRegex = /(\n\s*([0-9]+\.)\s.*)+/g;
+var paragraphRegex = /\n+(?!<pre>)(?!<h)(?!<ul>)(?!<blockquote)(?!<hr)(?!\t)([^\n]+)\n/g; // Replacer functions for Markdown
+
+var codeBlockReplacer = function codeBlockReplacer(fullMatch) {
+  return "\n<pre>" + fullMatch + "</pre>";
+};
+
+var inlineCodeReplacer = function inlineCodeReplacer(fullMatch, tagStart, tagContents) {
+  return "<code>" + tagContents + "</code>";
+};
+
+var imageReplacer = function imageReplacer(fullMatch, tagTitle, tagURL) {
+  return '<img src="' + tagURL + '" alt="' + tagTitle + '" />';
+};
+
+var linkReplacer = function linkReplacer(fullMatch, tagTitle, tagURL) {
+  return '<a href="' + tagURL + '">' + tagTitle + "</a>";
+};
+
+var headingReplacer = function headingReplacer(fullMatch, tagStart, tagContents) {
+  return "\n<h" + tagStart.trim().length + ">" + tagContents + "</h" + tagStart.trim().length + ">";
+};
+
+var boldItalicsReplacer = function boldItalicsReplacer(fullMatch, tagStart, tagContents) {
+  return "<" + (tagStart.trim().length == 1 ? "em" : "strong") + ">" + tagContents + "</" + (tagStart.trim().length == 1 ? "em" : "strong") + ">";
+};
+
+var strikethroughReplacer = function strikethroughReplacer(fullMatch, tagStart, tagContents) {
+  return "<del>" + tagContents + "</del>";
+};
+
+var blockquoteReplacer = function blockquoteReplacer(fullMatch, tagStart, tagContents) {
+  return "\n<blockquote>" + tagContents + "</blockquote>";
+};
+
+var horizontalRuleReplacer = function horizontalRuleReplacer(fullMatch) {
+  return "\n<hr />";
+};
+
+var unorderedListReplacer = function unorderedListReplacer(fullMatch) {
+  var items = "";
+  fullMatch.trim().split("\n").forEach(function (item) {
+    items += "<li>" + item.substring(2) + "</li>";
+  });
+  return "\n<ul>" + items + "</ul>";
+};
+
+var orderedListReplacer = function orderedListReplacer(fullMatch) {
+  var items = "";
+  fullMatch.trim().split("\n").forEach(function (item) {
+    items += "<li>" + item.substring(item.indexOf(".") + 2) + "</li>";
+  });
+  return "\n<ol>" + items + "</ol>";
+};
+
+var paragraphReplacer = function paragraphReplacer(fullMatch, tagContents) {
+  return "<p>" + tagContents + "</p>";
+}; // Rules for Markdown parsing (use in order of appearance for best results)
+
+
+var replaceCodeBlocks = replaceRegex(codeBlockRegex, codeBlockReplacer);
+var replaceInlineCodes = replaceRegex(inlineCodeRegex, inlineCodeReplacer);
+var replaceImages = replaceRegex(imageRegex, imageReplacer);
+var replaceLinks = replaceRegex(linkRegex, linkReplacer);
+var replaceHeadings = replaceRegex(headingRegex, headingReplacer);
+var replaceBoldItalics = replaceRegex(boldItalicsRegex, boldItalicsReplacer);
+var replaceceStrikethrough = replaceRegex(strikethroughRegex, strikethroughReplacer);
+var replaceBlockquotes = replaceRegex(blockquoteRegex, blockquoteReplacer);
+var replaceHorizontalRules = replaceRegex(horizontalRuleRegex, horizontalRuleReplacer);
+var replaceUnorderedLists = replaceRegex(unorderedListRegex, unorderedListReplacer);
+var replaceOrderedLists = replaceRegex(orderedListRegex, orderedListReplacer);
+var replaceParagraphs = replaceRegex(paragraphRegex, paragraphReplacer); // Fix for tab-indexed code blocks
+
+var codeBlockFixRegex = /\n(<pre>)((\n|.)*)(<\/pre>)/g;
+
+var codeBlockFixer = function codeBlockFixer(fullMatch, tagStart, tagContents, lastMatch, tagEnd) {
+  var lines = "";
+  tagContents.split("\n").forEach(function (line) {
+    lines += line.substring(1) + "\n";
+  });
+  return tagStart + lines + tagEnd;
+};
+
+var fixCodeBlocks = replaceRegex(codeBlockFixRegex, codeBlockFixer); // Replacement rule order function for Markdown
+// Do not use as-is, prefer parseMarkdown as seen below
+
+var replaceMarkdown = function replaceMarkdown(str) {
+  return replaceParagraphs(replaceOrderedLists(replaceUnorderedLists(replaceHorizontalRules(replaceBlockquotes(replaceceStrikethrough(replaceBoldItalics(replaceHeadings(replaceLinks(replaceImages(replaceInlineCodes(replaceCodeBlocks(str))))))))))));
+}; // Parser for Markdown (fixes code, adds empty lines around for parsing)
+// Usage: parseMarkdown(strVar)
+
+
+var parseMarkdown = function parseMarkdown(str) {
+  return fixCodeBlocks(replaceMarkdown("\n" + str + "\n")).trim();
+};
+
+exports.parseMarkdown = parseMarkdown;
 });
 
 ;require.register("Utils/storage.js", function(exports, require, module) {
@@ -4417,7 +4898,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var Images = ["images/IMG_4029.webp", "images/IMG_3989.webp", "images/IMG_3990.webp", "images/IMG_3991.webp", "images/IMG_3992.webp", "images/IMG_3993.webp", "images/IMG_3994.webp", "images/IMG_3995.webp", "images/IMG_3996.webp", "images/IMG_3997.webp", "images/IMG_3998.webp", "images/IMG_3999.webp", "images/IMG_4001.webp", "images/IMG_4002.webp", "images/IMG_4003.webp", "images/IMG_4004.webp", "images/IMG_4005.webp", "images/IMG_4006.webp", "images/IMG_4007.webp", "images/IMG_4008.webp", "images/IMG_4009.webp", "images/IMG_4010.webp", "images/IMG_4011.webp", "images/IMG_4012.webp", "images/IMG_4013.webp", "images/IMG_4014.webp", "images/IMG_4015.webp", "images/IMG_4016.webp", "images/IMG_4017.webp", "images/IMG_4018.webp", "images/IMG_4019.webp", "images/IMG_4020.webp", "images/IMG_4021.webp", "images/IMG_4022.webp", "images/IMG_4023.webp", "images/IMG_4024.webp", "images/IMG_4025.webp", "images/IMG_4026.webp", "images/IMG_4027.webp", "images/IMG_4028.webp"];
+var Images = ["images/IMG_4029.webp", "images/IMG_3989.webp", "images/IMG_3990.webp", "images/IMG_3991.webp", "images/IMG_3992.webp", "images/IMG_3993.webp", "images/IMG_3995.webp", "images/IMG_3996.webp", "images/IMG_3997.webp", "images/IMG_3998.webp", "images/IMG_3999.webp", "images/IMG_4001.webp", "images/IMG_4002.webp", "images/IMG_4003.webp", "images/IMG_4004.webp", "images/IMG_4005.webp", "images/IMG_4006.webp", "images/IMG_4007.webp", "images/IMG_4008.webp", "images/IMG_4009.webp", "images/IMG_4010.webp", "images/IMG_4011.webp", "images/IMG_4012.webp", "images/IMG_4013.webp", "images/IMG_4014.webp", "images/IMG_4015.webp", "images/IMG_4016.webp", "images/IMG_4017.webp", "images/IMG_4018.webp", "images/IMG_4019.webp", "images/IMG_4020.webp", "images/IMG_4021.webp", "images/IMG_4022.webp", "images/IMG_4023.webp", "images/IMG_4024.webp", "images/IMG_4025.webp", "images/IMG_4026.webp", "images/IMG_4027.webp", "images/IMG_4028.webp"];
 var _default = Images;
 exports["default"] = _default;
 });
@@ -4463,7 +4944,7 @@ if ('development' !== "production") {
 
 var getProfile = function getProfile(w) {
   if (w < 624) return "phone";
-  if (w < 944) return "tablet";
+  if (w < 1000) return "tablet";
   return "desktop";
 };
 
@@ -4500,7 +4981,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 });
 
-;require.alias("process/browser.js", "process");process = require('process');require.register("___globals___", function(exports, require, module) {
+;require.alias("buffer/index.js", "buffer");
+require.alias("path-browserify/index.js", "path");
+require.alias("process/browser.js", "process");process = require('process');require.register("___globals___", function(exports, require, module) {
   
 
 // Auto-loaded modules from config.npm.globals.

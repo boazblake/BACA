@@ -14,31 +14,13 @@ const Toolbar = () => {
           },
         },
         m(
-          ".nav-left",
-          m(
-            m.route.Link,
-            {
-              onclick: () => m.route.set("/about"),
-            },
-            m("img#nav-logo", {
-              src: "images/logo.webp",
-            })
-          )
+          "figure.nav-left",
+          m(m.route.Link, {
+            selector: "img",
+            href: "/about",
+            src: "images/logo.webp",
+          })
         ),
-        mdl.state.isAuth() &&
-          mdl.settings.screenSize !== "phone" &&
-          m(
-            ".nav-center",
-
-            m(
-              m.route.Link,
-              {
-                href: "/social/blog-editor:",
-                class: "button primary",
-              },
-              "Add A Blog Post"
-            )
-          ),
 
         mdl.settings.screenSize == "desktop"
           ? m(".nav-right", m(AuthBox, { mdl }))

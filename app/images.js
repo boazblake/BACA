@@ -5,7 +5,6 @@ const Images = [
   "images/IMG_3991.webp",
   "images/IMG_3992.webp",
   "images/IMG_3993.webp",
-  "images/IMG_3994.webp",
   "images/IMG_3995.webp",
   "images/IMG_3996.webp",
   "images/IMG_3997.webp",

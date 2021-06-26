@@ -82,7 +82,7 @@ const NavModal = ({ attrs: { mdl } }) => {
           },
         },
         m(
-          `article#modal`,
+          `article.modal.card`,
           {
             oncreate: ({ dom }) => (_domModal = dom),
             id: "nav-modal",

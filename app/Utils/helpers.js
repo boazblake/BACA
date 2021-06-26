@@ -151,3 +151,6 @@ export const handlers = (types, fn) =>
   types.reduce((acc, type) => Object.assign(acc, { [type]: fn }), {})
 
 export const exists = (xs) => xs.length > 1
+export const oneExists = (xs, ys) => exists(xs) || exists(ys)
+
+export const PageTitle = () => document.getElementById("page-title")

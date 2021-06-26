@@ -2,12 +2,11 @@ import Layout from "Layouts/index.js"
 import Default from "Pages/default.js"
 import Home from "Pages/home.js"
 import About from "Pages/about.js"
+import { scrollToAnchor, PageTitle } from "Utils/index.js"
 
 const Logo = m("img", {
   src: "images/logo.webp",
 })
-
-import { scrollToAnchor } from "Utils/index.js"
 
 const Routes = [
   {
@@ -22,10 +21,10 @@ const Routes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Home, { mdl })),
@@ -42,8 +41,8 @@ const Routes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
+        : window.scroll({
+            top: 140,
             left: 0,
             behavior: "smooth",
           })
@@ -62,10 +61,10 @@ const Routes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scrollTo({
-            top: 0,
-            left: 0,
+        : PageTitle().scrollIntoView({
             behavior: "smooth",
+            block: "center",
+            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
