@@ -5,6 +5,7 @@ const Events = {
     calendar = new FullCalendar.Calendar(dom, {
       initialView: "dayGridMonth",
       initialDate: new Date(),
+      selectable: true,
       headerToolbar: {
         left: "prev,next today",
         center: "title",

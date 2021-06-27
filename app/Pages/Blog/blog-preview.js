@@ -20,8 +20,8 @@ const BlogPreview = {
           m("h4", "Added By ", author)
         ),
         m(
-          "figure.col.is-horizontal-align",
-          m("img.", {
+          "figure.col-4.is-horizontal-align",
+          m("img", {
             src: thumb || "images/main.webp",
             style: {
               border: "1px solid black",

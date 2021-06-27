@@ -140,42 +140,47 @@ const Modal = () => {
         m(
           "article.modal.card.grid",
           m(
-            "header",
+            "header.modal-header",
             m(
-              ".tabs.row",
+              "nav",
               m(
-                `a.pointer.${state.modalState() == "upload" ? "active" : ""}`,
-                { onclick: (e) => state.modalState("upload") },
-                "Upload New Image"
-              ),
-              m(
-                `a.pointer.${state.modalState() == "select" ? "active" : ""}`,
-                { onclick: (e) => state.modalState("select") },
-                "Select From Database"
+                ".tabs",
+                m(
+                  `a.pointer.${state.modalState() == "upload" ? "active" : ""}`,
+                  { onclick: (e) => state.modalState("upload") },
+                  "Upload New Image"
+                ),
+                m(
+                  `a.pointer.${state.modalState() == "select" ? "active" : ""}`,
+                  { onclick: (e) => state.modalState("select") },
+                  "Select From Database"
+                )
               )
             )
           ),
           m(
-            "form",
-            state.modalState() == "upload"
-              ? m("input", { type: "file", id: "file" })
-              : state.images.map(({ image, thumb }) =>
-                  m(
-                    `figure.button.${
-                      thumb == state.thumb ? "primary" : "outline"
-                    }`,
-                    {
-                      onclick: (e) => assignImg(image, thumb),
-                    },
-                    m("img", { src: thumb })
-                  )
-                )
-          ),
-
-          m(
-            "footer",
+            "section.modal-content",
             m(
-              ".tabs",
+              "form",
+              state.modalState() == "upload"
+                ? m("input", { type: "file", id: "file" })
+                : state.images.map(({ image, thumb }) =>
+                    m(
+                      `figure.button.${
+                        thumb == state.thumb ? "primary" : "outline"
+                      }`,
+                      {
+                        onclick: (e) => assignImg(image, thumb),
+                      },
+                      m("img", { src: thumb })
+                    )
+                  )
+            )
+          ),
+          m(
+            "section.modal-footer",
+            m(
+              ".tabs grouped",
               m("button", { onclick: () => state.showModal(false) }, "Cancel"),
               m(
                 "button",

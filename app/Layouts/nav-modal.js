@@ -1,8 +1,7 @@
-import { AngleLine, PopOutLine } from "@mithril-icons/clarity"
+import { PopOutLine } from "@mithril-icons/clarity"
 import NavLink from "Components/nav-link"
 import AuthBox from "Components/authbox"
 import { isActiveRoute } from "Utils/index.js"
-import { replaceCSS } from "Styles/animations.js"
 
 let navItemstate = {
   onHover: () => {},
@@ -82,14 +81,14 @@ const NavModal = ({ attrs: { mdl } }) => {
           },
         },
         m(
-          `article.modal.card`,
+          "article.modal.card",
           {
             oncreate: ({ dom }) => (_domModal = dom),
             id: "nav-modal",
           },
-          m(AuthBox, { mdl }),
+          m("header.header", m(AuthBox, { mdl })),
           m(
-            "nav",
+            "nav.modal-content",
             routes(mdl).map((r) =>
               r.children.any()
                 ? m(NavSection, {
