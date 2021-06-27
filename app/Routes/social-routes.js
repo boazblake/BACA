@@ -5,6 +5,7 @@ import BlogEditor from "Pages/Blog/blog-editor"
 import BlogPost from "Pages/Blog/blog-post"
 import Gallery from "Pages/Gallery/gallery.js"
 import Album from "Pages/Gallery/album.js"
+import Events from "Pages/events.js"
 import { scrollToAnchor, PageTitle } from "Utils"
 
 const SocialRoutes = [
@@ -53,7 +54,7 @@ const SocialRoutes = [
             inline: "start",
           })
     },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
+    component: (mdl) => m(Layout, { mdl }, m(Events, { mdl })),
   },
   {
     id: "gallery",
