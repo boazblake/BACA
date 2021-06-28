@@ -70,17 +70,14 @@ const onImgSuccess = ({ image, thumb }) => {
 
 const saveImgToGalleryTask =
   (mdl) =>
-  ({ data: { image, medium, thumb } }) =>
+  ({ data: { image, thumb } }) =>
     mdl.http.back4App
       .postTask(mdl)("Classes/Gallery")({
         album: "blog",
         image: image.url,
-        medium: medium.url,
         thumb: thumb.url,
       })
-      .chain((_) =>
-        Task.of({ image: image.url, medium: medium.url, thumb: thumb.url })
-      )
+      .chain((_) => Task.of({ image: image.url, thumb: thumb.url }))
 
 const uploadImage = (mdl) => (file) => {
   const image = new FormData()

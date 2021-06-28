@@ -40,14 +40,14 @@ const AuthBox = () => {
               role: "button",
               href: "/login",
               link: "Login",
-              classList: `${isActiveRoute("/login")} outline`,
+              classList: `${isActiveRoute("/login")} button primary`,
             }),
             m(NavLink, {
               mdl,
               role: "button",
               href: "/register",
               link: "Register",
-              classList: `${isActiveRoute("/register")} outline secondary`,
+              classList: `${isActiveRoute("/register")} button secondary`,
             })
           ),
   }

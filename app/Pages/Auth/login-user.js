@@ -2,17 +2,20 @@ import NavLink from "Components/nav-link"
 import { jsonCopy } from "Utils"
 import { validateLoginTask } from "./Validations.js"
 import { loginTask } from "./fns.js"
+import { GroupSolidBadged } from "@mithril-icons/clarity"
 // import LogoLoader from "Components/LogoLoader"
 
 const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
     if (errs) {
       state.errors = errs
-      state.errorMsg(errs.message)
-      state.showErrorMsg(true)
-      console.log("failed - state", state)
+      state.errorMsg(errs.error)
+      state.showErrorMsg(errs.error)
+      console.log("failed - state", JSON.stringify(state))
     } else {
-      state.errorMsg("Issue with logging in. Have you registered?")
+      state.errorMsg(
+        "There seems to be an ssue with logging in. Have you registered?"
+      )
       state.showErrorMsg(true)
       console.log("failed - other?", state)
     }
@@ -66,67 +69,68 @@ export const Login = () => {
       mdl.state.isLoading()
         ? "" //m(LogoLoader, { mdl })
         : m(
-            ".",
-            [
-              state.showErrorMsg() && m("code.warning", state.errorMsg()),
-              m(
-                "form",
-                {
-                  role: "form",
-                  id: "login-form",
-                  onsubmit: (e) => e.preventDefault(),
-                },
+            "section.container",
 
-                m(
-                  "",
-                  m("input", {
-                    class: state.isSubmitted
-                      ? state.errors.email
-                        ? "has-error"
-                        : "has-success"
-                      : "",
-                    id: "reg-email",
-                    type: "email",
-                    placeholder: "Email",
-                    onkeyup: (e) => {
-                      // state.isSubmitted && validateForm(mdl)(state.data)
-                      state.data.userModel.email = e.target.value
-                    },
-                    value: state.data.userModel.email,
-                  }),
-                  state.errors.email && m("p", state.errors.email)
-                ),
-                m(
-                  "",
-                  m("input", {
-                    class: state.isSubmitted
-                      ? state.errors.password
-                        ? "has-error"
-                        : "has-success"
-                      : "",
-                    id: "reg-pass",
-                    type: "password",
-                    placeholder: "Password",
-                    onkeyup: (e) => {
-                      // state.isSubmitted && validateForm(mdl)(state.data)
-                      state.data.userModel.password = e.target.value
-                    },
-                    value: state.data.userModel.password,
-                  }),
-                  state.errors.password && m("p", state.errors.password)
-                )
-              ),
-              state.httpError && m(".toast toast-error", state.httpError),
-            ],
+            state.showErrorMsg() && m("code.warning", state.errorMsg()),
+
             m(
-              "button",
+              "form",
               {
-                role: "button",
-                form: `login-form`,
-                onclick: () => validateForm(mdl)(state.data),
-                class: mdl.state.isLoading() && "loading",
+                role: "form",
+                id: "login-form",
+                onsubmit: (e) => e.preventDefault(),
               },
-              "Login"
+              m(
+                "formgroup",
+                {
+                  class: mdl.settings.screenSize == "desktop" && "grouped",
+                },
+                m("input", {
+                  class: state.isSubmitted
+                    ? state.errors.email
+                      ? "error"
+                      : "success"
+                    : "",
+                  id: "reg-email",
+                  type: "email",
+                  placeholder: "Email",
+                  onkeyup: (e) => {
+                    // state.isSubmitted && validateForm(mdl)(state.data)
+                    state.data.userModel.email = e.target.value
+                  },
+                  value: state.data.userModel.email,
+                }),
+                state.errors.email && m("code.warning", state.errors.email),
+                m("input", {
+                  class: state.isSubmitted
+                    ? state.errors.password
+                      ? "error"
+                      : "success"
+                    : "",
+                  id: "reg-pass",
+                  type: "password",
+                  placeholder: "Password",
+                  onkeyup: (e) => {
+                    // state.isSubmitted && validateForm(mdl)(state.data)
+                    state.data.userModel.password = e.target.value
+                  },
+                  value: state.data.userModel.password,
+                }),
+                state.errors.password &&
+                  m("code.warning", state.errors.password)
+              ),
+              m(
+                "button.button.primary.is-center",
+                {
+                  role: "button",
+                  form: `login-form`,
+                  onclick: () => validateForm(mdl)(state.data),
+                  class: mdl.state.isLoading() && "loading",
+                },
+                "LOGIN"
+              ),
+
+              state.httpError && m(".toast toast-error", state.httpError)
             ),
             m(
               ".auth-link",

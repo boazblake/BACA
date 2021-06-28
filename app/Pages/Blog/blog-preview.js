@@ -10,7 +10,7 @@ const BlogPreview = {
       m(
         ".row",
         m(
-          "hgroup.col",
+          "hgroup.col-8",
           m("h2.bold", title),
           m(
             "h3",
@@ -20,7 +20,7 @@ const BlogPreview = {
           m("h4", "Added By ", author)
         ),
         m(
-          "figure.col-4.is-horizontal-align",
+          "figure.col.is-horizontal-align",
           m("img", {
             src: thumb || "images/main.webp",
             style: {

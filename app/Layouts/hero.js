@@ -34,7 +34,7 @@ const Hero = () => {
           m(
             "hgroup",
             m("h1", "Bonham Acres"),
-            m("h2", "Houstons best kept secret")
+            m("h2", "We are Houstons best kept secret")
           )
         )
       ),

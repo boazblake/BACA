@@ -25,7 +25,7 @@ const state = {
 }
 
 const resetState = () => {
-  state.data = jsonCopy(dataModel)
+  state.data.userModel = jsonCopy(dataModel)
   state.errors = {}
   state.httpError = undefined
   state.isSubmitted = false
@@ -37,11 +37,13 @@ export const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
     if (errs) {
       state.errors = errs
-      state.errorMsg(errs.message)
-      state.showErrorMsg(true)
-      console.log("failed - state", state)
+      state.errorMsg(errs.error)
+      state.showErrorMsg(errs.error)
+      console.log("failed - state", JSON.stringify(state))
     } else {
-      state.errorMsg("There seems to be a problem please contact web support")
+      state.errorMsg(
+        "There seems to be an ssue with logging in. Have you registered?"
+      )
       state.showErrorMsg(true)
       console.log("failed - state", state)
     }
@@ -53,98 +55,20 @@ export const validateForm = (mdl) => (data) => {
     sessionStorage.setItem("baca-user", JSON.stringify(mdl.user))
     m.route.set("/")
   }
-
+  // return console.log(data)
   state.isSubmitted = true
-  validateUserRegistrationTask(data.userModel)
+  validateUserRegistrationTask(data)
     .chain(registerUserTask(mdl))
     .chain(createAccountTask)
     .fork(onError, onSuccess)
 }
 
-const RegisterUser = () => {
-  return {
-    view: ({ attrs: { mdl, data, errors, isSubmitted } }) =>
-      mdl.state.isLoading()
-        ? "" // m(LogoLoader, { mdl })
-        : [
-            m("input", {
-              class: isSubmitted
-                ? errors.name
-                  ? "has-error"
-                  : "has-success"
-                : "",
-              id: "reg-name",
-              type: "text",
-              placeholder: "Full Name",
-              onkeyup: (e) => (data.name = e.target.value),
-              value: data.name,
-            }),
-            errors.name && m("p", errors.name),
-
-            m("input", {
-              class: isSubmitted
-                ? errors.email
-                  ? "has-error"
-                  : "has-success"
-                : "",
-              id: "reg-email",
-              type: "email",
-              placeholder: "Email",
-              onkeyup: (e) => (data.email = e.target.value),
-              value: data.email,
-            }),
-            errors.email && m("p", errors.email),
-
-            m("input", {
-              id: "confirmEmail",
-              class: isSubmitted
-                ? errors.confirmEmail
-                  ? "has-error"
-                  : "has-success"
-                : "",
-              type: "email",
-              placeholder: "Confirm Email",
-              onkeyup: (e) => (data.confirmEmail = e.target.value),
-              value: data.confirmEmail,
-            }),
-            errors.confirmEmail && m("p", errors.confirmEmail),
-
-            m("input", {
-              class: isSubmitted
-                ? errors.password
-                  ? "has-error"
-                  : "has-success"
-                : "",
-              id: "reg-pass",
-              type: "password",
-              placeholder: "Password",
-              onkeyup: (e) => (data.password = e.target.value),
-              value: data.password,
-            }),
-            errors.password && m("p", errors.password),
-
-            m("input", {
-              class: isSubmitted
-                ? errors.confirmPassword
-                  ? "has-error"
-                  : "has-success"
-                : "",
-              id: "pass-confirm",
-              type: "password",
-              placeholder: "Confirm Password",
-              onkeyup: (e) => (data.confirmPassword = e.target.value),
-              value: data.confirmPassword,
-            }),
-            errors.confirmPassword && m("p", errors.confirmPassword),
-          ],
-  }
-}
-
 export const Register = () => {
   return {
     onremove: () => resetState(),
-    view: ({ attrs: { mdl } }) => [
-      m("", [
+    view: ({ attrs: { mdl } }) =>
+      m(
+        "section.container",
         state.showErrorMsg() && m("code.warning", state.errorMsg()),
         m(
           "form",
@@ -153,41 +77,112 @@ export const Register = () => {
             id: "register-form",
             onsubmit: (e) => e.preventDefault(),
           },
-          [
-            m(RegisterUser, {
-              mdl,
-              data: state.data.userModel,
-              errors: state.errors,
-              isSubmitted: state.isSubmitted,
-            }),
-            m(
-              "button",
-              {
-                form: `register-form`,
-                onclick: () => validateForm(mdl)(state.data),
-                class: mdl.state.isLoading() && "loading",
-              },
-              "Register"
-            ),
-            m(".auth-link", [
-              "Need to ",
-              m(
-                "u",
-                m(NavLink, {
-                  mdl,
-                  href: "/login",
-                  link: "Login",
-                  classList: "",
-                })
-              ),
-              " ?",
-            ]),
-          ]
-        ),
-      ]),
 
-      state.httpError && m(".toast toast-error", state.httpError),
-    ],
+          m("input", {
+            class: state.isSubmitted
+              ? state.errors.name
+                ? "error"
+                : "success"
+              : "",
+            id: "reg-name",
+            type: "text",
+            placeholder: "Full Name",
+            onkeyup: (e) => (state.data.userModel.name = e.target.value),
+            value: state.data.userModel.name,
+          }),
+          state.errors.name && m("code.error", state.errors.name),
+
+          m(
+            "form-group",
+            { class: mdl.settings.screenSize == "desktop" && "grouped" },
+            m("input", {
+              class: state.isSubmitted
+                ? state.errors.email
+                  ? "error"
+                  : "success"
+                : "",
+              id: "reg-email",
+              type: "email",
+              placeholder: "Email",
+              onkeyup: (e) => (state.data.userModel.email = e.target.value),
+              value: state.data.userModel.email,
+            }),
+            state.errors.email && m("code.error", state.errors.email),
+
+            m("input", {
+              id: "confirmEmail",
+              class: state.isSubmitted
+                ? state.errors.confirmEmail
+                  ? "error"
+                  : "success"
+                : "",
+              type: "email",
+              placeholder: "Confirm Email",
+              onkeyup: (e) =>
+                (state.data.userModel.confirmEmail = e.target.value),
+              value: state.data.userModel.confirmEmail,
+            })
+          ),
+          state.errors.confirmEmail &&
+            m("code.error", state.errors.confirmEmail),
+
+          m(
+            "form-group",
+            { class: mdl.settings.screenSize == "desktop" && "grouped" },
+            m("input", {
+              class: state.isSubmitted
+                ? state.errors.password
+                  ? "error"
+                  : "success"
+                : "",
+              id: "reg-pass",
+              type: "password",
+              placeholder: "Password",
+              onkeyup: (e) => (state.data.userModel.password = e.target.value),
+              value: state.data.userModel.password,
+            }),
+            state.errors.password && m("code.error", state.errors.password),
+
+            m("input", {
+              class: state.isSubmitted
+                ? state.errors.confirmPassword
+                  ? "error"
+                  : "success"
+                : "",
+              id: "pass-confirm",
+              type: "password",
+              placeholder: "Confirm Password",
+              onkeyup: (e) =>
+                (state.data.userModel.confirmPassword = e.target.value),
+              value: state.data.userModel.confirmPassword,
+            })
+          ),
+          state.errors.confirmPassword &&
+            m("code.error", state.errors.confirmPassword),
+
+          m(
+            "button.button.primary",
+            {
+              form: `register-form`,
+              onclick: () => validateForm(mdl)(state.data.userModel),
+              class: mdl.state.isLoading() && "loading",
+            },
+            "Register"
+          )
+        ),
+        m(
+          ".auth-link",
+          "Need to ",
+          m(NavLink, {
+            mdl,
+            href: "/login",
+            link: "Login",
+            classList: "",
+          }),
+          " ?"
+        ),
+        state.httpError && m(".toast toast-error", state.httpError)
+      ),
   }
 }
 

@@ -15,9 +15,13 @@ const Navbar = () => {
         routes(mdl).map((r) =>
           m(NavLink, {
             mdl,
+            role: "button",
             href: r.route,
             link: r.name,
-            classList: `clear ${isActiveRoute(mdl.state.navState(), r.route)}`,
+            classList: `primary clear ${isActiveRoute(
+              mdl.state.navState(),
+              r.route
+            )}`,
           })
         )
       ),
