@@ -3,7 +3,7 @@ import { compose, groupBy, prop } from "ramda"
 
 const state = {
   albums: [],
-  showNewAlbumModal: Stream(false),
+  showModal: Stream(false),
   newAlbum: { title: "", img: "" },
 }
 
@@ -33,7 +33,7 @@ const createtNewAlbum = (mdl) => {
   const onError = (e) => console.log(e)
   const onSuccess = () => {
     state.newAlbum = { title: "", img: "" }
-    state.showNewAlbumModal(false)
+    state.showModal(false)
     fetchAllAlbums({ attrs: { mdl } })
   }
 
@@ -67,6 +67,11 @@ const NewAlbumModal = {
   view: ({ attrs: { mdl } }) =>
     m(
       ".modal-container",
+      {
+        id: "modal-container",
+        onclick: (e) =>
+          e.target.id == "modal-container" && state.showModal(false),
+      },
       m(
         "form.modal.card",
         m(
@@ -75,7 +80,9 @@ const NewAlbumModal = {
             "label",
             "Album Title",
             m("input", {
-              oninput: (e) => (state.newAlbum.title = e.target.value),
+              oninput: (e) => {
+                state.newAlbum.title = e.target.value
+              },
             })
           ),
           m(
@@ -83,7 +90,9 @@ const NewAlbumModal = {
             "Add A Photo",
             m("input", {
               type: "file",
-              oninput: (e) => (state.newAlbum.img = e.target.files[0]),
+              oninput: (e) => {
+                state.newAlbum.img = e.target.files[0]
+              },
             })
           )
         ),
@@ -104,7 +113,7 @@ const NewAlbumModal = {
             {
               onclick: (e) => {
                 e.preventDefault()
-                state.showNewAlbumModal(false)
+                state.showModal(false)
               },
             },
             "cancel"
@@ -129,12 +138,12 @@ const Gallery = {
                 m(
                   "button.button.primary",
                   {
-                    onclick: (e) => state.showNewAlbumModal(true),
+                    onclick: (e) => state.showModal(true),
                     class: mdl.settings.screenSize == "phone" ? "col-12" : "",
                   },
                   "Add A New Album"
                 ),
-                state.showNewAlbumModal() && m(NewAlbumModal, { mdl })
+                state.showModal() && m(NewAlbumModal, { mdl })
               )
             ),
           m(

@@ -17,7 +17,7 @@ const BlogPreview = {
             createdAt,
             updatedAt !== createdAt && ["updated on: ", updatedAt]
           ),
-          m("h4", "Added By ", author)
+          m("p", "Added By ", author)
         ),
         m(
           "figure.col.is-horizontal-align",
@@ -34,7 +34,7 @@ const BlogPreview = {
       m(
         "hgroup.col",
         m(
-          "h4",
+          "p",
           text.slice(0, 100),
           "....",
           m(

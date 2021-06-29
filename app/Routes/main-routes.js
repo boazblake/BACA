@@ -2,6 +2,7 @@ import Layout from "Layouts/index.js"
 import Default from "Pages/default.js"
 import Home from "Pages/home.js"
 import About from "Pages/about.js"
+import JoinBACA from "Pages/join-baca.js"
 import { scrollToAnchor, PageTitle } from "Utils/index.js"
 
 const Logo = m("img", {
@@ -11,7 +12,7 @@ const Logo = m("img", {
 const Routes = [
   {
     id: "home",
-    name: "Home",
+    name: "",
     // icon: Icons.home,
     route: "/",
     isNav: true,
@@ -51,7 +52,7 @@ const Routes = [
   },
   {
     id: "contact",
-    name: "Contact BCA",
+    name: "Contact BACA",
     // icon: Icons.search,
     route: "/contact",
     isNav: false,
@@ -68,6 +69,26 @@ const Routes = [
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
+  },
+  {
+    id: "join-BACA",
+    name: "Join Bonham Acres Civic Association",
+    // icon: Icons.search,
+    route: "/join-BACA",
+    isNav: false,
+    group: ["navmenu"],
+    children: [],
+    options: [],
+    onmatch: (mdl, args, path, fullroute, isAnchor) => {
+      isAnchor
+        ? scrollToAnchor(mdl.state.anchor)
+        : PageTitle().scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "start",
+          })
+    },
+    component: (mdl) => m(Layout, { mdl }, m(JoinBACA, { mdl })),
   },
 ]
 

@@ -1,5 +1,7 @@
 import Layout from "Layouts/index.js"
 import Default from "Pages/default.js"
+import CityOrd from "Pages/city-ordinances.js"
+
 import { scrollToAnchor, PageTitle } from "Utils/index.js"
 
 const LegalRoutes = [
@@ -61,7 +63,7 @@ const LegalRoutes = [
             inline: "start",
           })
     },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
+    component: (mdl) => m(Layout, { mdl }, m(CityOrd, { mdl })),
   },
 ]
 

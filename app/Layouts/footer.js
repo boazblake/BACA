@@ -3,7 +3,8 @@ import { isActiveRoute } from "Utils/index.js"
 
 const Footer = () => {
   return {
-    view: ({ attrs: { mdl } }) => m("footer.container-fluid", "footer"),
+    view: ({ attrs: { mdl } }) =>
+      m("footer.footer", m("h1.is-center", "Bonham Acres Civic Association")),
   }
 }
 

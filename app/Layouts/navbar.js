@@ -1,31 +1,35 @@
 import NavLink from "Components/nav-link.js"
-
 const isActiveRoute = (a, b) => (a == b ? "active" : "")
 
-const Navbar = () => {
-  const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
-  const subroutes = (mdl) =>
-    mdl.Routes.filter((r) =>
-      r.group.includes(mdl.state.navState().split("/")[1])
-    )
-  return {
-    view: ({ attrs: { mdl } }) =>
-      m(
-        "nav.nav#navbar.is-full-width",
-        routes(mdl).map((r) =>
-          m(NavLink, {
-            mdl,
-            role: "button",
-            href: r.route,
-            link: r.name,
-            classList: `primary clear ${isActiveRoute(
-              mdl.state.navState(),
-              r.route
-            )}`,
-          })
-        )
-      ),
-  }
+const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
+
+const Navbar = {
+  view: ({ attrs: { mdl } }) =>
+    m(
+      "nav.nav#navbar.is-full-width",
+      routes(mdl).map((r) =>
+        m(NavLink, {
+          onmouseover: (e) => {
+            mdl.state.navState(r.route)
+          },
+          onclick: (e) => {
+            if (r.children.any()) {
+              mdl.state.navState(r.route)
+              e.stopPropagation()
+              e.preventDefault()
+            }
+          },
+          mdl,
+          role: "button",
+          href: r.route,
+          link: r.name,
+          classList: `primary clear ${isActiveRoute(
+            mdl.state.navState(),
+            r.route
+          )}`,
+        })
+      )
+    ),
 }
 
 export default Navbar

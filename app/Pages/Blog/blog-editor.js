@@ -1,11 +1,6 @@
 import { handlers, exists, parseMarkdown } from "Utils"
 import Task from "data.task"
-import {
-  HelpInfoLine,
-  NoteEditLine,
-  SearchLine,
-  UnknownStatusLine,
-} from "@mithril-icons/clarity"
+import { HelpInfoLine, NoteEditLine, SearchLine } from "@mithril-icons/clarity"
 
 const state = {
   editor: "",
@@ -143,6 +138,9 @@ const Modal = () => {
     view: ({ attrs: { mdl, state } }) =>
       m(
         "section.modal-container",
+        {
+          onclick: (e) => state.showModal(false),
+        },
         m(
           "article.modal.card.grid",
           m(
@@ -153,12 +151,22 @@ const Modal = () => {
                 ".tabs",
                 m(
                   `a.pointer.${state.modalState() == "upload" ? "active" : ""}`,
-                  { onclick: (e) => state.modalState("upload") },
+                  {
+                    onclick: (e) => {
+                      e.stopPropagation()
+                      state.modalState("upload")
+                    },
+                  },
                   "Upload New Image"
                 ),
                 m(
                   `a.pointer.${state.modalState() == "select" ? "active" : ""}`,
-                  { onclick: (e) => state.modalState("select") },
+                  {
+                    onclick: (e) => {
+                      e.stopPropagation()
+                      state.modalState("select")
+                    },
+                  },
                   "Select From Database"
                 )
               )
@@ -167,16 +175,20 @@ const Modal = () => {
           m(
             "section.modal-content",
             m(
-              "form",
+              "form.grid",
               state.modalState() == "upload"
                 ? m("input", { type: "file", id: "file" })
                 : state.images.map(({ image, thumb }) =>
                     m(
-                      `figure.button.${
+                      `figure.col-6.button.${
                         thumb == state.thumb ? "primary" : "outline"
                       }`,
                       {
-                        onclick: (e) => assignImg(image, thumb),
+                        onclick: (e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          assignImg(image, thumb)
+                        },
                       },
                       m("img", { src: thumb })
                     )
@@ -187,16 +199,19 @@ const Modal = () => {
             "section.modal-footer",
             m(
               ".tabs grouped",
-              m("button", { onclick: () => state.showModal(false) }, "Cancel"),
               m(
-                "button",
+                "button.button",
+                { onclick: () => state.showModal(false) },
+                "Cancel"
+              ),
+              m(
+                "button.button.primary",
                 {
                   onclick: (e) => {
                     e.preventDefault()
                     handleImage(mdl)(state.file)
                   },
                   role: "button",
-                  type: "submit",
                   disabled: !state.file && !exists(state.img),
                 },
                 state.modalState() == "select" ? "Use" : "Upload"

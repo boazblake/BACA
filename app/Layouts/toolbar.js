@@ -16,7 +16,7 @@ const Toolbar = () => {
         m(
           ".nav-left.is-left",
           m(
-            "figure",
+            "figure.pointer",
             m(m.route.Link, {
               selector: "img",
               href: "/",

@@ -39,7 +39,7 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
           childRoutes.map((r) =>
             r.group.includes("external")
               ? m(
-                  "a.col-12",
+                  "a.col-12 nav-link icon",
                   { target: "_blank", href: r.external },
                   r.name,
                   m(PopOutLine, {

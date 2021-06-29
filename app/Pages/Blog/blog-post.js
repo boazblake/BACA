@@ -9,7 +9,7 @@ const toBlogs = () => m.route.set("/social/blog")
 
 const deleteBlog = (mdl) =>
   mdl.http.back4App
-    .deleteTask(mdl)(`Classes/Blogs/${state.objectId}`)
+    .deleteTask(mdl)(`Classes/Blogs/${state.blog.objectId}`)
     .fork(toBlogs, toBlogs)
 
 const fetchBlogPost = ({ attrs: { mdl } }) => {
