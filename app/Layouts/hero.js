@@ -6,8 +6,23 @@ const calcHeight = ({ settings: { screenSize } }) => {
       return "540px"
     case "tablet":
       return "340px"
+    case "wide":
+      return "340px"
     case "phone":
       return "340px"
+  }
+}
+
+const calcMargin = ({ settings: { screenSize } }) => {
+  switch (screenSize) {
+    case "desktop":
+      return "150px"
+    case "tablet":
+      return "90px"
+    case "wide":
+      return "70px"
+    case "phone":
+      return "30px"
   }
 }
 
@@ -24,10 +39,17 @@ const Hero = () => {
       setInterval(() => updateBackground(mdl), 500),
     view: ({ attrs: { mdl } }) =>
       m(
-        "section.hero",
+        ".hero",
+        {
+          style: {
+            marginTop: calcMargin(mdl),
+          },
+        },
         m("img.hero-img", {
           src: Images[mdl.state.image()],
-          style: { height: calcHeight(mdl) },
+          style: {
+            height: calcHeight(mdl),
+          },
         }),
         m(
           "header",

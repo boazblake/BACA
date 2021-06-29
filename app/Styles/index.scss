@@ -125,6 +125,21 @@ small {
   font-weight: 400;
 }
 
+.pad-x-50 {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.pad-y-6 {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.marg-y-6 {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
 /* Header */
 .hero {
   -webkit-background-size: cover;
@@ -134,7 +149,7 @@ small {
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: 100% auto;
-  margin-top: 150px;
+  margin-top: 30px;
 }
 
 .hero-img {
@@ -266,7 +281,7 @@ main .grid > * {
   }
 
   .hero {
-    margin-bottom: 150px;
+    margin-bottom: 50px;
   }
 }
 form.grid {

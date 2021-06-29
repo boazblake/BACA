@@ -9,9 +9,9 @@ const Navbar = {
       "nav.nav#navbar.is-full-width",
       routes(mdl).map((r) =>
         m(NavLink, {
-          onmouseover: (e) => {
-            mdl.state.navState(r.route)
-          },
+          // onmouseover: (e) => {
+          //   mdl.state.navState(r.route)
+          // },
           onclick: (e) => {
             if (r.children.any()) {
               mdl.state.navState(r.route)

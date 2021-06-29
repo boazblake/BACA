@@ -1,12 +1,13 @@
 import { ExclamationTriangleLine } from "@mithril-icons/clarity"
 
-const Default = (mdl) => {
+const CityOrd = (mdl) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        ".",
+        "section.pad-y-6",
+        { class: mdl.settings.screenSize == "desktop" && "pad-50" },
         m(
-          "section.bg-primary.text-white.card",
+          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-primary.text-white",
           m(
             "p",
             "Bonham Acres is a deed restricted community in which deed restrictions are actively enforced.",
@@ -29,10 +30,13 @@ const Default = (mdl) => {
             "p",
             "Violations to any of these deed restrictions should be reported directly to the Bonham Acres Civic Association.",
             m(
-              "button.button.icon",
-              { onclick: (e) => {} },
-              "Report City Ordinance Violation",
-              m(ExclamationTriangleLine)
+              ".pad-y-6.is-center",
+              m(
+                "button.button.icon.bd-error",
+                { onclick: (e) => {} },
+                "Report City Ordinance Violation",
+                m(ExclamationTriangleLine, { fill: "red" })
+              )
             ),
             m(
               "p",
@@ -48,7 +52,7 @@ const Default = (mdl) => {
           )
         ),
         m(
-          "section.bg-light.card",
+          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-light",
           m(
             "hgroup",
             m("h3", "Car Parking in Residential Area"),
@@ -106,7 +110,7 @@ const Default = (mdl) => {
           )
         ),
         m(
-          "section.bg-light.card",
+          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-light",
           m(
             "hgroup",
             m("h3", "Nuisance Ordinances"),
@@ -160,7 +164,7 @@ const Default = (mdl) => {
         ),
 
         m(
-          "section.bg-light.card",
+          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-light",
           m(
             "hgroup",
             m("h3", "Noise Ordinances"),
@@ -200,7 +204,7 @@ const Default = (mdl) => {
         ),
 
         m(
-          "section.bg-light.card",
+          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-light",
           m(
             "hgroup",
             m("h3", "Trash & Dumpster Ordinances"),
@@ -221,4 +225,4 @@ const Default = (mdl) => {
   }
 }
 
-export default Default
+export default CityOrd
