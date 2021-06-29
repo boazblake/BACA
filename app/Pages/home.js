@@ -1,9 +1,13 @@
 const Home = () => {
   return {
     view: ({ attrs: { mdl } }) =>
-      m(".", {
-        style: { height: "100vh", width: "100vw" },
-      }),
+      m(
+        ".",
+        m("section", "Upcoming Events"),
+        m("section", "Carousel of Latest Album Images uploaded"),
+        m("section", "Latest Blog Post"),
+        m("section", "Latest Blog Post")
+      ),
   }
 }
 

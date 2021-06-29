@@ -14,12 +14,15 @@ const Toolbar = () => {
           },
         },
         m(
-          "figure.nav-left",
-          m(m.route.Link, {
-            selector: "img",
-            href: "/about",
-            src: "images/logo.webp",
-          })
+          ".nav-left.is-left",
+          m(
+            "figure",
+            m(m.route.Link, {
+              selector: "img",
+              href: "/",
+              src: "images/logo.webp",
+            })
+          )
         ),
 
         mdl.settings.screenSize == "desktop"

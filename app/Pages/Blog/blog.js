@@ -1,6 +1,7 @@
 import { formatDate } from "Utils"
 import { compose, lensProp, over } from "ramda"
 import BlogPreview from "./blog-preview.js"
+import { AddTextLine, EditLine, NoteEditLine } from "@mithril-icons/clarity"
 
 const state = {
   errors: {},
@@ -37,15 +38,18 @@ const Blog = () => {
             mdl.state.isAuth() &&
               m(
                 "nav.nav",
+                { style: { paddingBottom: "25px" } },
                 m(
-                  ".nav-left",
+                  ".nav-center",
                   m(
                     m.route.Link,
                     {
+                      selector: "button.button.primary.icon",
                       href: "/social/blog-editor:",
-                      class: "button primary",
+                      class: mdl.settings.screenSize == "phone" ? "col-12" : "",
                     },
-                    "Add A Blog Post"
+                    m("label", "Add A Blog Post"),
+                    m(NoteEditLine, { fill: "white" })
                   )
                 )
               ),

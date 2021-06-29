@@ -6,7 +6,7 @@ const AuthBox = () => {
     view: ({ attrs: { mdl } }) =>
       mdl.state.isAuth()
         ? m(
-            ".grouped",
+            ".grouped.is-center",
             mdl.user.isAdmin &&
               m(NavLink, {
                 mdl,
@@ -14,7 +14,7 @@ const AuthBox = () => {
                 link: "Dashboard",
                 classList: `${isActiveRoute(
                   `/dashboard/${mdl.user.name}`
-                )} outline`,
+                )} button dark`,
               }),
             m(NavLink, {
               mdl,
@@ -23,18 +23,18 @@ const AuthBox = () => {
               link: "Your Account",
               classList: `${isActiveRoute(
                 `/account/${mdl.user.name}`
-              )} outline`,
+              )} button primary`,
             }),
             m(NavLink, {
               mdl,
               href: "/logout",
               role: "button",
               link: "Logout",
-              classList: "secondary",
+              classList: "button secondary",
             })
           )
         : m(
-            ".grouped",
+            ".grouped.is-center",
             m(NavLink, {
               mdl,
               role: "button",

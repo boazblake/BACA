@@ -16,10 +16,7 @@ const toggleRoutes = (mdl) => (id) => {
 const NavItem = () => {
   return {
     view: ({ attrs: { mdl, href, link, classList } }) =>
-      m(
-        `li.nav-item`,
-        m(NavLink, { mdl, ...navItemstate, href, link, classList })
-      ),
+      m(NavLink, { mdl, ...navItemstate, href, link, classList }),
   }
 }
 
@@ -31,19 +28,18 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
   return {
     view: ({ attrs: { isSelected } }) =>
       m(
-        "details",
+        "details.grid.col-12",
         {
+          class: "primary",
           onclick: (e) => toggleRoutes(mdl)(route.id),
         },
         m("summary", route.name),
-
         m(
-          "nav",
-
+          "nav.row",
           childRoutes.map((r) =>
             r.group.includes("external")
               ? m(
-                  "a",
+                  "a.col-12",
                   { target: "_blank", href: r.external },
                   r.name,
                   m(PopOutLine, {
@@ -56,7 +52,7 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
                   mdl,
                   href: r.route,
                   link: r.name,
-                  classList: `${isActiveRoute(r.route)}`,
+                  classList: `${isActiveRoute(r.route)} col-12`,
                 })
           )
         )
@@ -88,7 +84,7 @@ const NavModal = ({ attrs: { mdl } }) => {
           },
           m("header.header", m(AuthBox, { mdl })),
           m(
-            "nav.modal-content",
+            "nav.modal-content.row",
             routes(mdl).map((r) =>
               r.children.any()
                 ? m(NavSection, {
@@ -101,7 +97,7 @@ const NavModal = ({ attrs: { mdl } }) => {
                     mdl,
                     href: r.route,
                     link: r.name,
-                    classList: `${isActiveRoute(r.route)}`,
+                    classList: `${isActiveRoute(r.route)} col-12`,
                   })
             )
           )

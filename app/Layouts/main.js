@@ -3,7 +3,7 @@ const Main = () => {
     view: ({ attrs: { mdl, children } }) =>
       m(
         "main.container",
-        m("header", m("h1#page-title.bold", mdl.state.route.name)),
+        m("", m("h1#page-title.bold", mdl.state.route.name)),
         children
       ),
   }

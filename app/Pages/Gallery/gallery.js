@@ -68,9 +68,9 @@ const NewAlbumModal = {
     m(
       ".modal-container",
       m(
-        ".modal.card",
+        "form.modal.card",
         m(
-          "form",
+          "section.modal-content",
           m(
             "label",
             "Album Title",
@@ -85,29 +85,29 @@ const NewAlbumModal = {
               type: "file",
               oninput: (e) => (state.newAlbum.img = e.target.files[0]),
             })
+          )
+        ),
+        m(
+          ".modal-footer.is-right grouped",
+          m(
+            "button.button.primary",
+            {
+              onclick: (e) => {
+                e.preventDefault()
+                createtNewAlbum(mdl)
+              },
+            },
+            "Create Album"
           ),
           m(
-            ".footer.is-right",
-            m(
-              "button",
-              {
-                onclick: (e) => {
-                  e.preventDefault()
-                  state.showNewAlbumModal(false)
-                },
+            "button.button.secondary",
+            {
+              onclick: (e) => {
+                e.preventDefault()
+                state.showNewAlbumModal(false)
               },
-              "cancel"
-            ),
-            m(
-              "button",
-              {
-                onclick: (e) => {
-                  e.preventDefault()
-                  createtNewAlbum(mdl)
-                },
-              },
-              "Create Album"
-            )
+            },
+            "cancel"
           )
         )
       )
@@ -125,12 +125,12 @@ const Gallery = {
             m(
               "nav.nav",
               m(
-                ".nav-left",
+                ".nav-center",
                 m(
-                  "button",
+                  "button.button.primary",
                   {
                     onclick: (e) => state.showNewAlbumModal(true),
-                    class: "button primary",
+                    class: mdl.settings.screenSize == "phone" ? "col-12" : "",
                   },
                   "Add A New Album"
                 ),

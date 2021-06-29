@@ -180,7 +180,7 @@ const SocialRoutes = [
     id: "bfn-park",
     name: "Bonham Family Nature Park",
     // icon: Icons.home,
-    route: `/#`,
+    route: "/external",
     external: "https://www.pct3.com/Parks/Bonham-Family-Nature-Park",
     isNav: true,
     group: ["nav", "social", "external"],

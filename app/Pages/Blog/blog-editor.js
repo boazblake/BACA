@@ -1,5 +1,11 @@
 import { handlers, exists, parseMarkdown } from "Utils"
 import Task from "data.task"
+import {
+  HelpInfoLine,
+  NoteEditLine,
+  SearchLine,
+  UnknownStatusLine,
+} from "@mithril-icons/clarity"
 
 const state = {
   editor: "",
@@ -12,7 +18,8 @@ const state = {
   showModal: Stream(false),
   images: [],
   modalState: Stream("upload"),
-  isEditing: Stream(true),
+  showPreview: Stream(false),
+  isEditing: Stream(false),
   showHelp: Stream(false),
   errors: {
     img: null,
@@ -30,7 +37,8 @@ const resetEditorState = (state) => {
   state.img = ""
   state.thumb = ""
   state.file = null
-  state.isEditing(true)
+  state.showPreview(false)
+  state.isEditing(false)
   state.showModal(false)
   state.showHelp(false)
 }
@@ -53,6 +61,7 @@ const setupEditor = ({ attrs: { mdl } }) => {
 
   let id = m.route.get().split(":")[1]
   if (exists(id)) {
+    state.isEditing(true)
     mdl.http.back4App
       .getTask(mdl)(`Classes/Blogs/${id}`)
       .fork(onError, onSuccess)
@@ -182,7 +191,10 @@ const Modal = () => {
               m(
                 "button",
                 {
-                  onclick: (e) => handleImage(mdl)(state.file),
+                  onclick: (e) => {
+                    e.preventDefault()
+                    handleImage(mdl)(state.file)
+                  },
                   role: "button",
                   type: "submit",
                   disabled: !state.file && !exists(state.img),
@@ -216,74 +228,81 @@ const BlogEditor = () => {
           "form",
           { ...onInput },
           m(
-            "",
-            m("label", "Title"),
-            m("input", { id: "title", value: state.title })
+            "section",
+            m("label", "Title", m("input", { id: "title", value: state.title }))
           ),
 
-          state.thumb && m("aside", m("img", { src: state.thumb })),
           m(
-            "button.secondary",
-            {
-              onclick: (e) => {
-                e.preventDefault()
-                state.showModal(!state.showModal())
+            "section",
+            state.thumb && m("aside", m("img", { src: state.thumb })),
+            m(
+              "button.primary",
+              {
+                onclick: (e) => {
+                  e.preventDefault()
+                  state.showModal(!state.showModal())
+                },
               },
-            },
-            state.thumb ? "Update Image" : "Add An Image"
+              state.thumb ? "Update Image" : "Add An Image"
+            )
           ),
           state.showModal() && m(Modal, { state, mdl }),
           m(
-            "",
-            m("label", "Contents"),
+            "nav.nav",
             m(
-              "button",
-              {
-                onclick: (e) => {
-                  e.preventDefault()
-                  state.isEditing(!state.isEditing())
-                },
-              },
-              state.isEditing() ? "Preview" : "Edit"
-            ),
-            m(
-              "button",
-              {
-                onclick: (e) => {
-                  e.preventDefault()
-                  state.showHelp(true)
-                },
-              },
-              "How To Use"
-            ),
-            state.showHelp() &&
+              ".nav-right.grouped.container",
               m(
-                "section.modal-container",
+                "button.button.dark.outline.icon",
                 {
                   onclick: (e) => {
-                    state.showHelp(false)
+                    e.preventDefault()
+                    state.showPreview(!state.showPreview())
                   },
                 },
-                m(
-                  ".modal.card",
-                  m("h3", "Headings"),
-                  m("h4", "use #"),
-                  m("h3", "Italics & Bold"),
-                  m("h4", "use *"),
-                  m("h3", "Lists"),
-                  m("h4", "use + or -"),
-                  m("h3", "Links"),
-                  m("h4", "use []()")
-                )
+                state.showPreview()
+                  ? ["Edit", m(NoteEditLine)]
+                  : ["Preview", m(SearchLine)]
               ),
+              m(
+                "button.button.secondary.outline.icon",
+                {
+                  onclick: (e) => {
+                    e.preventDefault()
+                    state.showHelp(true)
+                  },
+                },
+                "How To Use",
+                m(HelpInfoLine)
+              )
+            )
+          ),
 
-            state.isEditing()
-              ? m("textarea", {
-                  value: state.text,
-                  id: "text",
-                  style: { height: "300px" },
-                })
-              : m(
+          state.showHelp() &&
+            m(
+              "section.modal-container",
+              {
+                onclick: (e) => {
+                  state.showHelp(false)
+                },
+              },
+              m(
+                ".modal.card",
+                m("h3", "Headings"),
+                m("h4", "use #"),
+                m("h3", "Italics & Bold"),
+                m("h4", "use *"),
+                m("h3", "Lists"),
+                m("h4", "use + or -"),
+                m("h3", "Links"),
+                m("h4", "use []()")
+              )
+            ),
+
+          m(
+            "section",
+            m("label", "Contents"),
+            state.showPreview()
+              ? m(
                   "hgroup",
                   m(
                     "h4",
@@ -292,20 +311,25 @@ const BlogEditor = () => {
                     )
                   )
                 )
+              : m("textarea", {
+                  value: state.text,
+                  id: "text",
+                  style: { height: "300px" },
+                })
           ),
 
           m(
-            "nav.grid",
+            "nav.container.grouped.is-center",
             m(
               m.route.Link,
               {
-                selector: "button",
+                selector: "button.button.secondary",
                 href: "/social/blog",
               },
               "Cancel"
             ),
             m(
-              "button",
+              "button.button.primary",
               {
                 disabled: isInvalid(),
                 onclick: (e) => {
@@ -315,7 +339,12 @@ const BlogEditor = () => {
               },
               state.objectId ? "Update" : "Submit"
             ),
-            m("button", { onclick: (e) => deleteBlog(mdl) }, "Delete")
+            state.isEditing() &&
+              m(
+                "button.button.error",
+                { onclick: (e) => deleteBlog(mdl) },
+                "Delete"
+              )
           )
         )
       )

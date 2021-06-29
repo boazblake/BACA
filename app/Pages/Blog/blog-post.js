@@ -1,3 +1,4 @@
+import { ArrowLine, NoteEditLine } from "@mithril-icons/clarity"
 import { parseMarkdown } from "Utils"
 import { toViewModel } from "./blog"
 
@@ -73,18 +74,28 @@ const BlogPost = {
                 m(
                   m.route.Link,
                   {
-                    selector: "button",
+                    selector: "button.button.primary.icon",
                     href: `/social/blog-editor:${state.blog.objectId}`,
                   },
-                  "Edit"
+                  "Edit",
+                  m(NoteEditLine, { fill: "white" })
                 ),
-                m("button", { onclick: () => deleteBlog(mdl) }, "Delete")
+                m(
+                  "button.button.error",
+                  { onclick: () => deleteBlog(mdl) },
+                  "Delete"
+                )
               )
           ),
 
           m(
             m.route.Link,
-            { selector: "button", href: "/social/blog", class: "primary" },
+            {
+              selector: "button.button.primary.outline.icon",
+              href: "/social/blog",
+              class: "primary",
+            },
+            m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
             "Back To Blogs"
           )
         ),

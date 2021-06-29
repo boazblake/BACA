@@ -59,5 +59,4 @@ if (sessionStorage.getItem("baca-user")) {
   Model.user = JSON.parse(sessionStorage.getItem("baca-user"))
   Model.state.isAuth(true)
 }
-
-m.route(root, "/about", App(Model))
+m.route(root, "/", App(Model))
