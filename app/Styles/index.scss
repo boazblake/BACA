@@ -187,6 +187,10 @@ header hgroup {
   height: 100px;
 }
 
+#page-title {
+  z-index: 50;
+}
+
 .navigation {
   z-index: 60;
   position: sticky;
@@ -197,6 +201,7 @@ header hgroup {
 
 .nav-link {
   font-size: larger;
+  word-wrap: break-word;
 }
 
 // #navbar {
@@ -224,7 +229,7 @@ header hgroup {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 100;
+  z-index: 1000;
   background-color: rgba(0, 0, 0, 0.8);
   align-items: center;
   display: flex;
