@@ -12,7 +12,7 @@ const Logo = m("img", {
 const Routes = [
   {
     id: "home",
-    name: "Welcome to Bonham Acres Civic Association (BACA).",
+    name: "Welcome to Bonham Acres Civic Association (BACA)",
     // icon: Icons.home,
     route: "/",
     isNav: true,

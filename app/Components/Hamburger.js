@@ -1,15 +1,16 @@
 import { WindowCloseLine, MenuLine } from "@mithril-icons/clarity"
 
+const filledGreen = { fill: "green" }
+
 const Hamburger = () => {
   return {
     view: ({ attrs: { mdl } }) =>
-      m(".pointer", [
+      m("figure.pointer is-center", { style: { transform: "scale(1.2)" } }, [
         mdl.state.isAuth() &&
           m("label", `Welcome ${mdl.user.name.split(" ")[0]}`),
-        m(
-          ".icon-click.",
-          mdl.state.showNavModal() ? m(WindowCloseLine) : m(MenuLine)
-        ),
+        mdl.state.showNavModal()
+          ? m(WindowCloseLine, filledGreen)
+          : m(MenuLine, filledGreen),
       ]),
   }
 }

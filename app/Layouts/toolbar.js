@@ -16,7 +16,7 @@ const Toolbar = () => {
         m(
           ".nav-left.is-left",
           m(
-            "figure.pointer",
+            "figure.pointer.scale-2",
             m(m.route.Link, {
               selector: "img",
               id: "nav-logo",
@@ -29,7 +29,7 @@ const Toolbar = () => {
         mdl.settings.screenSize == "desktop"
           ? m(".nav-right", m(AuthBox, { mdl }))
           : m(
-              ".nav-right",
+              ".nav-right is-right",
               {
                 onclick: () =>
                   mdl.state.showNavModal(!mdl.state.showNavModal()),
