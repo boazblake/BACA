@@ -1,7 +1,7 @@
 import { prop, startsWith, traverse } from "ramda"
 import { exists } from "Utils"
 import Task from "data.task"
-import { TimesCircleLine } from "@mithril-icons/clarity"
+import { TimesCircleLine, ArrowLine } from "@mithril-icons/clarity"
 const state = {
   album: [],
   title: "",
@@ -60,11 +60,10 @@ const fetchAlbum = ({ attrs: { mdl } }) => {
 
 const saveImgToGalleryTask =
   (mdl) =>
-  ({ data: { image, medium, thumb } }) =>
+  ({ data: { image, thumb } }) =>
     mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
       album: state.title,
       image: image.url,
-      medium: medium.url,
       thumb: thumb.url,
     })
 
@@ -75,7 +74,6 @@ const uploadImage = (mdl) => (file) => {
 }
 
 const submitImages = (mdl, images) => {
-  console.log("images", Object.values(images), mdl)
   const onSuccess = (d) => {
     fetchAlbum({ attrs: { mdl } })
     state.showModal(false)
@@ -108,7 +106,12 @@ const Modal = () => {
     view: ({ attrs: { mdl } }) =>
       m(
         "section.modal-container",
-        { onclick: (e) => state.showModal(false) },
+        {
+          id: "modal-container",
+          onclick: (e) => {
+            e.target.id == "modal-container" && state.showModal(false)
+          },
+        },
         m(
           "article.modal.card.grid",
           m(
@@ -138,9 +141,11 @@ const Modal = () => {
                             ? "primary"
                             : "outline"
                         }`,
+                        {
+                          onclick: (e) => selectImg(src, file),
+                        },
                         m("img", {
                           src,
-                          onclick: (e) => selectImg(src, file),
                         })
                       )
                     )
@@ -173,15 +178,20 @@ const Album = {
     m(
       ".container",
       m(
-        "nav",
+        "nav.grouped.marg-y-6",
         m(
           m.route.Link,
-          { selector: "button", href: "/social/gallery", class: "primary" },
-          "Back To Gallery"
+          {
+            selector: "button.button.primary.outline.icon",
+            href: "/social/gallery",
+            class: "primary",
+          },
+          m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
+          "Back To Blogs"
         ),
         mdl.state.isAuth() && [
           m(
-            "button.primary",
+            "button.button.primary",
             {
               onclick: (e) => state.showModal(true),
             },
@@ -210,6 +220,7 @@ const Album = {
                 mdl.state.isAuth() &&
                   m(TimesCircleLine, {
                     class: "pointer",
+                    fill: "red",
                     onclick: (e) => deleteImg(mdl, pic),
                   }),
                 m("img", { src: pic.thumb })

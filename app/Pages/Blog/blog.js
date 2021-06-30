@@ -37,19 +37,17 @@ const Blog = () => {
             ".container",
             mdl.state.isAuth() &&
               m(
-                "nav.nav",
-                { style: { paddingBottom: "25px" } },
+                "nav.nav.marg-y-6",
                 m(
                   ".nav-center",
                   m(
                     m.route.Link,
                     {
-                      selector: "button.button.primary.icon",
+                      selector: "button.button.primary",
                       href: "/social/blog-editor:",
                       class: mdl.settings.screenSize == "phone" ? "col-12" : "",
                     },
-                    m("label", "Add A Blog Post"),
-                    m(NoteEditLine, { fill: "white" })
+                    "Add A Blog Post"
                   )
                 )
               ),
