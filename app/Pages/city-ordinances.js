@@ -4,10 +4,10 @@ const CityOrd = (mdl) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "section.pad-y-6",
-        { class: mdl.settings.screenSize == "desktop" && "pad-50" },
+        "section.bd-light",
+        { class: mdl.settings.screenSize == "desktop" && "p-50" },
         m(
-          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-primary.text-white",
+          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-primary.text-white",
           m(
             "p",
             "Bonham Acres is a deed restricted community in which deed restrictions are actively enforced.",
@@ -30,7 +30,7 @@ const CityOrd = (mdl) => {
             "p",
             "Violations to any of these deed restrictions should be reported directly to the Bonham Acres Civic Association.",
             m(
-              ".pad-y-6.is-center",
+              ".p-y-6.is-center",
               m(
                 "button.button.icon.bd-error",
                 { onclick: (e) => {} },
@@ -52,7 +52,7 @@ const CityOrd = (mdl) => {
           )
         ),
         m(
-          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-light",
+          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
             m("h3", "Car Parking in Residential Area"),
@@ -110,7 +110,7 @@ const CityOrd = (mdl) => {
           )
         ),
         m(
-          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-light",
+          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
             m("h3", "Nuisance Ordinances"),
@@ -164,7 +164,7 @@ const CityOrd = (mdl) => {
         ),
 
         m(
-          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-light",
+          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
             m("h3", "Noise Ordinances"),
@@ -204,7 +204,7 @@ const CityOrd = (mdl) => {
         ),
 
         m(
-          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-light",
+          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
             m("h3", "Trash & Dumpster Ordinances"),

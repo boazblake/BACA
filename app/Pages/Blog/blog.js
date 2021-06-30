@@ -37,7 +37,7 @@ const Blog = () => {
             ".container",
             mdl.state.isAuth() &&
               m(
-                "nav.nav.marg-y-6",
+                "nav.nav.m-y-6",
                 m(
                   ".nav-center",
                   m(

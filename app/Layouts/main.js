@@ -4,8 +4,8 @@ const Main = () => {
       m(
         "main",
         m(
-          "section#page-title.is-marginless.bg-primary.card.text-white",
-          m("h1.is-center.bold", mdl.state.route.name)
+          "section#page-title.is-marginless.bg-primary.text-white.is-vertical-align.is-horizontal-align.is-center",
+          m("h1.text-center.bold.p-t-25", mdl.state.route.name)
         ),
         children
       ),

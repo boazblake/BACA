@@ -178,7 +178,7 @@ const Album = {
     m(
       ".container",
       m(
-        "nav.grouped.marg-y-6",
+        "nav.grouped.m-y-6",
         m(
           m.route.Link,
           {

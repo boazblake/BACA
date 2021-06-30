@@ -10,6 +10,11 @@ import Toolbar from "./toolbar.js"
 const showNavMenu = (mdl) =>
   mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal()
 
+const vertAlign = (mdl) =>
+  !mdl.Routes.find((r) => mdl.state.navState() == r.route).children.any()
+    ? "is-vertical-align"
+    : ""
+
 const Layout = () => {
   return {
     view: ({ children, attrs: { mdl } }) =>
@@ -19,7 +24,14 @@ const Layout = () => {
         m(Toolbar, { mdl }),
         m(Hero, { mdl }),
         mdl.settings.screenSize == "desktop" &&
-          m("nav.navigation", m(Navbar, { mdl }), m(SubNavbar, { mdl })),
+          m(
+            "nav.navigation",
+            {
+              class: vertAlign(mdl),
+            },
+            m(Navbar, { mdl }),
+            m(SubNavbar, { mdl })
+          ),
 
         m(Main, { mdl, children }),
         showNavMenu(mdl) &&

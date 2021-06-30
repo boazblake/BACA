@@ -2,11 +2,11 @@ const About = (mdl) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "section.pad-y-6",
-        { class: mdl.settings.screenSize == "desktop" && "pad-50" },
+        "section",
+        { class: mdl.settings.screenSize == "desktop" && "p-50" },
 
         m(
-          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-light",
+          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup.grid",
             m("h2", "About Us."),
@@ -21,7 +21,7 @@ const About = (mdl) => {
           )
         ),
         m(
-          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-primary.text-white",
+          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-primary.text-white",
           m(
             "hgroup.grid",
 
@@ -42,7 +42,7 @@ const About = (mdl) => {
           )
         ),
         m(
-          "section.is-marginless.bd-primary.pad-x-50.pad-y-6.bg-light",
+          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
 
           m("h2", "Community Support."),
 

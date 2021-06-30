@@ -125,17 +125,21 @@ small {
   font-weight: 400;
 }
 
-.pad-x-50 {
+.p-x-50 {
   padding-left: 50px;
   padding-right: 50px;
 }
 
-.pad-y-6 {
+.p-y-6 {
   padding-top: 6px;
   padding-bottom: 6px;
 }
 
-.marg-y-6 {
+.p-t-25 {
+  padding-top: 25px;
+}
+
+.m-y-6 {
   margin-top: 6px;
   margin-bottom: 6px;
 }
@@ -188,7 +192,7 @@ header hgroup {
 }
 
 #page-title {
-  z-index: 50;
+  // height: 100px;
 }
 
 .navigation {
@@ -196,7 +200,7 @@ header hgroup {
   position: sticky;
   top: 65px;
   background-color: rgba(255, 255, 255, 0.9);
-  height: 100px;
+  min-height: 102px;
 }
 
 .nav-link {
@@ -208,9 +212,9 @@ header hgroup {
 //   top: 65px;
 // }
 
-// #sub-navbar {
-//   top: 140px;
-// }
+#sub-navbar {
+  border-top: 2px dotted green;
+}
 
 #toolbar {
   z-index: 60;
@@ -219,7 +223,7 @@ header hgroup {
 
   // background-color: rgba(255, 255, 255, 0.1);
   #nav-logo {
-    // width: 180px;
+    transform: scale(2);
   }
 }
 
@@ -273,6 +277,10 @@ header hgroup {
 
 .pointer {
   cursor: pointer;
+}
+
+.text-center {
+  text-align: center;
 }
 
 /* Main */
