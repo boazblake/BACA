@@ -27,11 +27,11 @@ const BlogPost = {
   oninit: fetchBlogPost,
   view: ({ attrs: { mdl } }) =>
     mdl.state.isLoading()
-      ? m("article.card", "LOADING POST")
+      ? m("article.card.container.p-y-6", "LOADING POST")
       : m(
-          "",
+          "section.container.p-y-6",
           m(
-            "article.card",
+            "article.",
             m(
               ".row",
               m(
@@ -60,12 +60,9 @@ const BlogPost = {
               )
             ),
             m(
-              "hgroup.col",
-              m(
-                "h4",
-                m.trust(
-                  HtmlSanitizer.SanitizeHtml(parseMarkdown(state.blog.text))
-                )
+              "hgroup.col.card",
+              m.trust(
+                HtmlSanitizer.SanitizeHtml(parseMarkdown(state.blog.text))
               )
             ),
             state.blog.author == mdl.user.name &&

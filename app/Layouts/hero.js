@@ -1,4 +1,10 @@
 import Images from "../images"
+import { FadeOut } from "Styles/animations"
+
+const state = {
+  image: Stream(0),
+  start: Stream(null),
+}
 
 const calcHeight = ({ settings: { screenSize } }) => {
   switch (screenSize) {
@@ -26,17 +32,28 @@ const calcMargin = ({ settings: { screenSize } }) => {
   }
 }
 
-const updateBackground = (mdl) => {
-  mdl.state.image() == Images.length - 1
-    ? mdl.state.image(0)
-    : mdl.state.image(mdl.state.image() + 1)
+const updateBackground = () => {
+  if (Date.now() - state.start() > 5000) {
+    state.start(Date.now())
+    state.image() == Images.length - 1
+      ? state.image(0)
+      : state.image(state.image() + 1)
+    m.redraw()
+  }
+  requestAnimationFrame(updateBackground)
 }
 
 const Hero = () => {
   return {
-    onremove: () => clearInterval(updateBackground),
-    oncreate: ({ attrs: { mdl } }) =>
-      setInterval(() => updateBackground(mdl), 500),
+    onremove: () => {
+      state.images(0)
+      state.start(null)
+      cancelAnimationFrame(updateBackground)
+    },
+    oncreate: ({ attrs: { mdl } }) => {
+      state.start(Date.now())
+      updateBackground()
+    },
     view: ({ attrs: { mdl } }) =>
       m(
         ".hero",
@@ -45,8 +62,9 @@ const Hero = () => {
             marginTop: calcMargin(mdl),
           },
         },
-        m("img.hero-img", {
-          src: Images[mdl.state.image()],
+        m("img.hero-img.fade", {
+          src: Images[state.image()],
+          onupdate: FadeOut,
           style: {
             height: calcHeight(mdl),
           },

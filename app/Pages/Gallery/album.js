@@ -187,7 +187,7 @@ const Album = {
             class: "primary",
           },
           m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
-          "Back To Blogs"
+          "Back To Gallery"
         ),
         mdl.state.isAuth() && [
           m(

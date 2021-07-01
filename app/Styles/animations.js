@@ -2,6 +2,7 @@ export const SlideInUp = ({ dom }) => dom.classList.toggle("slideInUp")
 export const SlideInLeft = ({ dom }) => dom.classList.toggle("slideInLeft")
 export const SlideInRight = ({ dom }) => dom.classList.toggle("slideInRight")
 export const AddToCart = ({ dom }) => dom.classList.toggle("slide-out-tr")
+export const ToggleFadeOut = ({ dom }) => dom.classList.toggle("fade")
 
 export const AddToCartOut = ({ dom }) => {
   AddToCart({ dom })
@@ -45,6 +46,29 @@ export const SlideDown = ({ dom }) => {
   dom.style.opacity = 0
   dom.classList.toggle("slideInDown")
   dom.style.opacity = 1
+}
+
+export const FadeOut = ({ dom }) => {
+  console.log(dom.classList)
+  dom.classList.replace("fade", "fadeOut")
+  console.log(dom.classList)
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      dom.classList.replace("fadeOut", "fade")
+      dom.addEventListener("animationend", resolve)
+    }, 3000)
+  )
+}
+
+export const FadeIn = ({ dom }) => {
+  console.log(dom.classList)
+  dom.classList.replace("fadeOut", "fade")
+  console.log(dom.classList)
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      dom.addEventListener("animationend", resolve)
+    }, 3000)
+  )
 }
 
 export const SlideUp = ({ dom }) => {

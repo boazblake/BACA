@@ -1,7 +1,6 @@
 import { formatDate } from "Utils"
 import { compose, lensProp, over } from "ramda"
 import BlogPreview from "./blog-preview.js"
-import { AddTextLine, EditLine, NoteEditLine } from "@mithril-icons/clarity"
 
 const state = {
   errors: {},
