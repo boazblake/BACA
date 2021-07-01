@@ -28,18 +28,18 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
   return {
     view: ({ attrs: { isSelected } }) =>
       m(
-        "details.grid.col-12",
+        "details.grid.col-12.text-primary.animated",
         {
           class: "primary",
           onclick: (e) => toggleRoutes(mdl)(route.id),
         },
-        m("summary", route.name),
+        m("summary.nav-link", route.name),
         m(
           "nav.row",
           childRoutes.map((r) =>
             r.group.includes("external")
               ? m(
-                  "a.col-12 nav-link icon",
+                  "a.col-12 icon nav-link",
                   { target: "_blank", href: r.external },
                   r.name,
                   m(PopOutLine, {
@@ -68,7 +68,7 @@ const NavModal = ({ attrs: { mdl } }) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "section.modal-container.animated",
+        "section.modal-container.animated#nav-modal",
         {
           oncreate: ({ dom }) => (_domOverlay = dom),
           onclick: (e) => {
@@ -84,7 +84,7 @@ const NavModal = ({ attrs: { mdl } }) => {
           },
           m("header.header", m(AuthBox, { mdl })),
           m(
-            "nav.modal-content.row",
+            "nav.modal-content.row.animated",
             routes(mdl).map((r) =>
               r.children.any()
                 ? m(NavSection, {

@@ -1,5 +1,5 @@
 import NavLink from "Components/nav-link.js"
-const isActiveRoute = (a, b) => (a == b ? "active" : "")
+const isActiveRoute = (a, b) => (a == b ? "active button outline" : "")
 
 const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
 
@@ -14,7 +14,7 @@ const Navbar = {
           // },
           onclick: (e) => {
             if (r.children.any()) {
-              mdl.state.navState(r.route)
+              mdl.state.navState(r.id)
               e.stopPropagation()
               e.preventDefault()
             }
@@ -24,7 +24,7 @@ const Navbar = {
           href: r.route,
           link: r.name,
           classList: `primary clear ${isActiveRoute(
-            mdl.state.navState(),
+            `/${mdl.state.navState()}`,
             r.route
           )}`,
         })

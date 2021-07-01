@@ -22,6 +22,7 @@ const state = {
   image: Stream(0),
   fab: Stream(0),
   editBlog: Stream(false),
+  showAuthModal: Stream(false),
 }
 const user = {}
 const settings = {}

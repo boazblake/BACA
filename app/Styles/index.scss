@@ -64,9 +64,10 @@
   --spacing-factor-md: 1.5;
   --spacing-factor-lg: 1.75;
   --spacing-factor-xl: 2;
+  --font-family-sans: "Poppins", sans-serif;
   //   --spacing-typography: 1.5rem;
   //   --spacing-form-element: 0.25rem;
-  //   --transition: 0.2s ease-in-out;
+  --transition: 0.2s ease-in-out;
 }
 
 body.dark {
@@ -227,6 +228,18 @@ header hgroup {
   }
 }
 
+// #nav-modal:after {
+//   content: "";
+//   position: absolute;
+//   left: 50%;
+//   top: 50%;
+//   transform: translate(-50%, -50%);
+//   border-radius: 50%;
+//   width: 150px;
+//   height: 150px;
+//   border: 1000px solid rebeccapurple;
+// }
+
 .modal-container {
   position: fixed;
   top: 0;
@@ -257,7 +270,8 @@ header hgroup {
 .modal-content {
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: inherit;
+  height: fit-content;
+  transition: height 3s ease;
 }
 
 #fab {

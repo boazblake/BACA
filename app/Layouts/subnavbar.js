@@ -5,9 +5,7 @@ const isActiveRoute = (a, b) => (a == b ? "active" : "")
 
 const SubNavbar = () => {
   const subroutes = (mdl) =>
-    mdl.Routes.filter(
-      (r) => r.isNav && r.group.includes(mdl.state.navState().split("/")[1])
-    )
+    mdl.Routes.filter((r) => r.isNav && r.group.includes(mdl.state.navState()))
   return {
     view: ({ attrs: { mdl } }) =>
       subroutes(mdl).any() &&

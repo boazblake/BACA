@@ -6,14 +6,17 @@ import Footer from "./footer.js"
 import NavModal from "./nav-modal.js"
 import { SlideOutRight, SlideInLeft } from "Styles/animations.js"
 import Toolbar from "./toolbar.js"
+import Login from "Pages/Auth/login-user.js"
+import Register from "Pages/Auth/register-user.js"
 
 const showNavMenu = (mdl) =>
   mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal()
 
-const vertAlign = (mdl) =>
-  !mdl.Routes.find((r) => mdl.state.navState() == r.route).children.any()
+const vertAlign = (mdl) => {
+  return !mdl.Routes.find((r) => mdl.state.navState() == r.id).children.any()
     ? "is-vertical-align"
     : ""
+}
 
 const Layout = () => {
   return {
@@ -40,6 +43,8 @@ const Layout = () => {
             onbeforeremove: SlideOutRight,
             mdl,
           }),
+        mdl.state.showAuthModal() == "login" && m(Login, { mdl }),
+        mdl.state.showAuthModal() == "register" && m(Register, { mdl }),
         m(Footer, { mdl })
       ),
   }

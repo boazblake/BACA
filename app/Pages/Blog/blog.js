@@ -34,7 +34,7 @@ const Blog = () => {
       mdl.state.isLoading()
         ? m("article.modal", "LOADING")
         : m(
-            ".container",
+            ".container.grid.p-y-6",
             mdl.state.isAuth() &&
               m(
                 "nav.nav.m-y-6",

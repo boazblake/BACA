@@ -31,7 +31,7 @@ const Routes = [
     component: (mdl) => m(Layout, { mdl }, m(Home, { mdl })),
   },
   {
-    id: "about-us",
+    id: "about",
     name: "About Bonham Acres",
     // icon: Icons.home,
     route: "/about",
