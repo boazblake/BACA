@@ -1,5 +1,19 @@
 /* Global CSS variables */
 :root {
+  --bg-color: #ffffff;
+  --bg-secondary-color: #f3f3f6;
+  --color-primary: #14854f;
+  --color-lightGrey: #d2d6dd;
+  --color-grey: #747681;
+  --color-darkGrey: #3f4144;
+  --color-error: #d43939;
+  --color-success: #28bd14;
+  --grid-maxWidth: 120rem;
+  --grid-gutter: 2rem;
+  --font-size: 1.6rem;
+  --font-color: #333333;
+  --font-family-sans: "Poppins", sans-serif;
+  --font-family-mono: monaco, "Consolas", "Lucida Console", monospace;
   --navy: #001f3f;
   --blue: #0074d9;
   --aqua: #7fdbff;
@@ -21,6 +35,13 @@
   --text-weight: 400;
   --titles-weight: 800;
   --block-round: 0;
+  --spacing-block: 2rem;
+  --spacing-factor-xs: 1;
+  --spacing-factor-sm: 1.25;
+  --spacing-factor-md: 1.5;
+  --spacing-factor-lg: 1.75;
+  --spacing-factor-xl: 2;
+  --transition: 0.2s ease-in-out;
   //   --text-font: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu",
   //     "Cantarell", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
   //     "Segoe UI Symbol", "Noto Color Emoji";
@@ -58,16 +79,8 @@
   //   --button-spacing-vertical: var(--form-element-spacing-vertical);
   //   --button-spacing-horizontal: var(--form-element-spacing-horizontal);
   //   --spacing-gutter: 1rem;
-  --spacing-block: 2rem;
-  --spacing-factor-xs: 1;
-  --spacing-factor-sm: 1.25;
-  --spacing-factor-md: 1.5;
-  --spacing-factor-lg: 1.75;
-  --spacing-factor-xl: 2;
-  --font-family-sans: "Poppins", sans-serif;
   //   --spacing-typography: 1.5rem;
   //   --spacing-form-element: 0.25rem;
-  --transition: 0.2s ease-in-out;
 }
 
 body.dark {
@@ -108,7 +121,7 @@ body {
 }
 
 img {
-  height: auto;
+  height: intrinsic;
   max-width: 100%;
 }
 

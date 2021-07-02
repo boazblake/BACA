@@ -28,7 +28,7 @@ const BlogPreview = {
             src: thumb || "images/main.webp",
             style: {
               width: "182px",
-              height: "fit-content",
+              height: "intrinsic",
             },
           })
         )

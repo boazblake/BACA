@@ -9,7 +9,7 @@ const Footer = () => {
             ".col-6",
             m("h2", "Connect with Bonham Acres via"),
             m(
-              ".grouped.is-center",
+              ".container.grouped",
               m(
                 "a.row.underline.nav-link",
                 {
@@ -43,7 +43,10 @@ const Footer = () => {
                   src: "icons/gmail.png",
                 })
               )
-            )
+            ),
+            m("p", "bonhamacrescivicassociation at gmail dot com"),
+            m("p", "P O Box 2886"),
+            m("p", "Bellaire, TX 77401")
           ),
           m(
             ".col-6",
