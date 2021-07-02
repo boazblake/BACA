@@ -90,7 +90,7 @@ const Footer = () => {
                   href: "https://www.facebook.com/groups/BonhamAcres?modal=false&should_open_composer=false&hoisted_section_header_type=notifications&show_migration_preparation_dialog=false&show_migration_onboarding_dialog=false",
                 },
                 m("img", {
-                  style: { width: "50px" },
+                  style: { width: "50px", height: "50px" },
                   src: "icons/facebook.png",
                 })
               ),
@@ -101,7 +101,7 @@ const Footer = () => {
                   href: "https://nextdoor.com/neighborhood/bonhamacres--houston--tx/",
                 },
                 m("img", {
-                  style: { width: "50px" },
+                  style: { width: "50px", height: "50px" },
                   src: "icons/nextdoor.png",
                 })
               ),
@@ -112,7 +112,7 @@ const Footer = () => {
                   href: "http://mailto:bonhamacrescivicassociation@gmail.com/",
                 },
                 m("img", {
-                  style: { width: "50px" },
+                  style: { width: "50px", height: "50px" },
                   src: "icons/gmail.png",
                 })
               )
