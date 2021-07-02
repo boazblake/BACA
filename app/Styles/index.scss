@@ -309,7 +309,7 @@ header hgroup {
 }
 
 .modal {
-  background: white;
+  background: var(--white);
   padding: 25px;
   margin: 0;
   overflow-x: hidden;
@@ -334,6 +334,10 @@ header hgroup {
   box-shadow: var(--card-shadow);
 }
 
+.bg-white {
+  background: var(--white);
+}
+
 .m-r-16 {
   margin-right: 16px;
 }
@@ -348,6 +352,14 @@ header hgroup {
 
 .underline {
   text-decoration: underline;
+}
+
+.pos-rel {
+  position: relative;
+}
+
+.pos-abs {
+  position: absolute;
 }
 
 /* Main */

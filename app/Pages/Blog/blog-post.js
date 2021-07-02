@@ -57,7 +57,6 @@ const BlogPost = {
                   src: state.blog.thumb || "images/main.webp",
                   style: {
                     width: "182px",
-                    height: "fit-content",
                   },
                 })
               )

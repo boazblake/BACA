@@ -17,7 +17,7 @@ const BlogPreview = {
             "p",
             "Added On ",
             createdAt,
-            updatedAt !== createdAt && ["updated on: ", updatedAt],
+            updatedAt !== createdAt && [" updated on ", updatedAt],
             " by ",
             author
           )
@@ -28,7 +28,6 @@ const BlogPreview = {
             src: thumb || "images/main.webp",
             style: {
               width: "182px",
-              height: "intrinsic",
             },
           })
         )

@@ -219,10 +219,10 @@ const Album = {
               ".row",
               state.album.map((pic) =>
                 m(
-                  "figure.col-4",
+                  "figure.col-4.pos-rel",
                   mdl.state.isAuth() &&
                     m(TimesCircleLine, {
-                      class: "pointer",
+                      class: "pointer bg-white pos-abs",
                       fill: "red",
                       onclick: (e) => deleteImg(mdl, pic),
                     }),
