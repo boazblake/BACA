@@ -3,7 +3,7 @@ const About = (mdl) => {
     view: ({ attrs: { mdl } }) =>
       m(
         "section",
-        { class: mdl.settings.screenSize == "desktop" && "p-50" },
+        { class: mdl.settings.screenSize == "desktop" ? "p-50" : "" },
 
         m(
           "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
@@ -16,7 +16,10 @@ const About = (mdl) => {
                 "p.col",
                 "The Bonham Acres Civic Association (BACA) is a registered 501(c)4 organization that was established to work for the common good of the community, providing a single voice for our neighborhood to area municipalities. The BACA operates with an all-volunteer staff, voluntary membership dues, and the donated time and energy of its neighbors."
               ),
-              m("figure.col", m("img", { src: "images/IMG_3216.webp" }))
+              m(
+                "figure.col",
+                m("img.height-auto", { src: "images/IMG_3216.webp" })
+              )
             )
           )
         ),
