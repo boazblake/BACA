@@ -26,7 +26,7 @@ const formatInvoice =
   }
 
 const setTempUser = (user) =>
-  sessionStorage.setItem("baca-user-token", user["sessionToken"])
+  sessionStorage.setItem("baca-session-token", user["sessionToken"])
 
 const unSetTempUser = () => sessionStorage.clear()
 

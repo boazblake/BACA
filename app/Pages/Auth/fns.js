@@ -16,7 +16,7 @@ const toAccountVM = (mdl) => (accnts) => {
 
 const setUserToken = (mdl) => (user) => {
   sessionStorage.setItem("baca-user", JSON.stringify(user))
-  sessionStorage.setItem("baca-user-token", user["sessionToken"])
+  sessionStorage.setItem("baca-session-token", user["sessionToken"])
   mdl.state.isAuth(true)
   mdl.user = user
   return mdl

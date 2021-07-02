@@ -7,9 +7,9 @@ const Footer = () => {
           "section.row",
           m(
             ".col-6",
-            m("h1.is-center", "Connect with Bonham Acres via"),
+            m("h2", "Connect with Bonham Acres via"),
             m(
-              ".grouped",
+              ".grouped.is-center",
               m(
                 "a.row.underline.nav-link",
                 {
