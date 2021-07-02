@@ -7,6 +7,46 @@ const Footer = () => {
           "section.row",
           m(
             ".col-6",
+            m("h1.is-center", "Connect with Bonham Acres via"),
+            m(
+              ".grouped",
+              m(
+                "a.row.underline.nav-link",
+                {
+                  target: "__blank",
+                  href: "https://www.facebook.com/groups/BonhamAcres?modal=false&should_open_composer=false&hoisted_section_header_type=notifications&show_migration_preparation_dialog=false&show_migration_onboarding_dialog=false",
+                },
+                m("img", {
+                  style: { width: "50px", height: "50px" },
+                  src: "icons/facebook.png",
+                })
+              ),
+              m(
+                "a.row.underline.nav-link",
+                {
+                  target: "__blank",
+                  href: "https://nextdoor.com/neighborhood/bonhamacres--houston--tx/",
+                },
+                m("img", {
+                  style: { width: "50px", height: "50px" },
+                  src: "icons/nextdoor.png",
+                })
+              ),
+              m(
+                "a.row.underline.nav-link",
+                {
+                  target: "__blank",
+                  href: "http://mailto:bonhamacrescivicassociation@gmail.com/",
+                },
+                m("img", {
+                  style: { width: "50px", height: "50px" },
+                  src: "icons/gmail.png",
+                })
+              )
+            )
+          ),
+          m(
+            ".col-6",
             m("h3", "Useful Links"),
             m(
               "ul",
@@ -75,46 +115,6 @@ const Footer = () => {
                   href: "https://09ee40f4-9ff7-4e3d-819c-429f2403854d.filesusr.com/ugd/537320_2472d77b27c640bfa348613b3aa86c95.pdf",
                 },
                 "Construction in a Floodplain"
-              )
-            )
-          ),
-          m(
-            ".col-6",
-            m("h1.is-center", "Connect with Bonham Acres via"),
-            m(
-              ".grouped",
-              m(
-                "a.row.underline.nav-link",
-                {
-                  target: "__blank",
-                  href: "https://www.facebook.com/groups/BonhamAcres?modal=false&should_open_composer=false&hoisted_section_header_type=notifications&show_migration_preparation_dialog=false&show_migration_onboarding_dialog=false",
-                },
-                m("img", {
-                  style: { width: "50px", height: "50px" },
-                  src: "icons/facebook.png",
-                })
-              ),
-              m(
-                "a.row.underline.nav-link",
-                {
-                  target: "__blank",
-                  href: "https://nextdoor.com/neighborhood/bonhamacres--houston--tx/",
-                },
-                m("img", {
-                  style: { width: "50px", height: "50px" },
-                  src: "icons/nextdoor.png",
-                })
-              ),
-              m(
-                "a.row.underline.nav-link",
-                {
-                  target: "__blank",
-                  href: "http://mailto:bonhamacrescivicassociation@gmail.com/",
-                },
-                m("img", {
-                  style: { width: "50px", height: "50px" },
-                  src: "icons/gmail.png",
-                })
               )
             )
           )
