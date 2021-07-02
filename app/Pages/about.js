@@ -33,7 +33,7 @@ const About = (mdl) => {
               ".row",
               m(
                 "figure.col",
-                m("img", {
+                m("img.height-auto", {
                   src: "images/baca-map.webp",
                 })
               ),
