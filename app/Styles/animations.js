@@ -49,14 +49,12 @@ export const SlideDown = ({ dom }) => {
 }
 
 export const FadeOut = ({ dom }) => {
-  console.log(dom.classList)
   dom.classList.replace("fade", "fadeOut")
-  console.log(dom.classList)
   return new Promise((resolve) =>
     setTimeout(() => {
       dom.classList.replace("fadeOut", "fade")
       dom.addEventListener("animationend", resolve)
-    }, 3000)
+    })
   )
 }
 

@@ -193,7 +193,7 @@ header hgroup {
 }
 
 #page-title {
-  // height: 100px;
+  letter-spacing: 2px;
 }
 
 .navigation {
@@ -295,6 +295,10 @@ header hgroup {
 
 .text-center {
   text-align: center;
+}
+
+.underline {
+  text-decoration: underline;
 }
 
 /* Main */

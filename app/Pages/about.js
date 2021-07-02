@@ -9,7 +9,7 @@ const About = (mdl) => {
           "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup.grid",
-            m("h2", "About Us."),
+            m("h2", "About Us"),
             m(
               ".row",
               m(
@@ -25,7 +25,7 @@ const About = (mdl) => {
           m(
             "hgroup.grid",
 
-            m("h2", "The Area."),
+            m("h2", "The Area"),
             m(
               ".row",
               m(
@@ -44,7 +44,7 @@ const About = (mdl) => {
         m(
           "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
 
-          m("h2", "Community Support."),
+          m("h2", "Community Support"),
 
           m(
             ".grid",

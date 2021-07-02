@@ -37,15 +37,18 @@ const BlogPost = {
               m(
                 "hgroup.col",
                 m("h2.bold", state.blog.title),
+                m("h3"),
                 m(
-                  "h3",
+                  "h4",
+                  "Added On ",
                   state.blog.createdAt,
                   state.blog.updatedAt !== state.blog.createdAt && [
-                    "updated on: ",
+                    " and updated on: ",
                     state.blog.updatedAt,
-                  ]
-                ),
-                m("h4", "Added By ", state.blog.author)
+                  ],
+                  " by ",
+                  state.blog.author
+                )
               ),
               m(
                 "figure.col.is-horizontal-align",

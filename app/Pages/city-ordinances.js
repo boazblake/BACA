@@ -10,15 +10,15 @@ const CityOrd = (mdl) => {
           "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-primary.text-white",
           m(
             "p",
-            "Bonham Acres is a deed restricted community in which deed restrictions are actively enforced.",
+            "Bonham Acres is a deed restricted community in which deed restrictions are actively enforced. ",
             m(
               m.route.Link,
               {
-                selector: "a.underline.strong",
+                selector: "a.underline",
                 class: "text-white",
                 href: "/legal/deed-restrictions",
               },
-              " The Deed Restrictions"
+              m("em", "The Deed Restrictions")
             ),
             " are intended to preserve and enhance property values as well as to promote safety in our community. "
           ),
@@ -41,7 +41,7 @@ const CityOrd = (mdl) => {
             m(
               "p",
               m(
-                "i",
+                "em",
                 "All reports will be treated as anonymous and your name kept private."
               )
             ),
@@ -55,9 +55,9 @@ const CityOrd = (mdl) => {
           "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
-            m("h3", "Car Parking in Residential Area"),
+            m("h2", "Car Parking in Residential Area"),
             m(
-              "i",
+              "em",
               "Parking of Vehicles on Residential Property Chapter 28, Article X"
             ),
             m(
@@ -94,7 +94,7 @@ const CityOrd = (mdl) => {
                 " http://mycity.houstontx.gov/public/ "
               ),
               "and activating ",
-              m("i", "the Prohibited Yard Parking application: ")
+              m("em", "the Prohibited Yard Parking application: ")
             ),
             m(
               "p",
@@ -113,7 +113,7 @@ const CityOrd = (mdl) => {
           "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
-            m("h3", "Nuisance Ordinances"),
+            m("h2", "Nuisance Ordinances"),
             m(
               "p",
               m(
@@ -167,7 +167,7 @@ const CityOrd = (mdl) => {
           "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
-            m("h3", "Noise Ordinances"),
+            m("h2", "Noise Ordinances"),
 
             m(
               "p",
@@ -207,7 +207,7 @@ const CityOrd = (mdl) => {
           "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
-            m("h3", "Trash & Dumpster Ordinances"),
+            m("h2", "Trash & Dumpster Ordinances"),
             m(
               "p",
               m(

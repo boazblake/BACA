@@ -12,12 +12,15 @@ const BlogPreview = {
         m(
           "hgroup.col-8",
           m("h2.bold", title),
+          m("h3"),
           m(
-            "h3",
+            "p",
+            "Added On ",
             createdAt,
-            updatedAt !== createdAt && ["updated on: ", updatedAt]
-          ),
-          m("p", "Added By ", author)
+            updatedAt !== createdAt && ["updated on: ", updatedAt],
+            " by ",
+            author
+          )
         ),
         m(
           "figure.col.is-horizontal-align",
