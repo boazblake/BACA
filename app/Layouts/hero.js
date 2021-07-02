@@ -64,6 +64,7 @@ const Hero = () => {
         },
         m("img.hero-img.fade", {
           src: Images[state.image()],
+          onload: (e) => e.target.classList.replace("fadeout", "fade"),
           onupdate: FadeOut,
           style: {
             height: calcHeight(mdl),
