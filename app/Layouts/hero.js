@@ -1,5 +1,5 @@
 import Images from "../images"
-import { FadeOut } from "Styles/animations"
+import { FadeBack } from "Styles/animations"
 
 const state = {
   image: Stream(0),
@@ -65,7 +65,7 @@ const Hero = () => {
         m("img.hero-img.fade", {
           src: Images[state.image()],
           onload: (e) => e.target.classList.replace("fadeout", "fade"),
-          onupdate: FadeOut,
+          onupdate: FadeBack,
           style: {
             height: calcHeight(mdl),
           },

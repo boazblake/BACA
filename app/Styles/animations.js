@@ -48,6 +48,16 @@ export const SlideDown = ({ dom }) => {
   dom.style.opacity = 1
 }
 
+export const FadeBack = ({ dom }) => {
+  dom.classList.replace("fade", "fadeback")
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      dom.classList.replace("fadeback", "fade")
+      dom.addEventListener("animationend", resolve)
+    })
+  )
+}
+
 export const FadeOut = ({ dom }) => {
   dom.classList.replace("fade", "fadeOut")
   return new Promise((resolve) =>

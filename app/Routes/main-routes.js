@@ -1,5 +1,5 @@
 import Layout from "Layouts/index.js"
-import Default from "Pages/default.js"
+import Contact from "Pages/contact.js"
 import Home from "Pages/home.js"
 import About from "Pages/about.js"
 import JoinBACA from "Pages/join-baca.js"
@@ -68,7 +68,7 @@ const Routes = [
             inline: "start",
           })
     },
-    component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
+    component: (mdl) => m(Layout, { mdl }, m(Contact, { mdl })),
   },
   {
     id: "join-BACA",

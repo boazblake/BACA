@@ -1,3 +1,4 @@
+import Loader from "Components/loader.js"
 import { prop, startsWith, traverse } from "ramda"
 import { exists } from "Utils"
 import Task from "data.task"
@@ -211,19 +212,22 @@ const Album = {
       ),
       m("h2", state.title.toLocaleUpperCase()),
       mdl.state.isLoading()
-        ? "LOADING"
+        ? m(Loader)
         : m(
-            ".row",
-            state.album.map((pic) =>
-              m(
-                "figure.col-4",
-                mdl.state.isAuth() &&
-                  m(TimesCircleLine, {
-                    class: "pointer",
-                    fill: "red",
-                    onclick: (e) => deleteImg(mdl, pic),
-                  }),
-                m("img", { src: pic.thumb })
+            ".container.grid.p-y-6.fade",
+            m(
+              ".row",
+              state.album.map((pic) =>
+                m(
+                  "figure.col-4",
+                  mdl.state.isAuth() &&
+                    m(TimesCircleLine, {
+                      class: "pointer",
+                      fill: "red",
+                      onclick: (e) => deleteImg(mdl, pic),
+                    }),
+                  m("img", { src: pic.thumb })
+                )
               )
             )
           )

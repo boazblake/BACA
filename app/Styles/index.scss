@@ -94,16 +94,35 @@ article {
 
 body,
 html {
+  overflow: hidden;
   height: 100%;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  max-height: 90vh;
+  width: 100vw;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
+}
+
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+.logoLoader {
+  width: max-content;
+  margin: 0 auto;
+  .heartbeat {
+    width: 50rem;
+  }
+}
+
+.heartbeat {
+  -webkit-animation: heartbeat 1.5s ease-in-out infinite both;
+  animation: heartbeat 1.5s ease-in-out infinite both;
 }
 
 /* Typography */
@@ -124,6 +143,10 @@ small {
 
 .strong {
   font-weight: 400;
+}
+
+.p-x-l-50 {
+  padding-left: 50px;
 }
 
 .p-x-50 {
@@ -183,6 +206,19 @@ header hgroup {
   );
   margin-bottom: var(--spacing);
 }
+
+// details {
+//   transition: height 1s ease;
+//   overflow: auto;
+// }
+
+// details:not([open]) {
+//   height: 50px;
+// }
+
+// details[open] {
+//   height: 100px;
+// }
 
 .sticky-nav {
   z-index: 10;
@@ -302,13 +338,18 @@ header hgroup {
 }
 
 /* Main */
+main {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 main .grid > * {
   margin-bottom: var(--spacing);
 }
 @media (min-width: 992px) {
   main > .grid {
-    grid-column-gap: var(--spacing);
-    grid-template-columns: auto 25%;
+    // grid-column-gap: var(--spacing);
+    // grid-template-columns: auto 25%;
   }
 
   .hero {

@@ -1389,6 +1389,31 @@
   }
 }
 
+.fadeback {
+  -webkit-animation-name: fadeback;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fadeback;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fadeback {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.4;
+  }
+}
+
+@keyframes fadeback {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.4;
+  }
+}
+
 @-webkit-keyframes fadeIn {
   from {
     opacity: 0;

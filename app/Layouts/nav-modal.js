@@ -28,14 +28,14 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
   return {
     view: ({ attrs: { isSelected } }) =>
       m(
-        "details.grid.col-12.text-primary.animated",
+        "details.grid.col-12.text-primary.animated.pointer",
         {
           class: "primary",
           onclick: (e) => toggleRoutes(mdl)(route.id),
         },
         m("summary.nav-link", route.name),
         m(
-          "nav.row",
+          "nav.row.bd-primary.fade.p-x-l-50",
           childRoutes.map((r) =>
             r.group.includes("external")
               ? m(

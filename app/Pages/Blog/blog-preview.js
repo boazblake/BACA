@@ -27,9 +27,8 @@ const BlogPreview = {
           m("img", {
             src: thumb || "images/main.webp",
             style: {
-              border: "1px solid black",
-              borderRadius: "2%",
               width: "182px",
+              height: "fit-content",
             },
           })
         )

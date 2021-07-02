@@ -2,9 +2,9 @@ const JoinBACA = (mdl) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        ".",
+        "",
         m(
-          "section",
+          "section.container",
           m(
             "hgroup",
             m(
@@ -17,12 +17,18 @@ const JoinBACA = (mdl) => {
             ),
             m(
               "p",
-              "We will use the annual $50 membership to maintain ",
-              m(m.route.Link, { href: "/" }, "bonhamacres.org, "),
-              "Bonham Acre monuments, BACA work & communication uphold deed restriction and city ordinances, mailers & signage, social events, other items as voted on by BACA members."
+              "We will use the ",
+              m("span.text-primary", "annual $50 membership"),
+              " to maintain ",
+              m(
+                m.route.Link,
+                { selector: "a", class: "underline", href: "/" },
+                "bonhamacres.org"
+              ),
+              ", Bonham Acre monuments, BACA work & communication uphold deed restriction and city ordinances, mailers & signage, social events, other items as voted on by BACA members."
             ),
             m(
-              "h4",
+              "h3",
               "We are not a HOA",
               m(
                 "a",

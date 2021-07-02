@@ -1,4 +1,4 @@
-import m from "mithril"
+import Loader from "Components/loader.js"
 import { compose, groupBy, prop } from "ramda"
 
 const state = {
@@ -127,9 +127,9 @@ const Gallery = {
   oninit: fetchAllAlbums,
   view: ({ attrs: { mdl } }) =>
     mdl.state.isLoading()
-      ? m("article.modal", "LOADING")
+      ? m(Loader)
       : m(
-          ".container.grid.p-y-6",
+          ".container.grid.p-y-6.fade",
           mdl.state.isAuth() &&
             m(
               "nav.nav",

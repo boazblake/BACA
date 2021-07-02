@@ -1,6 +1,7 @@
 import { ArrowLine, NoteEditLine } from "@mithril-icons/clarity"
 import { parseMarkdown } from "Utils"
 import { toViewModel } from "./blog"
+import Loader from "Components/loader.js"
 
 const state = {
   blog: null,
@@ -27,9 +28,9 @@ const BlogPost = {
   oninit: fetchBlogPost,
   view: ({ attrs: { mdl } }) =>
     mdl.state.isLoading()
-      ? m("article.card.container.p-y-6", "LOADING POST")
+      ? m(Loader)
       : m(
-          "section.container.p-y-6",
+          "section.container.p-y-6.fade",
           m(
             "article.",
             m(
@@ -55,9 +56,8 @@ const BlogPost = {
                 m("img.", {
                   src: state.blog.thumb || "images/main.webp",
                   style: {
-                    border: "1px solid black",
-                    borderRadius: "2%",
                     width: "182px",
+                    height: "fit-content",
                   },
                 })
               )

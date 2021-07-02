@@ -1,3 +1,4 @@
+import Loader from "Components/loader.js"
 import { formatDate } from "Utils"
 import { compose, lensProp, over } from "ramda"
 import BlogPreview from "./blog-preview.js"
@@ -31,9 +32,9 @@ const Blog = () => {
     },
     view: ({ attrs: { mdl } }) =>
       mdl.state.isLoading()
-        ? m("article.modal", "LOADING")
+        ? m(Loader)
         : m(
-            ".container.grid.p-y-6",
+            ".container.grid.p-y-6.fade",
             mdl.state.isAuth() &&
               m(
                 "nav.nav.m-y-6",
