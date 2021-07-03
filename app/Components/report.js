@@ -10,13 +10,24 @@ const state = {
   firstName: "",
   lastName: "",
   email: "",
-  image: null,
   images: [],
 }
 
+const resetState = () => {
+  state.date = ""
+  state.time = ""
+  state.location = ""
+  state.subject = ""
+  state.message = ""
+  state.firstName = ""
+  state.lastName = ""
+  state.email = ""
+  state.images = []
+}
+
 const submitReport = (mdl, showModal) => {
-  onSuccess = (s) => showModal(false)
-  onError = (e) => console.log(e)
+  const onSuccess = (s) => showModal(false)
+  const onError = (e) => console.log(e)
   console.log(state) // save imgBB then
 
   // mdl.http.back4App
@@ -25,6 +36,7 @@ const submitReport = (mdl, showModal) => {
 }
 
 const ViolationReport = {
+  onremove: resetState,
   view: ({ attrs: { mdl, showModal } }) =>
     m(
       ".modal-container",
@@ -62,6 +74,46 @@ const ViolationReport = {
                 m("input", {
                   oninput: (e) => (state.location = e.target.value),
                 })
+              ),
+
+              m(
+                "label",
+                "Violation",
+                m(
+                  "select",
+                  {
+                    onchange: (e) => (state.violation = e.target.value),
+                  },
+                  m("option", { value: "" }, "Select a violation"),
+                  m("option", { value: "Yard Parking" }, "Yard Parking"),
+                  m("option", { value: "Overgrown Lot" }, "Overgrown Lot"),
+                  m(
+                    "option",
+                    { value: "Garbage / Trash / Rubbish" },
+                    "Garbage / Trash / Rubbish"
+                  ),
+                  m(
+                    "option",
+                    { value: "Junked auto appliances / furniture" },
+                    "Junked auto appliances / furniture"
+                  ),
+                  m(
+                    "option",
+                    { value: "new construction" },
+                    "new construction"
+                  ),
+                  m(
+                    "option",
+                    { value: "Business in westview terrace" },
+                    "Business in westview terrace"
+                  ),
+                  m(
+                    "option",
+                    { value: "Trailer being used as residance" },
+                    "Trailer being used as residance"
+                  ),
+                  m("option", { value: "Other" }, "Other")
+                )
               ),
 
               m(
