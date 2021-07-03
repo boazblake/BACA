@@ -122,6 +122,7 @@ body {
 
 img {
   height: intrinsic;
+  width: intrinsic;
   max-width: 100%;
 }
 
@@ -183,6 +184,10 @@ small {
 
 .height-auto {
   height: auto;
+}
+
+.width-auto {
+  width: auto;
 }
 
 /* Header */

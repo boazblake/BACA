@@ -24,12 +24,7 @@ const BlogPreview = {
         ),
         m(
           "figure.col.is-horizontal-align",
-          m("img", {
-            src: thumb || "images/main.webp",
-            style: {
-              width: "182px",
-            },
-          })
+          m("img", { src: thumb || "images/main.webp" })
         )
       ),
       m(

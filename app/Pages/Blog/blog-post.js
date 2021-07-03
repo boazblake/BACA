@@ -52,13 +52,8 @@ const BlogPost = {
                 )
               ),
               m(
-                "figure.col.is-horizontal-align",
-                m("img.", {
-                  src: state.blog.thumb || "images/main.webp",
-                  style: {
-                    width: "182px",
-                  },
-                })
+                "figure.col-3.is-horizontal-align",
+                m("img", { src: state.blog.thumb || "images/main.webp" })
               )
             ),
             m(
