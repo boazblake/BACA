@@ -95,6 +95,7 @@ body.dark {
 *:before,
 *:after {
   box-sizing: border-box !important;
+  touch-action: manipulation !important;
 }
 
 article {
@@ -285,18 +286,6 @@ header hgroup {
   }
 }
 
-// #nav-modal:after {
-//   content: "";
-//   position: absolute;
-//   left: 50%;
-//   top: 50%;
-//   transform: translate(-50%, -50%);
-//   border-radius: 50%;
-//   width: 150px;
-//   height: 150px;
-//   border: 1000px solid rebeccapurple;
-// }
-
 .modal-container {
   position: fixed;
   top: 0;
@@ -318,6 +307,7 @@ header hgroup {
 
 .modal {
   background: var(--white);
+  color: var(--font-color);
   padding: 25px;
   margin: 0;
   overflow-x: hidden;

@@ -90,24 +90,14 @@ const NewAlbumModal = {
             "Add A Photo",
             m("input", {
               type: "file",
-              oninput: (e) => {
-                state.newAlbum.img = e.target.files[0]
-              },
+              id: "file",
+              accept: "images/*",
+              oninput: (e) => (state.newAlbum.img = e.target.files[0]),
             })
           )
         ),
         m(
           ".modal-footer.is-right grouped",
-          m(
-            "button.button.primary",
-            {
-              onclick: (e) => {
-                e.preventDefault()
-                createtNewAlbum(mdl)
-              },
-            },
-            "Create Album"
-          ),
           m(
             "button.button.secondary",
             {
@@ -117,6 +107,18 @@ const NewAlbumModal = {
               },
             },
             "cancel"
+          ),
+
+          m(
+            "button.button.primary",
+            {
+              disabled: !state.newAlbum.img,
+              onclick: (e) => {
+                e.preventDefault()
+                createtNewAlbum(mdl)
+              },
+            },
+            "Create Album"
           )
         )
       )

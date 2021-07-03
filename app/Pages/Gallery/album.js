@@ -154,7 +154,7 @@ const Modal = () => {
                 )
           ),
           m(
-            "section.modal-footer",
+            "section.modal-footer.grouped",
             m("button", { onclick: () => state.showModal(false) }, "Cancel"),
             m(
               "button",

@@ -42,7 +42,11 @@ const CityOrd = (mdl) => {
                 "Report City Ordinance Violation",
                 m(ExclamationTriangleLine, { fill: "red" })
               ),
-              state.showOrdinanceViolation() && m(ViolationReport, { mdl })
+              state.showOrdinanceViolation() &&
+                m(ViolationReport, {
+                  mdl,
+                  showModal: state.showOrdinanceViolation,
+                })
             ),
             m(
               "p",
