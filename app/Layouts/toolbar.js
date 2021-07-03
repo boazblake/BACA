@@ -19,6 +19,7 @@ const Toolbar = () => {
             "figure.pointer.scale-2",
             m(m.route.Link, {
               selector: "img",
+              class: "width-auto",
               id: "nav-logo",
               href: "/",
               src: "images/logo.webp",
