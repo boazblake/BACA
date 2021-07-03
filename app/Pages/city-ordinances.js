@@ -1,4 +1,9 @@
+import ViolationReport from "Components/report"
 import { ExclamationTriangleLine } from "@mithril-icons/clarity"
+
+const state = {
+  showOrdinanceViolation: Stream(false),
+}
 
 const CityOrd = (mdl) => {
   return {
@@ -33,10 +38,11 @@ const CityOrd = (mdl) => {
               ".p-y-6.is-center",
               m(
                 "button.button.icon.bd-error",
-                { onclick: (e) => {} },
+                { onclick: (e) => state.showOrdinanceViolation(true) },
                 "Report City Ordinance Violation",
                 m(ExclamationTriangleLine, { fill: "red" })
-              )
+              ),
+              state.showOrdinanceViolation() && m(ViolationReport, { mdl })
             ),
             m(
               "p",

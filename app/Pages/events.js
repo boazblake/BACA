@@ -1,4 +1,4 @@
-let calendar = (dom) =>
+const initCal = (dom) =>
   new FullCalendar.Calendar(dom, {
     initialView: "dayGridMonth",
     initialDate: new Date(),
@@ -12,9 +12,15 @@ let calendar = (dom) =>
     },
   })
 
+const state = {
+  calendar: null,
+}
+
 const Events = {
-  oncreate: ({ dom }) => calendar(dom).render(),
-  onupdate: ({ dom }) => calendar(dom).render(),
+  oncreate: ({ dom }) => {
+    state.calendar = initCal(dom).render()
+  },
+  onupdate: ({ dom }) => state.calendar.render(),
   view: ({ attrs: { mdl } }) =>
     m("#calendar", {
       onclick: (e) => console.log("e", e, e.target["data-date"]),
