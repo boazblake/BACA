@@ -300,14 +300,19 @@ const BlogEditor = () => {
               },
               m(
                 ".modal.card",
-                m("h3", "Headings"),
-                m("h4", "use #"),
-                m("h3", "Italics & Bold"),
-                m("h4", "use *"),
-                m("h3", "Lists"),
-                m("h4", "use + or -"),
-                m("h3", "Links"),
-                m("h4", "use []()")
+                m(
+                  "p",
+                  "Markdown is a text-to-HTML conversion tool for web writers. Markdown allows you to write using an easy-to-read, easy-to-write plain text format."
+                ),
+                m("h4", "Headings"),
+                m("p", "Example: # heading, ## heading, ### heading "),
+                m("h4", "Italics & Bold"),
+                m("p", "Example: *hello world* "),
+                m("p", "Example bold: **hello world** "),
+                m("h4", "Lists"),
+                m("p", "Example: - apple, - orange "),
+                m("h4", "Links"),
+                m("p", "Example: [website name](www.website.com) ")
               )
             ),
 

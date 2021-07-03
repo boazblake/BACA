@@ -4,7 +4,7 @@ import { compose, groupBy, prop } from "ramda"
 const state = {
   albums: [],
   showModal: Stream(false),
-  newAlbum: { title: "", img: "" },
+  newAlbum: { title: "", img: null },
 }
 
 const groupByAlbum = compose(groupBy(prop("album")), prop("results"))
@@ -37,6 +37,8 @@ const createtNewAlbum = (mdl) => {
     fetchAllAlbums({ attrs: { mdl } })
   }
 
+  return console.log(state)
+
   const image = new FormData()
   image.append("image", state.newAlbum.img)
   mdl.http.imgBB
@@ -67,11 +69,6 @@ const NewAlbumModal = {
   view: ({ attrs: { mdl } }) =>
     m(
       ".modal-container",
-      {
-        id: "modal-container",
-        onclick: (e) =>
-          e.target.id == "modal-container" && state.showModal(false),
-      },
       m(
         "form.modal.card",
         m(
@@ -89,10 +86,9 @@ const NewAlbumModal = {
             "label",
             "Add A Photo",
             m("input", {
-              type: "file",
-              id: "file",
-              accept: "images/*",
               oninput: (e) => (state.newAlbum.img = e.target.files[0]),
+              type: "file",
+              id: "files",
             })
           )
         ),

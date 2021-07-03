@@ -107,12 +107,6 @@ const Modal = () => {
     view: ({ attrs: { mdl } }) =>
       m(
         "section.modal-container",
-        {
-          id: "modal-container",
-          onclick: (e) => {
-            e.target.id == "modal-container" && state.showModal(false)
-          },
-        },
         m(
           "article.modal.card.grid",
           m(
