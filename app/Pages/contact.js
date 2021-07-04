@@ -35,18 +35,24 @@ const Contact = (mdl) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "section.container.grid.bd-light",
-        m("h2", "Bonham Acres Civic Association Board Members April 13, 2021"),
+        "article.bg-light",
         m(
-          "article.row",
-          BoardMembers.map(({ title, name, phones, emails }) =>
-            m(
-              ".card.col-4",
-              m("h4", title),
-              m("p", name),
-              phones.map((phone) => m("p", phone)),
-              emails.map((email) =>
-                m("p.pointer.underline", { href: `mailto:${email}` }, email)
+          "section.container",
+          m(
+            "h2.is-center.is-marginless",
+            "Bonham Acres Civic Association Board Members April 13, 2021"
+          ),
+          m(
+            ".row.container",
+            BoardMembers.map(({ title, name, phones, emails }) =>
+              m(
+                ".card.col-4",
+                m("h4.text-primary", title),
+                m("p", name),
+                phones.map((phone) => m("p", phone)),
+                emails.map((email) =>
+                  m("p.pointer.underline", { href: `mailto:${email}` }, email)
+                )
               )
             )
           )

@@ -7,6 +7,7 @@ const state = {
   album: [],
   title: "",
   showModal: Stream(false),
+  isUpLoading: Stream(false),
   modalState: {
     imgFiles: [],
     selectedImgs: [],
@@ -75,11 +76,12 @@ const uploadImage = (mdl) => (file) => {
 }
 
 const submitImages = (mdl, images) => {
+  state.isUpLoading(true)
   const onSuccess = (d) => {
     fetchAlbum({ attrs: { mdl } })
+    state.isUpLoading(false)
     state.showModal(false)
   }
-
   const onError = (e) => console.error("e", e)
   traverse(Task.of, uploadImage(mdl), Object.values(images)).fork(
     onError,
@@ -115,7 +117,7 @@ const Modal = () => {
           ),
           m(
             "section.modal-content",
-            mdl.state.isLoading()
+            state.isUpLoading()
               ? m("p", "PROCESSING IMAGES... PLEASE BE PATIENT")
               : m(
                   "form.grid",
@@ -170,53 +172,54 @@ const Modal = () => {
 const Album = {
   oninit: fetchAlbum,
   view: ({ attrs: { mdl } }) =>
-    m(
-      ".container",
-      m(
-        "nav.grouped.m-y-6",
-        m(
-          m.route.Link,
-          {
-            selector: "button.button.primary.outline.icon",
-            href: "/social/gallery",
-            class: "primary",
-          },
-          m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
-          "Back To Gallery"
-        ),
-        mdl.state.isAuth() && [
+    mdl.state.isLoading() && !state.isUpLoading()
+      ? m(Loader)
+      : m(
+          "article.grid.p-y-6.fade.bg-light",
           m(
-            "button.button.primary",
-            {
-              onclick: (e) => state.showModal(true),
-            },
-            "Add more Images to Album"
-          ),
-          m(
-            "button.button error",
-            {
-              onclick: (e) => {
-                deleteAlbum(mdl)
+            "nav.grouped.m-y-6",
+            m(
+              m.route.Link,
+              {
+                selector: "button.button.primary.outline.icon",
+                href: "/social/gallery",
+                class: "primary",
               },
-            },
-            "Delete Album"
+              m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
+              "Back To Gallery"
+            ),
+            mdl.state.isAuth() && [
+              m(
+                "button.button.primary",
+                {
+                  onclick: (e) => state.showModal(true),
+                },
+                "Add more Images to Album"
+              ),
+              m(
+                "button.button error",
+                {
+                  onclick: (e) => {
+                    deleteAlbum(mdl)
+                  },
+                },
+                "Delete Album"
+              ),
+            ],
+            state.showModal() && m(Modal, { mdl })
           ),
-        ],
-        state.showModal() && m(Modal, { mdl })
-      ),
-      m("h2", state.title.toLocaleUpperCase()),
-      mdl.state.isLoading()
-        ? m(Loader)
-        : m(
-            ".container.grid.p-y-6.fade",
+          m(
+            "section.container",
+            m("h2", state.title.toLocaleUpperCase()),
             m(
               ".row",
               state.album.map((pic) =>
                 m(
-                  "figure.col-4.pos-rel",
+                  "figure.is-center.col-4.pos-rel",
                   mdl.state.isAuth() &&
                     m(TimesCircleLine, {
                       class: "pointer bg-white pos-abs",
+                      style: { borderRadius: "50%", top: 0, right: "20%" },
                       fill: "red",
                       onclick: (e) => deleteImg(mdl, pic),
                     }),
@@ -225,7 +228,7 @@ const Album = {
               )
             )
           )
-    ),
+        ),
 }
 
 export default Album

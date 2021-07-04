@@ -4,9 +4,9 @@ const JoinBACA = (mdl) => {
       m(
         "",
         m(
-          "section.container",
+          "section.bg-light",
           m(
-            "hgroup",
+            "hgroup.container",
             m(
               "p",
               "BACA operates as a non-profit organization for community and civic improvement and protection and other non-profit purposes."

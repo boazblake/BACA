@@ -28,7 +28,8 @@ const resetState = () => {
 const submitReport = (mdl, showModal) => {
   const onSuccess = (s) => showModal(false)
   const onError = (e) => console.log(e)
-  console.log(state) // save imgBB then
+  console.log(state)
+  // save imgBB then
 
   // mdl.http.back4App
   //   .postTask(mdl)("Classes/Reports")(state)

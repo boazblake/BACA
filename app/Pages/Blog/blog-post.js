@@ -30,11 +30,11 @@ const BlogPost = {
     mdl.state.isLoading()
       ? m(Loader)
       : m(
-          "section.container.p-y-6.fade",
+          "section.p-y-6.fade",
           m(
-            "article.",
+            "article.bg-light",
             m(
-              ".row",
+              "section.row.container",
               m(
                 "hgroup.col",
                 m("h2.bold", state.blog.title),

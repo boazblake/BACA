@@ -37,8 +37,6 @@ const createtNewAlbum = (mdl) => {
     fetchAllAlbums({ attrs: { mdl } })
   }
 
-  return console.log(state)
-
   const image = new FormData()
   image.append("image", state.newAlbum.img)
   mdl.http.imgBB
@@ -57,7 +55,7 @@ const AlbumCover = {
       m.route.Link,
       {
         selector: "figure",
-        class: "button clear card col-4",
+        class: "button card col-4 bg-white",
         href: `social/gallery/album:${album}`,
       },
       m("img", { src: thumb }),
@@ -127,7 +125,7 @@ const Gallery = {
     mdl.state.isLoading()
       ? m(Loader)
       : m(
-          ".container.grid.p-y-6.fade",
+          "article.bg-light.grid.p-y-6.fade",
           mdl.state.isAuth() &&
             m(
               "nav.nav",
@@ -145,7 +143,7 @@ const Gallery = {
               )
             ),
           m(
-            ".row",
+            "section.row.container",
             Object.keys(state.albums).map((album) =>
               m(AlbumCover, { mdl, album: state.albums[album][0] })
             )
