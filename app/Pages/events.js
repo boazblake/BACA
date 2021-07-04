@@ -23,7 +23,7 @@ const Events = {
   onupdate: ({ dom }) => state.calendar.render(),
   view: ({ attrs: { mdl } }) =>
     m("#calendar", {
-      onclick: (e) => console.log("e", e, e.target["data-date"]),
+      onclick: (e) => console.log("e", e, e.target.parentNode["data-date"]),
     }),
 }
 
