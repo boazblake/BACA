@@ -22,7 +22,8 @@ export const formatLensDate = (prpty) => over(lensProp(prpty), formatDate)
 export const toViewModel = compose(
   reverse,
   sortBy(propEq("createdAt")),
-  map(compose(formatLensDate("updatedAt"), formatLensDate("createdAt")))
+  map(compose(formatLensDate("updatedAt"), formatLensDate("createdAt"))),
+  log("wtf")
 )
 
 const loadBlogs = ({ attrs: { mdl } }) => {

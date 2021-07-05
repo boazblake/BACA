@@ -2,6 +2,7 @@ import { ArrowLine, NoteEditLine } from "@mithril-icons/clarity"
 import { parseMarkdown } from "Utils"
 import { toViewModel } from "./blog"
 import Loader from "Components/loader.js"
+import { map } from "ramda"
 
 const state = {
   blog: null,
@@ -15,11 +16,14 @@ const deleteBlog = (mdl) =>
 
 const fetchBlogPost = ({ attrs: { mdl } }) => {
   const onError = (e) => console.log(e)
-  const onSuccess = (blog) => (state.blog = blog)
+  const onSuccess = ([blog]) => (state.blog = blog)
 
   let id = m.route.get().split(":")[1]
+  // return console.log(id, m.route.params)
+
   mdl.http.back4App
     .getTask(mdl)(`Classes/Blogs/${id}`)
+    .map(Array.of)
     .map(toViewModel)
     .fork(onError, onSuccess)
 }
