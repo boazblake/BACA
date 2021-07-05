@@ -139,6 +139,10 @@ img {
   animation: heartbeat 1.5s ease-in-out infinite both;
 }
 
+formgroup {
+  display: block;
+}
+
 /* Typography */
 h2,
 h3,
@@ -319,6 +323,10 @@ header hgroup {
   overflow-x: hidden;
   height: fit-content;
   transition: height 3s ease;
+}
+
+.modal-footer {
+  padding-top: 20px;
 }
 
 #fab {

@@ -5,7 +5,7 @@ import BlogEditor from "Pages/Blog/blog-editor"
 import BlogPost from "Pages/Blog/blog-post"
 import Gallery from "Pages/Gallery/gallery.js"
 import Album from "Pages/Gallery/album.js"
-import Events from "Pages/events.js"
+import Events from "Pages/Events/index.js"
 import { scrollToAnchor, PageTitle } from "Utils"
 
 const SocialRoutes = [
