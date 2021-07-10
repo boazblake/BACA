@@ -10,7 +10,7 @@ const getCellDate = (target) => {
 const onEventClick = (state) => (info) => {
   info.jsEvent.preventDefault()
   let id = info.event.extendedProps.objectId
-  state.event = state.events().find(propEq("objectId", id))
+  state.event = state.events.find(propEq("objectId", id))
   state.previewEvent(true)
   state.event.startDate = state.event.start.split("T")[0]
   state.event.startTime = state.event.start.split("T")[1]
@@ -24,8 +24,9 @@ const onEventClick = (state) => (info) => {
 }
 
 const initCal = (dom, state) => {
+  console.log(state.events)
   return new FullCalendar.Calendar(dom, {
-    events: state.events(),
+    events: state.events,
     eventClick: onEventClick(state),
     initialView: "dayGridMonth",
     initialDate: new Date(),
@@ -53,7 +54,6 @@ const Calendar = {
   view: ({ attrs: { mdl, state } }) =>
     m("section#calendar", {
       oncreate: ({ dom }) => {
-        state.events()
         state.calendar = initCal(dom, state)
         state.calendar.render()
       },

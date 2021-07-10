@@ -7,13 +7,18 @@ const Event = {
       m(
         ".modal",
         m(
-          "section.modal-content container card",
+          "header.modal-header",
+          m("h2.tag", event.title),
           m(".grouped", m("label", event.startDate), m("label", event.endDate)),
           m(".grouped", m("label", event.startTime), m("label", event.endTime)),
           event.allDay &&
             m(".grouped", m("label.tag.primary", "All Day Event")),
-          m(".grouped", m("label", event.title)),
-          m(".grouped", m("label", event.image)),
+          m(".grouped", m("img", { src: event.image }))
+        ),
+
+        m(
+          "section.modal-content container card",
+
           m(".grouped", m("label", event.description))
         ),
         m(

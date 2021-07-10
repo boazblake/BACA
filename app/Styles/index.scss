@@ -303,12 +303,16 @@ header hgroup {
   margin: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  max-height: 90%;
+  display: flex;
+  flex-flow: column;
 }
 
 .modal-content {
   overflow-y: auto;
   overflow-x: hidden;
   height: fit-content;
+  max-height: 80%;
   transition: height 3s ease;
 }
 
@@ -353,6 +357,10 @@ header hgroup {
 
 .pos-abs {
   position: absolute;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
 }
 
 /* Main */

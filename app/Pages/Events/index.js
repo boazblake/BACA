@@ -8,7 +8,7 @@ const state = {
   calendar: null,
   showEditor: Stream(false),
   selectedDate: Stream(null),
-  events: Stream([]),
+  events: [],
   previewEvent: Stream(false),
   event: {
     id: "",
@@ -45,7 +45,7 @@ const fetchEvents = ({ attrs: { mdl } }) => {
     console.error(e)
   }
   const onSuccess = (events) => {
-    state.events(events)
+    state.events = events
     state.status("loaded")
   }
   mdl.http.back4App
