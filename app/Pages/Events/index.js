@@ -2,6 +2,8 @@ import Calendar from "./calendar"
 import Editor from "./editor"
 import Event from "./event"
 import { prop } from "ramda"
+import M from "moment"
+import { log } from "Utils"
 
 const state = {
   status: Stream("loading"),
@@ -70,7 +72,17 @@ const deleteEvent = (mdl, id) => {
     .fork(onError, onSuccess)
 }
 
-const formatDate = (date, time) => `${date}T${time}`
+const formatDate = (date, time) => {
+  // clean time
+  let t = time
+    .replaceAll("am", "")
+    .replaceAll("pm", "")
+    .replaceAll("AM", "")
+    .replaceAll("PM", "")
+    .trim()
+
+  return `${date}T${t}`
+}
 
 const submitEvent = (
   mdl,
@@ -108,36 +120,25 @@ const Events = {
   view: ({ attrs: { mdl } }) =>
     m(
       "article",
+      state.showEditor() &&
+        m(Editor, {
+          mdl,
+          state,
+          showEditor: state.showEditor,
+          submitEvent,
+          deleteEvent,
+          resetState,
+        }),
 
-      m(
-        "aside",
-        // m(
-        //   "button.is-primary",
-        //   {
-        //     onclick: (e) => {},
-        //   },
-        //   "Add Event"
-        // ),
-        state.showEditor() &&
-          m(Editor, {
-            mdl,
-            state,
-            showEditor: state.showEditor,
-            submitEvent,
-            deleteEvent,
-            resetState,
-          }),
-
-        state.previewEvent() &&
-          m(Event, {
-            mdl,
-            state,
-            editEvent: state.showEditor,
-            previewEvent: state.previewEvent,
-            event: state.event,
-            resetState,
-          })
-      ),
+      state.previewEvent() &&
+        m(Event, {
+          mdl,
+          state,
+          editEvent: state.showEditor,
+          previewEvent: state.previewEvent,
+          event: state.event,
+          resetState,
+        }),
 
       state.status() == "loaded" && m("section", m(Calendar, { mdl, state })),
       state.status() == "loading" && m("section", "is loading"),
