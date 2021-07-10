@@ -26,7 +26,7 @@ const Editor = {
             "form",
             { ...onInput(state.event) },
             m(
-              "formgroup",
+              "formgroup.grouped",
               m(
                 "label",
                 "Start Date",
