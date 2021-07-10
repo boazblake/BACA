@@ -43,6 +43,7 @@ const Editor = {
                   type: "time",
                   id: "startTime",
                   value: state.event.startTime,
+                  pattern: "(?:[01]|2(?![5-9])){1}d{1}:[0-5]{1}d{1}",
                 })
               )
             ),

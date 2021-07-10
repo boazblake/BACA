@@ -98,6 +98,7 @@ const submitEvent = (
     description,
     createdBy: mdl.user.name,
   }
+  console.log(startTime, endTime, start, end)
 
   const onError = (e) => {
     console.error(e)
