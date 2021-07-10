@@ -52,7 +52,7 @@
   //   --line-height: 1.5;
   //   --text-weight: 400;
   //   --titles-weight: 700;
-  //   --form-element-weight: var(--text-weight);
+  --form-element-weight: var(--text-weight);
   //   --buttons-weight: var(--text-weight);
   //   --code-weight: var(--text-weight);
   //   --base-font-xs: 16px;
@@ -67,20 +67,20 @@
   //   --h5-size: 1.125rem;
   //   --h6-size: 1rem;
   //   --block-round: 0.25rem;
-  //   --form-element-border-width: 1px;
-  //   --form-element-outline-width: 3px;
+  --form-element-border-width: 1px;
+  --form-element-outline-width: 3px;
   //   --checkbox-radio-border-width: 2px;
   //   --switch-border-width: 3px;
-  //   --form-element-spacing-vertical: 0.75rem;
-  //   --form-element-spacing-horizontal: 1rem;
+  --form-element-spacing-vertical: 0.75rem;
+  --form-element-spacing-horizontal: 1rem;
   //   --button-round: var(--block-round);
-  //   --button-border-width: var(--form-element-border-width);
-  //   --button-outline-width: var(--form-element-outline-width);
-  //   --button-spacing-vertical: var(--form-element-spacing-vertical);
-  //   --button-spacing-horizontal: var(--form-element-spacing-horizontal);
+  --button-border-width: var(--form-element-border-width);
+  --button-outline-width: var(--form-element-outline-width);
+  --button-spacing-vertical: var(--form-element-spacing-vertical);
+  --button-spacing-horizontal: var(--form-element-spacing-horizontal);
   //   --spacing-gutter: 1rem;
   //   --spacing-typography: 1.5rem;
-  //   --spacing-form-element: 0.25rem;
+  --spacing-form-element: 0.25rem;
 }
 
 body.dark {
@@ -233,19 +233,6 @@ header hgroup {
   margin-bottom: var(--spacing);
 }
 
-// details {
-//   transition: height 1s ease;
-//   overflow: auto;
-// }
-
-// details:not([open]) {
-//   height: 50px;
-// }
-
-// details[open] {
-//   height: 100px;
-// }
-
 .sticky-nav {
   z-index: 10;
   position: sticky;
@@ -312,7 +299,7 @@ header hgroup {
 .modal {
   background: var(--white);
   color: var(--font-color);
-  padding: 25px;
+  padding: 15px;
   margin: 0;
   overflow-x: hidden;
   overflow-y: auto;
@@ -387,8 +374,10 @@ main .grid > * {
     margin-bottom: 50px;
   }
 }
+
 form.grid {
   grid-row-gap: 0;
+  padding: 10px;
 }
 
 /* Aside nav */

@@ -23,7 +23,7 @@ const Editor = {
         m(
           "section.modal-content.container",
           m(
-            "form",
+            "form.grid",
             { ...onInput(state.event) },
             m(
               "formgroup.grouped",
@@ -38,11 +38,11 @@ const Editor = {
               ),
               m(
                 "label",
-                "End Date",
+                "Start Time",
                 m("input", {
-                  type: "date",
-                  id: "endDate",
-                  value: state.event.endDate,
+                  type: "time",
+                  id: "startTime",
+                  value: state.event.startTime,
                 })
               )
             ),
@@ -63,11 +63,11 @@ const Editor = {
               "formgroup.grouped",
               m(
                 "label",
-                "Start Time",
+                "End Date",
                 m("input", {
-                  type: "time",
-                  id: "startTime",
-                  value: state.event.startTime,
+                  type: "date",
+                  id: "endDate",
+                  value: state.event.endDate,
                 })
               ),
               m(
@@ -110,7 +110,7 @@ const Editor = {
         m(
           "footer.modal-footer",
           m(
-            ".tabs",
+            ".tabs.grouped.is-center",
             m(
               "button.button",
               {
