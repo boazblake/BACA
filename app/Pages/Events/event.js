@@ -1,30 +1,49 @@
 const Event = {
-  onremove: ({ attrs: { resetState, state } }) => resetState(state),
-  view: ({ attrs: { mdl, event, previewEvent } }) =>
+  view: ({
+    attrs: { mdl, event, previewEvent, editEvent, resetState, state },
+  }) =>
     m(
       ".modal-container",
       m(
         ".modal",
-        m("section.modal-content container", JSON.stringify(event)),
+        m(
+          "section.modal-content container card",
+          m(".grouped", m("label", event.startDate), m("label", event.endDate)),
+          m(".grouped", m("label", event.startTime), m("label", event.endTime)),
+          event.allDay &&
+            m(".grouped", m("label.tag.primary", "All Day Event")),
+          m(".grouped", m("label", event.title)),
+          m(".grouped", m("label", event.image)),
+          m(".grouped", m("label", event.description))
+        ),
         m(
           "footer.modal-footer",
           m(
             ".tabs grouped",
-            m(
-              "button.button.primary.is-full-width",
-              { onclick: () => previewEvent(false) },
-              "Done"
-            ),
             mdl.state.isAuth() &&
               m(
-                "button.button.primary.is-full-width",
+                "button.button.secondary.is-full-width",
                 {
-                  onclick: (e) => {},
+                  onclick: (e) => {
+                    previewEvent(false)
+                    editEvent(true)
+                    e.preventDefault()
+                  },
                   role: "button",
                   disabled: false,
                 },
-                "Submit"
-              )
+                "Edit"
+              ),
+            m(
+              "button.button.primary.is-full-width",
+              {
+                onclick: () => {
+                  resetState(state)
+                  previewEvent(false)
+                },
+              },
+              "Done"
+            )
           )
         )
       )

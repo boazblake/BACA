@@ -54,11 +54,27 @@ const fetchEvents = ({ attrs: { mdl } }) => {
     .fork(onError, onSuccess)
 }
 
+const deleteEvent = (mdl, id) => {
+  state.status("loading")
+  const onError = (e) => {
+    console.error(e)
+  }
+
+  const onSuccess = (evt) => {
+    fetchEvents({ attrs: { mdl } })
+    state.showEditor(false)
+  }
+
+  mdl.http.back4App
+    .deleteTask(mdl)(`Classes/Events/${id}`)
+    .fork(onError, onSuccess)
+}
+
 const formatDate = (date, time) => `${date}T${time}`
 
 const submitEvent = (
   mdl,
-  { startDate, startTime, endDate, endTime, title, allDay, description }
+  { id, startDate, startTime, endDate, endTime, title, allDay, description }
 ) => {
   let start = formatDate(startDate, startTime)
   let end = formatDate(endDate, endTime)
@@ -76,15 +92,15 @@ const submitEvent = (
   }
 
   const onSuccess = (evt) => {
-    // state.events(state.events().concat(event))
-    // console.log(event, state.events())
     fetchEvents({ attrs: { mdl } })
     state.showEditor(false)
   }
 
-  mdl.http.back4App
-    .postTask(mdl)("Classes/Events")(event)
-    .fork(onError, onSuccess)
+  const submitOrUpdate = (id) =>
+    id
+      ? mdl.http.back4App.putTask(mdl)(`Classes/Events/${id}`)(event)
+      : mdl.http.back4App.postTask(mdl)("Classes/Events")(event)
+  submitOrUpdate(id).fork(onError, onSuccess)
 }
 
 const Events = {
@@ -108,6 +124,7 @@ const Events = {
             state,
             showEditor: state.showEditor,
             submitEvent,
+            deleteEvent,
             resetState,
           }),
 
@@ -115,8 +132,9 @@ const Events = {
           m(Event, {
             mdl,
             state,
+            editEvent: state.showEditor,
             previewEvent: state.previewEvent,
-            event: state.selectedEvent,
+            event: state.event,
             resetState,
           })
       ),

@@ -10,14 +10,14 @@ const getCellDate = (target) => {
 const onEventClick = (state) => (info) => {
   info.jsEvent.preventDefault()
   let id = info.event.extendedProps.objectId
-  state.selectedEvent = state.events().find(propEq("objectId", id))
+  state.event = state.events().find(propEq("objectId", id))
   state.previewEvent(true)
-  state.selectedEvent.startDate = state.selectedEvent.start.split("T")[0]
-  state.selectedEvent.startTime = state.selectedEvent.start.split("T")[1]
-  state.selectedEvent.endDate = state.selectedEvent.end.split("T")[0]
-  state.selectedEvent.endTime = state.selectedEvent.end.split("T")[1]
-  state.selectedEvent.id = id
-  console.log(id, state.selectedEvent)
+  state.event.startDate = state.event.start.split("T")[0]
+  state.event.startTime = state.event.start.split("T")[1]
+  state.event.endDate = state.event.end.split("T")[0]
+  state.event.endTime = state.event.end.split("T")[1]
+  state.event.id = id
+  // console.log(id, state.event)
   if (info.event.url) {
     window.open(info.event.url)
   }

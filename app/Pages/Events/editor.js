@@ -2,32 +2,29 @@ import { exists, handlers } from "Utils"
 
 const onInput = (event) =>
   handlers(["oninput"], (e) => {
+    if (e.target.type == "checkbox") {
+      return (event[e.target.id] = JSON.parse(e.target.checked))
+    }
     if (e.target.id == "file") {
-      event[e.target.id] = e.target.files[0]
+      return (event[e.target.id] = e.target.files[0])
     } else {
-      event[e.target.id] = e.target.value
+      return (event[e.target.id] = e.target.value)
     }
   })
 
 const Editor = {
-  onremove: ({ attrs: { resetState, state } }) => resetState(state),
   view: ({
-    attrs: {
-      mdl,
-      state: { event },
-      showEditor,
-      submitEvent,
-    },
+    attrs: { mdl, showEditor, deleteEvent, submitEvent, resetState, state },
   }) =>
     m(
       "aside.modal-container",
       m(
         "article.modal",
         m(
-          "section.modal-content",
+          "section.modal-content.container",
           m(
             "form",
-            { ...onInput(event) },
+            { ...onInput(state.event) },
             m(
               "formgroup",
               m(
@@ -36,8 +33,7 @@ const Editor = {
                 m("input", {
                   type: "date",
                   id: "startDate",
-                  value: event.startDate,
-                  disabled: event.id && exists(event.id),
+                  value: state.event.startDate,
                 })
               ),
               m(
@@ -46,8 +42,7 @@ const Editor = {
                 m("input", {
                   type: "date",
                   id: "endDate",
-                  value: event.endDate,
-                  disabled: event.id && exists(event.id),
+                  value: state.event.endDate,
                 })
               )
             ),
@@ -59,8 +54,8 @@ const Editor = {
                 m("input", {
                   type: "checkbox",
                   id: "allDay",
-                  value: event.allDay,
-                  disabled: event.id && exists(event.id),
+                  value: state.event.allDay,
+                  checked: state.event.allDay,
                 })
               )
             ),
@@ -72,8 +67,7 @@ const Editor = {
                 m("input", {
                   type: "time",
                   id: "startTime",
-                  value: event.startTime,
-                  disabled: event.id && exists(event.id),
+                  value: state.event.startTime,
                 })
               ),
               m(
@@ -83,8 +77,7 @@ const Editor = {
                   type: "time",
                   id: "endTime",
 
-                  value: event.endTime,
-                  disabled: event.id && exists(event.id),
+                  value: state.event.endTime,
                 })
               )
             ),
@@ -97,8 +90,7 @@ const Editor = {
                 m("input", {
                   type: "text",
                   id: "title",
-                  value: event.title,
-                  disabled: event.id && exists(event.id),
+                  value: state.event.title,
                 })
               )
             ),
@@ -109,8 +101,7 @@ const Editor = {
                 "Description",
                 m("textarea", {
                   id: "description",
-                  value: event.description,
-                  disabled: event.id && exists(event.id),
+                  value: state.event.description,
                 })
               )
             )
@@ -119,14 +110,35 @@ const Editor = {
         m(
           "footer.modal-footer",
           m(
-            ".tabs grouped",
-            m("button.button", { onclick: () => showEditor(false) }, "Cancel"),
+            ".tabs",
+            m(
+              "button.button",
+              {
+                onclick: () => {
+                  resetState(state)
+                  showEditor(false)
+                },
+              },
+              "Cancel"
+            ),
+            state.event.id &&
+              m(
+                "button.button.error",
+                {
+                  onclick: (e) => {
+                    deleteEvent(mdl, state.event.id)
+                  },
+                  role: "button",
+                },
+                "Delete"
+              ),
             m(
               "button.button.primary",
               {
-                onclick: (e) => submitEvent(mdl, event),
+                onclick: (e) => {
+                  submitEvent(mdl, state.event)
+                },
                 role: "button",
-                disabled: false,
               },
               "Submit"
             )
