@@ -25,13 +25,13 @@ const Event = {
           "footer.modal-footer",
           m(
             ".tabs grouped",
-            mdl.state.isAuth() &&
+            (event.createdBy == mdl.user.name || mdl.user.isAdmin) &&
               m(
                 "button.button.secondary.is-full-width",
                 {
                   onclick: (e) => {
-                    previewEvent(false)
                     editEvent(true)
+                    previewEvent(false)
                     e.preventDefault()
                   },
                   role: "button",
@@ -44,6 +44,7 @@ const Event = {
               {
                 onclick: () => {
                   resetState(state)
+                  mdl.state.selectedPreviewEvent(null)
                   previewEvent(false)
                 },
               },

@@ -41,7 +41,7 @@ const BlogPreview = {
           )
         )
       ),
-      author == mdl.user.name &&
+      (author == mdl.user.name || mdl.user.isAdmin) &&
         m(
           "footer",
           m(

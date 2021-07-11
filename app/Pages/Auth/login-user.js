@@ -7,14 +7,14 @@ import { GroupSolidBadged } from "@mithril-icons/clarity"
 
 const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
-    if (errs) {
+    if (errs.code != 209) {
       state.errors = errs
       state.errorMsg(errs.error)
       state.showErrorMsg(errs.error)
       console.log("failed - state", JSON.stringify(state))
     } else {
       state.errorMsg(
-        "There seems to be an ssue with logging in. Have you registered?"
+        "There seems to be an issue with logging in. Have you registered or verified your email?"
       )
       state.showErrorMsg(true)
       console.log("failed - other?", state)

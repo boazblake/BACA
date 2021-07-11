@@ -7,7 +7,7 @@ const Hamburger = () => {
     view: ({ attrs: { mdl } }) =>
       m("figure.pointer is-center", { style: { transform: "scale(1.2)" } }, [
         mdl.state.isAuth() &&
-          m("label", `Welcome ${mdl.user.name.split(" ")[0]}`),
+          m("label", `Welcome ${mdl.user.name && mdl.user.name.split(" ")[0]}`),
         mdl.state.showNavModal()
           ? m(WindowCloseLine, filledGreen)
           : m(MenuLine, filledGreen),

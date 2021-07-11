@@ -42,10 +42,10 @@ const Routes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
+        : window.scroll({
+            top: 160,
+            left: 0,
             behavior: "smooth",
-            block: "center",
-            inline: "start",
           })
     },
     component: (mdl) => m(Layout, { mdl }, m(About, { mdl })),

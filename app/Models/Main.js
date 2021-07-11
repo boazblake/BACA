@@ -1,6 +1,12 @@
 import Routes from "../Routes/index.js"
 import http from "Utils/http"
 
+const data = {
+  events: [],
+  images: [],
+  blogs: [],
+}
+
 const state = {
   paginate: {
     page: Stream(1),
@@ -25,9 +31,11 @@ const state = {
   showAuthModal: Stream(false),
   selectedPreviewEvent: Stream(null),
 }
-const user = {}
+const user = {
+  isAdmin: false,
+}
 const settings = {}
-const data = {}
+
 const errors = {}
 
 const Model = {

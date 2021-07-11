@@ -1,4 +1,4 @@
-import { saveStorageTask } from "Utils"
+import Task from "data.task"
 import { mergeDeepWith, add, prop } from "ramda"
 
 const mergeCarts = (accnt) => (cart) => mergeDeepWith(add, cart, accnt)
@@ -15,10 +15,10 @@ const toAccountVM = (mdl) => (accnts) => {
 }
 
 const setUserToken = (mdl) => (user) => {
-  sessionStorage.setItem("baca-user", JSON.stringify(user))
-  sessionStorage.setItem("baca-session-token", user["sessionToken"])
-  mdl.state.isAuth(true)
-  mdl.user = user
+  sessionStorage.setItem("baca-user", JSON.stringify(user.objectId))
+  // sessionStorage.setItem("baca-session-token", user["sessionToken"])
+  // mdl.state.isAuth(true)
+  // mdl.user = user
   return mdl
 }
 
@@ -36,6 +36,9 @@ const getUserAccountTask = (mdl) => (_) => {
   return mdl.http.back4App
     .getTask(mdl)(`classes/Accounts?${userAccount}`)
     .map(prop("results"))
+    .chain((account) =>
+      account.any() ? Task.of(account) : createAccountTask(mdl)
+    )
     .map(toAccountVM(mdl))
 }
 

@@ -34,14 +34,25 @@ const CityOrd = (mdl) => {
           m(
             "p",
             "Violations to any of these deed restrictions should be reported directly to the Bonham Acres Civic Association.",
+
             m(
               ".p-y-6.is-center",
-              m(
-                "button.button.icon.bd-error",
-                { onclick: (e) => state.showOrdinanceViolation(true) },
-                "Report City Ordinance Violation",
-                m(ExclamationTriangleLine, { fill: "red" })
-              ),
+              mdl.state.isAuth()
+                ? m(
+                    "button.button.icon.bd-error",
+                    { onclick: (e) => state.showOrdinanceViolation(true) },
+                    "Report City Ordinance Violation",
+                    m(ExclamationTriangleLine, { fill: "red" })
+                  )
+                : m(
+                    m.route.Link,
+                    {
+                      selector: "button",
+                      class: "button.bd-error",
+                      href: "/login",
+                    },
+                    "Login To Report City Ordinance Violation"
+                  ),
               state.showOrdinanceViolation() &&
                 m(ViolationReport, {
                   mdl,

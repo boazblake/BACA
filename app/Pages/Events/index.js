@@ -2,6 +2,7 @@ import Calendar from "./calendar"
 import Editor from "./editor"
 import Event from "./event"
 import { propEq, prop, head, tail, clone } from "ramda"
+import Loader from "Components/loader.js"
 import M from "moment"
 import { log } from "Utils"
 
@@ -129,6 +130,8 @@ const submitEvent = (
     state.showEditor(false)
   }
 
+  state.previewEvent(true)
+
   const submitOrUpdate = (id) =>
     id
       ? mdl.http.back4App.putTask(mdl)(`Classes/Events/${id}`)(event)
@@ -162,7 +165,7 @@ const Events = {
         }),
 
       state.status() == "loaded" && m("section", m(Calendar, { mdl, state })),
-      state.status() == "loading" && m("section", "is loading"),
+      state.status() == "loading" && m("section", m(Loader)),
       state.status() == "error" && m("section", "is error")
     ),
 }

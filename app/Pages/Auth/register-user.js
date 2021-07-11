@@ -51,15 +51,18 @@ export const validateForm = (mdl) => (data) => {
 
   const onSuccess = (mdl) => {
     state.errors = {}
-    sessionStorage.setItem("baca-session-token", mdl.user["sessionToken"])
-    sessionStorage.setItem("baca-user", JSON.stringify(mdl.user))
-    m.route.set("/")
+    // sessionStorage.setItem("baca-session-token", mdl.user["sessionToken"])
+    // sessionStorage.setItem("baca-user", JSON.stringify(mdl.user.objectId))
+    state.errorMsg(
+      "Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login."
+    )
+    state.showErrorMsg(true)
   }
   // return console.log(data)
   state.isSubmitted = true
   validateUserRegistrationTask(data)
     .chain(registerUserTask(mdl))
-    .chain(createAccountTask)
+    // .chain(createAccountTask)
     .fork(onError, onSuccess)
 }
 
