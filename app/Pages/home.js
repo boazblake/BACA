@@ -1,5 +1,8 @@
+import { fetchAll } from "../Layouts"
+
 const Home = () => {
   return {
+    oninit: fetchAll,
     view: ({ attrs: { mdl } }) =>
       m(
         "article.grid",
@@ -22,6 +25,7 @@ const Home = () => {
                   event.allDay && m(".tag", "All Day Event!"),
                   m("h3", event.startDate),
                   m("h3", event.startTime),
+                  m("img", { src: event.image }),
                   m("h4", event.title),
                   m(
                     m.route.Link,

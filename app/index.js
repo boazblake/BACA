@@ -57,14 +57,13 @@ Model.settings.screenSize = getProfile(winW)
 checkWidth(winW)
 
 if (sessionStorage.getItem("baca-session-token")) {
-  let userId = JSON.parse(sessionStorage.getItem("baca-user"))
   const onError = (e) => {
     sessionStorage.clear()
     console.error("shit", e)
   }
   const onSuccess = (user) => {
     Model.user = user
-    Model.state.isAuth(true)
+    user.emailVerified ? Model.state.isAuth(true) : sessionStorage.clear()
   }
 
   Model.http.back4App.getTask(Model)(`users/me`).fork(onError, onSuccess)

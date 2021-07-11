@@ -1,7 +1,5 @@
 import Task from "data.task"
-import { mergeDeepWith, add, prop } from "ramda"
-
-const mergeCarts = (accnt) => (cart) => mergeDeepWith(add, cart, accnt)
+import { prop } from "ramda"
 
 const toAccountVM = (mdl) => (accnts) => {
   mdl.user.accounts = accnts
@@ -14,11 +12,11 @@ const toAccountVM = (mdl) => (accnts) => {
   // return cart
 }
 
-const setUserToken = (mdl) => (user) => {
+const setUserAndSessionToken = (mdl) => (user) => {
   sessionStorage.setItem("baca-user", JSON.stringify(user.objectId))
-  // sessionStorage.setItem("baca-session-token", user["sessionToken"])
-  // mdl.state.isAuth(true)
-  // mdl.user = user
+  sessionStorage.setItem("baca-session-token", user["sessionToken"])
+  mdl.state.isAuth(true)
+  mdl.user = user
   return mdl
 }
 
@@ -28,7 +26,7 @@ export const loginUserTask =
     let login = encodeURI(`username=${email}&password=${btoa(password)}`)
     return mdl.http.back4App
       .getTask(mdl)(`login?${login}`)
-      .map(setUserToken(mdl))
+      .map(setUserAndSessionToken(mdl))
   }
 
 const getUserAccountTask = (mdl) => (_) => {
@@ -50,17 +48,13 @@ export const loginTask =
 export const registerUserTask =
   (mdl) =>
   ({ name, email, password, isAdmin }) =>
-    mdl.http.back4App
-      .postTask(mdl)("users")({
-        username: email,
-        name,
-        email,
-        password: btoa(password),
-        isAdmin,
-      })
-      .map((user) =>
-        setUserToken(mdl)({ name, email, password, isAdmin, ...user })
-      )
+    mdl.http.back4App.postTask(mdl)("users")({
+      username: email,
+      name,
+      email,
+      password: btoa(password),
+      isAdmin,
+    })
 
 export const createAccountTask = (mdl) => {
   mdl.user.account = {

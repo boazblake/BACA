@@ -34,7 +34,7 @@ const toEventViewModel = (event) => {
 
 const fetchTask = (mdl) => (url) => mdl.http.back4App.getTask(mdl)(url)
 
-const fetchAll = ({ attrs: { mdl } }) => {
+export const fetchAll = ({ attrs: { mdl } }) => {
   const onError = (e) => console.error(e)
   const onSuccess = ({ events, images, blogs }) => {
     mdl.data.events = events

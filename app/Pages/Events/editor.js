@@ -14,7 +14,15 @@ const onInput = (event) =>
 
 const Editor = {
   view: ({
-    attrs: { mdl, showEditor, deleteEvent, submitEvent, resetState, state },
+    attrs: {
+      mdl,
+      showEditor,
+      deleteEvent,
+      submitEvent,
+      resetState,
+      state,
+      uploadImage,
+    },
   }) =>
     m(
       "aside.modal-container",
@@ -82,7 +90,6 @@ const Editor = {
                 })
               )
             ),
-
             m(
               "formgroup",
               m(
@@ -95,6 +102,25 @@ const Editor = {
                 })
               )
             ),
+            state.status() == "uploading-image"
+              ? m("h2.tag.is-center", "Attaching Image - please be patient")
+              : m(
+                  "formgroup.grouped",
+                  m(
+                    "label",
+                    "Upload an Image",
+                    m("input", {
+                      type: "file",
+                      id: "file",
+                      value: state.files,
+                      onchange: () => uploadImage(state.event.file),
+                    }),
+                    state.event.image &&
+                      m("img", {
+                        src: state.event.image,
+                      })
+                  )
+                ),
             m(
               "formgroup",
               m(

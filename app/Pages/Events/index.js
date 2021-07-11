@@ -3,6 +3,7 @@ import Editor from "./editor"
 import Event from "./event"
 import { propEq, prop, head, tail, clone } from "ramda"
 import Loader from "Components/loader.js"
+import Task from "data.task"
 import M from "moment"
 import { log } from "Utils"
 
@@ -13,7 +14,9 @@ const state = {
   selectedDate: Stream(null),
   events: [],
   previewEvent: Stream(false),
+  files: [],
   event: {
+    image: null,
     id: "",
     startDate: "",
     start: "",
@@ -29,6 +32,7 @@ const state = {
 
 const resetState = (state) =>
   (state.event = {
+    image: "",
     id: "",
     startDate: "",
     start: "",
@@ -105,9 +109,50 @@ const formatDate = (date, time) => {
   return `${date}T${t}`
 }
 
+const onSubmitError = (e) => {
+  state.errors = e
+  state.status("error")
+}
+const onImgSuccess = (img) => {
+  console.log(img)
+  state.event.image = img.thumb
+  state.status("loaded")
+}
+
+const saveImgToGalleryTask =
+  (mdl) =>
+  ({ data: { image, thumb } }) =>
+    mdl.http.back4App
+      .postTask(mdl)("Classes/Gallery")({
+        album: "events",
+        image: image.url,
+        thumb: thumb.url,
+      })
+      .chain((_) => Task.of({ image: image.url, thumb: thumb.url }))
+
+const uploadImage = (mdl) => (file) => {
+  state.status("uploading-image")
+  const image = new FormData()
+  image.append("image", file)
+  mdl.http.imgBB
+    .postTask(mdl)(image)
+    .chain(saveImgToGalleryTask(mdl))
+    .fork(onSubmitError, onImgSuccess)
+}
+
 const submitEvent = (
   mdl,
-  { id, startDate, startTime, endDate, endTime, title, allDay, description }
+  {
+    id,
+    startDate,
+    startTime,
+    endDate,
+    endTime,
+    title,
+    allDay,
+    description,
+    image,
+  }
 ) => {
   let start = formatDate(startDate, startTime)
   let end = formatDate(endDate, endTime)
@@ -118,6 +163,7 @@ const submitEvent = (
     allDay: JSON.parse(allDay),
     description,
     createdBy: mdl.user.name,
+    image,
   }
   console.log(startTime, endTime, start, end)
 
@@ -152,6 +198,7 @@ const Events = {
           submitEvent,
           deleteEvent,
           resetState,
+          uploadImage: uploadImage(mdl),
         }),
 
       state.previewEvent() &&
