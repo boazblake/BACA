@@ -1,10 +1,22 @@
 import Task from "data.task"
-import { prop } from "ramda"
+import { head, map, prop, tail } from "ramda"
 
 const state = {
   events: [],
   images: [],
   blogs: [],
+}
+
+const toEventViewModel = (event) => {
+  let start = event.start.split("T")
+  return {
+    image: event.image,
+    startDate: head(start),
+    startTime: tail(start),
+    title: event.title,
+    allDay: event.allDay,
+    objectId: event.objectId,
+  }
 }
 
 const fetchTask = (mdl) => (url) => mdl.http.back4App.getTask(mdl)(url)
@@ -18,7 +30,11 @@ const fetchAll = ({ attrs: { mdl } }) => {
   }
 
   Task.of((events) => (images) => (blogs) => ({ events, images, blogs }))
-    .ap(fetchTask(mdl)("Classes/Events").map(prop("results")))
+    .ap(
+      fetchTask(mdl)("Classes/Events")
+        .map(prop("results"))
+        .map(map(toEventViewModel))
+    )
     .ap(fetchTask(mdl)("Classes/Gallery").map(prop("results")))
     .ap(fetchTask(mdl)("Classes/Blogs").map(prop("results")))
     .fork(onError, onSuccess)
@@ -39,7 +55,7 @@ const Home = () => {
               ".grouped.overflow-x-auto",
               state.events.map((event) =>
                 m(
-                  ".card.col-10.col-4-md.col-4-lg",
+                  ".card.col-4",
                   {
                     style: {
                       backgroundImage: event.image,
@@ -47,10 +63,23 @@ const Home = () => {
                     },
                   },
                   event.allDay && m(".tag", "All Day Event!"),
-                  m("h3", event.start),
                   m("h3", event.startDate),
                   m("h3", event.startTime),
-                  m("h4", event.title)
+                  m("h4", event.title),
+                  m(
+                    m.route.Link,
+                    {
+                      selector: "label",
+                      class: "tag button bg-primary text-white is-full-width",
+                      href: "/social/calendar",
+                      onclick: (e) =>
+                        mdl.state.selectedPreviewEvent(event.objectId),
+                      style: { opacity: 0 },
+                      onmouseover: (e) => (e.target.style.opacity = 1),
+                      onmouseleave: (e) => (e.target.style.opacity = 0),
+                    },
+                    "...Read More"
+                  )
                 )
               )
             )
@@ -64,7 +93,7 @@ const Home = () => {
             m(
               ".grouped.overflow-x-auto",
               state.images.map((img) =>
-                m("img.card.col-4.col-2-md.col-4-lg", {
+                m("img.card.col-4", {
                   src: img.thumb,
                   style: {
                     // width: "40% !important",
@@ -83,14 +112,28 @@ const Home = () => {
               ".grouped.overflow-x-auto",
               state.blogs.map((blog) =>
                 m(
-                  ".card.col-4.col-2-md.col-4-lg",
+                  ".card.col-4",
                   {
                     style: {
                       backgroundImage: blog.img,
                       height: "40% !important",
                     },
                   },
-                  blog.title
+                  m("h2", blog.title),
+                  m(
+                    m.route.Link,
+                    {
+                      selector: "label",
+                      class: "tag button bg-primary text-white is-full-width",
+                      href: `/social/blog-post:${blog.objectId}`,
+                      onclick: (e) =>
+                        mdl.state.selectedPreviewEvent(event.objectId),
+                      style: { opacity: 0 },
+                      onmouseover: (e) => (e.target.style.opacity = 1),
+                      onmouseleave: (e) => (e.target.style.opacity = 0),
+                    },
+                    "...Read More"
+                  )
                 )
               )
             )

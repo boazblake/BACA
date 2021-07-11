@@ -1,4 +1,4 @@
-import { propEq } from "ramda"
+import { propEq, head, tail } from "ramda"
 
 const getCellDate = (target) => {
   if (["MAIN", "BUTTON"].includes(target.tagName)) return null
@@ -11,20 +11,20 @@ const onEventClick = (state) => (info) => {
   info.jsEvent.preventDefault()
   let id = info.event.extendedProps.objectId
   state.event = state.events.find(propEq("objectId", id))
-  state.previewEvent(true)
-  state.event.startDate = state.event.start.split("T")[0]
-  state.event.startTime = state.event.start.split("T")[1]
-  state.event.endDate = state.event.end.split("T")[0]
-  state.event.endTime = state.event.end.split("T")[1]
+  let start = state.event.start.split("T")
+  let end = state.event.end.split("T")
+  state.event.startDate = head(start)
+  state.event.startTime = head(tail(start))
+  state.event.endDate = head(end)
+  state.event.endTime = head(tail(end))
   state.event.id = id
-  // console.log(id, state.event)
+  state.previewEvent(true)
   if (info.event.url) {
     window.open(info.event.url)
   }
 }
 
 const initCal = (dom, state) => {
-  console.log(state.events)
   return new FullCalendar.Calendar(dom, {
     events: state.events,
     eventClick: onEventClick(state),
@@ -65,7 +65,6 @@ const Calendar = {
         ) {
           state.selectedDate(getCellDate(e.target))
           state.event.startDate = state.selectedDate()
-          console.log(state.selectedDate(), e)
           state.selectedDate() && state.showEditor(true)
         }
       },

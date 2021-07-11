@@ -1,7 +1,7 @@
 import Calendar from "./calendar"
 import Editor from "./editor"
 import Event from "./event"
-import { prop } from "ramda"
+import { propEq, prop, head, tail, clone } from "ramda"
 import M from "moment"
 import { log } from "Utils"
 
@@ -40,6 +40,17 @@ const resetState = (state) =>
     allDay: false,
   })
 
+const toViewModel = (event) => {
+  let start = event.start.split("T")
+  let end = event.end.split("T")
+  event.startDate = head(start)
+  event.startTime = head(tail(start))
+  event.endDate = head(end)
+  event.endTime = head(tail(end))
+  event.id = event.objectId
+  return event
+}
+
 const fetchEvents = ({ attrs: { mdl } }) => {
   state.status("loading")
   const onError = (e) => {
@@ -48,6 +59,15 @@ const fetchEvents = ({ attrs: { mdl } }) => {
   }
   const onSuccess = (events) => {
     state.events = events
+    if (mdl.state.selectedPreviewEvent()) {
+      state.event = head(
+        events
+          .filter(propEq("objectId", mdl.state.selectedPreviewEvent()))
+          .map(clone)
+          .map(toViewModel)
+      )
+      state.previewEvent(true)
+    }
     state.status("loaded")
   }
   mdl.http.back4App

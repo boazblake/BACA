@@ -23,6 +23,7 @@ const state = {
   fab: Stream(0),
   editBlog: Stream(false),
   showAuthModal: Stream(false),
+  selectedPreviewEvent: Stream(null),
 }
 const user = {}
 const settings = {}
