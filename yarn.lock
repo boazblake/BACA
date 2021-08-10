@@ -2354,6 +2354,14 @@ daggy@^1.4.0:
     sanctuary-type-classes "3.0.0"
     sanctuary-type-identifiers "1.0.0"
 
+daggy@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/daggy/-/daggy-1.5.0.tgz#82d9818a614e018a7ebb68f53a10970493293ee8"
+  integrity sha512-BQMsnneUmsqvPth/o+Cv9JPhQwjR0aqzDckMxH0tAdupsdFkePKVFFvhoB7HDtMnOJDxA/U4994MV/bNSJ28gw==
+  dependencies:
+    sanctuary-show "2.0.0"
+    sanctuary-type-identifiers "1.0.0"
+
 data.either@^1.5.2:
   version "1.5.2"
   resolved "https://registry.npmjs.org/data.either/-/data.either-1.5.2.tgz#5b25cafa7ff1361806e20937a1201c4472763dcf"
@@ -6560,6 +6568,11 @@ safer-buffer@^2.1.0:
   version "2.1.2"
   resolved "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
+
+sanctuary-show@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/sanctuary-show/-/sanctuary-show-2.0.0.tgz#2326b4744f4b0f993f18ca56a29f68a50f514637"
+  integrity sha512-REj4ZiioUXnDLj6EpJ9HcYDIEGaEexmB9Fg5o6InZR9f0x5PfnnC21QeU9SZ9E7G8zXSZPNjy8VRUK4safbesw==
 
 sanctuary-type-classes@3.0.0:
   version "3.0.0"
