@@ -29,16 +29,13 @@ const BlogPreview = {
       ),
       m(
         "hgroup.col",
+        m.trust(HtmlSanitizer.SanitizeHtml(text.slice(0, 100))),
+        "...",
         m(
-          "p",
-          text.slice(0, 100),
-          "....",
-          m(
-            m.route.Link,
-            // "a.pointer",
-            { href: `/social/blog-post:${objectId}` },
-            "continue reading"
-          )
+          m.route.Link,
+          // "a.pointer",
+          { href: `/social/blog-post:${objectId}` },
+          "continue reading"
         )
       ),
       (author == mdl.user.name || mdl.user.isAdmin) &&

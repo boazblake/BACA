@@ -1,8 +1,9 @@
-import { handlers, exists, parseMarkdown } from "Utils"
+import { handlers, exists } from "Utils"
 import Task from "data.task"
-import { HelpInfoLine, NoteEditLine, SearchLine } from "@mithril-icons/clarity"
+import { Jodit } from "jodit"
 
 const state = {
+  jodit: null,
   editor: "",
   title: "",
   author: "",
@@ -32,6 +33,7 @@ const resetEditorState = (state) => {
   state.img = ""
   state.thumb = ""
   state.file = null
+  state.jodit.value = null
   state.showPreview(false)
   state.isEditing(false)
   state.showModal(false)
@@ -52,6 +54,7 @@ const setupEditor = ({ attrs: { mdl } }) => {
     state.img = img
     state.thumb = thumb
     state.objectId = objectId
+    state.jodit.value = state.text
   }
 
   let id = m.route.get().split(":")[1]
@@ -238,7 +241,7 @@ const BlogEditor = () => {
       return m(
         ".grid",
         m(
-          "form",
+          "form.container",
           { ...onInput },
           m(
             "section",
@@ -260,80 +263,23 @@ const BlogEditor = () => {
             )
           ),
           state.showModal() && m(Modal, { state, mdl }),
-          m(
-            "nav.nav",
-            m(
-              ".nav-right.grouped.container",
-              m(
-                "button.button.dark.outline.icon",
-                {
-                  onclick: (e) => {
-                    e.preventDefault()
-                    state.showPreview(!state.showPreview())
-                  },
-                },
-                state.showPreview()
-                  ? ["Edit", m(NoteEditLine)]
-                  : ["Preview", m(SearchLine)]
-              ),
-              m(
-                "button.button.secondary.outline.icon",
-                {
-                  onclick: (e) => {
-                    e.preventDefault()
-                    state.showHelp(true)
-                  },
-                },
-                "How To Use",
-                m(HelpInfoLine)
-              )
-            )
-          ),
-
-          state.showHelp() &&
-            m(
-              "section.modal-container",
-              {
-                onclick: (e) => {
-                  state.showHelp(false)
-                },
-              },
-              m(
-                ".modal.card",
-                m(
-                  "p",
-                  "Markdown is a text-to-HTML conversion tool for web writers. Markdown allows you to write using an easy-to-read, easy-to-write plain text format."
-                ),
-                m("h4", "Headings"),
-                m("p", "Example: # heading, ## heading, ### heading "),
-                m("h4", "Italics & Bold"),
-                m("p", "Example: *hello world* "),
-                m("p", "Example bold: **hello world** "),
-                m("h4", "Lists"),
-                m("p", "Example: - apple, - orange "),
-                m("h4", "Links"),
-                m("p", "Example: [website name](www.website.com) ")
-              )
-            ),
 
           m(
             "section",
             m("label", "Contents"),
-            state.showPreview()
-              ? m(
-                  "hgroup",
-                  m(
-                    "h4",
-                    m.trust(
-                      HtmlSanitizer.SanitizeHtml(parseMarkdown(state.text))
-                    )
-                  )
-                )
-              : m("textarea", {
-                  value: state.text,
-                  id: "text",
-                  style: { height: "300px" },
+            m("#jodit", {
+              onupdate: (e) => (state.text = state.jodit.value),
+              oncreate: ({ dom }) => {
+                state.jodit = new Jodit(dom, {
+                  autofocus: true,
+                  uploader: {
+                    insertImageAsBase64URI: true,
+                  },
+                  toolbarButtonSize: "large",
+                  defaultActionOnPaste: "insert_clear_html",
                 })
+              },
+            })
           ),
 
           m(
