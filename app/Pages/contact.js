@@ -39,7 +39,7 @@ const Contact = (mdl) => {
         m(
           "section.container",
           m(
-            "h2.is-center.is-marginless",
+            "h2.is-center.is-marginless.m-b-15",
             "Bonham Acres Civic Association Board Members April 13, 2021"
           ),
           m(

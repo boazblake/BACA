@@ -4,7 +4,7 @@ const JoinBACA = (mdl) => {
       m(
         "",
         m(
-          "section.bg-light",
+          "section.bg-light.card",
           m(
             "hgroup.container",
             m(
