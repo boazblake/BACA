@@ -3404,10 +3404,10 @@ fsevents@~2.3.1:
   resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
-fullcalendar@^5.8.0:
-  version "5.8.0"
-  resolved "https://registry.npmjs.org/fullcalendar/-/fullcalendar-5.8.0.tgz#5eb27d3721665d95cf897807a68f4193398d07c0"
-  integrity sha512-yXHh9NA/cB3YIYQmD3Gj+rWmzL9lVAc4P6sTqJW/eMIkUZVhB8Qkyz96xArVsn90Jk/nAbZ0Opddl9RcoFN1Tg==
+fullcalendar@^5.9.0:
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/fullcalendar/-/fullcalendar-5.9.0.tgz#16ec6f1a13ad6642c565ce4e7b145bc0e7b05fe1"
+  integrity sha512-kUfkWov2YQFemafgL0x9ogx2TPmgZze/VsWYvmajgr+bmoVY28XXErQ3MGfgWbM18QWdmvBIVhJCGY81MdbL+w==
 
 function-bind@^1.1.1:
   version "1.1.1"
