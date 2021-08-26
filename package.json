@@ -25,7 +25,7 @@
     "jodit": "^3.7.2",
     "markdown-wasm": "^1.1.2",
     "mithril": "2.0.4",
-    "mithril-markdown": "^0.4.0",
+    "mithril-markdown": "^0.5.1",
     "mithril-stream": "^2.0.0",
     "moment": "^2.29.1",
     "ramda": "^0.27.0",

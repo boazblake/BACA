@@ -5246,10 +5246,10 @@ minizlib@^1.2.1:
   dependencies:
     minipass "^2.9.0"
 
-mithril-markdown@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.npmjs.org/mithril-markdown/-/mithril-markdown-0.4.0.tgz#a1b78a2e078293d114d7668c0cb0f702c0720e4c"
-  integrity sha512-MhwTZRDK0TaNIIukSa52Wz/GrZgmnEmnE1rtc0V4lO6446/d2mRBjF9J3GNyWzVg5d5USYuDRlPn5FG/3lBgHg==
+mithril-markdown@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/mithril-markdown/-/mithril-markdown-0.5.1.tgz#d7ad5ac091a6b83e94edfdba7cab7176e1553419"
+  integrity sha512-HgG+SjLFW4EKNzOTWJZLDZ7XuL05qtLazX1aOq1wu+VI2Uj/hfdhDM6O6oH2TzNtRjLgkw+GvV6dMFzwJ8rQOQ==
   dependencies:
     mithril "^2.0.4"
 
