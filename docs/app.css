@@ -3678,6 +3678,10 @@ small {
   padding-top: 25px;
 }
 
+.p-b-25 {
+  padding-bottom: 25px;
+}
+
 .m-y-6 {
   margin-top: 6px;
   margin-bottom: 6px;
@@ -3742,6 +3746,10 @@ header hgroup {
 
 #page-title {
   letter-spacing: 2px;
+}
+
+.homeCard {
+  min-width: 40%;
 }
 
 .navigation {

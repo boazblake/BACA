@@ -69,5 +69,5 @@ if (sessionStorage.getItem("baca-session-token")) {
   Model.http.back4App.getTask(Model)(`users/me`).fork(onError, onSuccess)
 }
 
-m.route(root, "/about", App(Model))
-// m.route.set("/about")
+m.route(root, "/", App(Model))
+m.route.set("/about")
