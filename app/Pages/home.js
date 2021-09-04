@@ -15,7 +15,7 @@ const Home = () => {
               ".grouped.overflow-x-auto",
               mdl.data.events.map((event) =>
                 m(
-                  ".card.col-2.is-vertical-align row",
+                  ".card.col-3.is-vertical-align row",
                   {
                     style: {
                       backgroundImage: event.image,
@@ -54,7 +54,7 @@ const Home = () => {
             m(
               ".grouped.overflow-x-auto",
               mdl.data.images.map((img) =>
-                m("img.card.col-2 auto", {
+                m("img.card.col-3 auto", {
                   src: img.thumb,
                   style: {
                     // width: "40% !important",
@@ -73,7 +73,7 @@ const Home = () => {
               ".grouped.overflow-x-auto",
               mdl.data.blogs.map((blog) =>
                 m(
-                  ".card.col-2.opacity-overlay.is-vertical-align row",
+                  ".card.col-3.opacity-overlay.is-vertical-align row",
                   m(
                     "figure",
                     m("img", { src: blog.img || "images/main.webp" })
