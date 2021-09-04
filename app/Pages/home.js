@@ -15,6 +15,9 @@ const createCarousel = (dom) => {
     preventScrollOnTouch: "auto",
     slideBy: "page",
     responsive: {
+      200: {
+        items: 2,
+      },
       640: {
         items: 2,
       },
