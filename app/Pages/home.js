@@ -15,7 +15,7 @@ const Home = () => {
               ".grouped.overflow-x-auto",
               mdl.data.events.map((event) =>
                 m(
-                  ".card.col-4",
+                  ".card.col-2.is-vertical-align row",
                   {
                     style: {
                       backgroundImage: event.image,
@@ -35,9 +35,9 @@ const Home = () => {
                       href: "/social/calendar",
                       onclick: (e) =>
                         mdl.state.selectedPreviewEvent(event.objectId),
-                      style: { opacity: 0 },
-                      onmouseover: (e) => (e.target.style.opacity = 1),
-                      onmouseleave: (e) => (e.target.style.opacity = 0),
+                      // style: { opacity: 0 },
+                      // onmouseover: (e) => (e.target.style.opacity = 1),
+                      // onmouseleave: (e) => (e.target.style.opacity = 0),
                     },
                     "...Read More"
                   )
@@ -54,7 +54,7 @@ const Home = () => {
             m(
               ".grouped.overflow-x-auto",
               mdl.data.images.map((img) =>
-                m("img.card.col-4", {
+                m("img.card.col-2 auto", {
                   src: img.thumb,
                   style: {
                     // width: "40% !important",
@@ -73,7 +73,7 @@ const Home = () => {
               ".grouped.overflow-x-auto",
               mdl.data.blogs.map((blog) =>
                 m(
-                  ".card.col-4.opacity-overlay",
+                  ".card.col-2.opacity-overlay.is-vertical-align row",
                   m(
                     "figure",
                     m("img", { src: blog.img || "images/main.webp" })
@@ -85,9 +85,9 @@ const Home = () => {
                       selector: "label",
                       class: "tag button bg-primary text-white is-full-width",
                       href: `/social/blog-post:${blog.objectId}`,
-                      style: { opacity: 0 },
-                      onmouseover: (e) => (e.target.style.opacity = 1),
-                      onmouseleave: (e) => (e.target.style.opacity = 0),
+                      // style: { opacity: 0 },
+                      // onmouseover: (e) => (e.target.style.opacity = 1),
+                      // onmouseleave: (e) => (e.target.style.opacity = 0),
                     },
                     "...Read More"
                   )
