@@ -31,6 +31,20 @@ const BoardMembers = [
   },
 ]
 
+const calcSize = (mdl) => {
+  switch (mdl.settings.screenSize) {
+    case "phone":
+      return "12"
+    case "wide":
+      return "12"
+    case "tablet":
+      return "6"
+    default:
+    case "desktop":
+      return "4"
+  }
+}
+
 const Contact = (mdl) => {
   return {
     view: ({ attrs: { mdl } }) =>
@@ -46,7 +60,7 @@ const Contact = (mdl) => {
             ".row.container",
             BoardMembers.map(({ title, name, phones, emails }) =>
               m(
-                ".card.col-4",
+                `.card.col-${calcSize(mdl)}`,
                 m("h4.text-primary", title),
                 m("p", name),
                 phones.map((phone) => m("p", phone)),

@@ -70,7 +70,7 @@ const Home = () => {
                       m.route.Link,
                       {
                         selector: "label",
-                        class: "tag button bg-primary text-white is-full-width",
+                        class: "button primary outline is-full-width",
                         href: "/social/calendar",
                         onclick: (e) =>
                           mdl.state.selectedPreviewEvent(event.objectId),
@@ -122,7 +122,7 @@ const Home = () => {
                       m.route.Link,
                       {
                         selector: "label",
-                        class: "tag button bg-primary text-white is-full-width",
+                        class: "button primary outline is-full-width",
                         href: `/social/blog-post:${blog.objectId}`,
                       },
                       "...Read More"
