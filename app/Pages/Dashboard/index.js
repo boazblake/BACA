@@ -1,35 +1,73 @@
-import { Orders } from "Components/orders.js"
-import { Prices } from "./prices.js"
-import { Users } from "./users.js"
+import { log } from "Utils"
+import { head, toPairs, compose, map, prop, filter, identity } from "ramda"
+import { Table } from "Components/table.js"
 
-const Dashboard = () => {
-  const components = {
-    prices: Prices,
-    users: Users,
-    orders: Orders,
-  }
+const nav = (role) => {
+  return [role == "admin" && "users", "blogs", "events", "images"]
+}
 
-  const navi = ["prices", "users", "orders"]
+const state = {
+  tab: "blogs",
+}
 
+const toColCell = (x) => ({ col: x[0], val: x[1] })
+
+const userViewmodel = (x) => {
+  // delete x.ACL
+  // delete x.updatedAt
+  // delete x.createdAt
+  // delete x.isAdmin
+  console.log("x", x)
+  return x
+}
+
+const eventsViewmodel = identity
+const blogsViewmodel = identity
+const imagesViewmodel = identity
+
+const handleType = (tab) => (data) => {
+  if (tab == "user") return userViewmodel(data)
+  if (tab == "events") return eventsViewmodel(data)
+  if (tab == "blogs") return blogsViewmodel(data)
+  if (tab == "images") return imagesViewmodel(data)
+}
+
+const toViewmodel = (state, mdl) => {
+  let data = mdl.data[state.tab].map(handleType(state.tab))
+  let cols = Object.keys(head(data))
+  let rows = compose(map(map(toColCell)), map(toPairs))(data)
+  return { cols, rows }
+}
+
+const getUsers = (mdl) =>
+  mdl.http.back4App
+    .getTask(mdl)("Users")
+    .map(prop("results"))
+    .map(filter(prop("name")))
+    .fork(log("error"), (u) => (mdl.data.users = u))
+
+const Dashboard = ({ attrs: { mdl } }) => {
+  console.log(mdl.data[state.tab])
   return {
+    oninit: ({ attrs: { mdl } }) => mdl.user.role == "admin" && getUsers(mdl),
     view: ({ attrs: { mdl } }) =>
       m(
-        ".",
-        { style: { minWidth: "100%", minHeight: "100%" } },
+        "section",
         m(
-          "section.dash-nav.frow row-around",
-          navi.map((nav) =>
+          "nav.tabs",
+          nav(mdl.user.role).map((tab) =>
             m(
-              "button",
+              "a.tab.pointer",
               {
-                class: mdl.dash.state.show == nav ? "is-active" : "",
-                onclick: (e) => (mdl.dash.state.show = nav),
+                class: state.tab == tab ? "active" : "",
+                onclick: () => (state.tab = tab),
               },
-              nav.toUpperCase()
+              tab.toUpperCase()
             )
           )
         ),
-        m("section.frow mt-10", m(components[mdl.dash.state.show], { mdl }))
+
+        m("section.container", m(Table, { mdl, ...toViewmodel(state, mdl) }))
       ),
   }
 }

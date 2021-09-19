@@ -38,7 +38,7 @@ const BlogPreview = {
           "continue reading"
         )
       ),
-      (author == mdl.user.name || mdl.user.isAdmin) &&
+      (author == mdl.user.name || ["admin", "mod"].includes(mdl.user.role)) &&
         m(
           "footer",
           m(

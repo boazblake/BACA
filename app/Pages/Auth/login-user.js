@@ -39,7 +39,7 @@ const userModel = {
   password: "",
   confirmEmail: "",
   confirmPassword: "",
-  isAdmin: false,
+  role: "user",
 }
 
 const dataModel = { userModel }

@@ -14,10 +14,10 @@ export const Users = () => {
       .map(filter(prop("name")))
       .fork(log("error"), (u) => (state.users = u))
 
-  const updateUserAdminLevel = (mdl) => (user) => {
+  const updateUserRole = (mdl) => (user) => {
     log("user")(user)
     mdl.http.back4App
-      .putTask(mdl)(`Users/${user.objectId}`)({ isAdmin: user.isAdmin })
+      .putTask(mdl)(`Users/${user.objectId}`)({ role: user.role })
       .fork(log("error"), log("succes"))
   }
 
@@ -38,7 +38,7 @@ export const Users = () => {
                 checked: user.isAdmin,
                 onclick: () => {
                   user.isAdmin = !user.isAdmin
-                  updateUserAdminLevel(mdl)(user)
+                  updateUserRole(mdl)(user)
                 },
               })
             )

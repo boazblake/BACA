@@ -92,9 +92,8 @@ const AuthenticatedRoutes = [
       //   fullroute,
       //   isAnchor,
       //   mdl.state.isAuth(),
-      //   mdl.user.isAdmin
       // )
-      !mdl.user.isAdmin && m.route.set(m.route.get())
+      mdl.user.role != "admin" && m.route.set(m.route.get())
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
         : PageTitle().scrollIntoView({

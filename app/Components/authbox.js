@@ -7,7 +7,7 @@ const AuthBox = () => {
       mdl.state.isAuth()
         ? m(
             ".grouped.is-center",
-            mdl.user.isAdmin &&
+            ["admin", "mod"].includes(mdl.user.role) &&
               m(NavLink, {
                 mdl,
                 href: `/dashboard/${mdl.user.name}`,

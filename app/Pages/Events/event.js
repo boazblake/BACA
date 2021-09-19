@@ -25,7 +25,8 @@ const Event = {
           "footer.modal-footer",
           m(
             ".tabs grouped",
-            (event.createdBy == mdl.user.name || mdl.user.isAdmin) &&
+            (event.createdBy == mdl.user.name ||
+              ["admin", "mod"].includes(mdl.user.role)) &&
               m(
                 "button.button.secondary.is-full-width",
                 {

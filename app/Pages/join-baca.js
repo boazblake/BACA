@@ -78,7 +78,7 @@ const JoinBACA = (mdl) => {
             ),
             m(
               "p",
-              "If you want to leverage many voices, namely the many members of Bonham Acres, to work with orginazations, commercial entities, governments to improvement our neighborhood you need to join."
+              "If you want to leverage many voices, namely the many members of Bonham Acres, to work with organizations, commercial entities, governments to improvement our neighborhood you need to join."
             )
           )
         )

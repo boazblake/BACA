@@ -47,13 +47,13 @@ export const loginTask =
 
 export const registerUserTask =
   (mdl) =>
-  ({ name, email, password, isAdmin }) =>
+  ({ name, email, password, role }) =>
     mdl.http.back4App.postTask(mdl)("users")({
       username: email,
       name,
       email,
       password: btoa(password),
-      isAdmin,
+      role,
     })
 
 export const createAccountTask = (mdl) => {

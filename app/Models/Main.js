@@ -32,7 +32,7 @@ const state = {
   selectedPreviewEvent: Stream(null),
 }
 const user = {
-  isAdmin: false,
+  role: "user",
 }
 const settings = {}
 
