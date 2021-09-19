@@ -1,5 +1,14 @@
 import { log } from "Utils"
-import { head, toPairs, compose, map, prop, filter, identity } from "ramda"
+import {
+  head,
+  toPairs,
+  compose,
+  map,
+  prop,
+  filter,
+  identity,
+  keys,
+} from "ramda"
 import { Table } from "Components/table.js"
 
 const nav = (role) => {
@@ -13,7 +22,7 @@ const state = {
 const toColCell = (x) => ({ col: x[0], val: x[1] })
 
 const userViewmodel = (x) => {
-  // delete x.ACL
+  delete x.ACL
   // delete x.updatedAt
   // delete x.createdAt
   // delete x.isAdmin
@@ -25,16 +34,18 @@ const eventsViewmodel = identity
 const blogsViewmodel = identity
 const imagesViewmodel = identity
 
-const handleType = (tab) => (data) => {
-  if (tab == "user") return userViewmodel(data)
-  if (tab == "events") return eventsViewmodel(data)
-  if (tab == "blogs") return blogsViewmodel(data)
-  if (tab == "images") return imagesViewmodel(data)
+const displayType = {
+  users: userViewmodel,
+  events: eventsViewmodel,
+  blogs: blogsViewmodel,
+  images: imagesViewmodel,
 }
+
+const handleType = (tab) => (data) => displayType[tab](data)
 
 const toViewmodel = (state, mdl) => {
   let data = mdl.data[state.tab].map(handleType(state.tab))
-  let cols = Object.keys(head(data))
+  let cols = Array.from(new Set(data.flatMap(keys)))
   let rows = compose(map(map(toColCell)), map(toPairs))(data)
   return { cols, rows }
 }

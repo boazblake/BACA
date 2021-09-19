@@ -3163,10 +3163,10 @@ var toColCell = function toColCell(x) {
 };
 
 var userViewmodel = function userViewmodel(x) {
-  // delete x.ACL
-  // delete x.updatedAt
+  delete x.ACL; // delete x.updatedAt
   // delete x.createdAt
   // delete x.isAdmin
+
   console.log("x", x);
   return x;
 };
@@ -3174,19 +3174,22 @@ var userViewmodel = function userViewmodel(x) {
 var eventsViewmodel = _ramda.identity;
 var blogsViewmodel = _ramda.identity;
 var imagesViewmodel = _ramda.identity;
+var displayType = {
+  users: userViewmodel,
+  events: eventsViewmodel,
+  blogs: blogsViewmodel,
+  images: imagesViewmodel
+};
 
 var handleType = function handleType(tab) {
   return function (data) {
-    if (tab == "user") return userViewmodel(data);
-    if (tab == "events") return eventsViewmodel(data);
-    if (tab == "blogs") return blogsViewmodel(data);
-    if (tab == "images") return imagesViewmodel(data);
+    return displayType[tab](data);
   };
 };
 
 var toViewmodel = function toViewmodel(state, mdl) {
   var data = mdl.data[state.tab].map(handleType(state.tab));
-  var cols = Object.keys((0, _ramda.head)(data));
+  var cols = Array.from(new Set(data.flatMap(_ramda.keys)));
   var rows = (0, _ramda.compose)((0, _ramda.map)((0, _ramda.map)(toColCell)), (0, _ramda.map)(_ramda.toPairs))(data);
   return {
     cols: cols,
