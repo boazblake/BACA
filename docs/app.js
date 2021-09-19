@@ -1276,8 +1276,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Table = void 0;
 
-var _cjs = require("@mithril-icons/clarity/cjs");
-
 var Cell = function Cell() {
   return {
     view: function view(_ref) {
@@ -1307,13 +1305,7 @@ var Row = function Row(_ref2) {
         }, m("", {
           key: cell.col
         }, cell.val));
-      }), m("td", m(_cjs.AngleLine, {
-        "class": "clickable ".concat(!row.isSelected && "point-down"),
-        onclick: function onclick() {
-          return row.isSelected = !row.isSelected;
-        },
-        width: "16px"
-      })))];
+      }))];
     }
   };
 };
@@ -1331,8 +1323,8 @@ var Table = function Table() {
           overflow: "auto"
         }
       }, rows.any() ? m("table.dash-table", mdl.settings.screenSize != "phone" && m("thead.dash-nav", m("tr.mb-5", cols.map(function (col) {
-        return m("th", col);
-      }), m("th"))), m("tbody", rows.map(function (row) {
+        return m("th.primary", col.toUpperCase());
+      }))), m("tbody", rows.map(function (row) {
         return m(Row, {
           mdl: mdl,
           row: row
@@ -3141,6 +3133,8 @@ var _ramda = require("ramda");
 
 var _table = require("Components/table.js");
 
+var _cjs = require("@mithril-icons/clarity/cjs");
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3148,7 +3142,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var nav = function nav(role) {
-  return [role == "admin" && "users", "blogs", "events", "images"];
+  var tabs = ["blogs", "events", "images"];
+  if (role == "admin") tabs.push("users");
+  return tabs;
 };
 
 var state = {
@@ -3162,18 +3158,80 @@ var toColCell = function toColCell(x) {
   };
 };
 
-var userViewmodel = function userViewmodel(x) {
-  delete x.ACL; // delete x.updatedAt
-  // delete x.createdAt
-  // delete x.isAdmin
-
-  console.log("x", x);
-  return x;
+var userViewmodel = function userViewmodel(_ref) {
+  var objectId = _ref.objectId,
+      email = _ref.email,
+      emailVerified = _ref.emailVerified,
+      name = _ref.name,
+      role = _ref.role,
+      username = _ref.username;
+  return {
+    name: name,
+    username: username,
+    email: email,
+    emailVerified: emailVerified,
+    role: role,
+    action: m(_cjs.EditLine, {
+      onclick: function onclick() {
+        return console.log(objectId);
+      }
+    })
+  };
 };
 
-var eventsViewmodel = _ramda.identity;
-var blogsViewmodel = _ramda.identity;
-var imagesViewmodel = _ramda.identity;
+var eventsViewmodel = function eventsViewmodel(_ref2) {
+  var objectId = _ref2.objectId,
+      title = _ref2.title,
+      image = _ref2.image,
+      startDate = _ref2.startDate,
+      startTime = _ref2.startTime;
+  return {
+    title: title,
+    image: image,
+    startDate: startDate,
+    startTime: startTime,
+    action: m(_cjs.EditLine, {
+      onclick: function onclick() {
+        return console.log(objectId);
+      }
+    })
+  };
+};
+
+var blogsViewmodel = function blogsViewmodel(_ref3) {
+  var objectId = _ref3.objectId,
+      title = _ref3.title,
+      img = _ref3.img,
+      text = _ref3.text,
+      author = _ref3.author;
+  return {
+    title: title,
+    img: img,
+    text: text,
+    author: author,
+    action: m(_cjs.EditLine, {
+      onclick: function onclick() {
+        return console.log(objectId);
+      }
+    })
+  };
+};
+
+var imagesViewmodel = function imagesViewmodel(_ref4) {
+  var objectId = _ref4.objectId,
+      album = _ref4.album,
+      image = _ref4.image;
+  return {
+    album: album,
+    image: image,
+    action: m(_cjs.EditLine, {
+      onclick: function onclick() {
+        return console.log(objectId);
+      }
+    })
+  };
+};
+
 var displayType = {
   users: userViewmodel,
   events: eventsViewmodel,
@@ -3203,16 +3261,14 @@ var getUsers = function getUsers(mdl) {
   });
 };
 
-var Dashboard = function Dashboard(_ref) {
-  var mdl = _ref.attrs.mdl;
-  console.log(mdl.data[state.tab]);
+var Dashboard = function Dashboard() {
   return {
-    oninit: function oninit(_ref2) {
-      var mdl = _ref2.attrs.mdl;
+    oninit: function oninit(_ref5) {
+      var mdl = _ref5.attrs.mdl;
       return mdl.user.role == "admin" && getUsers(mdl);
     },
-    view: function view(_ref3) {
-      var mdl = _ref3.attrs.mdl;
+    view: function view(_ref6) {
+      var mdl = _ref6.attrs.mdl;
       return m("section", m("nav.tabs", nav(mdl.user.role).map(function (tab) {
         return m("a.tab.pointer", {
           "class": state.tab == tab ? "active" : "",
@@ -5235,10 +5291,10 @@ var SocialRoutes = [{
     }));
   }
 }, {
-  id: "calendar",
-  name: "Events Calendar",
+  id: "events",
+  name: "Events",
   // icon: Icons.home,
-  route: "/social/calendar",
+  route: "/social/events",
   isNav: true,
   group: ["nav", "social"],
   children: [],

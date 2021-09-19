@@ -1,18 +1,12 @@
 import { log } from "Utils"
-import {
-  head,
-  toPairs,
-  compose,
-  map,
-  prop,
-  filter,
-  identity,
-  keys,
-} from "ramda"
+import { toPairs, compose, map, prop, filter, keys } from "ramda"
 import { Table } from "Components/table.js"
+import { EditLine } from "@mithril-icons/clarity/cjs"
 
 const nav = (role) => {
-  return [role == "admin" && "users", "blogs", "events", "images"]
+  let tabs = ["blogs", "events", "images"]
+  if (role == "admin") tabs.push("users")
+  return tabs
 }
 
 const state = {
@@ -21,18 +15,43 @@ const state = {
 
 const toColCell = (x) => ({ col: x[0], val: x[1] })
 
-const userViewmodel = (x) => {
-  delete x.ACL
-  // delete x.updatedAt
-  // delete x.createdAt
-  // delete x.isAdmin
-  console.log("x", x)
-  return x
-}
+const userViewmodel = ({
+  objectId,
+  email,
+  emailVerified,
+  name,
+  role,
+  username,
+}) => ({
+  name,
+  username,
+  email,
+  emailVerified,
+  role,
+  action: m(EditLine, { onclick: () => console.log(objectId) }),
+})
 
-const eventsViewmodel = identity
-const blogsViewmodel = identity
-const imagesViewmodel = identity
+const eventsViewmodel = ({ objectId, title, image, startDate, startTime }) => ({
+  title,
+  image,
+  startDate,
+  startTime,
+  action: m(EditLine, { onclick: () => console.log(objectId) }),
+})
+
+const blogsViewmodel = ({ objectId, title, img, text, author }) => ({
+  title,
+  img,
+  text,
+  author,
+  action: m(EditLine, { onclick: () => console.log(objectId) }),
+})
+
+const imagesViewmodel = ({ objectId, album, image }) => ({
+  album,
+  image,
+  action: m(EditLine, { onclick: () => console.log(objectId) }),
+})
 
 const displayType = {
   users: userViewmodel,
@@ -57,8 +76,7 @@ const getUsers = (mdl) =>
     .map(filter(prop("name")))
     .fork(log("error"), (u) => (mdl.data.users = u))
 
-const Dashboard = ({ attrs: { mdl } }) => {
-  console.log(mdl.data[state.tab])
+const Dashboard = () => {
   return {
     oninit: ({ attrs: { mdl } }) => mdl.user.role == "admin" && getUsers(mdl),
     view: ({ attrs: { mdl } }) =>

@@ -1,5 +1,3 @@
-import { AngleLine } from "@mithril-icons/clarity/cjs"
-
 const Cell = () => {
   return {
     view: ({
@@ -27,15 +25,6 @@ const Row = ({ attrs: { mdl } }) => {
           "tr",
           row.map((cell) =>
             m(Cell, { mdl }, m("", { key: cell.col }, cell.val))
-          ),
-
-          m(
-            "td",
-            m(AngleLine, {
-              class: `clickable ${!row.isSelected && "point-down"}`,
-              onclick: () => (row.isSelected = !row.isSelected),
-              width: "16px",
-            })
           )
         ),
       ]
@@ -62,8 +51,7 @@ export const Table = () => {
                   "thead.dash-nav",
                   m(
                     "tr.mb-5",
-                    cols.map((col) => m("th", col)),
-                    m("th")
+                    cols.map((col) => m("th.primary", col.toUpperCase()))
                   )
                 ),
               m(

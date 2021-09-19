@@ -37,10 +37,10 @@ const SocialRoutes = [
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
   {
-    id: "calendar",
-    name: "Events Calendar",
+    id: "events",
+    name: "Events",
     // icon: Icons.home,
-    route: "/social/calendar",
+    route: "/social/events",
     isNav: true,
     group: ["nav", "social"],
     children: [],
