@@ -5,6 +5,11 @@ const data = {
   events: [],
   images: [],
   blogs: [],
+  account: {
+    profile: {},
+    dues: [],
+    messages: [],
+  },
 }
 
 const state = {

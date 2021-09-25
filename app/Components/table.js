@@ -1,3 +1,13 @@
+import { toPairs, compose, map, keys } from "ramda"
+
+const toColCell = (x) => ({ col: x[0], val: x[1] })
+
+export const formatDataForTable = (data) => {
+  let cols = Array.from(new Set(data.flatMap(keys)))
+  let rows = compose(map(map(toColCell)), map(toPairs))(data)
+  return { cols, rows }
+}
+
 const Cell = () => {
   return {
     view: ({

@@ -828,162 +828,6 @@ var _default = NavLink;
 exports["default"] = _default;
 });
 
-;require.register("Components/orders.js", function(exports, require, module) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Orders = void 0;
-
-var _Utils = require("Utils");
-
-var _cjs = require("@mithril-icons/clarity/cjs");
-
-var _ramda = require("ramda");
-
-var STATE = function STATE() {
-  return {
-    invoices: []
-  };
-};
-
-var state = STATE();
-
-var calcProductPrice = function calcProductPrice(_ref, product) {
-  var prices = _ref.prices,
-      cart = _ref.cart;
-  return parseInt(prices[product]) * Object.values(cart[product]).reduce(_ramda.add, 0);
-};
-
-var calcTotalPrice = function calcTotalPrice(invoice) {
-  return Object.keys(invoice.cart).map(function (product) {
-    return calcProductPrice(invoice, product);
-  }).reduce(_ramda.add, 0);
-};
-
-var invoiceUrl = function invoiceUrl(mdl) {
-  var userInvoices = "{\"userId\":\"".concat(mdl.user.objectId, "\"}");
-  return mdl.state.route.id == "dashboard" ? "classes/Invoices" : "classes/Invoices?where=".concat(encodeURI(userInvoices));
-};
-
-var fetchInvoicesTask = function fetchInvoicesTask(mdl) {
-  return mdl.http.back4App.getTask(mdl)(invoiceUrl(mdl)).map((0, _ramda.prop)("results")).map((0, _ramda.map)((0, _ramda.assoc)("isSelected", false)));
-};
-
-var onFetchInvoiceError = function onFetchInvoiceError(mdl) {
-  return function (e) {
-    return log("e")([e, mdl]);
-  };
-};
-
-var onFetchInvoiceSuccess = function onFetchInvoiceSuccess(_) {
-  return function (invoices) {
-    return state.invoices = invoices;
-  };
-};
-
-var fetchInvoices = function fetchInvoices(_ref2) {
-  var mdl = _ref2.attrs.mdl;
-  return fetchInvoicesTask(mdl).fork(onFetchInvoiceError(mdl), onFetchInvoiceSuccess(mdl));
-};
-
-var InvoiceCell = function InvoiceCell() {
-  return {
-    view: function view(_ref3) {
-      var screenSize = _ref3.attrs.mdl.settings.screenSize,
-          children = _ref3.children;
-      return screenSize == "phone" ? m("tr", [m("td", {
-        style: {
-          width: "25%"
-        }
-      }, m("label", children[0].key)), children]) : m("td", {
-        style: {
-          width: "20%"
-        }
-      }, children);
-    }
-  };
-};
-
-var Invoice = function Invoice(_ref4) {
-  var mdl = _ref4.attrs.mdl;
-  return {
-    view: function view(_ref5) {
-      var invoice = _ref5.attrs.invoice;
-      return [m("tr", m(InvoiceCell, {
-        mdl: mdl
-      }, m("", {
-        key: "Date"
-      }, (0, _Utils.formatDate)(invoice.purchaseTime))), m(InvoiceCell, {
-        mdl: mdl
-      }, m("", {
-        key: "Order Id"
-      }, invoice.orderID)), m(InvoiceCell, {
-        mdl: mdl
-      }, m("", {
-        key: "Name"
-      }, "".concat(invoice.shippingDestination.name.full_name, " "))), m(InvoiceCell, {
-        mdl: mdl
-      }, m("", {
-        key: "Payment Status"
-      }, invoice.status)), m(InvoiceCell, {
-        mdl: mdl
-      }, m("", {
-        key: "Shipping Status",
-        style: {
-          width: "100%",
-          borderBottom: "1px solid gold"
-        }
-      }, invoice.shippingStatus ? m("a", {
-        href: invoice.shippingStatus
-      }, "Shipping Status") : m("p", "Prepparing your order"))), m("td", m(_cjs.AngleLine, {
-        "class": "clickable ".concat(!invoice.isSelected && "point-down"),
-        onclick: function onclick() {
-          return invoice.isSelected = !invoice.isSelected;
-        },
-        width: "16px"
-      }))), invoice.isSelected && m("td", {
-        colspan: 5,
-        style: {
-          width: "100%"
-        }
-      }, m("tr", m("td", m("label", "Shipping Destination"), "".concat(invoice.shippingDestination.address.address_line_1, " ").concat(invoice.shippingDestination.address.admin_area_2, " ").concat(invoice.shippingDestination.address.admin_area_1, " ").concat(invoice.shippingDestination.address.postal_code)), mdl.state.route.id == "dashboard" && m("td", m("button", "Update Shipping Status"))), m("table", {
-        style: {
-          width: "100%",
-          borderBottom: "1px solid gold"
-        }
-      }, [m("thead", m("tr", [m("th", "Product"), m("th", "Quantities"), m("th", "Unit Price"), m("th", "Unit Total")])), m("tbody", Object.keys(invoice.cart).map(function (product) {
-        return m("tr", [m("td", product), m("td", JSON.stringify(invoice.cart[product])), m("td", invoice.prices[product]), m("td", calcProductPrice(invoice, product))]);
-      }), m("tr", m("th", "Order Total"), m("th", calcTotalPrice(invoice))))]))];
-    }
-  };
-};
-
-var Orders = function Orders() {
-  return {
-    onremove: state = STATE(),
-    oninit: fetchInvoices,
-    view: function view(_ref6) {
-      var mdl = _ref6.attrs.mdl;
-      return m("section.overflow-auto", {
-        style: {
-          minWidth: "100%",
-          height: "75vh"
-        }
-      }, state.invoices.any() ? m("table.dash-table", mdl.settings.screenSize != "phone" && m("thead.dash-nav", m("tr.mb-5", [m("th", "Date"), m("th", "Order Id"), m("th", "Name"), m("th", "Payment Status"), m("th", "Shipping Status"), m("th")])), m("tbody", state.invoices.map(function (invoice) {
-        return m(Invoice, {
-          mdl: mdl,
-          invoice: invoice
-        });
-      }))) : m("h2", "No Orders"));
-    }
-  };
-};
-
-exports.Orders = Orders;
-});
-
 ;require.register("Components/paypal.js", function(exports, require, module) {
 "use strict";
 
@@ -1274,7 +1118,27 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Table = void 0;
+exports.Table = exports.formatDataForTable = void 0;
+
+var _ramda = require("ramda");
+
+var toColCell = function toColCell(x) {
+  return {
+    col: x[0],
+    val: x[1]
+  };
+};
+
+var formatDataForTable = function formatDataForTable(data) {
+  var cols = Array.from(new Set(data.flatMap(_ramda.keys)));
+  var rows = (0, _ramda.compose)((0, _ramda.map)((0, _ramda.map)(toColCell)), (0, _ramda.map)(_ramda.toPairs))(data);
+  return {
+    cols: cols,
+    rows: rows
+  };
+};
+
+exports.formatDataForTable = formatDataForTable;
 
 var Cell = function Cell() {
   return {
@@ -2041,7 +1905,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 var data = {
   events: [],
   images: [],
-  blogs: []
+  blogs: [],
+  account: {
+    profile: {},
+    dues: [],
+    messages: []
+  }
 };
 var state = {
   paginate: {
@@ -2119,20 +1988,205 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _orders = require("Components/orders.js");
+var _profile = _interopRequireDefault(require("./profile"));
+
+var _model = require("./model");
+
+var _table = require("Components/table.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var nav = function nav() {
+  return ["profile", "dues", "messages"];
+};
+
+var state = {
+  tab: "profile",
+  status: "loading"
+};
+
+var loadAll = function loadAll(mdl) {
+  var onSuccess = function onSuccess(_ref) {
+    var profile = _ref.profile,
+        dues = _ref.dues,
+        messages = _ref.messages;
+    mdl.data.profile = profile;
+    mdl.data.dues = dues;
+    mdl.data.messages = messages;
+    state.status = "success";
+    console.log(state, mdl);
+  };
+
+  var onError = function onError(e) {
+    state.status = "error";
+    console.error("issues w fetching data", e);
+  };
+
+  (0, _model.loadAllTask)(mdl).fork(onError, onSuccess);
+};
 
 var Account = function Account() {
   return {
-    view: function view(_ref) {
-      var mdl = _ref.attrs.mdl;
-      return m(".frow-container", m(_orders.Orders, {
+    //future add param to quick nav the state.tab to messages pane.
+    oninit: function oninit(_ref2) {
+      var mdl = _ref2.attrs.mdl;
+      return loadAll(mdl);
+    },
+    view: function view(_ref3) {
+      var mdl = _ref3.attrs.mdl;
+      return m("section", state.status == "error" && m("ERROR"), state.status == "loading" && m("loading"), state.status == "success" && m("section", m("nav.tabs", nav(mdl.user.role).map(function (tab) {
+        return m("a.tab.pointer", {
+          "class": state.tab == tab ? "active" : "",
+          onclick: function onclick() {
+            return state.tab = tab;
+          }
+        }, tab.toUpperCase());
+      })), m("section.container", state.tab == "profile" && m(_profile["default"], {
+        mdl: mdl,
+        data: mdl.data.profile
+      }), state.tab == "dues" && m(_table.Table, _objectSpread({
         mdl: mdl
-      }));
+      }, (0, _table.formatDataForTable)(mdl.data.dues))), state.tab == "messages" && m(_table.Table, _objectSpread({
+        mdl: mdl
+      }, (0, _table.formatDataForTable)(mdl.data.messages))))));
     }
   };
 };
 
 var _default = Account;
+exports["default"] = _default;
+});
+
+;require.register("Pages/Account/model.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.loadAllTask = void 0;
+
+var _Utils = require("Utils");
+
+var _ramda = require("ramda");
+
+var _cjs = require("@mithril-icons/clarity/cjs");
+
+var _clarity = require("@mithril-icons/clarity");
+
+var _data = _interopRequireDefault(require("data.task"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var toProfileVM = function toProfileVM(_ref) {
+  var emailVerified = _ref.emailVerified,
+      email = _ref.email,
+      name = _ref.name;
+  return function (_ref2) {
+    var avatar = _ref2.avatar,
+        _ref2$address = _ref2.address,
+        street = _ref2$address.street,
+        city = _ref2$address.city,
+        state = _ref2$address.state,
+        zip = _ref2$address.zip;
+    return {
+      street: street,
+      city: city,
+      state: state,
+      zip: zip,
+      emailVerified: emailVerified,
+      email: email,
+      name: name,
+      avatar: avatar
+    };
+  };
+};
+
+var getProfile = function getProfile(mdl) {
+  return function (id) {
+    return mdl.http.back4App.getTask(mdl)("classes/Accounts?".concat(id)).map((0, _ramda.prop)("results")).map(_ramda.head).map(toProfileVM(mdl.user));
+  };
+};
+
+var toDuesVM = function toDuesVM(dues) {
+  return dues;
+};
+
+var getDues = function getDues(mdl) {
+  return function (id) {
+    return mdl.http.back4App.getTask(mdl)("classes/Dues?".concat(id)).map((0, _ramda.prop)("results")).map((0, _ramda.map)(toDuesVM));
+  };
+};
+
+var toMessagesVM = function toMessagesVM(dues) {
+  return dues;
+};
+
+var getMessages = function getMessages(mdl) {
+  return function (id) {
+    return mdl.http.back4App.getTask(mdl)("classes/Messages?".concat(id)).map((0, _ramda.prop)("results")).map((0, _ramda.map)(toMessagesVM));
+  };
+};
+
+var loadAllTask = function loadAllTask(mdl) {
+  var id = encodeURI("where={\"userId\":\"".concat(mdl.user.objectId, "\"}"));
+  return _data["default"].of(function (profile) {
+    return function (dues) {
+      return function (messages) {
+        console.log(profile);
+        return {
+          profile: profile,
+          dues: dues,
+          messages: messages
+        };
+      };
+    };
+  }).ap(getProfile(mdl)(id)).ap(getDues(mdl)(id)).ap(getMessages(mdl)(id));
+};
+
+exports.loadAllTask = loadAllTask;
+});
+
+;require.register("Pages/Account/profile.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var Profile = function Profile() {
+  return {
+    view: function view(_ref) {
+      var _ref$attrs = _ref.attrs,
+          mdl = _ref$attrs.mdl,
+          data = _ref$attrs.data;
+      console.log(data);
+      return m("form", m("figure", m("img.avatar", {
+        src: data.avatar
+      })), !data.emailVerified && m("label.warning", "email not verified"), m("label", "name", m("input", {
+        value: data.name
+      })), m("label", "email", m("input", {
+        value: data.email
+      })), m("label", "street", m("input", {
+        value: data.street
+      })), m("label", "city", m("input", {
+        value: data.city
+      })), m("label", "state", m("input", {
+        value: data.state
+      })), m("label", "zip", m("input", {
+        value: data.zip
+      })), m("button", "Update"));
+    }
+  };
+};
+
+var _default = Profile;
 exports["default"] = _default;
 });
 
@@ -2209,25 +2263,13 @@ exports.validateLoginTask = validateLoginTask;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createAccountTask = exports.registerUserTask = exports.loginTask = exports.loginUserTask = void 0;
+exports.createMessagesTask = exports.createDuesTask = exports.createAccountTask = exports.registerUserTask = exports.loginTask = exports.loginUserTask = void 0;
 
 var _data = _interopRequireDefault(require("data.task"));
 
 var _ramda = require("ramda");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var toAccountVM = function toAccountVM(mdl) {
-  return function (accnts) {
-    mdl.user.accounts = accnts;
-    return mdl; // let cart = mergeCarts(accnts[0].cart)(mdl.cart)
-    // mdl.user.account = { objectId: accnts[0].objectId, cart }
-    // mdl.user.address = accnts[0].address
-    // mdl.cart = cart
-    // setUserToken(mdl)(mdl.user)
-    // return cart
-  };
-};
 
 var setUserAndSessionToken = function setUserAndSessionToken(mdl) {
   return function (user) {
@@ -2251,12 +2293,40 @@ var loginUserTask = function loginUserTask(mdl) {
 exports.loginUserTask = loginUserTask;
 
 var getUserAccountTask = function getUserAccountTask(mdl) {
-  return function (_) {
-    var userAccount = encodeURI("where={\"userId\":\"".concat(mdl.user.objectId, "\"}"));
-    return mdl.http.back4App.getTask(mdl)("classes/Accounts?".concat(userAccount)).map((0, _ramda.prop)("results")).chain(function (account) {
+  return function (encodeId) {
+    return mdl.http.back4App.getTask(mdl)("classes/Accounts?".concat(encodeId)).map((0, _ramda.prop)("results")).chain(function (account) {
       return account.any() ? _data["default"].of(account) : createAccountTask(mdl);
-    }).map(toAccountVM(mdl));
+    }).map(_ramda.head);
   };
+};
+
+var getUserDuesTask = function getUserDuesTask(mdl) {
+  return function (encodeId) {
+    return mdl.http.back4App.getTask(mdl)("classes/Dues?".concat(encodeId)).map((0, _ramda.prop)("results"));
+  };
+}; // .chain((dues) => (dues.any() ? Task.of(dues) : createDuesTask(mdl)))
+
+
+var getUserMessagesTask = function getUserMessagesTask(mdl) {
+  return function (encodeId) {
+    return mdl.http.back4App.getTask(mdl)("classes/Messages?".concat(encodeId)).map((0, _ramda.prop)("results"));
+  };
+}; // .chain((messages) =>
+//   messages.any() ? Task.of(messages) : createMessagesTask(mdl)
+// )
+
+
+var getUserInfoTask = function getUserInfoTask(mdl) {
+  var encodeId = encodeURI("where={\"userId\":\"".concat(mdl.user.objectId, "\"}"));
+  return _data["default"].of(function (account) {
+    return function (dues) {
+      return function (messages) {
+        mdl.data.account = account;
+        mdl.data.dues = dues;
+        mdl.data.messages = messages;
+      };
+    };
+  }).ap(getUserAccountTask(mdl)(encodeId)).ap(getUserDuesTask(mdl)(encodeId)).ap(getUserMessagesTask(mdl)(encodeId));
 };
 
 var loginTask = function loginTask(mdl) {
@@ -2266,7 +2336,9 @@ var loginTask = function loginTask(mdl) {
     return loginUserTask(mdl)({
       email: email,
       password: password
-    }).chain(getUserAccountTask(mdl));
+    }).chain(function (_) {
+      return getUserInfoTask(mdl);
+    });
   };
 };
 
@@ -2292,11 +2364,18 @@ exports.registerUserTask = registerUserTask;
 
 var createAccountTask = function createAccountTask(mdl) {
   mdl.user.account = {
-    address: {}
+    address: {},
+    avatar: "https://i.ibb.co/6W0zsZH/avatar.webp"
   };
   return mdl.http.back4App.postTask(mdl)("classes/Accounts")({
     userId: mdl.user.objectId,
-    address: {}
+    avatar: "https://i.ibb.co/6W0zsZH/avatar.webp",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      zip: ""
+    }
   }).map(function (_ref4) {
     var objectId = _ref4.objectId;
     mdl.user.account.objectId = objectId;
@@ -2305,6 +2384,33 @@ var createAccountTask = function createAccountTask(mdl) {
 };
 
 exports.createAccountTask = createAccountTask;
+
+var createDuesTask = function createDuesTask(mdl) {
+  mdl.user.dues = {};
+  return mdl.http.back4App.postTask(mdl)("classes/Dues")({
+    userId: mdl.user.objectId,
+    address: {}
+  }).map(function (_ref5) {
+    var objectId = _ref5.objectId;
+    mdl.user.dues.objectId = objectId;
+    return mdl;
+  });
+};
+
+exports.createDuesTask = createDuesTask;
+
+var createMessagesTask = function createMessagesTask(mdl) {
+  mdl.user.messages = {};
+  return mdl.http.back4App.postTask(mdl)("classes/Messages")({
+    userId: mdl.user.objectId
+  }).map(function (_ref6) {
+    var objectId = _ref6.objectId;
+    mdl.user.messages.objectId = objectId;
+    return mdl;
+  });
+};
+
+exports.createMessagesTask = createMessagesTask;
 });
 
 ;require.register("Pages/Auth/login-user.js", function(exports, require, module) {
@@ -3135,6 +3241,8 @@ var _table = require("Components/table.js");
 
 var _cjs = require("@mithril-icons/clarity/cjs");
 
+var _clarity = require("@mithril-icons/clarity");
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3151,13 +3259,6 @@ var state = {
   tab: "blogs"
 };
 
-var toColCell = function toColCell(x) {
-  return {
-    col: x[0],
-    val: x[1]
-  };
-};
-
 var userViewmodel = function userViewmodel(_ref) {
   var objectId = _ref.objectId,
       email = _ref.email,
@@ -3171,11 +3272,15 @@ var userViewmodel = function userViewmodel(_ref) {
     email: email,
     emailVerified: emailVerified,
     role: role,
-    action: m(_cjs.EditLine, {
+    action: [m(_cjs.EditLine, {
       onclick: function onclick() {
-        return console.log(objectId);
+        return console.log("edit", objectId);
       }
-    })
+    }), m(_clarity.RemoveLine, {
+      onclick: function onclick() {
+        return console.log(objectId, "delete");
+      }
+    })]
   };
 };
 
@@ -3187,14 +3292,20 @@ var eventsViewmodel = function eventsViewmodel(_ref2) {
       startTime = _ref2.startTime;
   return {
     title: title,
-    image: image,
+    image: m("img", {
+      src: image
+    }),
     startDate: startDate,
     startTime: startTime,
-    action: m(_cjs.EditLine, {
+    action: [m(_cjs.EditLine, {
       onclick: function onclick() {
-        return console.log(objectId);
+        return console.log("edit", objectId);
       }
-    })
+    }), m(_clarity.RemoveLine, {
+      onclick: function onclick() {
+        return console.log(objectId, "delete");
+      }
+    })]
   };
 };
 
@@ -3206,14 +3317,20 @@ var blogsViewmodel = function blogsViewmodel(_ref3) {
       author = _ref3.author;
   return {
     title: title,
-    img: img,
-    text: text,
+    img: m("img", {
+      src: img
+    }),
+    text: text.slice(0, 300),
     author: author,
-    action: m(_cjs.EditLine, {
+    action: [m(_cjs.EditLine, {
       onclick: function onclick() {
-        return console.log(objectId);
+        return console.log("edit", objectId);
       }
-    })
+    }), m(_clarity.RemoveLine, {
+      onclick: function onclick() {
+        return console.log(objectId, "delete");
+      }
+    })]
   };
 };
 
@@ -3223,12 +3340,18 @@ var imagesViewmodel = function imagesViewmodel(_ref4) {
       image = _ref4.image;
   return {
     album: album,
-    image: image,
-    action: m(_cjs.EditLine, {
+    image: m("img", {
+      src: image
+    }),
+    action: [m(_cjs.EditLine, {
       onclick: function onclick() {
-        return console.log(objectId);
+        return console.log("edit", objectId);
       }
-    })
+    }), m(_clarity.RemoveLine, {
+      onclick: function onclick() {
+        return console.log(objectId, "delete");
+      }
+    })]
   };
 };
 
@@ -3247,12 +3370,7 @@ var handleType = function handleType(tab) {
 
 var toViewmodel = function toViewmodel(state, mdl) {
   var data = mdl.data[state.tab].map(handleType(state.tab));
-  var cols = Array.from(new Set(data.flatMap(_ramda.keys)));
-  var rows = (0, _ramda.compose)((0, _ramda.map)((0, _ramda.map)(toColCell)), (0, _ramda.map)(_ramda.toPairs))(data);
-  return {
-    cols: cols,
-    rows: rows
-  };
+  return (0, _table.formatDataForTable)(data);
 };
 
 var getUsers = function getUsers(mdl) {
@@ -3285,57 +3403,6 @@ var Dashboard = function Dashboard() {
 
 var _default = Dashboard;
 exports["default"] = _default;
-});
-
-;require.register("Pages/Dashboard/prices.js", function(exports, require, module) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Prices = void 0;
-
-var _mithril = _interopRequireDefault(require("mithril"));
-
-var _ramda = require("ramda");
-
-var _Utils = require("Utils");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var Prices = function Prices() {
-  var getPrices = function getPrices(_ref) {
-    var mdl = _ref.attrs.mdl;
-    return mdl.http.back4App.getTask(mdl)("classes/Prices").map(_Utils.parsePrices).fork((0, _Utils.log)("error"), function (prices) {
-      return mdl.state.prices = prices;
-    });
-  };
-
-  var updatePrices = function updatePrices(mdl) {
-    return mdl.http.back4App.postTask(mdl)("classes/Prices")(mdl.state.prices).fork((0, _Utils.log)("error"), (0, _Utils.log)("succes"));
-  };
-
-  return {
-    view: function view(_ref2) {
-      var mdl = _ref2.attrs.mdl;
-      return (0, _mithril["default"])("table.dash-table", (0, _ramda.without)("id", Object.keys(mdl.state.prices)).map(function (product) {
-        return (0, _mithril["default"])("tr", (0, _mithril["default"])("td", (0, _mithril["default"])("label.col-xs-1-3", product)), (0, _mithril["default"])("td", (0, _mithril["default"])("input", {
-          type: "number",
-          value: mdl.state.prices[product],
-          onkeyup: function onkeyup(e) {
-            return mdl.state.prices[product] = parseInt(e.target.value);
-          }
-        })));
-      }), (0, _mithril["default"])("button", {
-        onclick: function onclick(e) {
-          return updatePrices(mdl);
-        }
-      }, "update prices"));
-    }
-  };
-};
-
-exports.Prices = Prices;
 });
 
 ;require.register("Pages/Dashboard/users.js", function(exports, require, module) {

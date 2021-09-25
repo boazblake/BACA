@@ -1,7 +1,8 @@
 import { log } from "Utils"
-import { toPairs, compose, map, prop, filter, keys } from "ramda"
-import { Table } from "Components/table.js"
+import { prop, filter } from "ramda"
+import { Table, formatDataForTable } from "Components/table.js"
 import { EditLine } from "@mithril-icons/clarity/cjs"
+import { RemoveLine } from "@mithril-icons/clarity"
 
 const nav = (role) => {
   let tabs = ["blogs", "events", "images"]
@@ -12,8 +13,6 @@ const nav = (role) => {
 const state = {
   tab: "blogs",
 }
-
-const toColCell = (x) => ({ col: x[0], val: x[1] })
 
 const userViewmodel = ({
   objectId,
@@ -28,29 +27,41 @@ const userViewmodel = ({
   email,
   emailVerified,
   role,
-  action: m(EditLine, { onclick: () => console.log(objectId) }),
+  action: [
+    m(EditLine, { onclick: () => console.log("edit", objectId) }),
+    m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
+  ],
 })
 
 const eventsViewmodel = ({ objectId, title, image, startDate, startTime }) => ({
   title,
-  image,
+  image: m("img", { src: image }),
   startDate,
   startTime,
-  action: m(EditLine, { onclick: () => console.log(objectId) }),
+  action: [
+    m(EditLine, { onclick: () => console.log("edit", objectId) }),
+    m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
+  ],
 })
 
 const blogsViewmodel = ({ objectId, title, img, text, author }) => ({
   title,
-  img,
-  text,
+  img: m("img", { src: img }),
+  text: text.slice(0, 300),
   author,
-  action: m(EditLine, { onclick: () => console.log(objectId) }),
+  action: [
+    m(EditLine, { onclick: () => console.log("edit", objectId) }),
+    m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
+  ],
 })
 
 const imagesViewmodel = ({ objectId, album, image }) => ({
   album,
-  image,
-  action: m(EditLine, { onclick: () => console.log(objectId) }),
+  image: m("img", { src: image }),
+  action: [
+    m(EditLine, { onclick: () => console.log("edit", objectId) }),
+    m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
+  ],
 })
 
 const displayType = {
@@ -64,9 +75,7 @@ const handleType = (tab) => (data) => displayType[tab](data)
 
 const toViewmodel = (state, mdl) => {
   let data = mdl.data[state.tab].map(handleType(state.tab))
-  let cols = Array.from(new Set(data.flatMap(keys)))
-  let rows = compose(map(map(toColCell)), map(toPairs))(data)
-  return { cols, rows }
+  return formatDataForTable(data)
 }
 
 const getUsers = (mdl) =>

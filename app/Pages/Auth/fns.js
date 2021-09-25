@@ -1,16 +1,5 @@
 import Task from "data.task"
-import { prop } from "ramda"
-
-const toAccountVM = (mdl) => (accnts) => {
-  mdl.user.accounts = accnts
-  return mdl
-  // let cart = mergeCarts(accnts[0].cart)(mdl.cart)
-  // mdl.user.account = { objectId: accnts[0].objectId, cart }
-  // mdl.user.address = accnts[0].address
-  // mdl.cart = cart
-  // setUserToken(mdl)(mdl.user)
-  // return cart
-}
+import { head, prop } from "ramda"
 
 const setUserAndSessionToken = (mdl) => (user) => {
   sessionStorage.setItem("baca-user", JSON.stringify(user.objectId))
@@ -29,21 +18,44 @@ export const loginUserTask =
       .map(setUserAndSessionToken(mdl))
   }
 
-const getUserAccountTask = (mdl) => (_) => {
-  let userAccount = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
-  return mdl.http.back4App
-    .getTask(mdl)(`classes/Accounts?${userAccount}`)
+const getUserAccountTask = (mdl) => (encodeId) =>
+  mdl.http.back4App
+    .getTask(mdl)(`classes/Accounts?${encodeId}`)
     .map(prop("results"))
     .chain((account) =>
       account.any() ? Task.of(account) : createAccountTask(mdl)
     )
-    .map(toAccountVM(mdl))
-}
+    .map(head)
 
+const getUserDuesTask = (mdl) => (encodeId) =>
+  mdl.http.back4App
+    .getTask(mdl)(`classes/Dues?${encodeId}`)
+    .map(prop("results"))
+// .chain((dues) => (dues.any() ? Task.of(dues) : createDuesTask(mdl)))
+
+const getUserMessagesTask = (mdl) => (encodeId) =>
+  mdl.http.back4App
+    .getTask(mdl)(`classes/Messages?${encodeId}`)
+    .map(prop("results"))
+// .chain((messages) =>
+//   messages.any() ? Task.of(messages) : createMessagesTask(mdl)
+// )
+
+const getUserInfoTask = (mdl) => {
+  let encodeId = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
+  return Task.of((account) => (dues) => (messages) => {
+    mdl.data.account = account
+    mdl.data.dues = dues
+    mdl.data.messages = messages
+  })
+    .ap(getUserAccountTask(mdl)(encodeId))
+    .ap(getUserDuesTask(mdl)(encodeId))
+    .ap(getUserMessagesTask(mdl)(encodeId))
+}
 export const loginTask =
   (mdl) =>
   ({ email, password }) =>
-    loginUserTask(mdl)({ email, password }).chain(getUserAccountTask(mdl))
+    loginUserTask(mdl)({ email, password }).chain((_) => getUserInfoTask(mdl))
 
 export const registerUserTask =
   (mdl) =>
@@ -59,14 +71,41 @@ export const registerUserTask =
 export const createAccountTask = (mdl) => {
   mdl.user.account = {
     address: {},
+    avatar: "https://i.ibb.co/6W0zsZH/avatar.webp",
   }
   return mdl.http.back4App
     .postTask(mdl)("classes/Accounts")({
       userId: mdl.user.objectId,
-      address: {},
+      avatar: "https://i.ibb.co/6W0zsZH/avatar.webp",
+      address: { street: "", city: "", state: "", zip: "" },
     })
     .map(({ objectId }) => {
       mdl.user.account.objectId = objectId
+      return mdl
+    })
+}
+
+export const createDuesTask = (mdl) => {
+  mdl.user.dues = {}
+  return mdl.http.back4App
+    .postTask(mdl)("classes/Dues")({
+      userId: mdl.user.objectId,
+      address: {},
+    })
+    .map(({ objectId }) => {
+      mdl.user.dues.objectId = objectId
+      return mdl
+    })
+}
+
+export const createMessagesTask = (mdl) => {
+  mdl.user.messages = {}
+  return mdl.http.back4App
+    .postTask(mdl)("classes/Messages")({
+      userId: mdl.user.objectId,
+    })
+    .map(({ objectId }) => {
+      mdl.user.messages.objectId = objectId
       return mdl
     })
 }
