@@ -46,7 +46,7 @@ const eventsViewmodel = ({ objectId, title, image, startDate, startTime }) => ({
 
 const blogsViewmodel = ({ objectId, title, img, text, author }) => ({
   title,
-  img: m("img", { src: img }),
+  img: m("img", { style: { maxWidth: "150px" }, src: img }),
   text: text.slice(0, 300),
   author,
   action: [
@@ -57,7 +57,7 @@ const blogsViewmodel = ({ objectId, title, img, text, author }) => ({
 
 const imagesViewmodel = ({ objectId, album, image }) => ({
   album,
-  image: m("img", { src: image }),
+  image: m("img", { style: { maxWidth: "150px" }, src: image }),
   action: [
     m(EditLine, { onclick: () => console.log("edit", objectId) }),
     m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),

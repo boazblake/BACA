@@ -828,6 +828,162 @@ var _default = NavLink;
 exports["default"] = _default;
 });
 
+;require.register("Components/orders.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Orders = void 0;
+
+var _Utils = require("Utils");
+
+var _cjs = require("@mithril-icons/clarity/cjs");
+
+var _ramda = require("ramda");
+
+var STATE = function STATE() {
+  return {
+    invoices: []
+  };
+};
+
+var state = STATE();
+
+var calcProductPrice = function calcProductPrice(_ref, product) {
+  var prices = _ref.prices,
+      cart = _ref.cart;
+  return parseInt(prices[product]) * Object.values(cart[product]).reduce(_ramda.add, 0);
+};
+
+var calcTotalPrice = function calcTotalPrice(invoice) {
+  return Object.keys(invoice.cart).map(function (product) {
+    return calcProductPrice(invoice, product);
+  }).reduce(_ramda.add, 0);
+};
+
+var invoiceUrl = function invoiceUrl(mdl) {
+  var userInvoices = "{\"userId\":\"".concat(mdl.user.objectId, "\"}");
+  return mdl.state.route.id == "dashboard" ? "classes/Invoices" : "classes/Invoices?where=".concat(encodeURI(userInvoices));
+};
+
+var fetchInvoicesTask = function fetchInvoicesTask(mdl) {
+  return mdl.http.back4App.getTask(mdl)(invoiceUrl(mdl)).map((0, _ramda.prop)("results")).map((0, _ramda.map)((0, _ramda.assoc)("isSelected", false)));
+};
+
+var onFetchInvoiceError = function onFetchInvoiceError(mdl) {
+  return function (e) {
+    return log("e")([e, mdl]);
+  };
+};
+
+var onFetchInvoiceSuccess = function onFetchInvoiceSuccess(_) {
+  return function (invoices) {
+    return state.invoices = invoices;
+  };
+};
+
+var fetchInvoices = function fetchInvoices(_ref2) {
+  var mdl = _ref2.attrs.mdl;
+  return fetchInvoicesTask(mdl).fork(onFetchInvoiceError(mdl), onFetchInvoiceSuccess(mdl));
+};
+
+var InvoiceCell = function InvoiceCell() {
+  return {
+    view: function view(_ref3) {
+      var screenSize = _ref3.attrs.mdl.settings.screenSize,
+          children = _ref3.children;
+      return screenSize == "phone" ? m("tr", [m("td", {
+        style: {
+          width: "25%"
+        }
+      }, m("label", children[0].key)), children]) : m("td", {
+        style: {
+          width: "20%"
+        }
+      }, children);
+    }
+  };
+};
+
+var Invoice = function Invoice(_ref4) {
+  var mdl = _ref4.attrs.mdl;
+  return {
+    view: function view(_ref5) {
+      var invoice = _ref5.attrs.invoice;
+      return [m("tr", m(InvoiceCell, {
+        mdl: mdl
+      }, m("", {
+        key: "Date"
+      }, (0, _Utils.formatDate)(invoice.purchaseTime))), m(InvoiceCell, {
+        mdl: mdl
+      }, m("", {
+        key: "Order Id"
+      }, invoice.orderID)), m(InvoiceCell, {
+        mdl: mdl
+      }, m("", {
+        key: "Name"
+      }, "".concat(invoice.shippingDestination.name.full_name, " "))), m(InvoiceCell, {
+        mdl: mdl
+      }, m("", {
+        key: "Payment Status"
+      }, invoice.status)), m(InvoiceCell, {
+        mdl: mdl
+      }, m("", {
+        key: "Shipping Status",
+        style: {
+          width: "100%",
+          borderBottom: "1px solid gold"
+        }
+      }, invoice.shippingStatus ? m("a", {
+        href: invoice.shippingStatus
+      }, "Shipping Status") : m("p", "Prepparing your order"))), m("td", m(_cjs.AngleLine, {
+        "class": "clickable ".concat(!invoice.isSelected && "point-down"),
+        onclick: function onclick() {
+          return invoice.isSelected = !invoice.isSelected;
+        },
+        width: "16px"
+      }))), invoice.isSelected && m("td", {
+        colspan: 5,
+        style: {
+          width: "100%"
+        }
+      }, m("tr", m("td", m("label", "Shipping Destination"), "".concat(invoice.shippingDestination.address.address_line_1, " ").concat(invoice.shippingDestination.address.admin_area_2, " ").concat(invoice.shippingDestination.address.admin_area_1, " ").concat(invoice.shippingDestination.address.postal_code)), mdl.state.route.id == "dashboard" && m("td", m("button", "Update Shipping Status"))), m("table", {
+        style: {
+          width: "100%",
+          borderBottom: "1px solid gold"
+        }
+      }, [m("thead", m("tr", [m("th", "Product"), m("th", "Quantities"), m("th", "Unit Price"), m("th", "Unit Total")])), m("tbody", Object.keys(invoice.cart).map(function (product) {
+        return m("tr", [m("td", product), m("td", JSON.stringify(invoice.cart[product])), m("td", invoice.prices[product]), m("td", calcProductPrice(invoice, product))]);
+      }), m("tr", m("th", "Order Total"), m("th", calcTotalPrice(invoice))))]))];
+    }
+  };
+};
+
+var Orders = function Orders() {
+  return {
+    onremove: state = STATE(),
+    oninit: fetchInvoices,
+    view: function view(_ref6) {
+      var mdl = _ref6.attrs.mdl;
+      return m("section.overflow-auto", {
+        style: {
+          minWidth: "100%",
+          height: "75vh"
+        }
+      }, state.invoices.any() ? m("table.dash-table", mdl.settings.screenSize != "phone" && m("thead.dash-nav", m("tr.mb-5", [m("th", "Date"), m("th", "Order Id"), m("th", "Name"), m("th", "Payment Status"), m("th", "Shipping Status"), m("th")])), m("tbody", state.invoices.map(function (invoice) {
+        return m(Invoice, {
+          mdl: mdl,
+          invoice: invoice
+        });
+      }))) : m("h2", "No Orders"));
+    }
+  };
+};
+
+exports.Orders = Orders;
+});
+
 ;require.register("Components/paypal.js", function(exports, require, module) {
 "use strict";
 
@@ -3318,6 +3474,9 @@ var blogsViewmodel = function blogsViewmodel(_ref3) {
   return {
     title: title,
     img: m("img", {
+      style: {
+        maxWidth: "150px"
+      },
       src: img
     }),
     text: text.slice(0, 300),
@@ -3341,6 +3500,9 @@ var imagesViewmodel = function imagesViewmodel(_ref4) {
   return {
     album: album,
     image: m("img", {
+      style: {
+        maxWidth: "150px"
+      },
       src: image
     }),
     action: [m(_cjs.EditLine, {
