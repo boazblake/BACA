@@ -69,23 +69,26 @@ export const Login = () => {
       mdl.state.isLoading()
         ? "" //m(LogoLoader, { mdl })
         : m(
-            "section.container",
+            "section.container.p-y-50",
 
             state.showErrorMsg() && m("code.warning", state.errorMsg()),
             m(
               "article.card",
+              mdl.settings.screenSize != "phone" && {
+                style: { maxWidth: "60%", margin: "0 auto" },
+              },
               m(
-                "form",
+                "form.rows",
                 {
                   role: "form",
                   id: "login-form",
                   onsubmit: (e) => e.preventDefault(),
                 },
                 m(
-                  "formgroup",
-                  {
-                    class: mdl.settings.screenSize == "desktop" && "grouped",
-                  },
+                  "formgroup.col",
+                  // {
+                  //   class: mdl.settings.screenSize == "desktop" && "grouped",
+                  // },
                   m("input", {
                     class: state.isSubmitted
                       ? state.errors.email

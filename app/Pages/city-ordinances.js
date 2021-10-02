@@ -1,5 +1,13 @@
 import ViolationReport from "Components/report"
-import { ExclamationTriangleLine } from "@mithril-icons/clarity"
+import {
+  CarLine,
+  ExclamationTriangleLine,
+  HomeLine,
+  MusicNoteLine,
+  MusicNoteSolid,
+  TrailerLine,
+  TrashLine,
+} from "@mithril-icons/clarity"
 
 const state = {
   showOrdinanceViolation: Stream(false),
@@ -73,10 +81,11 @@ const CityOrd = (mdl) => {
           )
         ),
         m(
-          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
+          "section.card.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
             m("h2", "Car Parking in Residential Area"),
+            m(CarLine),
             m(
               "em",
               "Parking of Vehicles on Residential Property Chapter 28, Article X"
@@ -130,11 +139,13 @@ const CityOrd = (mdl) => {
             )
           )
         ),
+
         m(
-          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
+          "section.card.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
             m("h2", "Nuisance Ordinances"),
+            m(HomeLine),
             m(
               "p",
               m(
@@ -185,11 +196,12 @@ const CityOrd = (mdl) => {
         ),
 
         m(
-          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
+          "section.card.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
             m("h2", "Noise Ordinances"),
-
+            m(MusicNoteLine),
+            m(MusicNoteSolid),
             m(
               "p",
               "According to the ",
@@ -225,10 +237,12 @@ const CityOrd = (mdl) => {
         ),
 
         m(
-          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light",
+          "section.card.bd-primary.p-x-50.p-y-6.bg-light",
           m(
             "hgroup",
             m("h2", "Trash & Dumpster Ordinances"),
+            m(TrashLine),
+            m(TrailerLine),
             m(
               "p",
               m(

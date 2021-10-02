@@ -2654,15 +2654,21 @@ var Login = function Login() {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
       return mdl.state.isLoading() ? "" //m(LogoLoader, { mdl })
-      : m("section.container", state.showErrorMsg() && m("code.warning", state.errorMsg()), m("article.card", m("form", {
+      : m("section.container.p-y-50", state.showErrorMsg() && m("code.warning", state.errorMsg()), m("article.card", mdl.settings.screenSize != "phone" && {
+        style: {
+          maxWidth: "60%",
+          margin: "0 auto"
+        }
+      }, m("form.rows", {
         role: "form",
         id: "login-form",
         onsubmit: function onsubmit(e) {
           return e.preventDefault();
         }
-      }, m("formgroup", {
-        "class": mdl.settings.screenSize == "desktop" && "grouped"
-      }, m("input", {
+      }, m("formgroup.col", // {
+      //   class: mdl.settings.screenSize == "desktop" && "grouped",
+      // },
+      m("input", {
         "class": state.isSubmitted ? state.errors.email ? "error" : "success" : "",
         id: "reg-email",
         type: "email",
@@ -2791,7 +2797,12 @@ var Register = function Register() {
     },
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return m("section.container", state.showErrorMsg() && m("code.warning", state.errorMsg()), m("form", {
+      return m("section.container.p-y-50", state.showErrorMsg() && m("code.warning", state.errorMsg()), m("article.card", mdl.settings.screenSize != "phone" && {
+        style: {
+          maxWidth: "60%",
+          margin: "0 auto"
+        }
+      }, m("form", {
         role: "form",
         id: "register-form",
         onsubmit: function onsubmit(e) {
@@ -2852,7 +2863,7 @@ var Register = function Register() {
           return validateForm(mdl)(state.data.userModel);
         },
         "class": mdl.state.isLoading() && "loading"
-      }, "Register")), m(".auth-link", "Need to ", m(_navLink["default"], {
+      }, "Register"))), m(".auth-link", "Need to ", m(_navLink["default"], {
         mdl: mdl,
         href: "/login",
         link: "Login",
@@ -4534,7 +4545,7 @@ var CityOrd = function CityOrd(mdl) {
       }, "Login To Report City Ordinance Violation"), state.showOrdinanceViolation() && m(_report["default"], {
         mdl: mdl,
         showModal: state.showOrdinanceViolation
-      })), m("p", m("em", "All reports will be treated as anonymous and your name kept private.")), m("p.strong", "Your assistance in reporting violations will go a very long way to protect and enhance our property values."))), m("section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light", m("hgroup", m("h2", "Car Parking in Residential Area"), m("em", "Parking of Vehicles on Residential Property Chapter 28, Article X"), m("p", "To read the complete ordinance, go to ", m("a.nav-link", {
+      })), m("p", m("em", "All reports will be treated as anonymous and your name kept private.")), m("p.strong", "Your assistance in reporting violations will go a very long way to protect and enhance our property values."))), m("section.card.bd-primary.p-x-50.p-y-6.bg-light", m("hgroup", m("h2", "Car Parking in Residential Area"), m(_clarity.CarLine), m("em", "Parking of Vehicles on Residential Property Chapter 28, Article X"), m("p", "To read the complete ordinance, go to ", m("a.nav-link", {
         target: "__blank",
         href: "www.Municode.com"
       }, "www.Municode.com"), " on the internet and search for City of Houston, Chapter 28, Article X, or enter Parking of Vehicles on Residential Property in the search block."), m("p", m("a.nav-link", {
@@ -4546,7 +4557,7 @@ var CityOrd = function CityOrd(mdl) {
       }, " http://mycity.houstontx.gov/public/ "), "and activating ", m("em", "the Prohibited Yard Parking application: ")), m("p", m("a.nav-link", {
         target: "__blank",
         href: "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html"
-      }, "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html")))), m("section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light", m("hgroup", m("h2", "Nuisance Ordinances"), m("p", m("a.nav-link", {
+      }, "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html")))), m("section.card.bd-primary.p-x-50.p-y-6.bg-light", m("hgroup", m("h2", "Nuisance Ordinances"), m(_clarity.HomeLine), m("p", m("a.nav-link", {
         target: "__blank",
         href: "https://statutes.capitol.texas.gov/Docs/HS/htm/HS.342.htm#342.004"
       }, "Section 342.004 of the Texas Health and Safety Code")), m("p", "State law giving authority to municipalities to require landowners to keep their property free of weeds, brush and conditions constituting a public nuisance."), m("p", m("a.nav-link", {
@@ -4555,13 +4566,13 @@ var CityOrd = function CityOrd(mdl) {
       }, "Sections 311.003 - 311.004 of the Texas Transportation Code")), m("p", "State laws giving authority to type-A municipalities to require a person to keep the front of their premise free of weeds and trash. It also gives them the authority to require a landowner to improve their sidewalk and allows home-rule municipalities to declare a defective sidewalk a public nuisance."), m("p", m("a.nav-link", {
         target: "__blank",
         href: "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.683.htm#E"
-      }, "Texas Transportation Code, Chapter 683, Subchapter E")), m("p", "State law governing junked vehicles; declaring them a public nuisance."))), m("section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light", m("hgroup", m("h2", "Noise Ordinances"), m("p", "According to the ", ("a.nav-link", {
+      }, "Texas Transportation Code, Chapter 683, Subchapter E")), m("p", "State law governing junked vehicles; declaring them a public nuisance."))), m("section.card.bd-primary.p-x-50.p-y-6.bg-light", m("hgroup", m("h2", "Noise Ordinances"), m(_clarity.MusicNoteLine), m(_clarity.MusicNoteSolid), m("p", "According to the ", ("a.nav-link", {
         target: "__blank",
         href: "#"
       }, " Houston Sound Ordinance, "), " sound ", m("span.strong", " cannot exceed 65 decibels during the day "), "and", m("span.strong", " 58 decibels at night in residential areas."), " Permits must be obtained for sound up to 75 decibels until 10pm on Sundays through Thursdays and until 11pm on Fridays and Saturdays. ", " The Houston ordinance penalizes up to ", m("span.strong", " $1, 000 per offense or per hour.")), m("p", "Noise or Barking dogs contact information: The LAPD suggests that noise complaints, from loud TVs to awful parties, are best dealt with by your local police station. Call them at (877) ASK-LAPD (275-5273). Do not call 911. If your neighbor complaint is more of the barking dog variety, try the city's Animal Care and Control Department."), m("p", m("a.nav-link", {
         target: "__blank",
         href: "https://library.municode.com/tx/houston/codes/code_of_ordinances?nodeId=COOR_CH30NOSOLERE"
-      }, "https://library.municode.com/tx/houston/codes/code_of_ordinances?nodeId=COOR_CH30NOSOLERE")))), m("section.is-marginless.bd-primary.p-x-50.p-y-6.bg-light", m("hgroup", m("h2", "Trash & Dumpster Ordinances"), m("p", m("a.nav-link", {
+      }, "https://library.municode.com/tx/houston/codes/code_of_ordinances?nodeId=COOR_CH30NOSOLERE")))), m("section.card.bd-primary.p-x-50.p-y-6.bg-light", m("hgroup", m("h2", "Trash & Dumpster Ordinances"), m(_clarity.TrashLine), m(_clarity.TrailerLine), m("p", m("a.nav-link", {
         target: "__blank",
         href: "https://www.houstontx.gov/solidwaste/trashfacts.pdf"
       }, "https://www.houstontx.gov/solidwaste/trashfacts.pdf")))));
