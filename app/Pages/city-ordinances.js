@@ -5,8 +5,7 @@ import {
   ExclamationTriangleLine,
   HomeLine,
   MusicNoteLine,
-  MusicNoteSolid,
-  TrailerLine,
+  PopOutLine,
   TrashLine,
 } from "@mithril-icons/clarity"
 
@@ -86,11 +85,19 @@ const contents = {
         "p",
         m(
           "a.nav-link",
+          { target: "__blank", href: "https://www.rollouthouston.com/" },
+          ["Roll Out Houston!", m(PopOutLine)]
+        )
+      ),
+      m(
+        "p",
+        m(
+          "a.nav-link",
           {
             target: "__blank",
             href: "https://www.houstontx.gov/solidwaste/trashfacts.pdf",
           },
-          "https://www.houstontx.gov/solidwaste/trashfacts.pdf"
+          ["Houston Trash Facts PDF", m(PopOutLine)]
         )
       ),
     ],
@@ -113,10 +120,7 @@ const contents = {
         " The Houston ordinance penalizes up to ",
         m("span.strong", " $1, 000 per offense or per hour.")
       ),
-      m(
-        "p",
-        "Noise or Barking dogs contact information: The LAPD suggests that noise complaints, from loud TVs to awful parties, are best dealt with by your local police station. Call them at (877) ASK-LAPD (275-5273). Do not call 911. If your neighbor complaint is more of the barking dog variety, try the city's Animal Care and Control Department."
-      ),
+
       m(
         "p",
         m(
@@ -213,7 +217,9 @@ const CardOrd = () => {
         "article.card.col-6.bd-primary.p-x-50.p-y-6.bg-light",
         {
           id,
-          onhover: () => (isSelected = true),
+          class: isSelected && "text-success",
+          onmouseover: () => (isSelected = true),
+          onmouseout: () => (isSelected = false),
           onclick: () => {
             state.title = title
             state.contents = contents
@@ -221,7 +227,8 @@ const CardOrd = () => {
           },
         },
         m(icons.default, {
-          class: isSelected ? "is-center is-primary" : "is-center",
+          class: "is-center",
+          fill: isSelected && "#14854f",
           style: { margin: "0 auto", width: "250px", height: "250px" },
         }),
         m("hgroup", m("h2", title))

@@ -211,7 +211,8 @@ const Events = {
           resetState,
         }),
 
-      state.status() == "loaded" && m("section", m(Calendar, { mdl, state })),
+      state.status() == "loaded" &&
+        m("section.container", m(Calendar, { mdl, state })),
       state.status() == "loading" && m("section", m(Loader)),
       state.status() == "error" && m("section", "is error")
     ),
