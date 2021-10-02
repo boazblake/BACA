@@ -1,7 +1,10 @@
+import { m } from "mithril"
+import { log } from "Utils"
 import { exists, handlers } from "Utils"
 
 const onInput = (event) =>
   handlers(["oninput"], (e) => {
+    console.log(e.target.type)
     if (e.target.type == "checkbox") {
       return (event[e.target.id] = JSON.parse(e.target.checked))
     }
@@ -11,6 +14,11 @@ const onInput = (event) =>
       return (event[e.target.id] = e.target.value)
     }
   })
+
+const data = {
+  status: null,
+  locations: [],
+}
 
 const Editor = {
   view: ({
@@ -121,6 +129,51 @@ const Editor = {
                       })
                   )
                 ),
+
+            m(
+              "label.icon",
+              "Location",
+              m("input", {
+                oninput: (e) => {
+                  if (e.target.value.length > 3) {
+                    data.status = "isloading"
+                    mdl.http.openCage
+                      .getLocationTask(mdl)(e.target.value.trim())
+                      .fork(
+                        (e) => {
+                          data.status = "error"
+                          log("error fetching locations")(e)
+                        },
+                        ({ results }) => {
+                          data.status = "loaded"
+                          data.locations = results
+                        }
+                      )
+                  }
+                },
+                id: "location",
+                value: state.event.location,
+              })
+            ),
+            data.locations.any() &&
+              m(
+                "details.dropdown",
+                m("summary.button.outline", "options"),
+                m(
+                  ".card",
+                  m(
+                    "ul",
+
+                    data.locations.map(({ formatted }) =>
+                      m(
+                        "li.pointer",
+                        { onclick: (e) => (state.event.location = formatted) },
+                        formatted
+                      )
+                    )
+                  )
+                )
+              ),
             m(
               "formgroup",
               m(
@@ -134,6 +187,7 @@ const Editor = {
             )
           )
         ),
+
         m(
           "footer.modal-footer",
           m(

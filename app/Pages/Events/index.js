@@ -4,7 +4,6 @@ import Event from "./event"
 import { propEq, prop, head, tail, clone } from "ramda"
 import Loader from "Components/loader.js"
 import Task from "data.task"
-import { log } from "Utils"
 
 const state = {
   status: Stream("loading"),
@@ -26,6 +25,7 @@ const state = {
     title: "",
     description: "",
     allDay: false,
+    location: "",
   },
 }
 
@@ -151,6 +151,7 @@ const submitEvent = (
     allDay,
     description,
     image,
+    location,
   }
 ) => {
   let start = formatDate(startDate, startTime)
@@ -163,8 +164,8 @@ const submitEvent = (
     description,
     createdBy: mdl.user.name,
     image,
+    location,
   }
-  console.log(startTime, endTime, start, end)
 
   const onError = (e) => {
     console.error(e)

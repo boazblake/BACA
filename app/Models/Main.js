@@ -12,6 +12,12 @@ const data = {
   },
 }
 
+const Map = {
+  locale: Stream(null),
+  bounds: Stream(encodeURIComponent("-125.5957, 24.36711, -65.39063, 48.944")),
+  defaultBounds: encodeURIComponent("-125.5957, 24.36711, -65.39063, 48.944"),
+}
+
 const state = {
   paginate: {
     page: Stream(1),
@@ -44,6 +50,7 @@ const settings = {}
 const errors = {}
 
 const Model = {
+  Map,
   http,
   Routes,
   state,

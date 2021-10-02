@@ -1,5 +1,5 @@
 import Task from "data.task"
-import { PAYPAL, BACK4APP, IMGBB } from "../../.secrets.js"
+import { PAYPAL, BACK4APP, IMGBB, OpenCage } from "../../.secrets.js"
 
 const updatePayPalAuth = (mdl) => (paypal) => (mdl.state.paypal = paypal)
 
@@ -117,8 +117,18 @@ const imgBB = {
   },
 }
 
+const OpenCageUrl = `${OpenCage.baseUrl}?key=${OpenCage.key}&q=`
+
+const openCage = {
+  getLocationTask: (mdl) => (query) =>
+    HttpTask(OpenCage.headers())("GET")(mdl)(
+      OpenCageUrl + query + `&pretty=1&json&bounds=${mdl.Map.bounds()}`
+    )(null),
+}
+
 const http = {
   imgBB,
+  openCage,
   back4App,
   paypal,
   HttpTask,
