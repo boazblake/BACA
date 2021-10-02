@@ -1,4 +1,5 @@
 import { fetchAll } from "../Layouts"
+import DateTime from "Components/DateTime"
 
 const State = {
   events: null,
@@ -11,7 +12,6 @@ const createCarousel = (dom) => {
     container: dom,
     controls: true,
     nav: false,
-    sessionStorage,
     preventScrollOnTouch: "auto",
     slideBy: "page",
     responsive: {
@@ -52,31 +52,31 @@ const Home = () => {
               m(
                 ".grouped.#events",
                 SliderController(mdl),
-                mdl.data.events.map((event) =>
+                mdl.data.events.map((event, idx) =>
                   m(
                     ".card.is-vertical-align row",
                     {
+                      key: idx,
                       style: {
                         backgroundImage: event.image,
                         height: "40% !important",
                       },
                     },
                     event.allDay && m(".tag", "All Day Event!"),
-                    m("h3", event.startDate),
-                    m("h3", event.startTime),
+                    m("h4.text-primary", event.title),
                     m("img", { src: event.image }),
-                    m("h4", event.title),
-                    m(
-                      m.route.Link,
-                      {
-                        selector: "label",
-                        class: "button primary outline is-full-width",
-                        href: "/social/calendar",
-                        onclick: (e) =>
-                          mdl.state.selectedPreviewEvent(event.objectId),
-                      },
-                      "...Read More"
-                    )
+                    m(DateTime, { event })
+                    // m(
+                    //   m.route.Link,
+                    //   {
+                    //     selector: "label",
+                    //     class: "button primary outline is-full-width",
+                    //     href: "/social/events",
+                    //     onclick: (e) =>
+                    //       mdl.state.selectedPreviewEvent(event.objectId),
+                    //   },
+                    //   "...Read More"
+                    // )
                   )
                 )
               )
@@ -91,8 +91,9 @@ const Home = () => {
               m(
                 ".grouped.#images",
                 SliderController(mdl),
-                mdl.data.images.map((img) =>
+                mdl.data.images.map((img, idx) =>
                   m("img.card.auto", {
+                    key: idx,
                     src: img.thumb,
                     style: {},
                   })
@@ -109,24 +110,24 @@ const Home = () => {
               m(
                 ".grouped.#blogs",
                 SliderController(mdl),
-                mdl.data.blogs.map((blog) =>
+                mdl.data.blogs.map((blog, idx) =>
                   m(
                     ".card.opacity-overlay.is-vertical-align row",
-
+                    { key: idx },
                     m(
                       "figure",
                       m("img", { src: blog.img || "images/main.webp" })
                     ),
-                    m("h2", blog.title),
-                    m(
-                      m.route.Link,
-                      {
-                        selector: "label",
-                        class: "button primary outline is-full-width",
-                        href: `/social/blog-post:${blog.objectId}`,
-                      },
-                      "...Read More"
-                    )
+                    m("h2", blog.title)
+                    // m(
+                    //   m.route.Link,
+                    //   {
+                    //     selector: "label",
+                    //     class: "button primary outline is-full-width",
+                    //     href: `/social/blog-post:${blog.objectId}`,
+                    //   },
+                    //   "...Read More"
+                    // )
                   )
                 )
               )

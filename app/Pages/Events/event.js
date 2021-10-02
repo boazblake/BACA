@@ -1,3 +1,5 @@
+import DateTime from "Components/DateTime"
+
 const Event = {
   view: ({
     attrs: { mdl, event, previewEvent, editEvent, resetState, state },
@@ -8,9 +10,8 @@ const Event = {
         ".modal",
         m(
           "header.modal-header",
-          m("h2.tag", event.title),
-          m(".grouped", m("label", event.startDate), m("label", event.endDate)),
-          m(".grouped", m("label", event.startTime), m("label", event.endTime)),
+          m("h2.tag.text-primary", event.title),
+          m(DateTime, { event }),
           event.allDay &&
             m(".grouped", m("label.tag.primary", "All Day Event")),
           m(".grouped", m("img", { src: event.image }))

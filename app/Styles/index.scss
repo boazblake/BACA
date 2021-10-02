@@ -321,6 +321,7 @@ header hgroup {
   overflow-x: hidden;
   overflow-y: auto;
   max-height: 90%;
+  min-width: 95vw;
   display: flex;
   flex-flow: column;
 }

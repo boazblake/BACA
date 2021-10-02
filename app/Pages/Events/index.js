@@ -4,7 +4,6 @@ import Event from "./event"
 import { propEq, prop, head, tail, clone } from "ramda"
 import Loader from "Components/loader.js"
 import Task from "data.task"
-import M from "moment"
 import { log } from "Utils"
 
 const state = {
