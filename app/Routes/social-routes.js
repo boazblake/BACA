@@ -21,7 +21,7 @@ const SocialRoutes = [
       "blog",
       "explore",
       "gallery",
-      "calendar",
+      "events",
       "bfn-park",
     ],
     options: [],

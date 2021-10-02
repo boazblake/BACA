@@ -3,7 +3,9 @@ const Modal = {
   oncreate: SlideInLeft,
   onbeforeremove: SlideOutRight,
   view: ({ attrs: { classList, isActive, close, title, content, footer } }) => {
-    console.log("MODAL", classList, isActive, close, title, content, footer)
+    console.log("close", close)
+    console.log("title", title)
+    console.log("content", content)
     return m(
       `section.modal.${classList}`,
       { class: isActive ? "active" : "", id: "modal" },
