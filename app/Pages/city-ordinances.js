@@ -214,7 +214,7 @@ const CardOrd = () => {
   return {
     view: ({ attrs: { id, title, icons, contents } }) =>
       m(
-        "article.card.col-6.bd-primary.p-x-50.p-y-6.bg-light",
+        "article.card.col-6.bd-primary.p-x-50.p-y-6.bg-light.pointer",
         {
           id,
           class: isSelected && "text-success",

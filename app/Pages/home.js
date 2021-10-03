@@ -8,12 +8,13 @@ const State = {
 }
 
 const createCarousel = (dom) => {
-  var slider = tns({
+  const slider = tns({
     container: dom,
     controls: true,
     nav: false,
     preventScrollOnTouch: "auto",
     slideBy: "page",
+    startIndex: 0,
     responsive: {
       200: {
         items: 2,
@@ -29,11 +30,13 @@ const createCarousel = (dom) => {
       },
     },
   })
+  // slider.events.on("indexChanged", (e) => console.log("index", e.displayIndex))
   State[dom.id] = slider
 }
 
 const SliderController = (mdl) => ({
   oncreate: ({ dom }) => createCarousel(dom),
+  // onupdate: (e) => console.log(e),
   onremove: ({ dom }) => State[dom.id].destroy(),
 })
 
@@ -72,8 +75,8 @@ const Home = () => {
                     //     selector: "label",
                     //     class: "button primary outline is-full-width",
                     //     href: "/social/events",
-                    //     onclick: (e) =>
-                    //       mdl.state.selectedPreviewEvent(event.objectId),
+                    //     onclick: (e) => console.log(State.events.getInfo()),
+                    //     // mdl.state.selectedPreviewEvent(event.objectId),
                     //   },
                     //   "...Read More"
                     // )
@@ -132,10 +135,6 @@ const Home = () => {
                 )
               )
             )
-        ),
-        m(
-          "section.row.bg-primary.text-white",
-          m(".container", "Some more info...")
         )
       ),
   }

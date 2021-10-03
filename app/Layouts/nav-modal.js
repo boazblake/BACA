@@ -35,7 +35,7 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
         },
         m("summary.nav-link", route.name),
         m(
-          "nav.row.bd-primary.fade.p-x-l-50",
+          "nav.row.fade.p-x-l-50",
           childRoutes.map((r) =>
             r.group.includes("external")
               ? m(
