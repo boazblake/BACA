@@ -71,12 +71,12 @@ export const registerUserTask =
 export const createAccountTask = (mdl) => {
   mdl.user.account = {
     address: {},
-    avatar: "https://i.ibb.co/6W0zsZH/avatar.webp",
+    avatar: "",
   }
   return mdl.http.back4App
     .postTask(mdl)("classes/Accounts")({
       userId: mdl.user.objectId,
-      avatar: "https://i.ibb.co/6W0zsZH/avatar.webp",
+      avatar: "",
       address: { street: "", city: "", state: "", zip: "" },
     })
     .map(({ objectId }) => {

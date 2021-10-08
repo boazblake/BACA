@@ -6,7 +6,8 @@ import Task from "data.task"
 
 const toProfileVM =
   ({ emailVerified, email, name }) =>
-  ({ avatar, address: { street, city, state, zip } }) => ({
+  ({ objectId, avatar, address: { street, city, state, zip } }) => ({
+    objectId,
     street,
     city,
     state,
@@ -42,14 +43,11 @@ const getMessages = (mdl) => (id) =>
 
 export const loadAllTask = (mdl) => {
   let id = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
-  return Task.of((profile) => (dues) => (messages) => {
-    console.log(profile)
-    return {
-      profile,
-      dues,
-      messages,
-    }
-  })
+  return Task.of((profile) => (dues) => (messages) => ({
+    profile,
+    dues,
+    messages,
+  }))
     .ap(getProfile(mdl)(id))
     .ap(getDues(mdl)(id))
     .ap(getMessages(mdl)(id))

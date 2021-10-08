@@ -15,7 +15,7 @@ const loadAll = (mdl) => {
     mdl.data.dues = dues
     mdl.data.messages = messages
     state.status = "success"
-    console.log(state, mdl)
+    console.log(mdl)
   }
   const onError = (e) => {
     state.status = "error"
