@@ -1,4 +1,3 @@
-import Task from "data.task"
 import { log, handlers } from "Utils"
 import { path } from "ramda"
 
@@ -132,28 +131,20 @@ const Profile = () => {
                     )
                   )
                 )
-              ),
-            // m(
-            //   "label",
-            //   "street",
-            //   m("input", { id: "street", value: data.street })
-            // ),
-            // m("label", "city", m("input", { id: "city", value: data.city })),
-            // m("label", "state", m("input", { id: "state", value: data.state })),
-            // m("label", "zip", m("input", { id: "zip", value: data.zip })),
-            m(
-              ".nav",
-              m(
-                ".nav-left",
-                m(
-                  "button.button.primary",
-                  { onclick: () => updateProfileMeta(mdl)(data) },
-                  "Update"
-                )
               )
-              // m(".nav-right", m("button.button.error", "Delete Account"))
+          )
+        ),
+        m(
+          ".nav",
+          m(
+            ".nav-left",
+            m(
+              "button.button.primary",
+              { onclick: () => updateProfileMeta(mdl)(data) },
+              "Update"
             )
           )
+          // m(".nav-right", m("button.button.error", "Delete Account"))
         )
       )
     },
