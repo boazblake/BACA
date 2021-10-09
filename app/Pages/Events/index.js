@@ -181,7 +181,11 @@ const submitEvent = (
   const submitOrUpdate = (id) =>
     id
       ? mdl.http.back4App.putTask(mdl)(`Classes/Events/${id}`)(event)
-      : mdl.http.back4App.postTask(mdl)("Classes/Events")(event)
+      : mdl.http.back4App.postTask(mdl)("Classes/Events")({
+          ...event,
+          attendees: [],
+          likes: [],
+        })
   submitOrUpdate(id).fork(onError, onSuccess)
 }
 

@@ -1,10 +1,9 @@
-import { m } from "mithril"
 import { log } from "Utils"
-import { exists, handlers } from "Utils"
+import { handlers } from "Utils"
 
 const onInput = (event) =>
   handlers(["oninput"], (e) => {
-    console.log(e.target.type)
+    // console.log(e.target.type)
     if (e.target.type == "checkbox") {
       return (event[e.target.id] = JSON.parse(e.target.checked))
     }
