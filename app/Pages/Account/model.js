@@ -6,12 +6,9 @@ import Task from "data.task"
 
 const toProfileVM =
   ({ emailVerified, email, name }) =>
-  ({ objectId, avatar, address: { street, city, state, zip } }) => ({
+  ({ objectId, avatar, address }) => ({
     objectId,
-    street,
-    city,
-    state,
-    zip,
+    address,
     emailVerified,
     email,
     name,

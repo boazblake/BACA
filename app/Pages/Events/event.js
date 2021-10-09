@@ -1,9 +1,12 @@
 import {
   CalendarLine,
   CheckCircleLine,
+  HappyFaceLine,
   HeartLine,
   HomeSolid,
+  SadFaceLine,
   TimesCircleLine,
+  UserLine,
 } from "@mithril-icons/clarity"
 import DateTime from "Components/DateTime"
 import { includes, without } from "ramda"
@@ -13,26 +16,23 @@ const updateEventTask = (mdl) => (id) => (event) =>
 
 const onError = (e) => console.log("e", e)
 
-const onSuccess = (s) => console.log("s", s)
+const onSuccess = (event, field, value) => () => (event[field] = value)
+
+const updateEvent = (xs) => (x) =>
+  xs.includes(x) ? without([x], xs) : xs.concat([x])
 
 const updateAttendees = (mdl, event) => {
-  event.attendees = event.attendees.includes(mdl.user.objectId)
-    ? without([mdl.user.objectId], event.attendees)
-    : event.attendees.concat([mdl.user.objectId])
-  console.log("attendees", event.attendees)
-  updateEventTask(mdl)(event.id)({ attendees: event.attendees }).fork(
+  let attendees = updateEvent(event.attendees)(mdl.user.objectId)
+  updateEventTask(mdl)(event.id)({ attendees }).fork(
     onError,
-    onSuccess
+    onSuccess(event, "attendees", attendees)
   )
 }
 const updateLikes = (mdl, event) => {
-  event.likes = event.likes.includes(mdl.user.objectId)
-    ? without([mdl.user.objectId], event.likes)
-    : event.likes.concat([mdl.user.objectId])
-  console.log("likes", event.likes)
-  updateEventTask(mdl)(event.id)({ likes: event.likes }).fork(
+  let likes = updateEvent(event.likes)(mdl.user.objectId)
+  updateEventTask(mdl)(event.id)({ likes }).fork(
     onError,
-    onSuccess
+    onSuccess(event, "likes", likes)
   )
 }
 
@@ -68,21 +68,26 @@ const Event = {
             ),
             m(
               ".col",
-
+              m(
+                ".grouped clear icon",
+                m(UserLine, { fill: "#14854f" }),
+                m("p", "Attendees: ", event.attendees.length)
+              ),
               mdl.state.isAuth() &&
                 m(
-                  ".grouped",
+                  ".tag grouped",
                   m(
                     ".button.clear icon",
                     { onclick: () => updateAttendees(mdl, event) },
                     includes(mdl.user.objectId, event.attendees)
-                      ? [
-                          m(CheckCircleLine, {
+                      ? m(
+                          "",
+                          m(HappyFaceLine, {
                             fill: "green",
                           }),
-                          "I'm Attending!",
-                        ]
-                      : [m(TimesCircleLine), "Not Attending"]
+                          m("", "I'm Attending!")
+                        )
+                      : m("", m(SadFaceLine), m("", "Not Attending"))
                   ),
                   m(
                     ".button.clear icon-only",
@@ -91,8 +96,7 @@ const Event = {
                       fill: includes(mdl.user.objectId, event.likes) && "red",
                     })
                   )
-                ),
-              m(".tag", event.attendees.length)
+                )
             )
           ),
 

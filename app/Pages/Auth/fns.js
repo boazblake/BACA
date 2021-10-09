@@ -70,14 +70,14 @@ export const registerUserTask =
 
 export const createAccountTask = (mdl) => {
   mdl.user.account = {
-    address: {},
+    address: "",
     avatar: "",
   }
   return mdl.http.back4App
     .postTask(mdl)("classes/Accounts")({
       userId: mdl.user.objectId,
       avatar: "",
-      address: { street: "", city: "", state: "", zip: "" },
+      address: "",
     })
     .map(({ objectId }) => {
       mdl.user.account.objectId = objectId
@@ -90,7 +90,7 @@ export const createDuesTask = (mdl) => {
   return mdl.http.back4App
     .postTask(mdl)("classes/Dues")({
       userId: mdl.user.objectId,
-      address: {},
+      address: "",
     })
     .map(({ objectId }) => {
       mdl.user.dues.objectId = objectId

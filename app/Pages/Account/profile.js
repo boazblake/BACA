@@ -1,13 +1,17 @@
 import Task from "data.task"
-import { exists, handlers } from "Utils"
+import { log, handlers } from "Utils"
 import { path } from "ramda"
 
 const AVATAR_URL = "https://i.ibb.co/6W0zsZH/avatar.webp"
 
-const state = { files: [] }
+const state = { files: [], locations: [], address: "", status: "" }
 
-const onError = (e) => console.log("error", e)
-const onSuccess = (s) => console.log("success", s)
+const onError = (e) => {
+  console.log("error", e)
+}
+const onSuccess = (s) => {
+  console.log("success", s)
+}
 
 const updateProfile = (mdl) => (data) =>
   mdl.http.back4App.putTask(mdl)(
@@ -16,12 +20,8 @@ const updateProfile = (mdl) => (data) =>
 
 const updateProfileMeta =
   (mdl) =>
-  ({ name, email, street, city, state, zip }) =>
-    updateProfile(mdl)({
-      name,
-      email,
-      address: { street, city, state, zip },
-    }).fork(onError, onSuccess)
+  ({ name, email, address }) =>
+    updateProfile(mdl)({ name, email, address }).fork(onError, onSuccess)
 
 const uploadImage = (mdl) => (file) => {
   const image = new FormData()
@@ -40,7 +40,6 @@ const uploadImage = (mdl) => (file) => {
 
 const onInput = (profile) =>
   handlers(["oninput"], (e) => {
-    console.log(e.target.type)
     if (e.target.type == "checkbox") {
       return (profile[e.target.id] = JSON.parse(e.target.checked))
     }
@@ -54,7 +53,6 @@ const onInput = (profile) =>
 const Profile = () => {
   return {
     view: ({ attrs: { mdl, data } }) => {
-      // console.log(data)
       return m(
         "section.p-y-50",
         m(
@@ -87,13 +85,62 @@ const Profile = () => {
             m("label", "name", m("input", { id: "name", value: data.name })),
             m("label", "email", m("input", { id: "email", value: data.email })),
             m(
-              "label",
-              "street",
-              m("input", { id: "street", value: data.street })
+              "label.icon",
+              "Address",
+              m("input", {
+                oninput: (e) => {
+                  if (e.target.value.length > 3) {
+                    state.status = "isloading"
+                    mdl.http.openCage
+                      .getLocationTask(mdl)(e.target.value.trim())
+                      .fork(
+                        (e) => {
+                          state.status = "error"
+                          log("error fetching locations")(e)
+                        },
+                        ({ results }) => {
+                          state.status = "loaded"
+                          state.locations = results
+                        }
+                      )
+                  }
+                },
+                id: "address",
+                value: data.address,
+              })
             ),
-            m("label", "city", m("input", { id: "city", value: data.city })),
-            m("label", "state", m("input", { id: "state", value: data.state })),
-            m("label", "zip", m("input", { id: "zip", value: data.zip })),
+            state.locations.any() &&
+              m(
+                "details.dropdown",
+                m("summary.button.outline", "options"),
+                m(
+                  ".card",
+                  m(
+                    "ul",
+
+                    state.locations.map(({ formatted }) =>
+                      m(
+                        "li.pointer",
+                        {
+                          onclick: (e) => {
+                            data.address = formatted
+                            state.locations = []
+                          },
+                        },
+                        formatted
+                      )
+                    )
+                  )
+                )
+              ),
+            // m(
+            //   "label",
+            //   "street",
+            //   m("input", { id: "street", value: data.street })
+            // ),
+            // m("label", "city", m("input", { id: "city", value: data.city })),
+            // m("label", "state", m("input", { id: "state", value: data.state })),
+            // m("label", "zip", m("input", { id: "zip", value: data.zip })),
             m(
               ".nav",
               m(
