@@ -1,11 +1,9 @@
 import {
   CalendarLine,
-  CheckCircleLine,
   HappyFaceLine,
   HeartLine,
   HomeSolid,
   SadFaceLine,
-  TimesCircleLine,
   UserLine,
 } from "@mithril-icons/clarity"
 import DateTime from "Components/DateTime"
@@ -46,7 +44,7 @@ const Event = {
         ".modal",
         m(
           "header.modal-header",
-          m("h2.text-primary", event.title.toUpperCase()),
+          m("h2.text-primary strong", event.title.toUpperCase()),
 
           m(
             ".row",
@@ -104,7 +102,7 @@ const Event = {
         ),
 
         m(
-          "section.modal-content container card",
+          "section.modal-content card",
 
           m(".grouped", m("label", event.description))
         ),
