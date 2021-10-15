@@ -1,6 +1,5 @@
 import Task from "data.task"
 import { log, getTotal, toProducts, jsonCopy, saveStorageTask } from "Utils"
-import { newCart } from "Models"
 
 const makePaymentTask = (actions) => {
   log("makePaymentTask")(actions)
@@ -29,13 +28,6 @@ const setTempUser = (user) =>
   sessionStorage.setItem("baca-session-token", user["sessionToken"])
 
 const unSetTempUser = () => sessionStorage.clear()
-
-const updateCartTask = (mdl) => (_) => {
-  log("updateCartTask")()
-
-  mdl.cart = jsonCopy(newCart)
-  return saveStorageTask(mdl)("sb-cart")(mdl.cart)
-}
 
 const saveUnregisteredInvoiceTask = (mdl) => (invoice) =>
   mdl.http.back4App
@@ -98,7 +90,6 @@ export const PayPal = () => {
                 return makePaymentTask(actions)
                   .map(formatInvoice(mdl)(data))
                   .chain(addInvoiceTask(mdl))
-                  .chain(updateCartTask(mdl))
                   .fork(onError(state), onSuccess(mdl, state))
               },
             })

@@ -4,8 +4,11 @@ import Event from "./event"
 import { propEq, prop, head, tail, clone } from "ramda"
 import Loader from "Components/loader.js"
 import Task from "data.task"
+import { validateEventTask } from "./validations.js"
+import { log } from "Utils"
 
 const state = {
+  errors: {},
   status: Stream("loading"),
   calendar: null,
   showEditor: Stream(false),
@@ -73,6 +76,7 @@ const fetchEvents = ({ attrs: { mdl } }) => {
       state.previewEvent(true)
     }
     state.status("loaded")
+    resetState(state)
   }
   mdl.http.back4App
     .getTask(mdl)("Classes/Events")
@@ -108,8 +112,8 @@ const formatDate = (date, time) => {
   return `${date}T${t}`
 }
 
-const onSubmitError = (e) => {
-  state.errors = e
+const onImgError = (e) => {
+  state.errors.img = e
   state.status("error")
 }
 const onImgSuccess = (img) => {
@@ -136,7 +140,7 @@ const uploadImage = (mdl) => (file) => {
   mdl.http.imgBB
     .postTask(mdl)(image)
     .chain(saveImgToGalleryTask(mdl))
-    .fork(onSubmitError, onImgSuccess)
+    .fork(onImgError, onImgSuccess)
 }
 
 const submitEvent = (
@@ -167,8 +171,9 @@ const submitEvent = (
     location,
   }
 
-  const onError = (e) => {
-    console.error(e)
+  const onError = (errors) => {
+    state.errors = errors
+    console.error(errors)
   }
 
   const onSuccess = (evt) => {
@@ -176,17 +181,18 @@ const submitEvent = (
     state.showEditor(false)
   }
 
-  state.previewEvent(true)
-
-  const submitOrUpdate = (id) =>
+  const submitOrUpdateTask = (id) => (data) =>
     id
-      ? mdl.http.back4App.putTask(mdl)(`Classes/Events/${id}`)(event)
+      ? mdl.http.back4App.putTask(mdl)(`Classes/Events/${id}`)(data)
       : mdl.http.back4App.postTask(mdl)("Classes/Events")({
-          ...event,
+          ...data,
           attendees: [],
           likes: [],
         })
-  submitOrUpdate(id).fork(onError, onSuccess)
+
+  return validateEventTask(event)
+    .chain(submitOrUpdateTask(id))
+    .fork(onError, onSuccess)
 }
 
 const Events = {

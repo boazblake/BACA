@@ -36,10 +36,18 @@ const Editor = {
       m(
         "article.modal",
         m(
+          "header.modal-header",
+          m(
+            "h1.title.text-primary.is-center",
+            state.event.objectId ? "Edit Event" : "Add Event"
+          )
+        ),
+        m(
           "section.modal-content.container",
           m(
             "form.grid",
             { ...onInput(state.event) },
+            m("h2.text-primary", "Date", m("span.text-error", "*")),
             m(
               "formgroup.grouped",
               m(
@@ -97,11 +105,13 @@ const Editor = {
                 })
               )
             ),
+
             m(
               "formgroup",
               m(
                 "label",
-                "Title",
+                m("h2.text-primary", "Title", m("span.text-error", "*")),
+                state.errors.title && m("h2.text-error", state.errors.title),
                 m("input", {
                   type: "text",
                   id: "title",
@@ -109,6 +119,7 @@ const Editor = {
                 })
               )
             ),
+            m("h2.text-primary", "Image", m("span.text-error", "*")),
             state.status() == "uploading-image"
               ? m("h2.tag.is-center", "Attaching Image - please be patient")
               : m(
@@ -131,7 +142,9 @@ const Editor = {
 
             m(
               "label.icon",
-              "Location",
+              m("h2.text-primary", "Location", m("span.text-error", "*")),
+              state.errors.location &&
+                m("h2.text-error", state.errors.location),
               m("input", {
                 oninput: (e) => {
                   if (e.target.value.length > 3) {
@@ -173,11 +186,14 @@ const Editor = {
                   )
                 )
               ),
+
             m(
               "formgroup",
               m(
                 "label",
-                "Description",
+                m("h2.text-primary", "Details", m("span.text-error", "*")),
+                state.errors.description &&
+                  m("h2.text-error", state.errors.description),
                 m("textarea", {
                   id: "description",
                   value: state.event.description,

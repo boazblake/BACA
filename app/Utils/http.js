@@ -130,7 +130,7 @@ const http = {
   imgBB,
   openCage,
   back4App,
-  paypal,
+  // paypal,
   HttpTask,
   getTask,
   lookupLocationTask,

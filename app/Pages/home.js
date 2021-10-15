@@ -30,7 +30,15 @@ const createCarousel = (dom) => {
       },
     },
   })
-  // slider.events.on("indexChanged", (e) => console.log("index", e.displayIndex))
+  slider.events.on("touch", (e) =>
+    console.log(
+      "index",
+      slider.getInfo(),
+      e.displayIndex,
+      e.container.children,
+      e.container.children.length
+    )
+  )
   State[dom.id] = slider
 }
 
@@ -75,8 +83,6 @@ const Home = () => {
                     //     selector: "label",
                     //     class: "button primary outline is-full-width",
                     //     href: "/social/events",
-                    //     onclick: (e) => console.log(State.events.getInfo()),
-                    //     // mdl.state.selectedPreviewEvent(event.objectId),
                     //   },
                     //   "...Read More"
                     // )

@@ -44,7 +44,7 @@ const Event = {
         ".modal",
         m(
           "header.modal-header",
-          m("h2.text-primary strong", event.title.toUpperCase()),
+          m("h2.text-primary strong is-center", event.title.toUpperCase()),
 
           m(
             ".row",

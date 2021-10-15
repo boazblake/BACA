@@ -2,7 +2,10 @@ import Profile from "./profile"
 import { loadAllTask } from "./model"
 import { Table, formatDataForTable } from "Components/table.js"
 
-const nav = () => ["profile", "dues", "messages"]
+const nav = () => [
+  "profile",
+  // "dues", "messages"
+]
 
 const state = {
   tab: "profile",
