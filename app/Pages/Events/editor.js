@@ -3,7 +3,6 @@ import { handlers } from "Utils"
 
 const onInput = (event) =>
   handlers(["oninput"], (e) => {
-    // console.log(e.target.type)
     if (e.target.type == "checkbox") {
       return (event[e.target.id] = JSON.parse(e.target.checked))
     }
@@ -20,6 +19,7 @@ const data = {
 }
 
 const Editor = {
+  onremove: ({ attrs: { resetState, state } }) => resetState(state),
   view: ({
     attrs: {
       mdl,
@@ -179,7 +179,11 @@ const Editor = {
                     data.locations.map(({ formatted }) =>
                       m(
                         "li.pointer",
-                        { onclick: (e) => (state.event.location = formatted) },
+                        {
+                          onclick: (e) => {
+                            state.event.location = formatted
+                          },
+                        },
                         formatted
                       )
                     )

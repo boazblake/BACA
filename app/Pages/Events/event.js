@@ -44,7 +44,11 @@ const Event = {
         ".modal",
         m(
           "header.modal-header",
-          m("h2.text-primary strong is-center", event.title.toUpperCase()),
+          m("h2.text-primary strong is-center", event.title.toUpperCase())
+        ),
+
+        m(
+          "section.modal-content ",
 
           m(
             ".row",
@@ -59,7 +63,7 @@ const Event = {
                 m(
                   ".grouped",
                   m(HomeSolid, { fill: "#14854f", height: 60, width: 60 }),
-                  m("p", event.location)
+                  m("label", event.location)
                 ),
               event.allDay &&
                 m(".grouped", m("label.tag.primary", "All Day Event"))
@@ -69,7 +73,7 @@ const Event = {
               m(
                 ".grouped clear icon",
                 m(UserLine, { fill: "#14854f" }),
-                m("p", "Attendees: ", event.attendees.length)
+                m("label", "Attendees: ", event.attendees.length)
               ),
               mdl.state.isAuth() &&
                 m(
@@ -97,14 +101,9 @@ const Event = {
                 )
             )
           ),
-
-          m(".grouped", m("img", { src: event.image }))
-        ),
-
-        m(
-          "section.modal-content card",
-
-          m(".grouped", m("label", event.description))
+          m(".grouped", m("img", { src: event.image })),
+          m("hr.bd-primary"),
+          m(".grouped.container", m("p.p-t-25", event.description))
         ),
         m(
           "footer.modal-footer",

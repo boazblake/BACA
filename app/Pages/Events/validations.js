@@ -28,9 +28,11 @@ const validateLocation = (data) =>
     validate(isRequired, locationLens, "Your event needs a location.", data)
   )
 
-export const validateEventTask = (data) =>
-  ValidateEvent.ap(validateTitle(data))
+export const validateEventTask = (data) => {
+  console.log(data)
+  return ValidateEvent.ap(validateTitle(data))
     .ap(validateDescription(data))
     .ap(validateLocation(data))
     .failureMap(mergeAll)
     .toTask()
+}

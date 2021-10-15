@@ -9,22 +9,19 @@ const DateTime = ({ attrs: { event } }) => {
       event.startDate == event.endDate
         ? m(
             ".",
-            m("p", m("label.strong", formatDate(event.startDate))),
+            m("h3", m("label.strong", formatDate(event.startDate))),
             m(
-              "p.grouped",
+              "h4.grouped",
               m("label", formatTime(event.start)),
               m("label", " - "),
               m("label", formatTime(event.end))
             )
           )
         : m(
-            ".",
-            m(
-              "p",
-              m("label.strong", formatDate(event.startDate)),
-              m("label", " - "),
-              m("label.strong", formatDate(event.endDate))
-            )
+            "h4.grouped",
+            m("label.strong", formatDate(event.startDate)),
+            m("label", " - "),
+            m("label.strong", formatDate(event.endDate))
           ),
   }
 }

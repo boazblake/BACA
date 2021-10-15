@@ -32,8 +32,8 @@ const state = {
   },
 }
 
-const resetState = (state) =>
-  (state.event = {
+const resetState = (s) => {
+  state.event = {
     image: "",
     id: "",
     startDate: "",
@@ -44,9 +44,13 @@ const resetState = (state) =>
     endTime: "00:00:00",
     title: "",
     description: "",
+    location: "",
     allDay: false,
-  })
+  }
 
+  state.files = []
+  state.errors = {}
+}
 const toViewModel = (event) => {
   let start = event.start.split("T")
   let end = event.end.split("T")
