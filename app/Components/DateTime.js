@@ -1,8 +1,10 @@
-import M from "moment"
+import D from "dayjs"
+import af from "dayjs/plugin/advancedFormat"
+D.extend(af)
 
 const DateTime = ({ attrs: { event } }) => {
-  const formatDate = (x) => M(x).format("dddd, MMMM Do YYYY")
-  const formatTime = (x) => M(x).format("h:mm a")
+  const formatDate = (x) => D(x).format("dddd, MMMM Do YYYY")
+  const formatTime = (x) => D(x).format("h:mm a")
 
   return {
     view: () =>

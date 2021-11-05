@@ -30,9 +30,9 @@ exports.plugins = {
     precision: 8,
     mode: "native",
     sourceMapEmbed: true,
-    includePaths: [
-      // "node_modules/frow.scss"
-    ],
+    // includePaths: [
+    // "node_modules/frow.scss"
+    // ],
   },
   imagemin: {
     plugins: {
@@ -46,6 +46,7 @@ exports.plugins = {
   },
   copycat: {
     fonts: ["app/assets/fonts"],
+    files: ["app/assets/files"],
     // images: ["app/assets/images"],
     verbose: true, //shows each file that is copied to the destination directory
     onlyChanged: true, //only copy a file if it's modified time has changed (only effective when using brunch watch)
@@ -77,23 +78,23 @@ exports.plugins = {
       },
     },
   },
-  sharp: {
-    src: "app/assets/images",
-    dest: "docs/images",
-    imageExt: ["jpg", "png", "svg", "HEIC"],
-    tasks: [
-      [
-        { resize: [1200] }, //width, height
-        { ignoreAspectRatio: true },
-        { toFormat: "webp" },
-        { withoutEnlargement: true },
-        { quality: 100 },
-        { withoutAdaptiveFiltering: true },
-        { optimiseScans: true },
-        // { rename: "{base}-1200.{ext}" },
-      ],
-    ],
-  },
+  // sharp: {
+  //   src: "app/assets/images",
+  //   dest: "docs/images",
+  //   imageExt: ["jpg", "png", "svg", "HEIC"],
+  //   tasks: [
+  //     [
+  //       { resize: [1200] }, //width, height
+  //       { ignoreAspectRatio: true },
+  //       { toFormat: "webp" },
+  //       { withoutEnlargement: true },
+  //       { quality: 100 },
+  //       { withoutAdaptiveFiltering: true },
+  //       { optimiseScans: true },
+  //       // { rename: "{base}-1200.{ext}" },
+  //     ],
+  //   ],
+  // },
 }
 
 exports.paths = {

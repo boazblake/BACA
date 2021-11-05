@@ -8,6 +8,7 @@ const State = {
 }
 
 const createCarousel = (dom) => {
+  console.log(tns)
   const slider = tns({
     container: dom,
     controls: true,
@@ -15,6 +16,7 @@ const createCarousel = (dom) => {
     preventScrollOnTouch: "auto",
     slideBy: "page",
     startIndex: 0,
+    useLocalStorage: true,
     responsive: {
       200: {
         items: 2,
