@@ -1,6 +1,6 @@
 import m from "mithril"
 
-const Page3 = m(".", [
+const Page3 =  [
   m(
     "h3",
     {
@@ -497,9 +497,9 @@ const Page3 = m(".", [
       "*Elaine L. Oates’ signature and Seal appear on original and filed copy"
     )
   ),
-])
+]
 
-const Page2 = m(".", [
+const Page2 =  [
   m(
     "h3",
     { style: { "text-align": "center", "white-space": "pre-wrap" } },
@@ -810,9 +810,9 @@ const Page2 = m(".", [
     ),
     m("strong", m("em", "at 1:00 o’clock PM")),
   ]),
-])
+]
 
-const Page1 = m(".", [
+const Page1 =  [
   m(
     "h3",
     { style: { "text-align": "center", "white-space": "pre-wrap" } },
@@ -1103,7 +1103,7 @@ const Page1 = m(".", [
       m("em", "April 21, 1952, at 3:00 o’clock PM"),
     ]),
   ]),
-])
+]
 
 const pages = [Page1, Page2, Page3]
 
@@ -1132,7 +1132,7 @@ const DeedRes = (mdl) => {
           )
         ),
         m(
-          ".container",
+          ".card",
           { style: { height: "100vh", overflow: "scroll" } },
           pages[state.page]
         )
