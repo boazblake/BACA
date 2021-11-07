@@ -5,7 +5,6 @@ import { propEq, prop, head, tail, clone } from "ramda"
 import Loader from "Components/loader.js"
 import Task from "data.task"
 import { validateEventTask } from "./validations.js"
-import { log } from "Utils"
 
 const state = {
   errors: {},
@@ -17,6 +16,7 @@ const state = {
   previewEvent: Stream(false),
   files: [],
   event: {
+    attendees: [],
     image: null,
     id: "",
     startDate: "",
@@ -80,7 +80,6 @@ const fetchEvents = ({ attrs: { mdl } }) => {
       state.previewEvent(true)
     }
     state.status("loaded")
-    resetState(state)
   }
   mdl.http.back4App
     .getTask(mdl)("Classes/Events")
@@ -121,7 +120,6 @@ const onImgError = (e) => {
   state.status("error")
 }
 const onImgSuccess = (img) => {
-  console.log(img)
   state.event.image = img.thumb
   state.status("loaded")
 }
