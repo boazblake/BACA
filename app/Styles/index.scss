@@ -387,9 +387,10 @@ main {
   overflow-y: auto;
 }
 
-main .grid > * {
-  margin-bottom: var(--spacing);
-}
+// main .grid > * {
+//   margin-bottom: var(--spacing);
+// }
+
 @media (min-width: 992px) {
   main > .grid {
     // grid-column-gap: var(--spacing);

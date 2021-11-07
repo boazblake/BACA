@@ -20,7 +20,7 @@ const createCarousel = (dom) => {
     // should have been named `itemMinWidth`
     // slides grow to fit the container viewport
     // ignored unless `slidesToShow` is set to `auto`
-    itemWidth: "100%",
+    itemWidth: "100vw",
 
     // if true, slides wont be resized to fit viewport
     // requires `itemWidth` to be set
@@ -109,7 +109,7 @@ const Home = () => {
           "section.row.p-b-25.bg-light",
           mdl.data.events.any() &&
             m(
-              ".container.glider-contain",
+              ".glider-contain",
               SliderController(mdl),
               m("h2.is-center", "Upcoming Events!"),
               m(
@@ -161,7 +161,7 @@ const Home = () => {
           "section.row.p-b-25.bg-primary.text-white",
           mdl.data.images.any() &&
             m(
-              ".container.glider-contain",
+              ".glider-contain",
               SliderController(mdl),
               m("h2.is-center", "Recent Photos"),
               m(
@@ -189,7 +189,7 @@ const Home = () => {
           "section.row.p-b-25.bg-light",
           mdl.data.blogs.any() &&
             m(
-              ".container.glider-contain",
+              ".glider-contain",
               SliderController(mdl),
               m("h2.is-center", "Recent Blogs"),
               m(
