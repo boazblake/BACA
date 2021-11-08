@@ -1,5 +1,6 @@
 import { fetchAll } from "../Layouts"
 import DateTime from "Components/DateTime"
+import { AngleDoubleLine } from "@mithril-icons/clarity"
 
 const State = {
   events: null,
@@ -9,17 +10,19 @@ const State = {
 
 const createCarousel = (dom) => {
   let slides = dom.children[1]
-  let prev = dom.children[2]
-  let next = dom.children[3]
+  let prev = dom.children[2].children[0]
+  let next = dom.children[2].children[1]
   const slider = new Glider(slides, {
     // `auto` allows automatic responsive
     // width calculations
     slidesToShow: "auto",
+    itemWidth: "100%",
     slidesToScroll: "auto",
 
     // should have been named `itemMinWidth`
     // slides grow to fit the container viewport
     // ignored unless `slidesToShow` is set to `auto`
+    itemWidth: "100%",
     itemWidth: "100vw",
 
     // if true, slides wont be resized to fit viewport
@@ -67,23 +70,34 @@ const createCarousel = (dom) => {
     // Glider.js breakpoints are mobile-first
     responsive: [
       {
-        breakpoint: 900,
+        breakpoint: 1200,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 4,
+          itemWidth: "100%",
           slidesToScroll: 2,
         },
       },
       {
-        breakpoint: 575,
+        breakpoint: 1000,
         settings: {
           slidesToShow: 3,
-          slidesToScroll: 3,
+          itemWidth: "100%",
+          slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 200,
+        breakpoint: 624,
+        settings: {
+          slidesToShow: 2,
+          itemWidth: "100%",
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 424,
         settings: {
           slidesToShow: 1,
+          itemWidth: "100%",
           slidesToScroll: 1,
         },
       },
@@ -114,14 +128,9 @@ const Home = () => {
               m("h2.is-center", "Upcoming Events!"),
               m(
                 ".grouped.#events.glider",
-                {
-                  style: {
-                    maxHeight: "60vh",
-                  },
-                },
                 mdl.data.events.map((event, idx) =>
                   m(
-                    ".card.is-vertical-align row",
+                    ".card.is-vertical-align m-x-6 row",
                     {
                       key: idx,
                       style: {
@@ -130,19 +139,27 @@ const Home = () => {
                         alignContent: "stretch",
                       },
                     },
-                    event.allDay && m(".tag", "All Day Event!"),
-                    m("h4.text-primary", event.title),
-                    m("img", {
-                      style: {
-                        maxHeight: "100px",
-                      },
-                      src: event.image,
-                    }),
-                    m(DateTime, { event }),
+                    m(
+                      "header",
+                      event.allDay && m(".tag", "All Day Event!"),
+                      m("h5.text-primary text-wrap", event.title)
+                    ),
+
+                    m(
+                      "p",
+                      m("img", {
+                        style: {
+                          maxHeight: "250px",
+                        },
+                        src: event.image,
+                      }),
+                      m(DateTime, { event })
+                    ),
+
                     m(
                       m.route.Link,
                       {
-                        selector: "label",
+                        selector: "footer",
                         class: "button primary outline is-full-width",
                         onclick: () =>
                           mdl.state.selectedPreviewEvent(event.objectId),
@@ -153,8 +170,21 @@ const Home = () => {
                   )
                 )
               ),
-              m("button.button.outline.dark", "PREV"),
-              m("button.button.outline.dark", "NEXT")
+              m(
+                "nav.nav.p-t-25",
+                m(
+                  "button.button.nav-left.outline.dark",
+                  m(AngleDoubleLine, {
+                    style: { transform: "rotate(270deg)" },
+                  })
+                ),
+                m(
+                  "button.button.nav-right.outline.dark",
+                  m(AngleDoubleLine, {
+                    style: { transform: "rotate(90deg)" },
+                  })
+                )
+              )
             )
         ),
         m(
@@ -166,11 +196,6 @@ const Home = () => {
               m("h2.is-center", "Recent Photos"),
               m(
                 ".grouped.#images.glider",
-                {
-                  style: {
-                    maxHeight: "60vh",
-                  },
-                },
                 mdl.data.images.map((img, idx) =>
                   m("img.card.auto", {
                     key: idx,
@@ -181,8 +206,21 @@ const Home = () => {
                   })
                 )
               ),
-              m("button.button.outline", "PREV"),
-              m("button.button.outline", "NEXT")
+              m(
+                "nav.nav.p-t-25",
+                m(
+                  "button.button.nav-left.light.outline",
+                  m(AngleDoubleLine, {
+                    style: { transform: "rotate(270deg)" },
+                  })
+                ),
+                m(
+                  "button.button.nav-right.light.outline",
+                  m(AngleDoubleLine, {
+                    style: { transform: "rotate(90deg)" },
+                  })
+                )
+              )
             )
         ),
         m(
@@ -194,34 +232,27 @@ const Home = () => {
               m("h2.is-center", "Recent Blogs"),
               m(
                 ".grouped.#blogs.glider",
-                {
-                  style: {
-                    maxHeight: "60vh",
-                  },
-                },
                 mdl.data.blogs.map((blog, idx) =>
                   m(
-                    ".card.opacity-overlay.is-vertical-align row",
+                    ".card.opacity-overlay.is-vertical-align m-x-6 row",
                     {
                       key: idx,
-                      style: {
-                        alignContent: "stretch",
-                      },
                     },
                     m(
-                      "figure",
+                      "header",
                       m("img", {
-                        style: {
-                          maxHeight: "100px",
-                        },
                         src: blog.img || "images/main.webp",
+                        style: {
+                          objectFit: "contain",
+                          maxHeight: "250px",
+                        },
                       })
                     ),
                     m("h2", blog.title),
                     m(
                       m.route.Link,
                       {
-                        selector: "label",
+                        selector: "footer",
                         class: "button primary outline is-full-width",
                         href: `/social/blog-post:${blog.objectId}`,
                       },
@@ -230,8 +261,21 @@ const Home = () => {
                   )
                 )
               ),
-              m("button.button.outline.dark", "PREV"),
-              m("button.button.outline.dark", "NEXT")
+              m(
+                "nav.nav.p-t-25",
+                m(
+                  "button.button.nav-left.outline.dark",
+                  m(AngleDoubleLine, {
+                    style: { transform: "rotate(270deg)" },
+                  })
+                ),
+                m(
+                  "button.button.nav-right.outline.dark",
+                  m(AngleDoubleLine, {
+                    style: { transform: "rotate(90deg)" },
+                  })
+                )
+              )
             )
         )
       ),
