@@ -27,27 +27,19 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "app.css",
-    "revision": "0d9be50f14fdaf7120e8a5d29bf1e8ae"
+    "revision": "d2c65a4e183380f57fd2b2080dc93479"
   },
   {
     "url": "app.css.gz",
-    "revision": "def85074646b07da2f8711507413f337"
-  },
-  {
-    "url": "app.css.map",
-    "revision": "e1cd0dbaa77cf372e1b8330771a1a9df"
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
     "url": "app.js",
-    "revision": "f3154d4929a50c2430d45c18c1b48981"
+    "revision": "d3cb095a821d75f991c30bfc626ef78c"
   },
   {
     "url": "app.js.gz",
-    "revision": "3ff9d177d4c36782f94d3f51f899531f"
-  },
-  {
-    "url": "app.js.map",
-    "revision": "462ca1004a5890ce62d38ad3155d55e9"
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
     "url": "files/Bonham_Acres_Sec_1_Amendent_3.pdf",
@@ -94,196 +86,20 @@ self.__precacheManifest = [
     "revision": "2c80785f543c8498af6aaf32cca58093"
   },
   {
-    "url": "images/BNP.webp",
-    "revision": "ca3e1ee76f3bb57d2d8179233a8462a1"
-  },
-  {
     "url": "images/BNP1.jpeg",
     "revision": "f30df42107180c811eed7d32a2f05509"
-  },
-  {
-    "url": "images/BNP1.webp",
-    "revision": "d5d2562ee855b496c2182aeee399ed09"
   },
   {
     "url": "images/IMG_3216.jpeg",
     "revision": "24e6d1bf3b14f020ad33eea28cff5934"
   },
   {
-    "url": "images/IMG_3216.webp",
-    "revision": "72fa4dd65b805f9a4c0af8c6cf42dc98"
-  },
-  {
-    "url": "images/IMG_3989.webp",
-    "revision": "7372f3227941048792d12f58186f18fc"
-  },
-  {
-    "url": "images/IMG_3990.webp",
-    "revision": "42a96d4d315760f0599494816cf17712"
-  },
-  {
-    "url": "images/IMG_3991.webp",
-    "revision": "3418e230f1283c78492ecc11962be1ca"
-  },
-  {
-    "url": "images/IMG_3992.webp",
-    "revision": "3f6c47f2b9a736436ddc71d38a3d142c"
-  },
-  {
-    "url": "images/IMG_3993.webp",
-    "revision": "4dd46165a8e2f49c08fc9d022d7989f6"
-  },
-  {
-    "url": "images/IMG_3995.webp",
-    "revision": "7036baae12f69ab42750db368adb748b"
-  },
-  {
-    "url": "images/IMG_3996.webp",
-    "revision": "d04c29ddd51f6e663bf0236457e0970f"
-  },
-  {
-    "url": "images/IMG_3997.webp",
-    "revision": "74455dcc72712c42703f7d0cbb8ac0e4"
-  },
-  {
-    "url": "images/IMG_3998.webp",
-    "revision": "9bca3d16c157f803ac7af598681d8d63"
-  },
-  {
-    "url": "images/IMG_3999.webp",
-    "revision": "9b84c7dd76a53b83191d06d56c1853f5"
-  },
-  {
-    "url": "images/IMG_4001.webp",
-    "revision": "d46e8b93f508ee7de4ad111044a62eb7"
-  },
-  {
-    "url": "images/IMG_4002.webp",
-    "revision": "3f53d441d38bcb3c53a5d4cba512d7ed"
-  },
-  {
-    "url": "images/IMG_4003.webp",
-    "revision": "64076ac0ab1703c6c8751c24f2435772"
-  },
-  {
-    "url": "images/IMG_4004.webp",
-    "revision": "25f03fb488a42feadc223980709ebfb6"
-  },
-  {
-    "url": "images/IMG_4005.webp",
-    "revision": "78683f3f8348055f86bd4e81d67d3193"
-  },
-  {
-    "url": "images/IMG_4006.webp",
-    "revision": "ac72ee98d0d206363b93c182af833d0a"
-  },
-  {
-    "url": "images/IMG_4007.webp",
-    "revision": "bcbbbd1f6365f7a8be26b250b2b80343"
-  },
-  {
-    "url": "images/IMG_4008.webp",
-    "revision": "b27b3353fe01a48e44ee1724348f72df"
-  },
-  {
-    "url": "images/IMG_4009.webp",
-    "revision": "d47fa856d17aec5aead987e8496276de"
-  },
-  {
-    "url": "images/IMG_4010.webp",
-    "revision": "a946fdd9d40360a60ab1c2771033db75"
-  },
-  {
-    "url": "images/IMG_4011.webp",
-    "revision": "2ffea0cca03e6a7b9962915282e91c5a"
-  },
-  {
-    "url": "images/IMG_4012.webp",
-    "revision": "d29eb3f4fe29bbeb27f15a9a6357a295"
-  },
-  {
-    "url": "images/IMG_4013.webp",
-    "revision": "d9d92b14b10557f7cd1b29348681ba03"
-  },
-  {
-    "url": "images/IMG_4014.webp",
-    "revision": "2b026731485d9f1d06dd581ccc81ad42"
-  },
-  {
-    "url": "images/IMG_4015.webp",
-    "revision": "94a1c9c1a3b41428605b30eeea45afa8"
-  },
-  {
-    "url": "images/IMG_4016.webp",
-    "revision": "91e26306973aaba4b6df98915f9c5d40"
-  },
-  {
-    "url": "images/IMG_4017.webp",
-    "revision": "d9fae13b60d9c6c6ddf4b8182b931105"
-  },
-  {
-    "url": "images/IMG_4018.webp",
-    "revision": "c7813ed9a4188b9a8b8f1fa24bf1d70b"
-  },
-  {
-    "url": "images/IMG_4019.webp",
-    "revision": "5801e01ef3243f337da4a3a971f5e938"
-  },
-  {
-    "url": "images/IMG_4020.webp",
-    "revision": "36be4739d9999d2e61fc22f356997c79"
-  },
-  {
-    "url": "images/IMG_4021.webp",
-    "revision": "3ce21fa732ccbe26c3313f741437764b"
-  },
-  {
-    "url": "images/IMG_4022.webp",
-    "revision": "2d571046ffcc03e0cbd9a50d07743968"
-  },
-  {
-    "url": "images/IMG_4023.webp",
-    "revision": "26a58bac4215cb4d0818517f376c0938"
-  },
-  {
-    "url": "images/IMG_4024.webp",
-    "revision": "6bf1663c726004cb593de4deba48b73d"
-  },
-  {
-    "url": "images/IMG_4025.webp",
-    "revision": "ed0fe24c055cb824b3b911c520ffde82"
-  },
-  {
-    "url": "images/IMG_4026.webp",
-    "revision": "8ef2b97ac54b71a0bc6f7d65e711a69f"
-  },
-  {
-    "url": "images/IMG_4027.webp",
-    "revision": "23ad47bbcd8178a6cede8ff55e5503b4"
-  },
-  {
-    "url": "images/IMG_4028.webp",
-    "revision": "5e8d1abc30949c37fcd849fb9e0c6587"
-  },
-  {
-    "url": "images/IMG_4029.webp",
-    "revision": "ea6140462a8a647075b8ff5d6d71fb8f"
-  },
-  {
     "url": "images/logo.jpeg",
     "revision": "ec5f7b7fd3fdeb068228f9537ed05310"
   },
   {
-    "url": "images/logo.webp",
-    "revision": "0dc2223d19cfa06815c645e409de4b20"
-  },
-  {
     "url": "images/main.jpg",
     "revision": "c1682e981da965d758666e27b27650d3"
-  },
-  {
-    "url": "images/main.webp",
-    "revision": "8c7b24466716c5622c98a92c718bda1b"
   },
   {
     "url": "images/test.JPG",
@@ -295,19 +111,15 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html.gz",
-    "revision": "599d9b66a0a4517d6cf20735112298e1"
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
     "url": "manifest.json",
     "revision": "130d0a87fabbbe98ddc3c037dcfe8204"
   },
   {
-    "url": "service-worker.js",
-    "revision": "3deb1855f01dde829b72fb636139c838"
-  },
-  {
     "url": "vendor.js.gz",
-    "revision": "3273d1428a9d7d79621a77b5d4bb9235"
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
