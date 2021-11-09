@@ -7,7 +7,7 @@ import {
   MusicNoteLine,
   PopOutLine,
   TrashLine,
-} from "@mithril-icons/clarity"
+} from "@mithril-icons/clarity/cjs"
 
 const state = {
   showOrdinanceViolation: Stream(false),

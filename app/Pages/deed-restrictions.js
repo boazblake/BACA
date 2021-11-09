@@ -1132,7 +1132,7 @@ const DeedRes = () => {
         ),
 
         m(
-          "section.card",
+          "section.card.container",
           { style: { height: "100vh", overflow: "scroll" } },
           pages[state.page]
         )

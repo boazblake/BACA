@@ -1,4 +1,4 @@
-import { CameraLine } from "@mithril-icons/clarity"
+import { CameraLine } from "@mithril-icons/clarity/cjs"
 import { FadeBack } from "Styles/animations"
 
 const state = {

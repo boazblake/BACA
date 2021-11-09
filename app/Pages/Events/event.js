@@ -5,7 +5,7 @@ import {
   HomeSolid,
   SadFaceLine,
   UserLine,
-} from "@mithril-icons/clarity"
+} from "@mithril-icons/clarity/cjs"
 import DateTime from "Components/DateTime"
 import { includes, without } from "ramda"
 

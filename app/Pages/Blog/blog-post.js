@@ -1,4 +1,4 @@
-import { ArrowLine, NoteEditLine } from "@mithril-icons/clarity"
+import { ArrowLine, NoteEditLine } from "@mithril-icons/clarity/cjs"
 import { parseMarkdown } from "Utils"
 import { toViewModel } from "./blog"
 import Loader from "Components/loader.js"

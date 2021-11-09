@@ -1,6 +1,6 @@
 import { fetchAll } from "../Layouts"
 import DateTime from "Components/DateTime"
-import { AngleDoubleLine } from "@mithril-icons/clarity"
+import { AngleDoubleLine } from "@mithril-icons/clarity/cjs"
 
 const State = {
   events: null,
@@ -15,36 +15,32 @@ const createCarousel = (dom) => {
   const slider = new Glider(slides, {
     // `auto` allows automatic responsive
     // width calculations
-    slidesToShow: "auto",
-    itemWidth: "100%",
-    slidesToScroll: "auto",
+    // slidesToShow: "auto",
+    // slidesToScroll: "auto",
 
     // should have been named `itemMinWidth`
     // slides grow to fit the container viewport
     // ignored unless `slidesToShow` is set to `auto`
-    itemWidth: "100%",
-    itemWidth: "100vw",
+    // itemWidth: "350px",
 
     // if true, slides wont be resized to fit viewport
     // requires `itemWidth` to be set
     // * this may cause fractional slides
-    exactWidth: false,
+    // exactWidth: false,
 
     // speed aggravator - higher is slower
     duration: 0.5,
-
     // dot container element or selector
-    dots: "CSS Selector",
+    // dots: "CSS Selector",
 
     // arrow container elements or selector
     arrows: {
       prev,
-      // may also pass element directly
       next,
     },
 
     // allow mouse dragging
-    draggable: false,
+    draggable: true,
     // how much to scroll with each mouse delta
     dragVelocity: 3.3,
 
@@ -56,10 +52,11 @@ const createCarousel = (dom) => {
 
     // event control
     scrollPropagate: false,
+    rewind: true,
     eventPropagate: true,
 
     // Force centering slide after scroll event
-    scrollLock: false,
+    scrollLock: true,
     // how long to wait after scroll event before locking
     // if too low, it might interrupt normal scrolling
     scrollLockDelay: 150,
@@ -94,7 +91,7 @@ const createCarousel = (dom) => {
         },
       },
       {
-        breakpoint: 424,
+        breakpoint: 300,
         settings: {
           slidesToShow: 1,
           itemWidth: "100%",
@@ -107,11 +104,144 @@ const createCarousel = (dom) => {
   State[dom.id] = slider
 }
 
-const SliderController = (mdl) => ({
-  oncreate: ({ dom }) => createCarousel(dom),
-  // onupdate: (e) => console.log(e),
-  onbeforeremove: ({ dom }) => State[dom.id].destroy(),
-})
+const Blog = {
+  view: ({ attrs: { mdl, idx, blog } }) =>
+    m(
+      ".card.opacity-overlay.is-vertical-align m6 row",
+      {
+        key: idx,
+        style: {
+          height: "200px",
+          alignContent: "stretch",
+          overflow: "auto",
+        },
+      },
+      m("img", {
+        src: blog.img || "images/main.webp",
+        style: {
+          objectFit: "contain",
+          maxHeight: "150px",
+        },
+      }),
+      m("h2.text-primary text-wrap", blog.title),
+      m(
+        m.route.Link,
+        {
+          selector: "button",
+          class: "button primary outline is-full-width",
+          href: `/social/blog-post:${blog.objectId}`,
+        },
+        "...Read More"
+      )
+    ),
+}
+
+const Img = {
+  view: ({ attrs: { idx, img } }) =>
+    m(
+      ".card.m6",
+      {
+        style: {
+          width: "250px",
+        },
+      },
+      m("img.is-center", {
+        style: { height: "100%", margin: "0 auto" },
+        key: idx,
+        src: img.thumb,
+      })
+    ),
+}
+
+const Event = {
+  view: ({ attrs: { mdl, idx, event } }) =>
+    m(
+      ".card.is-vertical-align m6 row",
+      {
+        key: idx,
+        style: {
+          height: "200px",
+          backgroundImage: event.image,
+          alignContent: "stretch",
+          overflow: "auto",
+        },
+      },
+      event.allDay && m("p.tag", "All Day Event!"),
+      m(
+        ".row.grouped",
+        m("h2.is-left.text-primary text-wrap", event.title),
+        m("img.is-right", {
+          style: {
+            maxHeight: "100px",
+          },
+          src: event.image,
+        })
+      ),
+      m(DateTime, { event }),
+      m(
+        m.route.Link,
+        {
+          selector: "",
+          class: "button primary outline is-full-width",
+          onclick: () => mdl.state.selectedPreviewEvent(event.objectId),
+          href: "/social/events",
+        },
+        m("p", "...Read More")
+      )
+    ),
+}
+
+const Slider = {
+  view: ({ attrs: { mdl, data, type } }) =>
+    m(
+      ".grouped.glider",
+      {
+        style: { maxHeight: "350px" },
+      },
+      data.map((item, idx) => {
+        if (type == "event") return m(Event, { mdl, event: item, idx })
+        if (type == "img") return m(Img, { mdl, img: item, idx })
+        if (type == "blog") return m(Blog, { mdl, blog: item, idx })
+      })
+    ),
+}
+
+const Nav = {
+  view: () =>
+    m(
+      "nav.p-t-25.row",
+      m(
+        "button.button.nav-left.outline.dark",
+        m(AngleDoubleLine, {
+          style: { transform: "rotate(270deg)" },
+        })
+      ),
+      m(
+        "button.button.nav-right.outline.dark",
+        m(AngleDoubleLine, {
+          style: { transform: "rotate(90deg)" },
+        })
+      )
+    ),
+}
+
+const Section = {
+  view: ({ attrs: { mdl, title, type, data } }) =>
+    m(
+      "section.row.p-b-25.bg-light",
+      data.any() &&
+        m(
+          ".glider-contain",
+          {
+            onbeforeremove: ({ dom }) => State[dom.id].destroy(),
+            oncreate: ({ dom }) => createCarousel(dom),
+          },
+          m("h2.is-center", title),
+          m(Slider, { mdl, data, type }),
+          m(Nav)
+        )
+    ),
+}
 
 const Home = () => {
   return {
@@ -119,165 +249,24 @@ const Home = () => {
     view: ({ attrs: { mdl } }) =>
       m(
         "article.grid",
-        m(
-          "section.row.p-b-25.bg-light",
-          mdl.data.events.any() &&
-            m(
-              ".glider-contain",
-              SliderController(mdl),
-              m("h2.is-center", "Upcoming Events!"),
-              m(
-                ".grouped.#events.glider",
-                mdl.data.events.map((event, idx) =>
-                  m(
-                    ".card.is-vertical-align m-x-6 row",
-                    {
-                      key: idx,
-                      style: {
-                        backgroundImage: event.image,
-
-                        alignContent: "stretch",
-                      },
-                    },
-                    m(
-                      "header",
-                      event.allDay && m(".tag", "All Day Event!"),
-                      m("h5.text-primary text-wrap", event.title)
-                    ),
-
-                    m(
-                      "p",
-                      m("img", {
-                        style: {
-                          maxHeight: "250px",
-                        },
-                        src: event.image,
-                      }),
-                      m(DateTime, { event })
-                    ),
-
-                    m(
-                      m.route.Link,
-                      {
-                        selector: "footer",
-                        class: "button primary outline is-full-width",
-                        onclick: () =>
-                          mdl.state.selectedPreviewEvent(event.objectId),
-                        href: "/social/events",
-                      },
-                      "...Read More"
-                    )
-                  )
-                )
-              ),
-              m(
-                "nav.nav.p-t-25",
-                m(
-                  "button.button.nav-left.outline.dark",
-                  m(AngleDoubleLine, {
-                    style: { transform: "rotate(270deg)" },
-                  })
-                ),
-                m(
-                  "button.button.nav-right.outline.dark",
-                  m(AngleDoubleLine, {
-                    style: { transform: "rotate(90deg)" },
-                  })
-                )
-              )
-            )
-        ),
-        m(
-          "section.row.p-b-25.bg-primary.text-white",
-          mdl.data.images.any() &&
-            m(
-              ".glider-contain",
-              SliderController(mdl),
-              m("h2.is-center", "Recent Photos"),
-              m(
-                ".grouped.#images.glider",
-                mdl.data.images.map((img, idx) =>
-                  m("img.card.auto", {
-                    key: idx,
-                    src: img.thumb,
-                    style: {
-                      alignContent: "stretch",
-                    },
-                  })
-                )
-              ),
-              m(
-                "nav.nav.p-t-25",
-                m(
-                  "button.button.nav-left.light.outline",
-                  m(AngleDoubleLine, {
-                    style: { transform: "rotate(270deg)" },
-                  })
-                ),
-                m(
-                  "button.button.nav-right.light.outline",
-                  m(AngleDoubleLine, {
-                    style: { transform: "rotate(90deg)" },
-                  })
-                )
-              )
-            )
-        ),
-        m(
-          "section.row.p-b-25.bg-light",
-          mdl.data.blogs.any() &&
-            m(
-              ".glider-contain",
-              SliderController(mdl),
-              m("h2.is-center", "Recent Blogs"),
-              m(
-                ".grouped.#blogs.glider",
-                mdl.data.blogs.map((blog, idx) =>
-                  m(
-                    ".card.opacity-overlay.is-vertical-align m-x-6 row",
-                    {
-                      key: idx,
-                    },
-                    m(
-                      "header",
-                      m("img", {
-                        src: blog.img || "images/main.webp",
-                        style: {
-                          objectFit: "contain",
-                          maxHeight: "250px",
-                        },
-                      })
-                    ),
-                    m("h2", blog.title),
-                    m(
-                      m.route.Link,
-                      {
-                        selector: "footer",
-                        class: "button primary outline is-full-width",
-                        href: `/social/blog-post:${blog.objectId}`,
-                      },
-                      "...Read More"
-                    )
-                  )
-                )
-              ),
-              m(
-                "nav.nav.p-t-25",
-                m(
-                  "button.button.nav-left.outline.dark",
-                  m(AngleDoubleLine, {
-                    style: { transform: "rotate(270deg)" },
-                  })
-                ),
-                m(
-                  "button.button.nav-right.outline.dark",
-                  m(AngleDoubleLine, {
-                    style: { transform: "rotate(90deg)" },
-                  })
-                )
-              )
-            )
-        )
+        m(Section, {
+          mdl,
+          title: "Upcoming Events!",
+          type: "event",
+          data: mdl.data.events,
+        }),
+        m(Section, {
+          mdl,
+          title: "Recent Photos",
+          type: "img",
+          data: mdl.data.images,
+        }),
+        m(Section, {
+          mdl,
+          title: "Latest Blog Posts!",
+          type: "blog",
+          data: mdl.data.blogs,
+        })
       ),
   }
 }

@@ -2,7 +2,7 @@ import Loader from "Components/loader.js"
 import { prop, startsWith, traverse } from "ramda"
 import { exists } from "Utils"
 import Task from "data.task"
-import { TimesCircleLine, ArrowLine } from "@mithril-icons/clarity"
+import { TimesCircleLine, ArrowLine } from "@mithril-icons/clarity/cjs"
 const state = {
   album: [],
   title: "",

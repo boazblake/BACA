@@ -1,4 +1,4 @@
-import { PopOutLine } from "@mithril-icons/clarity"
+import { PopOutLine } from "@mithril-icons/clarity/cjs"
 import NavLink from "Components/nav-link.js"
 
 const isActiveRoute = (a, b) => (a == b ? "active" : "")

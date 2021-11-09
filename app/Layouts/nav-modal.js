@@ -1,4 +1,4 @@
-import { PopOutLine } from "@mithril-icons/clarity"
+import { PopOutLine } from "@mithril-icons/clarity/cjs"
 import NavLink from "Components/nav-link"
 import AuthBox from "Components/authbox"
 import { isActiveRoute } from "Utils/index.js"

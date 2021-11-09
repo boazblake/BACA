@@ -1,4 +1,4 @@
-import { WindowCloseLine, MenuLine } from "@mithril-icons/clarity"
+import { WindowCloseLine, MenuLine } from "@mithril-icons/clarity/cjs"
 
 const filledGreen = { fill: "green" }
 
