@@ -7,7 +7,7 @@ import {
   MusicNoteLine,
   PopOutLine,
   TrashLine,
-} from "@mithril-icons/clarity/cjs"
+} from "@mithril-icons/clarity"
 
 const state = {
   showOrdinanceViolation: Stream(false),
@@ -243,7 +243,7 @@ const CityOrd = (mdl) => {
         "section.bd-light",
         { class: mdl.settings.screenSize == "desktop" && "p-50" },
         m(
-          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-primary.text-white",
+          "section.card.is-marginless",
           m(
             "p",
             "Bonham Acres is a deed restricted community in which deed restrictions are actively enforced. ",
@@ -251,7 +251,7 @@ const CityOrd = (mdl) => {
               m.route.Link,
               {
                 selector: "a.underline",
-                class: "text-white",
+                class: "strong",
                 href: "/legal/deed-restrictions",
               },
               m("em", "The Deed Restrictions")

@@ -116,6 +116,7 @@ html {
 
 body {
   width: 100vw;
+  height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
@@ -157,6 +158,12 @@ p {
 
 small {
   color: var(--muted-text);
+}
+
+.heading {
+  font-size: xxx-large !important;
+  font-size: -webkit-xxx-large !important;
+
 }
 
 .strong {
