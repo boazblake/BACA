@@ -119,7 +119,7 @@ body {
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  position: relative;
+  position: fixed;
 }
 
 img {
@@ -319,6 +319,8 @@ header hgroup {
   // background-color: rgba(255, 255, 255, 0.1);
   #nav-logo {
     transform: scale(2);
+    max-height: -webkit-fill-available;
+    max-width: 95px;
   }
 }
 

@@ -5,7 +5,7 @@ const Toolbar = () => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "nav#toolbar.sticky-nav.nav.is-horizontal-align",
+        "nav#toolbar.sticky-nav.is-horizontal-align",
         {
           style: {
             "background-color": mdl.state.showNavModal()
@@ -16,10 +16,9 @@ const Toolbar = () => {
         m(
           ".nav-left.is-left",
           m(
-            "figure.pointer.scale-2",
+            "figure.pointer",
             m(m.route.Link, {
               selector: "img",
-              class: "width-auto",
               id: "nav-logo",
               href: "/",
               src: "images/logo.webp",

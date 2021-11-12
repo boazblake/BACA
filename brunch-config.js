@@ -118,4 +118,5 @@ exports.npm = {
 
 exports.server = {
   run: true,
+  hostname: "0.0.0.0",
 }
