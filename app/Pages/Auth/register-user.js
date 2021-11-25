@@ -72,106 +72,127 @@ export const Register = () => {
     view: ({ attrs: { mdl } }) =>
       m(
         "section.container.p-y-50",
-        state.showErrorMsg() && m("code.warning", state.errorMsg()),
+        state.showErrorMsg() && m("p.warning", state.errorMsg()),
         m(
           "article.card",
           mdl.settings.screenSize != "phone" && {
-            style: { maxWidth: "60%", margin: "0 auto" },
+            style: { maxWidth: "80%", margin: "0 auto" },
           },
 
           m(
-            "form",
+            "form.row",
             {
               role: "form",
               id: "register-form",
               onsubmit: (e) => e.preventDefault(),
             },
 
-            m("input", {
-              class: state.isSubmitted
-                ? state.errors.name
-                  ? "error"
-                  : "success"
-                : "",
-              id: "reg-name",
-              type: "text",
-              placeholder: "Full Name",
-              onkeyup: (e) => (state.data.userModel.name = e.target.value),
-              value: state.data.userModel.name,
-            }),
-            state.errors.name && m("code.error", state.errors.name),
-
             m(
-              "form-group",
-              { class: mdl.settings.screenSize == "desktop" && "grouped" },
-              m("input", {
-                class: state.isSubmitted
-                  ? state.errors.email
-                    ? "error"
-                    : "success"
-                  : "",
-                id: "reg-email",
-                type: "email",
-                placeholder: "Email",
-                onkeyup: (e) => (state.data.userModel.email = e.target.value),
-                value: state.data.userModel.email,
-              }),
-              state.errors.email && m("code.error", state.errors.email),
-
-              m("input", {
-                id: "confirmEmail",
-                class: state.isSubmitted
-                  ? state.errors.confirmEmail
-                    ? "error"
-                    : "success"
-                  : "",
-                type: "email",
-                placeholder: "Confirm Email",
-                onkeyup: (e) =>
-                  (state.data.userModel.confirmEmail = e.target.value),
-                value: state.data.userModel.confirmEmail,
-              })
+              "formgroup.col-12",
+              m(
+                "",
+                {
+                  class: mdl.settings.screenSize == "phone" && "col-5",
+                },
+                m("input", {
+                  class: state.isSubmitted
+                    ? state.errors.name
+                      ? "error"
+                      : "success"
+                    : "",
+                  id: "reg-name",
+                  type: "text",
+                  placeholder: "Full Name",
+                  onkeyup: (e) => (state.data.userModel.name = e.target.value),
+                  value: state.data.userModel.name,
+                })
+              ),
+              state.errors.name && m("p.text-error", state.errors.name)
             ),
-            state.errors.confirmEmail &&
-              m("code.error", state.errors.confirmEmail),
-
             m(
-              "form-group",
-              { class: mdl.settings.screenSize == "desktop" && "grouped" },
-              m("input", {
-                class: state.isSubmitted
-                  ? state.errors.password
-                    ? "error"
-                    : "success"
-                  : "",
-                id: "reg-pass",
-                type: "password",
-                placeholder: "Password",
-                onkeyup: (e) =>
-                  (state.data.userModel.password = e.target.value),
-                value: state.data.userModel.password,
-              }),
-              state.errors.password && m("code.error", state.errors.password),
+              "formgroup.row.col-12",
+              // { class: mdl.settings.screenSize == "desktop" && "grouped" },
+              m(
+                ".col-6",
+                m("input", {
+                  class: state.isSubmitted
+                    ? state.errors.email
+                      ? "error"
+                      : "success"
+                    : "",
+                  id: "reg-email",
+                  type: "email",
+                  placeholder: "Email",
+                  onkeyup: (e) => (state.data.userModel.email = e.target.value),
+                  value: state.data.userModel.email,
+                }),
+                state.errors.email && m("p.text-error", state.errors.email)
+              ),
 
-              m("input", {
-                class: state.isSubmitted
-                  ? state.errors.confirmPassword
-                    ? "error"
-                    : "success"
-                  : "",
-                id: "pass-confirm",
-                type: "password",
-                placeholder: "Confirm Password",
-                onkeyup: (e) =>
-                  (state.data.userModel.confirmPassword = e.target.value),
-                value: state.data.userModel.confirmPassword,
-              })
+              m(
+                ".col-6",
+                m("input", {
+                  id: "confirmEmail",
+                  class: state.isSubmitted
+                    ? state.errors.confirmEmail
+                      ? "error"
+                      : "success"
+                    : "",
+                  type: "email",
+                  placeholder: "Confirm Email",
+                  onkeyup: (e) =>
+                    (state.data.userModel.confirmEmail = e.target.value),
+                  value: state.data.userModel.confirmEmail,
+                }),
+                state.errors.confirmEmail &&
+                  m("p.text-error", state.errors.confirmEmail)
+              )
             ),
-            state.errors.confirmPassword &&
-              m("code.error", state.errors.confirmPassword),
 
             m(
-              "button.button.primary",
+              "formgroup.row.col-12",
+              // { class: mdl.settings.screenSize == "desktop" && "grouped" },
+              m(
+                ".col-6",
+                m("input", {
+                  class: state.isSubmitted
+                    ? state.errors.password
+                      ? "error"
+                      : "success"
+                    : "",
+                  id: "reg-pass",
+                  type: "password",
+                  placeholder: "Password",
+                  onkeyup: (e) =>
+                    (state.data.userModel.password = e.target.value),
+                  value: state.data.userModel.password,
+                }),
+                state.errors.password &&
+                  m("p.text-error", state.errors.password)
+              ),
+
+              m(
+                ".col-6",
+                m("input", {
+                  class: state.isSubmitted
+                    ? state.errors.confirmPassword
+                      ? "error"
+                      : "success"
+                    : "",
+                  id: "pass-confirm",
+                  type: "password",
+                  placeholder: "Confirm Password",
+                  onkeyup: (e) =>
+                    (state.data.userModel.confirmPassword = e.target.value),
+                  value: state.data.userModel.confirmPassword,
+                }),
+                state.errors.confirmPassword &&
+                  m("p.text-error", state.errors.confirmPassword)
+              )
+            ),
+
+            m(
+              "button.button.primary.col-12",
               {
                 form: `register-form`,
                 onclick: () => validateForm(mdl)(state.data.userModel),

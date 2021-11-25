@@ -125,7 +125,7 @@ const Gallery = {
     mdl.state.isLoading()
       ? m(Loader)
       : m(
-          "article.bg-light.grid.p-y-6.fade",
+          "article.grid.p-y-6.fade",
           mdl.state.isAuth() &&
             m(
               "nav.nav",

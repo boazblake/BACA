@@ -228,7 +228,7 @@ const Nav = {
 const Section = {
   view: ({ attrs: { mdl, title, type, data } }) =>
     m(
-      "section.row.p-b-25.bg-light",
+      "section.row.p-b-25",
       data.any() &&
         m(
           ".glider-contain",
@@ -236,7 +236,7 @@ const Section = {
             onbeforeremove: ({ dom }) => State[dom.id].destroy(),
             oncreate: ({ dom }) => createCarousel(dom),
           },
-          m("h2.is-center", title),
+          m("h2.is-center.strong", title),
           m(Slider, { mdl, data, type }),
           m(Nav)
         )

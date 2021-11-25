@@ -214,7 +214,7 @@ const CardOrd = () => {
   return {
     view: ({ attrs: { id, title, icons, contents } }) =>
       m(
-        "article.card.col-6.bd-primary.p-x-50.p-y-6.bg-light.pointer",
+        "article.card.col-6.bd-primary.p-x-50.p-y-6.pointer",
         {
           id,
           class: isSelected && "text-success",
@@ -226,108 +226,111 @@ const CardOrd = () => {
             state.showModal(true)
           },
         },
-        m(icons.default, {
-          class: "is-center",
-          fill: isSelected && "#14854f",
-          style: { margin: "0 auto", width: "250px", height: "250px" },
-        }),
-        m("hgroup", m("h2", title))
+
+        m(
+          "hgroup.row",
+          m(icons.default, {
+            class: "col.is-center",
+            fill: isSelected && "#14854f",
+            style: { margin: "0 auto", width: "30%", height: "250px" },
+          }),
+          m("h2.col.is-center", title)
+        )
       ),
   }
 }
 
-const CityOrd = (mdl) => {
-  return {
-    view: ({ attrs: { mdl } }) =>
+const CityOrd = {
+  view: ({ attrs: { mdl } }) =>
+    m(
+      "section.container",
+      { class: mdl.settings.screenSize == "desktop" && "p-50" },
       m(
-        "section.bd-light",
-        { class: mdl.settings.screenSize == "desktop" && "p-50" },
+        "section.is-marginless",
         m(
-          "section.card.is-marginless",
+          "p",
+          "Bonham Acres is a deed restricted community in which deed restrictions are actively enforced. ",
           m(
-            "p",
-            "Bonham Acres is a deed restricted community in which deed restrictions are actively enforced. ",
-            m(
-              m.route.Link,
-              {
-                selector: "a.underline",
-                class: "strong",
-                href: "/legal/deed-restrictions",
-              },
-              m("em", "The Deed Restrictions")
-            ),
-            " are intended to preserve and enhance property values as well as to promote safety in our community. "
-          ),
-          m(
-            "p",
-            "Many of these deed restrictions are enforced with the assistance of the City of Houston, whose legal department and our council representative have supported and whom have been valuable partners to Bonham Acres when enforcing deed restrictions."
-          ),
-          m(
-            "p",
-            "Violations to any of these deed restrictions should be reported directly to the Bonham Acres Civic Association.",
-
-            m(
-              ".p-y-6.is-center",
-              mdl.state.isAuth()
-                ? m(
-                    "button.button.icon.bd-error",
-                    { onclick: (e) => state.showOrdinanceViolation(true) },
-                    "Report City Ordinance Violation",
-                    m(ExclamationTriangleLine, { fill: "red" })
-                  )
-                : m(
-                    m.route.Link,
-                    {
-                      selector: "button",
-                      class: "button.bd-error",
-                      href: "/login",
-                    },
-                    "Login To Report City Ordinance Violation"
-                  ),
-              state.showOrdinanceViolation() &&
-                m(ViolationReport, {
-                  mdl,
-                  showModal: state.showOrdinanceViolation,
-                })
-            ),
-            m(
-              "p",
-              m(
-                "em",
-                "All reports will be treated as anonymous and your name kept private."
-              )
-            ),
-            m(
-              "p.strong",
-              "Your assistance in reporting violations will go a very long way to protect and enhance our property values."
-            )
-          )
-        ),
-        m(
-          "section.row",
-          Object.keys(contents).map((ord) =>
-            m(CardOrd, {
-              mdl,
-              id: ord,
-              title: contents[ord].title,
-              icons: contents[ord].icons,
-              contents: contents[ord].contents,
-            })
-          )
-        ),
-        state.showModal() &&
-          m(Modal, {
-            mdl,
-            title: state.title,
-            contents: state.contents,
-            close: () => {
-              state.contents = null
-              state.title = null
-              state.showModal(false)
+            m.route.Link,
+            {
+              selector: "a.underline",
+              class: "strong",
+              href: "/legal/deed-restrictions",
             },
-          })
+            m("em", "The Deed Restrictions")
+          ),
+          " are intended to preserve and enhance property values as well as to promote safety in our community. "
+        ),
+        m(
+          "p",
+          "Many of these deed restrictions are enforced with the assistance of the City of Houston, whose legal department and our council representative have supported and whom have been valuable partners to Bonham Acres when enforcing deed restrictions."
+        ),
+        m(
+          "p",
+          "Violations to any of these deed restrictions should be reported directly to the Bonham Acres Civic Association.",
+
+          m(
+            ".p-y-6.is-center",
+            mdl.state.isAuth()
+              ? m(
+                  "button.button.icon.bd-error",
+                  { onclick: (e) => state.showOrdinanceViolation(true) },
+                  "Report City Ordinance Violation",
+                  m(ExclamationTriangleLine, { fill: "red" })
+                )
+              : m(
+                  m.route.Link,
+                  {
+                    selector: "button",
+                    class: "button.bd-error",
+                    href: "/login",
+                  },
+                  "Login To Report City Ordinance Violation"
+                ),
+            state.showOrdinanceViolation() &&
+              m(ViolationReport, {
+                mdl,
+                showModal: state.showOrdinanceViolation,
+              })
+          ),
+          m(
+            "p",
+            m(
+              "em",
+              "All reports will be treated as anonymous and your name kept private."
+            )
+          ),
+          m(
+            "p.strong",
+            "Your assistance in reporting violations will go a very long way to protect and enhance our property values."
+          )
+        )
       ),
-  }
+
+      m(
+        "section.row",
+        Object.keys(contents).map((ord) =>
+          m(CardOrd, {
+            mdl,
+            id: ord,
+            title: contents[ord].title,
+            icons: contents[ord].icons,
+            contents: contents[ord].contents,
+          })
+        )
+      ),
+      state.showModal() &&
+        m(Modal, {
+          mdl,
+          title: state.title,
+          contents: state.contents,
+          close: () => {
+            state.contents = null
+            state.title = null
+            state.showModal(false)
+          },
+        })
+    ),
 }
 
 export default CityOrd

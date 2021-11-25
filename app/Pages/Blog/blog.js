@@ -48,7 +48,7 @@ const Blog = () => {
       mdl.state.isLoading()
         ? m(Loader)
         : m(
-            "article.grid.p-y-6.fade.bg-light",
+            "article.grid.p-y-6.fade",
             m(
               "section.container",
               mdl.state.isAuth() &&

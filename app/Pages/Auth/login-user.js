@@ -71,21 +71,21 @@ export const Login = () => {
         : m(
             "section.container.p-y-50",
 
-            state.showErrorMsg() && m("code.warning", state.errorMsg()),
+            state.showErrorMsg() && m("p.text-error", state.errorMsg()),
             m(
               "article.card",
               mdl.settings.screenSize != "phone" && {
-                style: { maxWidth: "60%", margin: "0 auto" },
+                style: { maxWidth: "80%", margin: "0 auto" },
               },
               m(
-                "form.rows",
+                "form.row",
                 {
                   role: "form",
                   id: "login-form",
                   onsubmit: (e) => e.preventDefault(),
                 },
                 m(
-                  "formgroup.col",
+                  "formgroup.col-12",
                   // {
                   //   class: mdl.settings.screenSize == "desktop" && "grouped",
                   // },
@@ -104,7 +104,10 @@ export const Login = () => {
                     },
                     value: state.data.userModel.email,
                   }),
-                  state.errors.email && m("code.warning", state.errors.email),
+                  state.errors.email && m("p.text-error", state.errors.email)
+                ),
+                m(
+                  "formgroup.col-12",
                   m("input", {
                     class: state.isSubmitted
                       ? state.errors.password
@@ -121,35 +124,35 @@ export const Login = () => {
                     value: state.data.userModel.password,
                   }),
                   state.errors.password &&
-                    m("code.warning", state.errors.password)
-                ),
-                m(
-                  "button.button.primary.is-center",
-                  {
-                    role: "button",
-                    form: `login-form`,
-                    onclick: () => validateForm(mdl)(state.data),
-                    class: mdl.state.isLoading() && "loading",
-                  },
-                  "LOGIN"
-                ),
-
-                state.httpError && m(".toast toast-error", state.httpError)
+                    m("p.text-error", state.errors.password)
+                )
               ),
               m(
-                ".auth-link",
-                "Need to ",
-                m(
-                  "u",
-                  m(NavLink, {
-                    mdl,
-                    href: "/register",
-                    link: "register",
-                    classList: "",
-                  })
-                ),
-                " ?"
-              )
+                "button.button.primary.is-center",
+                {
+                  role: "button",
+                  form: `login-form`,
+                  onclick: () => validateForm(mdl)(state.data),
+                  class: mdl.state.isLoading() && "loading",
+                },
+                "LOGIN"
+              ),
+
+              state.httpError && m(".toast toast-error", state.httpError)
+            ),
+            m(
+              ".auth-link",
+              "Need to ",
+              m(
+                "u",
+                m(NavLink, {
+                  mdl,
+                  href: "/register",
+                  link: "register",
+                  classList: "",
+                })
+              ),
+              " ?"
             )
           ),
   }

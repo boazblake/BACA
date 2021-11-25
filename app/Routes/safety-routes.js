@@ -88,8 +88,7 @@ const MemberRoutes = [
     name: "Houston 311 Service Request/Report",
     // icon: Icons.search,
     route: "/external",
-    external:
-      "https://www.houstontx.gov/311/ServiceRequestDirectoryWebpage.htm",
+    external: "https://houston311.powerappsportals.us/en-US/",
     isNav: true,
     group: ["external", "safety"],
     children: [],

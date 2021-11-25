@@ -1,7 +1,5 @@
-import { log, handlers } from "Utils"
+import { log, handlers, AVATAR_URL } from "Utils"
 import { path } from "ramda"
-
-const AVATAR_URL = "https://i.ibb.co/6W0zsZH/avatar.webp"
 
 const state = { files: [], locations: [], address: "", status: "" }
 

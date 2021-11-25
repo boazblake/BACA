@@ -49,11 +49,11 @@ const Contact = (mdl) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "article.bg-light",
+        "article",
         m(
           "section.container",
           m(
-            "h2.is-center.is-marginless.m-b-15",
+            "h2.is-center.is-marginless.m-b-15.strong",
             "Bonham Acres Civic Association Board Members April 13, 2021"
           ),
           m(
