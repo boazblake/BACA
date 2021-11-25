@@ -67,31 +67,34 @@ const Comments = {
   view: ({ attrs: { blog, comments, mdl } }) =>
     m(
       "section.container.p-y-25",
-      m(
-        "aside.card",
+      mdl.state.isAuth() &&
         m(
-          ".row",
+          "aside.card",
           m(
-            "figure.col-2.is-left",
-            m("img.avatar", {
-              style: { maxWidth: "100px" },
-              src: mdl.user.avatar || AVATAR_URL,
-            })
-          ),
-          m(
-            ".col-10.is-right",
+            "header.row",
             m(
-              "textarea.w100",
-              {
-                rows: 3,
-                onchange: (e) => (state.new.comment = e.target.value),
-              },
-              state.new.comment
+              "figure.col-2",
+              m("img.avatar", {
+                style: { maxWidth: "100px" },
+                src: mdl.user.avatar || AVATAR_URL,
+              }),
+              m("caption", mdl.user.name)
+            ),
+            m(
+              ".col-10",
+              m(
+                "textarea.w100",
+                {
+                  // style: { width: "80%" },
+                  rows: 3,
+                  onchange: (e) => (state.new.comment = e.target.value),
+                },
+                state.new.comment
+              )
             )
-          )
+          ),
+          m("footer.is-right", m("button.is-right", "Submit"))
         ),
-        m("footer.is-right", m("button.is-right", "Submit"))
-      ),
       comments &&
         comments.map((comment) =>
           m(

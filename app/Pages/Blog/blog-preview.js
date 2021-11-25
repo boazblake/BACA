@@ -1,7 +1,5 @@
 import HtmlSanitizer from "Utils/html-sanitize"
 
-console.log(HtmlSanitizer)
-
 const BlogPreview = {
   view: ({
     attrs: {

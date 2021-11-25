@@ -211,16 +211,34 @@ const Nav = {
     m(
       "nav.p-t-25.row",
       m(
-        "button.button.nav-left.outline.dark",
-        m(AngleDoubleLine, {
-          style: { transform: "rotate(270deg)" },
-        })
+        ".nav-left",
+        m(
+          "button.button.m-auto.outline.dark",
+          {
+            style: { width: "80%" },
+          },
+          m(AngleDoubleLine, {
+            style: {
+              transform: "rotate(270deg)",
+              transition: "transform .3s ease-out",
+            },
+          })
+        )
       ),
       m(
-        "button.button.nav-right.outline.dark",
-        m(AngleDoubleLine, {
-          style: { transform: "rotate(90deg)" },
-        })
+        ".nav-right",
+        m(
+          "button.button.m-auto.outline.dark",
+          {
+            style: { width: "80%" },
+          },
+          m(AngleDoubleLine, {
+            style: {
+              transform: "rotate(90deg)",
+              transition: "transform .3s ease-out",
+            },
+          })
+        )
       )
     ),
 }
