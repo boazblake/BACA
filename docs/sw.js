@@ -107,14 +107,14 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "4afc2b27632d8baa69b914bc557890a9"
+    "revision": "c03c2d544007c9964f9f9826879383db"
   },
   {
     "url": "index.html.gz",
     "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
-    "url": "manifest.json",
+    "url": "manifest.webmanifest",
     "revision": "e18d7f8fcb18bf8ee4d99b2689422c07"
   },
   {
