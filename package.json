@@ -47,7 +47,6 @@
     "sharp-brunch": "^1.0.6",
     "size-limit": "^4.5.0",
     "slimdown-js": "^0.4.1",
-    "sw-precache-brunch": "^2.0.1",
     "terser-brunch": "^4.0.0",
     "workbox-brunch": "^1.0.2"
   }
