@@ -23,7 +23,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/BACA/#!/about/index.html",
+  "start_url": "/BACA/#!/",
   "background_color": "#FFFF",
   "display": "fullscreen",
   "scope": "/",
