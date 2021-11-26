@@ -24,6 +24,7 @@
     }
   ],
   "start_url": "/BACA/#!/",
+  "id": "/BACA/#!/",
   "background_color": "#FFFF",
   "display": "fullscreen",
   "scope": "/",
