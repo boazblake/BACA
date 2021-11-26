@@ -26,7 +26,7 @@ if (process.env.NODE_ENV !== "production") {
           .register("./sw.js")
           .then((registration) => {
             console.log("⚙️ SW registered: ", registration)
-            registration.addEventListener("updatefound", function () {
+            registration.addEventListener("updatefound", () => {
               // If updatefound is fired, it means that there's
               // a new service worker being installed.
               var installingWorker = registration.installing
