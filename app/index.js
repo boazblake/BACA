@@ -20,30 +20,32 @@ if (process.env.NODE_ENV !== "production") {
   console.log("Looks like we are in development mode!")
 } else {
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./sw.js")
-        .then((registration) => {
-          console.log("⚙️ SW registered: ", registration)
-          registration.addEventListener('updatefound', function() {
-            // If updatefound is fired, it means that there's
-            // a new service worker being installed.
-            var installingWorker = registration.installing;
-            console.log('A new service worker is being installed:',
-              installingWorker);
+    window
+      .addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then((registration) => {
+            console.log("⚙️ SW registered: ", registration)
+            registration.addEventListener("updatefound", function () {
+              // If updatefound is fired, it means that there's
+              // a new service worker being installed.
+              var installingWorker = registration.installing
+              console.log(
+                "A new service worker is being installed:",
+                installingWorker
+              )
 
-            // You can listen for changes to the installing service worker's
-            // state via installingWorker.onstatechange
-          });
-        })
-        .catch(function(error) {
-          console.log('Service worker registration failed:', error);
-        })
-        })
-        .catch((registrationError) => {
-          console.log("🧟 SW registration failed: ", registrationError)
-        })
-    })
+              // You can listen for changes to the installing service worker's
+              // state via installingWorker.onstatechange
+            })
+          })
+          .catch(function (error) {
+            console.log("Service worker registration failed:", error)
+          })
+      })
+      .catch((registrationError) => {
+        console.log("🧟 SW registration failed: ", registrationError)
+      })
   }
 }
 
