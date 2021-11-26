@@ -26,6 +26,6 @@
   "start_url": "/",
   "background_color": "#FFFF",
   "display": "fullscreen",
-  "scope": ".",
+  "scope": "/BACA/#!/",
   "theme_color": "#3367D6"
 }
