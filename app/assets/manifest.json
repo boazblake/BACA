@@ -23,9 +23,9 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/",
+  "start_url": "/BACA/#!/",
   "background_color": "#FFFF",
   "display": "fullscreen",
-  "scope": "/BACA/#!/",
+  "scope": "/",
   "theme_color": "#3367D6"
 }
