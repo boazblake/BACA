@@ -74,6 +74,34 @@ self.__precacheManifest = [
     "revision": "d9fd34b3338468a9a9233aba8ebdab0f"
   },
   {
+    "url": "icons/maskable_icon_x128.png",
+    "revision": "d7f05d94c45c66c8fd921e622bba712c"
+  },
+  {
+    "url": "icons/maskable_icon_x192.png",
+    "revision": "53066c54597624175d267ad9d5ea6a43"
+  },
+  {
+    "url": "icons/maskable_icon_x384.png",
+    "revision": "c87a96f48271f606dd659edc39fd04c7"
+  },
+  {
+    "url": "icons/maskable_icon_x48.png",
+    "revision": "b288ecec08e59cbe48fb6a8cc4b18f9e"
+  },
+  {
+    "url": "icons/maskable_icon_x72.png",
+    "revision": "3b7d65254ebac8468332bb8fcf573251"
+  },
+  {
+    "url": "icons/maskable_icon_x96.png",
+    "revision": "5015b0911f69ba3540c0ad8bcf689014"
+  },
+  {
+    "url": "icons/maskable_icon.png",
+    "revision": "48e28e5a9d7f9554830d7649039d0583"
+  },
+  {
     "url": "icons/nextdoor.png",
     "revision": "9e2b1fbc6a59ce10f509a5f3e0b516f4"
   },
@@ -115,7 +143,7 @@ self.__precacheManifest = [
   },
   {
     "url": "manifest.json",
-    "revision": "8b9e51188dae39838ccd6a7063c631b5"
+    "revision": "730ae9426fc53c274069095bd932d631"
   },
   {
     "url": "vendor.js.gz",
