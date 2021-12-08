@@ -23,7 +23,7 @@
     "dayjs": "^1.10.7",
     "flickity": "^2.2.2",
     "fullcalendar": "^5.9.0",
-    "jodit": "^3.8.5",
+    "jodit": "^3.9.6",
     "mithril": "2.0.4",
     "mithril-stream": "^2.0.0",
     "ramda": "^0.27.0",
