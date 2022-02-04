@@ -1,5 +1,4 @@
 import Images from "../images"
-import { FadeBack } from "Styles/animations"
 
 const state = {
   image: Stream(0),
@@ -63,17 +62,17 @@ const Hero = () => {
             marginTop: calcMargin(mdl),
           },
         },
-        [
-          m("img.hero-img.fade", {
-            src: Images[state.image()],
-            key: state.image(),
+        Images.map((image, idx) =>
+          m("img.hero-img.animated.fadeout", {
+            src: image,
+            key: idx,
+            class: state.image() == idx ? "fadeInRight" : "fadeOutLeft",
             onload: (e) => e.target.classList.replace("fadeout", "fadeInRight"),
-            // onupdate: FadeBack,
             style: {
               height: calcHeight(mdl),
             },
-          }),
-        ],
+          })
+        ),
         m(
           "header",
           m(
