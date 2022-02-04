@@ -4,6 +4,7 @@ import { FadeBack } from "Styles/animations"
 const state = {
   image: Stream(0),
   start: Stream(null),
+  timestamp: undefined,
 }
 
 const calcHeight = ({ settings: { screenSize } }) => {
@@ -32,7 +33,7 @@ const calcMargin = ({ settings: { screenSize } }) => {
   }
 }
 
-const updateBackground = () => {
+const updateBackground = (timestamp) => {
   if (Date.now() - state.start() > 5000) {
     state.start(Date.now())
     state.image() == Images.length - 1
@@ -52,7 +53,7 @@ const Hero = () => {
     },
     oncreate: ({ attrs: { mdl } }) => {
       state.start(Date.now())
-      updateBackground()
+      requestAnimationFrame(updateBackground)
     },
     view: ({ attrs: { mdl } }) =>
       m(
@@ -62,14 +63,17 @@ const Hero = () => {
             marginTop: calcMargin(mdl),
           },
         },
-        m("img.hero-img.fade", {
-          src: Images[state.image()],
-          onload: (e) => e.target.classList.replace("fadeout", "fade"),
-          // onupdate: FadeBack,
-          style: {
-            height: calcHeight(mdl),
-          },
-        }),
+        [
+          m("img.hero-img.fade", {
+            src: Images[state.image()],
+            key: state.image(),
+            onload: (e) => e.target.classList.replace("fadeout", "fadeInRight"),
+            // onupdate: FadeBack,
+            style: {
+              height: calcHeight(mdl),
+            },
+          }),
+        ],
         m(
           "header",
           m(
