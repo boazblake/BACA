@@ -14,8 +14,9 @@ const state = {
 }
 
 const Post = {
-  view: ({ attrs: { blog, mdl } }) =>
-    m(
+  view: ({ attrs: { blog, mdl } }) => {
+    console.log(blog.text)
+    return m(
       "section.card",
       m(
         ".row",
@@ -60,7 +61,8 @@ const Post = {
           ),
           m("button.button.error", { onclick: () => deleteBlog(mdl) }, "Delete")
         )
-    ),
+    )
+  },
 }
 
 const Comments = {

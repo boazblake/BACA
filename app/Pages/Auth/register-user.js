@@ -54,9 +54,10 @@ export const validateForm = (mdl) => (data) => {
     // sessionStorage.setItem("baca-session-token", mdl.user["sessionToken"])
     // sessionStorage.setItem("baca-user", JSON.stringify(mdl.user.objectId))
     state.errorMsg(
-      "Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login."
+      "Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login, you will be redirected to the login page now."
     )
     state.showErrorMsg(true)
+    setTimeout(() => m.route.set("/login"), 3000)
   }
   // return console.log(data)
   state.isSubmitted = true

@@ -100,7 +100,7 @@ const HtmlSanitizer = new (function () {
     iframe["sandbox"] =
       "allow-same-origin allow-scripts allow-popups allow-forms"
     iframe.style.display = "none"
-    console.log(iframe)
+    // console.log(iframe)
     document.body.appendChild(iframe) // necessary so the iframe contains a document
     var iframedoc = iframe.contentDocument || iframe.contentWindow.document
     if (iframedoc.body == null) iframedoc.write("<body></body>") // null in IE
@@ -133,7 +133,7 @@ const HtmlSanitizer = new (function () {
           var attr = node.attributes[i]
           if (attributeWhitelist_[attr.name]) {
             if (attr.name == "style") {
-              for (s = 0; s < node.style.length; s++) {
+              for (var s = 0; s < node.style.length; s++) {
                 var styleName = node.style[s]
                 if (cssWhitelist_[styleName])
                   newNode.style.setProperty(
