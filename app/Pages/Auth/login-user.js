@@ -1,7 +1,7 @@
 import NavLink from "Components/nav-link"
 import { jsonCopy } from "Utils"
 import { validateLoginTask } from "./Validations.js"
-import { loginTask } from "./fns.js"
+import { loginTask, resetPasswordTask } from "./fns.js"
 import { GroupSolidBadged } from "@mithril-icons/clarity/cjs"
 // import LogoLoader from "Components/LogoLoader"
 
@@ -33,10 +33,20 @@ const validateForm = (mdl) => (data) => {
     .fork(onError, onSuccess(mdl))
 }
 
-const resetPassword = (mdl, state) => {
-  console.log(mdl, state)
-  state.showResetModal(false)
-  //reset password
+const resetPassword = (mdl, email) => {
+  const onError = ({ message }) => {
+    state.errorMsg(message)
+    state.showErrorMsg(true)
+    state.showResetModal(false)
+    console.log("er", message)
+  }
+
+  const onSuccess = (data) => {
+    state.showResetModal(false)
+    console.log("data", data)
+  }
+
+  resetPasswordTask(mdl, email).fork(onError, onSuccess)
 }
 
 const userModel = {
@@ -160,6 +170,7 @@ export const Login = () => {
                     m(
                       "section.modal-content",
                       m("input", {
+                        type: "email",
                         placeholder: "Enter Email",
                         value: state.data.userModel.email,
                         onchange: (e) =>
@@ -170,7 +181,10 @@ export const Login = () => {
                       "section.modal-footer",
                       m(
                         "button",
-                        { onclick: () => resetPassword(mdl, state) },
+                        {
+                          onclick: () =>
+                            resetPassword(mdl, state.data.userModel.email),
+                        },
                         "Reset Password"
                       )
                     )

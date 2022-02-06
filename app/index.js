@@ -68,6 +68,9 @@ if (sessionStorage.getItem("baca-session-token")) {
 
   Model.http.back4App.getTask(Model)(`users/me`).fork(onError, onSuccess)
 }
+const format = (hash) => JSON.stringify(hash).replace("#!", "")
 
 m.route(root, "/", App(Model))
-m.route.set("/about")
+window.location.hash
+  ? m.route.set(format(window.location.hash))
+  : m.route.set("/about")

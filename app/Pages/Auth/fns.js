@@ -59,6 +59,9 @@ export const loginTask =
   ({ email, password }) =>
     loginUserTask(mdl)({ email, password }).chain((_) => getUserInfoTask(mdl))
 
+export const resetPasswordTask = (mdl, email) =>
+  mdl.http.back4App.getTask(mdl)("requestPasswordReset", { email })
+
 export const registerUserTask =
   (mdl) =>
   ({ name, email, password, role }) =>
