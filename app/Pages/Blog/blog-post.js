@@ -63,56 +63,56 @@ const Post = {
     ),
 }
 
-const Comments = {
-  view: ({ attrs: { blog, comments, mdl } }) =>
-    m(
-      "section.container.p-y-25",
-      mdl.state.isAuth() &&
-        m(
-          "aside.card",
-          m(
-            "header.row",
-            m(
-              "figure.col-2",
-              m("img.avatar", {
-                style: { maxWidth: "100px" },
-                src: mdl.user.avatar || AVATAR_URL,
-              }),
-              m("caption", mdl.user.name)
-            ),
-            m(
-              ".col-10",
-              m(
-                "textarea.w100",
-                {
-                  // style: { width: "80%" },
-                  rows: 3,
-                  onchange: (e) => (state.new.comment = e.target.value),
-                },
-                state.new.comment
-              )
-            )
-          ),
-          m("footer.is-right", m("button.is-right", "Submit"))
-        ),
-      comments &&
-        comments.map((comment) =>
-          m(
-            "aside.row.card",
-            m(
-              "figure.col",
-              m("img.avatar", {
-                style: { maxWidth: "100px" },
-                src: mdl.user.avatar || AVATAR_URL,
-              }),
-              m("label.row", "comment.user"),
-              m("label.row", "comment.date")
-            ),
-            m("p.col", comment)
-          )
-        )
-    ),
-}
+// const Comments = {
+//   view: ({ attrs: { blog, comments, mdl } }) =>
+//     m(
+//       "section.container.p-y-25",
+//       mdl.state.isAuth() &&
+//         m(
+//           "aside.card",
+//           m(
+//             "header.row",
+//             m(
+//               "figure.col-2",
+//               m("img.avatar", {
+//                 style: { maxWidth: "100px" },
+//                 src: mdl.user.avatar || AVATAR_URL,
+//               }),
+//               m("caption", mdl.user.name)
+//             ),
+//             m(
+//               ".col-10",
+//               m(
+//                 "textarea.w100",
+//                 {
+//                   // style: { width: "80%" },
+//                   rows: 3,
+//                   onchange: (e) => (state.new.comment = e.target.value),
+//                 },
+//                 state.new.comment
+//               )
+//             )
+//           ),
+//           m("footer.is-right", m("button.is-right", "Submit"))
+//         ),
+//       comments &&
+//         comments.map((comment) =>
+//           m(
+//             "aside.row.card",
+//             m(
+//               "figure.col",
+//               m("img.avatar", {
+//                 style: { maxWidth: "100px" },
+//                 src: mdl.user.avatar || AVATAR_URL,
+//               }),
+//               m("label.row", "comment.user"),
+//               m("label.row", "comment.date")
+//             ),
+//             m("p.col", comment)
+//           )
+//         )
+//     ),
+// }
 
 const toBlogs = () => m.route.set("/social/blog")
 
@@ -143,7 +143,7 @@ const BlogPost = {
       : m(
           "section.fade.p-y-6.container",
           m(Post, { blog: state.blog, mdl }),
-          m(Comments, { blog: state.blog, comments: state.comments, mdl }),
+          // m(Comments, { blog: state.blog, comments: state.comments, mdl }),
           m(
             m.route.Link,
             {
