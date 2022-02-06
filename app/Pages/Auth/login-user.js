@@ -33,6 +33,12 @@ const validateForm = (mdl) => (data) => {
     .fork(onError, onSuccess(mdl))
 }
 
+const resetPassword = (mdl, state) => {
+  console.log(mdl, state)
+  state.showResetModal(false)
+  //reset password
+}
+
 const userModel = {
   name: "",
   email: "",
@@ -51,6 +57,7 @@ const state = {
   data: jsonCopy(dataModel),
   showErrorMsg: Stream(false),
   errorMsg: Stream(""),
+  showResetModal: Stream(false),
 }
 
 const resetState = () => {
@@ -60,6 +67,7 @@ const resetState = () => {
   state.isSubmitted = false
   state.showErrorMsg(false)
   state.errorMsg("")
+  state.showResetModal(false)
 }
 
 export const Login = () => {
@@ -138,6 +146,36 @@ export const Login = () => {
                 "LOGIN"
               ),
 
+              m(
+                "p.pointer.text-primary",
+                { onclick: () => state.showResetModal(true) },
+                "Need to reset password ?"
+              ),
+              state.showResetModal() &&
+                m(
+                  "section.modal-container",
+                  m(
+                    "article.modal.card.grid",
+                    m("header.modal-header", "Reset Password"),
+                    m(
+                      "section.modal-content",
+                      m("input", {
+                        placeholder: "Enter Email",
+                        value: state.data.userModel.email,
+                        onchange: (e) =>
+                          (state.data.userModel.email = e.target.value),
+                      })
+                    ),
+                    m(
+                      "section.modal-footer",
+                      m(
+                        "button",
+                        { onclick: () => resetPassword(mdl, state) },
+                        "Reset Password"
+                      )
+                    )
+                  )
+                ),
               state.httpError && m(".toast toast-error", state.httpError)
             ),
             m(
