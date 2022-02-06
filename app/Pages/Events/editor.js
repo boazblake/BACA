@@ -1,4 +1,3 @@
-import { log } from "Utils"
 import { handlers } from "Utils"
 
 const onInput = (event) =>

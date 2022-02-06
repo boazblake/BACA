@@ -16,7 +16,7 @@ const LegalRoutes = [
     children: ["deed-restrictions", "city-ordinances"],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
+      return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
         : PageTitle().scrollIntoView({
             behavior: "smooth",
@@ -36,7 +36,7 @@ const LegalRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
+      return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
         : PageTitle().scrollIntoView({
             behavior: "smooth",
@@ -56,7 +56,7 @@ const LegalRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
+      return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
         : PageTitle().scrollIntoView({
             behavior: "smooth",

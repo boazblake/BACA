@@ -1,4 +1,4 @@
-import { log, handlers, AVATAR_URL } from "Utils"
+import { handlers, AVATAR_URL } from "Utils"
 import { path } from "ramda"
 
 const state = { files: [], locations: [], address: "", status: "" }

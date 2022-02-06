@@ -250,16 +250,34 @@ const BlogEditor = () => {
 
           m(
             "section",
-            state.thumb && m("aside", m("img", { src: state.thumb })),
+            state.thumb &&
+              m(
+                "aside.col-6",
+                m("img.col-12", { src: state.thumb }),
+                m(
+                  "button.primary.col-12",
+                  {
+                    onclick: (e) => {
+                      e.preventDefault()
+                      state.thumb = ""
+                      state.img = ""
+                    },
+                  },
+                  "Remove image"
+                )
+              ),
             m(
-              "button.primary",
-              {
-                onclick: (e) => {
-                  e.preventDefault()
-                  state.showModal(!state.showModal())
+              ".col-12",
+              m(
+                "button.primary.col-6",
+                {
+                  onclick: (e) => {
+                    e.preventDefault()
+                    state.showModal(!state.showModal())
+                  },
                 },
-              },
-              state.thumb ? "Update Image" : "Add An Image"
+                state.thumb ? "Update Image" : "Add An Image"
+              )
             )
           ),
           state.showModal() && m(Modal, { state, mdl }),

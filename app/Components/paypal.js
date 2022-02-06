@@ -1,5 +1,5 @@
 import Task from "data.task"
-import { log, getTotal, toProducts, jsonCopy, saveStorageTask } from "Utils"
+import { getTotal, toProducts, jsonCopy, saveStorageTask } from "Utils"
 
 const makePaymentTask = (actions) => {
   log("makePaymentTask")(actions)

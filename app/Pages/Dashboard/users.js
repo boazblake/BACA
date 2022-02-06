@@ -1,5 +1,4 @@
 import { prop, filter } from "ramda"
-import { log } from "Utils"
 
 export const Users = () => {
   const state = {

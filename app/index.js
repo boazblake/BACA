@@ -11,6 +11,10 @@ Model.navState = Model.Routes.reduce((acc, r) => {
 
 const root = document.body
 let winW = window.innerWidth
+window.log = (m) => (v) => {
+  console.log(m, v)
+  return v
+}
 
 if (module.hot) {
   module.hot.accept()
@@ -71,6 +75,5 @@ if (sessionStorage.getItem("baca-session-token")) {
 const format = (hash) => JSON.stringify(hash).replace("#!", "")
 
 m.route(root, "/", App(Model))
-window.location.hash
-  ? m.route.set(format(window.location.hash))
-  : m.route.set("/about")
+
+m.route.set(window.location.hash ? format(window.location.hash) : "/about")

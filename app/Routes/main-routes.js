@@ -20,7 +20,7 @@ const Routes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
+      return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
         : window.scroll({
             top: 160,
@@ -40,7 +40,7 @@ const Routes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
+      return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
         : window.scroll({
             top: 160,
@@ -60,7 +60,7 @@ const Routes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
+      return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
         : PageTitle().scrollIntoView({
             behavior: "smooth",
@@ -80,7 +80,7 @@ const Routes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor
+      return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
         : PageTitle().scrollIntoView({
             behavior: "smooth",

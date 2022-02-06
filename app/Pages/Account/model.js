@@ -1,4 +1,3 @@
-import { log } from "Utils"
 import { toPairs, compose, map, prop, filter, keys, head } from "ramda"
 import { EditLine } from "@mithril-icons/clarity/cjs"
 import { RemoveLine } from "@mithril-icons/clarity/cjs"

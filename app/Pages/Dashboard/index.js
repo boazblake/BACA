@@ -1,8 +1,6 @@
-import { log } from "Utils"
 import { prop, filter } from "ramda"
 import { Table, formatDataForTable } from "Components/table.js"
-import { EditLine } from "@mithril-icons/clarity/cjs"
-import { RemoveLine } from "@mithril-icons/clarity/cjs"
+import { EditLine, RemoveLine } from "@mithril-icons/clarity/cjs"
 
 const nav = (role) => {
   let tabs = ["blogs", "events", "images"]
