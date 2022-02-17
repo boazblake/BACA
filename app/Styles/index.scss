@@ -358,6 +358,13 @@ header hgroup {
   // }
 }
 
+.modal-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .modal {
   background: var(--white);
   color: var(--font-color);

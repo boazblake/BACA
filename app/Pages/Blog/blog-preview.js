@@ -31,7 +31,9 @@ const BlogPreview = {
       ),
       m(
         "hgroup.col",
-        m.trust(HtmlSanitizer.SanitizeHtml(text.slice(0, 100))),
+        m.trust(
+          HtmlSanitizer.SanitizeHtml(text.replace(/<[^>]*>/g, "").slice(0, 100))
+        ),
         "...",
         m(
           m.route.Link,

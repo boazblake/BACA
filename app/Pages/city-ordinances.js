@@ -201,7 +201,7 @@ const Modal = () => {
         },
         m(
           "article.modal.container.card",
-          m("header.model-header", m("header.modal-header", m("h2", title))),
+          m("header.model-header", m("h2", title)),
           m("section.modal-content", contents)
         )
       ),

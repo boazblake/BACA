@@ -9,21 +9,19 @@ const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
     if (errs.code != 209) {
       state.errors = errs
-      state.errorMsg(errs.error)
-      state.showErrorMsg(errs.error)
-      console.log("failed - state", JSON.stringify(state))
+      state.msg(errs.error)
+      state.showMsg(errs.error)
     } else {
-      state.errorMsg(
+      state.msg(
         "There seems to be an issue with logging in. Have you registered or verified your email?"
       )
-      state.showErrorMsg(true)
-      console.log("failed - other?", state)
+      state.showMsg(true)
     }
   }
 
   const onSuccess = (mdl) => (_) => {
     state.errors = {}
-    m.route.set("/")
+    m.route.set("/home")
   }
 
   state.isSubmitted = true
@@ -35,15 +33,17 @@ const validateForm = (mdl) => (data) => {
 
 const resetPassword = (mdl, email) => {
   const onError = ({ message }) => {
-    state.errorMsg(message)
-    state.showErrorMsg(true)
+    state.msg(message)
+    state.showMsg(true)
     state.showResetModal(false)
-    console.log("er", message)
   }
 
-  const onSuccess = (data) => {
+  const onSuccess = () => {
     state.showResetModal(false)
-    console.log("data", data)
+    state.msg(
+      "A password reset request was sent to the email provided, please check your email to reset your password."
+    )
+    state.showMsg(true)
   }
 
   resetPasswordTask(mdl, email).fork(onError, onSuccess)
@@ -65,8 +65,8 @@ const state = {
   errors: {},
   httpError: undefined,
   data: jsonCopy(dataModel),
-  showErrorMsg: Stream(false),
-  errorMsg: Stream(""),
+  showMsg: Stream(false),
+  msg: Stream(""),
   showResetModal: Stream(false),
 }
 
@@ -75,8 +75,8 @@ const resetState = () => {
   state.errors = {}
   state.httpError = undefined
   state.isSubmitted = false
-  state.showErrorMsg(false)
-  state.errorMsg("")
+  state.showMsg(false)
+  state.msg("")
   state.showResetModal(false)
 }
 
@@ -89,7 +89,7 @@ export const Login = () => {
         : m(
             "section.container.p-y-50",
 
-            state.showErrorMsg() && m("p.text-error", state.errorMsg()),
+            state.showMsg() && m("p.text-error", state.msg()),
             m(
               "article.card",
               mdl.settings.screenSize != "phone" && {
@@ -163,17 +163,29 @@ export const Login = () => {
               ),
               state.showResetModal() &&
                 m(
-                  "section.modal-container",
+                  "section.modal-container#modal",
                   m(
                     "article.modal.card.grid",
-                    m("header.modal-header", "Reset Password"),
+                    m(
+                      "header.modal-header",
+                      "Reset Password",
+                      m(
+                        "button.button.icon-only",
+                        {
+                          id: "modal-close",
+                          "aria-label": "Close",
+                          onclick: () => state.showResetModal(false),
+                        },
+                        "X"
+                      )
+                    ),
                     m(
                       "section.modal-content",
                       m("input", {
                         type: "email",
                         placeholder: "Enter Email",
                         value: state.data.userModel.email,
-                        onchange: (e) =>
+                        oninput: (e) =>
                           (state.data.userModel.email = e.target.value),
                       })
                     ),

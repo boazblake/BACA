@@ -12,7 +12,7 @@ const setUserAndSessionToken = (mdl) => (user) => {
 export const loginUserTask =
   (mdl) =>
   ({ email, password }) => {
-    let login = encodeURI(`username=${email}&password=${btoa(password)}`)
+    let login = encodeURI(`username=${email}&password=${password}`)
     return mdl.http.back4App
       .getTask(mdl)(`login?${login}`)
       .map(setUserAndSessionToken(mdl))
@@ -60,7 +60,7 @@ export const loginTask =
     loginUserTask(mdl)({ email, password }).chain((_) => getUserInfoTask(mdl))
 
 export const resetPasswordTask = (mdl, email) =>
-  mdl.http.back4App.getTask(mdl)("requestPasswordReset", { email })
+  mdl.http.back4App.postTask(mdl)("requestPasswordReset")({ email })
 
 export const registerUserTask =
   (mdl) =>
@@ -69,7 +69,7 @@ export const registerUserTask =
       username: email,
       name,
       email,
-      password: btoa(password),
+      password,
       role,
     })
 

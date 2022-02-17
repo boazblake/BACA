@@ -126,13 +126,10 @@ const AuthenticatedRoutes = [
       mdl.user = {}
       console.log("loggout", mdl)
 
-      let routes = ["account"]
+      let routes = ["/account"]
       let currentRoute = m.route.get()
-      routes
-        .map((r) => currentRoute.includes(r))
-        .map(log("???"))
-        .contains(true)
-        ? m.route.set("/")
+      routes.map((r) => currentRoute.includes(r))
+        ? m.route.set("/home")
         : m.route.set(currentRoute)
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),

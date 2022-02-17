@@ -252,7 +252,7 @@ var Modal = {
       }
     }), m(".modal-container", {
       role: "document"
-    }, [m(".modal-header", [m("a.btn btn-clear float-right", {
+    }, [m("header.modal-header", [m("a.btn btn-clear float-right", {
       id: "modal-close",
       "aria-label": "Close",
       onclick: function onclick() {
@@ -1925,7 +1925,7 @@ var Toolbar = function Toolbar() {
       }, m(".nav-left.is-left", m("figure.pointer", m(m.route.Link, {
         selector: "img",
         id: "nav-logo",
-        href: "/",
+        href: "/home",
         src: "images/logo.webp"
       }))), mdl.settings.screenSize == "desktop" ? m(".nav-right", m(_authbox["default"], {
         mdl: mdl
@@ -2449,7 +2449,7 @@ var loginUserTask = function loginUserTask(mdl) {
   return function (_ref) {
     var email = _ref.email,
         password = _ref.password;
-    var login = encodeURI("username=".concat(email, "&password=").concat(btoa(password)));
+    var login = encodeURI("username=".concat(email, "&password=").concat(password));
     return mdl.http.back4App.getTask(mdl)("login?".concat(login)).map(setUserAndSessionToken(mdl));
   };
 };
@@ -2506,7 +2506,7 @@ var loginTask = function loginTask(mdl) {
 exports.loginTask = loginTask;
 
 var resetPasswordTask = function resetPasswordTask(mdl, email) {
-  return mdl.http.back4App.getTask(mdl)("requestPasswordReset", {
+  return mdl.http.back4App.postTask(mdl)("requestPasswordReset")({
     email: email
   });
 };
@@ -2523,7 +2523,7 @@ var registerUserTask = function registerUserTask(mdl) {
       username: email,
       name: name,
       email: email,
-      password: btoa(password),
+      password: password,
       role: role
     });
   };
@@ -2603,20 +2603,18 @@ var validateForm = function validateForm(mdl) {
     var onError = function onError(errs) {
       if (errs.code != 209) {
         state.errors = errs;
-        state.errorMsg(errs.error);
-        state.showErrorMsg(errs.error);
-        console.log("failed - state", JSON.stringify(state));
+        state.msg(errs.error);
+        state.showMsg(errs.error);
       } else {
-        state.errorMsg("There seems to be an issue with logging in. Have you registered or verified your email?");
-        state.showErrorMsg(true);
-        console.log("failed - other?", state);
+        state.msg("There seems to be an issue with logging in. Have you registered or verified your email?");
+        state.showMsg(true);
       }
     };
 
     var onSuccess = function onSuccess(mdl) {
       return function (_) {
         state.errors = {};
-        m.route.set("/");
+        m.route.set("/home");
       };
     };
 
@@ -2628,15 +2626,15 @@ var validateForm = function validateForm(mdl) {
 var resetPassword = function resetPassword(mdl, email) {
   var onError = function onError(_ref) {
     var message = _ref.message;
-    state.errorMsg(message);
-    state.showErrorMsg(true);
+    state.msg(message);
+    state.showMsg(true);
     state.showResetModal(false);
-    console.log("er", message);
   };
 
-  var onSuccess = function onSuccess(data) {
+  var onSuccess = function onSuccess() {
     state.showResetModal(false);
-    console.log("data", data);
+    state.msg("A password reset request was sent to the email provided, please check your email to reset your password.");
+    state.showMsg(true);
   };
 
   (0, _fns.resetPasswordTask)(mdl, email).fork(onError, onSuccess);
@@ -2658,8 +2656,8 @@ var state = {
   errors: {},
   httpError: undefined,
   data: (0, _Utils.jsonCopy)(dataModel),
-  showErrorMsg: Stream(false),
-  errorMsg: Stream(""),
+  showMsg: Stream(false),
+  msg: Stream(""),
   showResetModal: Stream(false)
 };
 
@@ -2668,8 +2666,8 @@ var resetState = function resetState() {
   state.errors = {};
   state.httpError = undefined;
   state.isSubmitted = false;
-  state.showErrorMsg(false);
-  state.errorMsg("");
+  state.showMsg(false);
+  state.msg("");
   state.showResetModal(false);
 };
 
@@ -2681,7 +2679,7 @@ var Login = function Login() {
     view: function view(_ref2) {
       var mdl = _ref2.attrs.mdl;
       return mdl.state.isLoading() ? "" //m(LogoLoader, { mdl })
-      : m("section.container.p-y-50", state.showErrorMsg() && m("p.text-error", state.errorMsg()), m("article.card", mdl.settings.screenSize != "phone" && {
+      : m("section.container.p-y-50", state.showMsg() && m("p.text-error", state.msg()), m("article.card", mdl.settings.screenSize != "phone" && {
         style: {
           maxWidth: "80%",
           margin: "0 auto"
@@ -2726,11 +2724,17 @@ var Login = function Login() {
         onclick: function onclick() {
           return state.showResetModal(true);
         }
-      }, "Need to reset password ?"), state.showResetModal() && m("section.modal-container", m("article.modal.card.grid", m("header.modal-header", "Reset Password"), m("section.modal-content", m("input", {
+      }, "Need to reset password ?"), state.showResetModal() && m("section.modal-container#modal", m("article.modal.card.grid", m("header.modal-header", "Reset Password", m("button.button.icon-only", {
+        id: "modal-close",
+        "aria-label": "Close",
+        onclick: function onclick() {
+          return state.showResetModal(false);
+        }
+      }, "X")), m("section.modal-content", m("input", {
         type: "email",
         placeholder: "Enter Email",
         value: state.data.userModel.email,
-        onchange: function onchange(e) {
+        oninput: function oninput(e) {
           return state.data.userModel.email = e.target.value;
         }
       })), m("section.modal-footer", m("button", {
@@ -3425,7 +3429,7 @@ var BlogPreview = {
         objectId = _ref$attrs$post.objectId;
     return m("article.card.col-6", m(".row", m("hgroup.col-8", m("h2.bold", title), m("h3"), m("p", "Added On ", createdAt, updatedAt !== createdAt && [" updated on ", updatedAt], " by ", author)), m("figure.col.is-horizontal-align", m("img", {
       src: thumb || "images/main.webp"
-    }))), m("hgroup.col", m.trust(_htmlSanitize["default"].SanitizeHtml(text.slice(0, 100))), "...", m(m.route.Link, // "a.pointer",
+    }))), m("hgroup.col", m.trust(_htmlSanitize["default"].SanitizeHtml(text.replace(/<[^>]*>/g, "").slice(0, 100))), "...", m(m.route.Link, // "a.pointer",
     {
       href: "/social/blog-post:".concat(objectId)
     }, "continue reading")), (author == mdl.user.name || ["admin", "mod"].includes(mdl.user.role)) && m("footer", m(m.route.Link, {
@@ -4871,7 +4875,7 @@ var Modal = function Modal() {
           state.contents = null;
           state.showModal(false);
         }
-      }, m("article.modal.container.card", m("header.model-header", m("header.modal-header", m("h2", title))), m("section.modal-content", contents)));
+      }, m("article.modal.container.card", m("header.model-header", m("h2", title)), m("section.modal-content", contents)));
     }
   };
 };
@@ -6548,11 +6552,11 @@ var AuthenticatedRoutes = [{
     mdl.state.isAuth(false);
     mdl.user = {};
     console.log("loggout", mdl);
-    var routes = ["account"];
+    var routes = ["/account"];
     var currentRoute = m.route.get();
     routes.map(function (r) {
       return currentRoute.includes(r);
-    }).map(log("???")).contains(true) ? m.route.set("/") : m.route.set(currentRoute);
+    }) ? m.route.set("/home") : m.route.set(currentRoute);
   },
   component: function component(mdl) {
     return m(_index2["default"], {
@@ -6715,10 +6719,33 @@ var Logo = m("img", {
   src: "images/logo.webp"
 });
 var Routes = [{
+  id: "root",
+  name: "About Bonham Acres",
+  // icon: Icons.home,
+  route: "/",
+  isNav: true,
+  group: ["toolbar"],
+  children: [],
+  options: [],
+  onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
+    return isAnchor ? (0, _index2.scrollToAnchor)(mdl.state.anchor) : window.scroll({
+      top: 160,
+      left: 0,
+      behavior: "smooth"
+    });
+  },
+  component: function component(mdl) {
+    return m(_index["default"], {
+      mdl: mdl
+    }, m(_about["default"], {
+      mdl: mdl
+    }));
+  }
+}, {
   id: "home",
   name: "Welcome to Bonham Acres Civic Association (BACA)",
   // icon: Icons.home,
-  route: "/",
+  route: "/home",
   isNav: true,
   group: ["toolbar"],
   children: [],
@@ -22299,12 +22326,7 @@ if (sessionStorage.getItem("baca-session-token")) {
   _index["default"].http.back4App.getTask(_index["default"])("users/me").fork(onError, onSuccess);
 }
 
-var format = function format(hash) {
-  return JSON.stringify(hash).replace("#!", "");
-};
-
 m.route(root, "/", (0, _app["default"])(_index["default"]));
-m.route.set(window.location.hash ? format(window.location.hash) : "/about");
 });
 
 ;require.register("initialize.js", function(exports, require, module) {
