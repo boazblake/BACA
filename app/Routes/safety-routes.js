@@ -21,11 +21,12 @@ const MemberRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
@@ -41,11 +42,12 @@ const MemberRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },

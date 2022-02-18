@@ -2,6 +2,15 @@ import { FunConfig } from "@boazblake/fun-config"
 import App from "./app.js"
 import Model from "Models/index.js"
 
+window.perf = (fn) => {
+  const startTime = performance.now()
+
+  // Do the normal stuff for this function
+
+  const duration = performance.now() - startTime
+  console.log(`${fn} took ${duration}ms`)
+}
+
 FunConfig.configure()
 
 Model.navState = Model.Routes.reduce((acc, r) => {
@@ -63,7 +72,7 @@ checkWidth(winW)
 if (sessionStorage.getItem("baca-session-token")) {
   const onError = (e) => {
     sessionStorage.clear()
-    console.error("shit", e)
+    console.error("problem fetching user", e)
   }
   const onSuccess = (user) => {
     Model.user = user

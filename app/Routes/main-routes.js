@@ -22,11 +22,12 @@ const Routes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scroll({
-            top: 160,
-            left: 0,
-            behavior: "smooth",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Home, { mdl })),
   },
@@ -42,11 +43,12 @@ const Routes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : window.scroll({
-            top: 160,
-            left: 0,
-            behavior: "smooth",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(About, { mdl })),
   },
@@ -55,18 +57,19 @@ const Routes = [
     name: "Contact BACA",
     // icon: Icons.search,
     route: "/contact",
-    isNav: false,
+    isNav: true,
     group: ["navmenu"],
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Contact, { mdl })),
   },
@@ -82,11 +85,12 @@ const Routes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(JoinBACA, { mdl })),
   },

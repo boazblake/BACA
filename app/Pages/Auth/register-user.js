@@ -123,6 +123,7 @@ export const Register = () => {
                     : "",
                   id: "reg-email",
                   type: "email",
+                  autocomplete: "username",
                   placeholder: "Email",
                   onkeyup: (e) => (state.data.userModel.email = e.target.value),
                   value: state.data.userModel.email,
@@ -140,6 +141,7 @@ export const Register = () => {
                       : "success"
                     : "",
                   type: "email",
+                  autocomplete: "username",
                   placeholder: "Confirm Email",
                   onkeyup: (e) =>
                     (state.data.userModel.confirmEmail = e.target.value),
@@ -163,6 +165,7 @@ export const Register = () => {
                     : "",
                   id: "reg-pass",
                   type: "password",
+                  autocomplete: "new-password",
                   placeholder: "Password",
                   onkeyup: (e) =>
                     (state.data.userModel.password = e.target.value),
@@ -182,6 +185,7 @@ export const Register = () => {
                     : "",
                   id: "pass-confirm",
                   type: "password",
+                  autocomplete: "new-password",
                   placeholder: "Confirm Password",
                   onkeyup: (e) =>
                     (state.data.userModel.confirmPassword = e.target.value),

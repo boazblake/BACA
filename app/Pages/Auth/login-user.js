@@ -115,6 +115,7 @@ export const Login = () => {
                       : "",
                     id: "reg-email",
                     type: "email",
+                    autocomplete: "username",
                     placeholder: "Email",
                     onkeyup: (e) => {
                       // state.isSubmitted && validateForm(mdl)(state.data)
@@ -134,6 +135,7 @@ export const Login = () => {
                       : "",
                     id: "reg-pass",
                     type: "password",
+                    autocomplete: "current-password",
                     placeholder: "Password",
                     onkeyup: (e) => {
                       // state.isSubmitted && validateForm(mdl)(state.data)
@@ -183,6 +185,7 @@ export const Login = () => {
                       "section.modal-content",
                       m("input", {
                         type: "email",
+                        autocomplete: "username",
                         placeholder: "Enter Email",
                         value: state.data.userModel.email,
                         oninput: (e) =>

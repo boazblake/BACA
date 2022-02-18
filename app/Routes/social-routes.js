@@ -28,11 +28,12 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
@@ -48,11 +49,12 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Events, { mdl })),
   },
@@ -68,11 +70,12 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Gallery, { mdl })),
   },
@@ -88,11 +91,12 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Album, { mdl })),
   },
@@ -108,11 +112,12 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Blog, { mdl })),
   },
@@ -128,11 +133,12 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(BlogEditor, { mdl })),
   },
@@ -149,11 +155,12 @@ const SocialRoutes = [
       m("blog-post", path)
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(BlogPost, { mdl })),
   },
@@ -169,11 +176,12 @@ const SocialRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },

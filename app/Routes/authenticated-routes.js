@@ -17,11 +17,12 @@ const AuthenticatedRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Account, { mdl })),
   },
@@ -37,11 +38,12 @@ const AuthenticatedRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Dashboard, { mdl })),
   },
@@ -66,11 +68,12 @@ const AuthenticatedRoutes = [
       )
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
@@ -96,11 +99,12 @@ const AuthenticatedRoutes = [
       mdl.user.role != "admin" && m.route.set(m.route.get())
       isAnchor
         ? scrollToAnchor(mdl.state.anchor)
-        : PageTitle().scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "start",
-          })
+        : () =>
+            PageTitle().scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "start",
+            })
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
@@ -114,11 +118,11 @@ const AuthenticatedRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      PageTitle().scroll({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      })
+      // PageTitle().scroll({
+      //   top: 0,
+      //   left: 0,
+      //   behavior: "smooth",
+      // })
 
       localStorage.clear()
       sessionStorage.clear()
