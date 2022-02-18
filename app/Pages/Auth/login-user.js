@@ -21,7 +21,7 @@ const validateForm = (mdl) => (data) => {
 
   const onSuccess = (mdl) => (_) => {
     state.errors = {}
-    m.route.set("/home")
+    m.route.set("/")
   }
 
   state.isSubmitted = true

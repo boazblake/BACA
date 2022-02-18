@@ -20,7 +20,7 @@ const Toolbar = () => {
             m(m.route.Link, {
               selector: "img",
               id: "nav-logo",
-              href: "/home",
+              href: "/",
               src: "images/logo.webp",
             })
           )

@@ -34,7 +34,7 @@ const state = {
   isAuth: Stream(false),
   navSelected: Stream(""),
   showNavModal: Stream(false),
-  navState: Stream("/home"),
+  navState: Stream("/"),
   subnavState: Stream(""),
   image: Stream(0),
   fab: Stream(0),

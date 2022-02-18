@@ -11,30 +11,10 @@ const Logo = m("img", {
 
 const Routes = [
   {
-    id: "root",
-    name: "About Bonham Acres",
-    // icon: Icons.home,
-    route: "/",
-    isNav: true,
-    group: ["toolbar"],
-    children: [],
-    options: [],
-    onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : window.scroll({
-            top: 160,
-            left: 0,
-            behavior: "smooth",
-          })
-    },
-    component: (mdl) => m(Layout, { mdl }, m(About, { mdl })),
-  },
-  {
     id: "home",
     name: "Welcome to Bonham Acres Civic Association (BACA)",
     // icon: Icons.home,
-    route: "/home",
+    route: "/",
     isNav: true,
     group: ["toolbar"],
     children: [],

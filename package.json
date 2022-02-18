@@ -9,9 +9,8 @@
     "fresh": "yarn run clean && yarn install && yarn run start",
     "debug": "export LOGGY_STACKS=1 && yarn run start",
     "start": "brunch watch --server",
-    "build:pre": "yarn caniuse; rm -rf docs",
-    "build": "yarn run build:pre && brunch build --production",
-    "caniuse": "npx browserslist@latest --update-db"
+    "build:pre": "rm -rf docs",
+    "build": "yarn run build:pre && brunch build --production"
   },
   "dependencies": {
     "@boazblake/fun-config": "git://github.com/boazblake/fun-config",
