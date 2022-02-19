@@ -4,7 +4,6 @@ import {
   resetEditorState,
   isInvalid,
   saveImgToGalleryTask,
-  toBlogs,
   deleteBlog,
   onInput,
 } from "./fns"
@@ -105,11 +104,9 @@ const initEditor =
 const handleImage = (mdl) => (state) =>
   state.file ? uploadImage(mdl)(state.file) : state.showModal(false)
 
-const onSubmitError = (e) => (state.errors.img = e)
-const onSubmitSuccess = () => toBlogs()
-
 const uploadImage = (mdl) => (file) => {
-  const onImgSuccess = ({ image, thumb }) => {
+  const onError = (e) => (state.errors.img = e)
+  const onSuccess = ({ image, thumb }) => {
     state.img = image
     state.thumb = thumb
     state.showModal(false)
@@ -120,12 +117,15 @@ const uploadImage = (mdl) => (file) => {
   mdl.http.imgBB
     .postTask(mdl)(image)
     .chain(saveImgToGalleryTask(mdl))
-    .fork(onSubmitError, onImgSuccess)
+    .fork(onError, onSuccess)
 }
 
 const submitBlog =
   (mdl) =>
   ({ title, img, text, thumb }) => {
+    const onError = (e) => console.log("e", e)
+    const onSuccess = () => m.route.set(`/social/blog-post:${state.objectId}`)
+
     let dto = {
       title,
       img,
@@ -137,7 +137,7 @@ const submitBlog =
       ? mdl.http.back4App.putTask(mdl)(`Classes/Blogs/${state.objectId}`)(dto)
       : mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto)
 
-    updateOrSubmitBlog.fork(onSubmitError, onSubmitSuccess)
+    updateOrSubmitBlog.fork(onError, onSuccess)
   }
 
 const assignImg = (img, thumb) => {
@@ -304,7 +304,9 @@ const BlogEditor = () => {
               m.route.Link,
               {
                 selector: "button.button.secondary",
-                href: "/social/blog",
+                href: state.objectId
+                  ? `/social/blog-post:${state.objectId}`
+                  : `/social/blog`,
               },
               "Cancel"
             ),

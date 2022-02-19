@@ -142,6 +142,17 @@ const BlogPost = {
       ? m(Loader)
       : m(
           "section.fade.p-y-6.container",
+          m(
+            m.route.Link,
+            {
+              selector: "button.button.primary.outline.icon",
+              href: "/social/blog",
+              class: "primary",
+            },
+            m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
+            "Back To Blogs"
+          ),
+
           m(Post, { blog: state.blog, mdl }),
           // m(Comments, { blog: state.blog, comments: state.comments, mdl }),
           m(
