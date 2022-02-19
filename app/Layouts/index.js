@@ -60,7 +60,6 @@ const Layout = {
       "#layout",
       { "data-theme": "light", id: "layout", role: "main" },
       m(Toolbar, { mdl }),
-      m(Hero, { mdl }),
       mdl.settings.screenSize == "desktop" &&
         m(
           "nav.navigation",
@@ -70,7 +69,7 @@ const Layout = {
           m(Navbar, { mdl }),
           m(SubNavbar, { mdl })
         ),
-
+      m(Hero, { mdl }),
       m(Main, { mdl, children }),
       showNavMenu(mdl) &&
         m(NavModal, {
