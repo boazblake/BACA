@@ -1194,11 +1194,6 @@ auto-reload-brunch@^2.7.1:
     anymatch "1.3.0"
     ws "~1.1.0"
 
-autobind-decorator@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.npmjs.org/autobind-decorator/-/autobind-decorator-2.4.0.tgz#ea9e1c98708cf3b5b356f7cf9f10f265ff18239c"
-  integrity sha512-OGYhWUO72V6DafbF8PM8rm3EPbfuyMZcJhtm5/n26IDwO18pohE4eNazLoCGhPiXOCD0gEGmrbU3849QvM8bbw==
-
 autoprefixer@^9.7.6:
   version "9.8.6"
   resolved "https://registry.npmjs.org/autoprefixer/-/autoprefixer-9.8.6.tgz#3b73594ca1bf9266320c5acf1588d74dea74210f"
@@ -2112,11 +2107,6 @@ core-js@^2.4.0:
   version "2.6.12"
   resolved "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
-
-core-js@^3.20.3:
-  version "3.21.0"
-  resolved "https://registry.npmjs.org/core-js/-/core-js-3.21.0.tgz#f479dbfc3dffb035a0827602dd056839a774aa71"
-  integrity sha512-YUdI3fFu4TF/2WykQ2xzSiTQdldLB4KVuL9WeAy5XONZYt5Cun/fpQvctoKbCgvPhmzADeesTk/j2Rdx77AcKQ==
 
 core-util-is@~1.0.0:
   version "1.0.2"
@@ -4370,14 +4360,6 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
-jodit@^3.9.6:
-  version "3.13.2"
-  resolved "https://registry.npmjs.org/jodit/-/jodit-3.13.2.tgz#184d8237d4658955604d394a44f04750d864f9ab"
-  integrity sha512-YFg5mdEw3fRXhU5ieC4M/YKYWQGYZS0KIlPuEhP+wT9eywQbdCrDSdY1V55YVIUC5kR2lyXNjrMdDdkrCEAdwQ==
-  dependencies:
-    autobind-decorator "^2.4.0"
-    core-js "^3.20.3"
-
 jpegtran-bin@^3.0.0:
   version "3.2.0"
   resolved "https://registry.npmjs.org/jpegtran-bin/-/jpegtran-bin-3.2.0.tgz#f60ecf4ae999c0bdad2e9fbcdf2b6f0981e7a29b"
@@ -6407,11 +6389,6 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
   integrity sha1-2kL0l0DAtC2yypcoVxyxkMmO/qM=
-
-siema@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.npmjs.org/siema/-/siema-1.5.1.tgz#eff312b77e8340fa4d81d5d053ebbeb9113ff888"
-  integrity sha1-7/MSt36DQPpNgdXQU+u+uRE/+Ig=
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.3"

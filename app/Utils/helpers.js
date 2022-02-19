@@ -149,6 +149,17 @@ export const handlers = (types, fn) =>
 export const exists = (xs) => xs.length >= 1
 export const oneExists = (xs, ys) => exists(xs) || exists(ys)
 
-export const PageTitle = () => document.getElementById("page-title")
+export const ScrollToPageTitle = () =>
+  document.getElementById("page-title")
+    ? document.getElementById("page-title").scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "start",
+      })
+    : window.scroll({
+        top: 160,
+        left: 0,
+        behavior: "smooth",
+      })
 
 export const AVATAR_URL = "https://i.ibb.co/6W0zsZH/avatar.webp"

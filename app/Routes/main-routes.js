@@ -3,7 +3,7 @@ import Contact from "Pages/contact.js"
 import Home from "Pages/home.js"
 import About from "Pages/about.js"
 import JoinBACA from "Pages/join-baca.js"
-import { scrollToAnchor, PageTitle } from "Utils/index.js"
+import { scrollToAnchor, ScrollToPageTitle } from "Utils/index.js"
 
 const Logo = m("img", {
   src: "images/logo.webp",
@@ -20,14 +20,7 @@ const Routes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : () =>
-            PageTitle().scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "start",
-            })
+      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Home, { mdl })),
   },
@@ -41,14 +34,7 @@ const Routes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : () =>
-            PageTitle().scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "start",
-            })
+      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(About, { mdl })),
   },
@@ -62,14 +48,7 @@ const Routes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : () =>
-            PageTitle().scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "start",
-            })
+      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Contact, { mdl })),
   },
@@ -83,14 +62,7 @@ const Routes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : () =>
-            PageTitle().scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "start",
-            })
+      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(JoinBACA, { mdl })),
   },

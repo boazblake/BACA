@@ -2,7 +2,7 @@ import Layout from "Layouts/index.js"
 import Default from "Pages/default.js"
 import Login from "Pages/Auth/login-user.js"
 import Register from "Pages/Auth/register-user.js"
-import { scrollToAnchor, PageTitle } from "Utils"
+import { scrollToAnchor, ScrollToPageTitle } from "Utils"
 
 const MemberRoutes = [
   {
@@ -15,14 +15,7 @@ const MemberRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : () =>
-            PageTitle().scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "start",
-            })
+      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
@@ -36,14 +29,7 @@ const MemberRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : () =>
-            PageTitle().scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "start",
-            })
+      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Login, { mdl })),
   },
@@ -57,14 +43,7 @@ const MemberRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : () =>
-            PageTitle().scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "start",
-            })
+      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Register, { mdl })),
   },
@@ -78,14 +57,7 @@ const MemberRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : () =>
-            PageTitle().scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "start",
-            })
+      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
@@ -99,14 +71,7 @@ const MemberRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor
-        ? scrollToAnchor(mdl.state.anchor)
-        : () =>
-            PageTitle().scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-              inline: "start",
-            })
+      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },

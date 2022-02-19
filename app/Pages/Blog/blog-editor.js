@@ -1,10 +1,15 @@
-import { handlers, exists } from "Utils"
-import Task from "data.task"
-import { Jodit } from "jodit"
+import { exists } from "Utils"
+import {
+  resetModalState,
+  resetEditorState,
+  isInvalid,
+  saveImgToGalleryTask,
+  toBlogs,
+  deleteBlog,
+  onInput,
+} from "./fns"
 
 const state = {
-  jodit: null,
-  editor: "",
   title: "",
   author: "",
   text: "",
@@ -22,24 +27,6 @@ const state = {
   },
 }
 
-const resetModalState = (state) => {
-  state.images = []
-  state.modalState("upload")
-}
-const resetEditorState = (state) => {
-  state.title = ""
-  state.author = ""
-  state.text = ""
-  state.img = ""
-  state.thumb = ""
-  state.file = null
-  state.jodit.value = null
-  state.showPreview(false)
-  state.isEditing(false)
-  state.showModal(false)
-  state.showHelp(false)
-}
-
 const fetchBlogImages = ({ attrs: { mdl, state } }) => {
   const onError = (e) => console.log(e)
   const onSuccess = ({ results }) => (state.images = results)
@@ -54,7 +41,7 @@ const setupEditor = ({ attrs: { mdl } }) => {
     state.img = img
     state.thumb = thumb
     state.objectId = objectId
-    state.jodit.value = state.text
+    state.editor.then((e) => e.setData(text))
   }
 
   let id = m.route.get().split(":")[1]
@@ -66,27 +53,68 @@ const setupEditor = ({ attrs: { mdl } }) => {
   }
 }
 
-const isInvalid = () => !exists(state.title) || !exists(state.text)
+const initEditor =
+  (state) =>
+  ({ dom }) => {
+    state.editor = ClassicEditor.create(dom, {
+      toolbar: [
+        "heading",
+        "selectAll",
+        "undo",
+        "redo",
+        "bold",
+        "italic",
+        "blockQuote",
+        "link",
+        "indent",
+        "outdent",
+        "numberedList",
+        "bulletedList",
+        "mediaEmbed",
+        "insertTable",
+        "tableColumn",
+        "tableRow",
+        "mergeTableCells",
+      ],
+      heading: {
+        options: [
+          {
+            model: "paragraph",
+            title: "Paragraph",
+            class: "ck-heading_paragraph",
+          },
+          {
+            model: "heading1",
+            view: "h1",
+            title: "Heading 1",
+            class: "ck-heading_heading1",
+          },
+          {
+            model: "heading2",
+            view: "h2",
+            title: "Heading 2",
+            class: "ck-heading_heading2",
+          },
+        ],
+      },
+    })
+
+    state.editor.then((e) => e.setData(state.text))
+  }
+
+const handleImage = (mdl) => (state) =>
+  state.file ? uploadImage(mdl)(state.file) : state.showModal(false)
 
 const onSubmitError = (e) => (state.errors.img = e)
-const onImgSuccess = ({ image, thumb }) => {
-  state.img = image
-  state.thumb = thumb
-  state.showModal(false)
-}
-
-const saveImgToGalleryTask =
-  (mdl) =>
-  ({ data: { image, thumb } }) =>
-    mdl.http.back4App
-      .postTask(mdl)("Classes/Gallery")({
-        album: "blog",
-        image: image.url,
-        thumb: thumb.url,
-      })
-      .chain((_) => Task.of({ image: image.url, thumb: thumb.url }))
+const onSubmitSuccess = () => toBlogs()
 
 const uploadImage = (mdl) => (file) => {
+  const onImgSuccess = ({ image, thumb }) => {
+    state.img = image
+    state.thumb = thumb
+    state.showModal(false)
+  }
+
   const image = new FormData()
   image.append("image", file)
   mdl.http.imgBB
@@ -94,13 +122,6 @@ const uploadImage = (mdl) => (file) => {
     .chain(saveImgToGalleryTask(mdl))
     .fork(onSubmitError, onImgSuccess)
 }
-
-const handleImage = (mdl) => (file) =>
-  file ? uploadImage(mdl)(file) : state.showModal(false)
-
-const toBlogs = () => m.route.set("/social/blog")
-
-const onSubmitSuccess = () => toBlogs()
 
 const submitBlog =
   (mdl) =>
@@ -128,11 +149,6 @@ const assignImg = (img, thumb) => {
     state.thumb = thumb
   }
 }
-
-const deleteBlog = (mdl) =>
-  mdl.http.back4App
-    .deleteTask(mdl)(`Classes/Blogs/${state.objectId}`)
-    .fork(toBlogs, toBlogs)
 
 const Modal = () => {
   return {
@@ -210,7 +226,7 @@ const Modal = () => {
                 {
                   onclick: (e) => {
                     e.preventDefault()
-                    handleImage(mdl)(state.file)
+                    handleImage(mdl)(state)
                   },
                   role: "button",
                   disabled: !state.file && !exists(state.img),
@@ -225,24 +241,15 @@ const Modal = () => {
 }
 
 const BlogEditor = () => {
-  const onInput = handlers(["oninput"], (e) => {
-    if (e.target.id == "file") {
-      state[e.target.id] = e.target.files[0]
-    } else {
-      state[e.target.id] = e.target.value
-    }
-  })
-
   return {
     onremove: () => resetEditorState(state),
     oninit: setupEditor,
     view: ({ attrs: { mdl } }) => {
-      // console.log(JSON.stringify(state))
       return m(
         ".grid",
         m(
           "form.container",
-          { ...onInput },
+          { ...onInput(state) },
           m(
             "section",
             m("label", "Title", m("input", { id: "title", value: state.title }))
@@ -284,19 +291,10 @@ const BlogEditor = () => {
 
           m(
             "section",
-            m("label", "Contents"),
-            m("#jodit", {
-              onupdate: (e) => (state.text = state.jodit.value),
-              oncreate: ({ dom }) => {
-                state.jodit = new Jodit(dom, {
-                  autofocus: true,
-                  uploader: {
-                    insertImageAsBase64URI: true,
-                  },
-                  toolbarButtonSize: "large",
-                  defaultActionOnPaste: "insert_clear_html",
-                })
-              },
+            m("#editor.fr-view", {
+              onupdate: (e) =>
+                state.editor.then((e) => (state.text = e.getData())),
+              oncreate: initEditor(state),
             })
           ),
 
@@ -313,7 +311,7 @@ const BlogEditor = () => {
             m(
               "button.button.primary",
               {
-                disabled: isInvalid(),
+                disabled: isInvalid(state),
                 onclick: (e) => {
                   e.preventDefault()
                   submitBlog(mdl)(state)
