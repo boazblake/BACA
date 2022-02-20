@@ -121,13 +121,9 @@ const deleteBlog = (mdl) =>
     .deleteTask(mdl)(`Classes/Blogs/${state.blog.objectId}`)
     .fork(toBlogs, toBlogs)
 
-const fetchBlogPost = ({ attrs: { mdl } }) => {
+const fetchBlogPost = ({ attrs: { mdl, id } }) => {
   const onError = (e) => console.log(e)
   const onSuccess = ([blog]) => (state.blog = blog)
-
-  let id = m.route.get().split(":")[1]
-  // return console.log(id, m.route.params)
-
   mdl.http.back4App
     .getTask(mdl)(`Classes/Blogs/${id}`)
     .map(Array.of)

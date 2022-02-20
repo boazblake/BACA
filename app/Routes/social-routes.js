@@ -7,6 +7,7 @@ import Gallery from "Pages/Gallery/gallery.js"
 import Album from "Pages/Gallery/album.js"
 import Events from "Pages/Events/index.js"
 import { scrollToAnchor, ScrollToPageTitle } from "Utils"
+import { m } from "mithril"
 
 const SocialRoutes = [
   {
@@ -110,10 +111,14 @@ const SocialRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      m("blog-post", path)
-      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
+      isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
+      mdl.blogpost = args.objectId.slice(1)
+      mdl.blogpost.length > 1
+        ? m(Layout, { mdl }, m(BlogPost, { mdl, id: mdl.blogpost }))
+        : m.route.SKIP
     },
-    component: (mdl) => m(Layout, { mdl }, m(BlogPost, { mdl })),
+    component: (mdl) =>
+      m(Layout, { mdl }, m(BlogPost, { mdl, id: mdl.blogpost })),
   },
   {
     id: "map-of-bonham-acres",
