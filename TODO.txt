@@ -1,0 +1,2 @@
+1. fix reeroute after save blog
+2. add loader screen (montage of images)
