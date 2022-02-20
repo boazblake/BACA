@@ -16,6 +16,7 @@ export const resetEditorState = (state) => {
   state.isEditing(false)
   state.showModal(false)
   state.showHelp(false)
+  state.objectId = null
 }
 
 export const isInvalid = (s) => !exists(s.title) || !exists(s.text)
@@ -33,9 +34,9 @@ export const saveImgToGalleryTask =
 
 export const toBlogs = () => m.route.set("/social/blog")
 
-export const deleteBlog = (mdl) =>
+export const deleteBlog = (mdl) => (id) =>
   mdl.http.back4App
-    .deleteTask(mdl)(`Classes/Blogs/${state.objectId}`)
+    .deleteTask(mdl)(`Classes/Blogs/${id}`)
     .fork(toBlogs, toBlogs)
 
 export const onInput = (state) =>

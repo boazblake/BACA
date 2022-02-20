@@ -6,9 +6,11 @@ import {
   saveImgToGalleryTask,
   deleteBlog,
   onInput,
+  toBlogs,
 } from "./fns"
 
 const state = {
+  objectId: null,
   title: "",
   author: "",
   text: "",
@@ -122,9 +124,10 @@ const uploadImage = (mdl) => (file) => {
 
 const submitBlog =
   (mdl) =>
-  ({ title, img, text, thumb }) => {
+  ({ title, img, text, thumb, objectId }) => {
     const onError = (e) => console.log("e", e)
-    const onSuccess = () => m.route.set(`/social/blog-post:${state.objectId}`)
+    const onSuccess = (data) =>
+      m.route.set(`/social/blog-post:${objectId ? objectId : data.objectId}`)
 
     let dto = {
       title,
@@ -133,8 +136,8 @@ const submitBlog =
       author: mdl.user.name,
       thumb,
     }
-    const updateOrSubmitBlog = state.objectId
-      ? mdl.http.back4App.putTask(mdl)(`Classes/Blogs/${state.objectId}`)(dto)
+    const updateOrSubmitBlog = objectId
+      ? mdl.http.back4App.putTask(mdl)(`Classes/Blogs/${objectId}`)(dto)
       : mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto)
 
     updateOrSubmitBlog.fork(onError, onSuccess)
@@ -324,7 +327,12 @@ const BlogEditor = () => {
             state.isEditing() &&
               m(
                 "button.button.error",
-                { onclick: (e) => deleteBlog(mdl) },
+                {
+                  onclick: (e) => {
+                    e.preventDefault()
+                    deleteBlog(mdl)(state.objectId)
+                  },
+                },
                 "Delete"
               )
           )
