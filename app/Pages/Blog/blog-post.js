@@ -6,6 +6,7 @@ import { toViewModel } from "./blog"
 import Loader from "Components/loader.js"
 
 const state = {
+  status: "loading",
   blog: null,
   comments: null,
   new: {
@@ -122,8 +123,15 @@ const deleteBlog = (mdl) =>
     .fork(toBlogs, toBlogs)
 
 const fetchBlogPost = ({ attrs: { mdl, id } }) => {
-  const onError = (e) => console.log(e)
-  const onSuccess = ([blog]) => (state.blog = blog)
+  const onError = (e) => {
+    log("fetchBlogPost")(e)
+    e.code == 101 && m.route.set("/social/blog")
+    state.status = "error"
+  }
+  const onSuccess = ([blog]) => {
+    state.blog = blog
+    state.status = "loaded"
+  }
   mdl.http.back4App
     .getTask(mdl)(`Classes/Blogs/${id}`)
     .map(Array.of)
@@ -134,34 +142,36 @@ const fetchBlogPost = ({ attrs: { mdl, id } }) => {
 const BlogPost = {
   oninit: fetchBlogPost,
   view: ({ attrs: { mdl } }) =>
-    mdl.state.isLoading()
-      ? m(Loader)
-      : m(
-          "section.fade.p-y-6.container",
-          m(
-            m.route.Link,
-            {
-              selector: "button.button.primary.outline.icon",
-              href: "/social/blog",
-              class: "primary",
-            },
-            m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
-            "Back To Blogs"
-          ),
-
-          m(Post, { blog: state.blog, mdl }),
-          // m(Comments, { blog: state.blog, comments: state.comments, mdl }),
-          m(
-            m.route.Link,
-            {
-              selector: "button.button.primary.outline.icon",
-              href: "/social/blog",
-              class: "primary",
-            },
-            m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
-            "Back To Blogs"
-          )
+    m(
+      "section.fade.p-y-6.container",
+      state.status == "error" && m("p", "error redirecting"),
+      state.status == "loading" && m(Loader),
+      state.status == "loaded" && [
+        m(
+          m.route.Link,
+          {
+            selector: "button.button.primary.outline.icon",
+            href: "/social/blog",
+            class: "primary",
+          },
+          m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
+          "Back To Blogs"
         ),
+
+        m(Post, { blog: state.blog, mdl }),
+        // m(Comments, { blog: state.blog, comments: state.comments, mdl }),
+        m(
+          m.route.Link,
+          {
+            selector: "button.button.primary.outline.icon",
+            href: "/social/blog",
+            class: "primary",
+          },
+          m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
+          "Back To Blogs"
+        ),
+      ]
+    ),
 }
 
 export default BlogPost

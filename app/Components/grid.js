@@ -1,10 +1,10 @@
-const getOverFlow = (mdl, overflow) => {
-  console.log(
-    mdl.settings.screenSize,
-    mdl.settings.screenSize == "phone" ? "none" : overflow
-  )
-  return mdl.settings.screenSize == "phone" ? "none" : overflow
-}
+// const getOverFlow = (mdl, overflow) => {
+//   console.log(
+//     mdl.settings.screenSize,
+//     mdl.settings.screenSize == "phone" ? "none" : overflow
+//   )
+//   return mdl.settings.screenSize == "phone" ? "none" : overflow
+// }
 
 const Fig = {
   view: ({ children, attrs: { id } }) =>

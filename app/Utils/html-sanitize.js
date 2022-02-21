@@ -47,11 +47,22 @@ const HtmlSanitizer = new (function () {
     VIDEO: true,
   }
 
-  var contentTagWhiteList_ = { FORM: true } //tags that will be converted to DIVs
+  var contentTagWhiteList_ = {
+    FORM: true,
+    TABLE: true,
+    FIGURE: true,
+    TABLE: true,
+    TBODY: true,
+    TR: true,
+    TD: true,
+    TH: true,
+    THEAD: true,
+  } //tags that will be converted to DIVs
 
   var attributeWhitelist_ = {
     align: true,
     color: true,
+    class: true,
     controls: true,
     height: true,
     href: true,

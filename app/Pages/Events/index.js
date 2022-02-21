@@ -1,6 +1,6 @@
 import Calendar from "./calendar"
 import Editor from "./editor"
-import Event from "./event"
+import EventPreview from "./event"
 import { propEq, prop, head, tail, clone } from "ramda"
 import Loader from "Components/loader.js"
 import Task from "data.task"
@@ -214,7 +214,7 @@ const Events = {
         }),
 
       state.previewEvent() &&
-        m(Event, {
+        m(EventPreview, {
           mdl,
           state,
           editEvent: state.showEditor,

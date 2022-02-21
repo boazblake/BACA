@@ -8,8 +8,13 @@ import { SlideOutRight, SlideInLeft } from "Styles/animations.js"
 import Toolbar from "./toolbar.js"
 import Login from "Pages/Auth/login-user.js"
 import Register from "Pages/Auth/register-user.js"
+import Loader from "Components/loader"
 import Task from "data.task"
 import { head, map, prop, tail } from "ramda"
+
+const state = {
+  status: "loading",
+}
 
 const showNavMenu = (mdl) =>
   mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal()
@@ -35,11 +40,15 @@ const toEventViewModel = (event) => {
 const fetchTask = (mdl) => (url) => mdl.http.back4App.getTask(mdl)(url)
 
 export const fetchAll = ({ attrs: { mdl } }) => {
-  const onError = (e) => console.error(e)
+  const onError = (e) => {
+    log("fetchAll - layout - error")(e)
+    state.status = "error"
+  }
   const onSuccess = ({ events, images, blogs }) => {
     mdl.data.events = events
     mdl.data.images = images
     mdl.data.blogs = blogs
+    state.status = "loaded"
   }
 
   Task.of((events) => (images) => (blogs) => ({ events, images, blogs }))
@@ -70,7 +79,10 @@ const Layout = {
           m(SubNavbar, { mdl })
         ),
       m(Hero, { mdl }),
-      m(Main, { mdl, children }),
+      state.status == "error" && m("p", "ERROR"),
+      state.status == "loading" && m(Loader),
+      state.status == "loaded" &&
+        m("section.animated.zoomIn", m(Main, { mdl, children })),
       showNavMenu(mdl) &&
         m(NavModal, {
           oncreate: SlideInLeft,

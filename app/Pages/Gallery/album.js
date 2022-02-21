@@ -40,7 +40,7 @@ const deleteAlbum = (mdl) => {
 
 const deleteImg = (mdl, pic) => {
   // console.log(pic)
-  const onError = (e) => console.log(e)
+  const onError = (e) => log("deleteImg - error")(e)
   const onSuccess = () => fetchAlbum({ attrs: { mdl } })
 
   deleteImageTask(mdl)(pic).fork(onError, onSuccess)
@@ -49,10 +49,13 @@ const deleteImg = (mdl, pic) => {
 const fetchAlbum = ({ attrs: { mdl } }) => {
   let album = m.route.get().split(":")[1].replaceAll("%20", " ")
   let byAlbumName = encodeURI(`where={"album":"${album}"}`)
-  const onError = (e) => console.log(e)
+  const onError = (e) => {
+    log("fetchAlbum - error")(e)
+  }
   const onSuccess = ({ results }) => {
-    state.album = results
-    state.title = album
+    results.any()
+      ? ((state.album = results), (state.title = album))
+      : m.route.set("/social/gallery")
   }
 
   mdl.http.back4App

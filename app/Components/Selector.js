@@ -13,7 +13,7 @@ const Selector = () => {
 
   const saveToStorage = (mdl) => {
     const onError = (e) => {
-      console.log("Error saving", e.message)
+      log("saveToStorage - error")(e)
       state.error(e.message)
     }
     const onSuccess = (s) => {

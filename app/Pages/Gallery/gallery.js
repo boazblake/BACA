@@ -10,7 +10,7 @@ const state = {
 const groupByAlbum = compose(groupBy(prop("album")), prop("results"))
 
 const fetchAllAlbums = ({ attrs: { mdl } }) => {
-  const onError = (e) => console.log(e)
+  const onError = (e) => log("fetchAllAlbums- error")(e)
   const onSuccess = (albums) => (state.albums = albums)
 
   mdl.http.back4App
@@ -30,7 +30,7 @@ const saveImgToGalleryTask =
     })
 
 const createtNewAlbum = (mdl) => {
-  const onError = (e) => console.log(e)
+  const onError = (e) => log("createtNewAlbum- error")(e)
   const onSuccess = () => {
     state.newAlbum = { title: "", img: "" }
     state.showModal(false)

@@ -6,10 +6,11 @@ import {
   saveImgToGalleryTask,
   deleteBlog,
   onInput,
-  toBlogs,
 } from "./fns"
+import Loader from "Components/loader.js"
 
 const state = {
+  status: "loading",
   objectId: null,
   title: "",
   author: "",
@@ -29,13 +30,17 @@ const state = {
 }
 
 const fetchBlogImages = ({ attrs: { mdl, state } }) => {
-  const onError = (e) => console.log(e)
+  const onError = (e) => log("fetchBlogImages - error")(e)
   const onSuccess = ({ results }) => (state.images = results)
   mdl.http.back4App.getTask(mdl)("Classes/Gallery").fork(onError, onSuccess)
 }
 
 const setupEditor = ({ attrs: { mdl } }) => {
-  const onError = (e) => console.log(e)
+  const onError = (e) => {
+    log("setupEditor error")(e)
+    state.status = "error"
+    e.code == 101 && m.route.set("/social/blog")
+  }
   const onSuccess = ({ title, text, img, thumb, objectId }) => {
     state.title = title
     state.text = text
@@ -43,6 +48,7 @@ const setupEditor = ({ attrs: { mdl } }) => {
     state.thumb = thumb
     state.objectId = objectId
     state.editor.then((e) => e.setData(text))
+    state.status = "loaded"
   }
 
   let id = m.route.get().split(":")[1]
@@ -160,7 +166,6 @@ const Modal = () => {
     view: ({ attrs: { mdl, state } }) =>
       m(
         "section.modal-container",
-
         m(
           "article.modal.card.grid",
           m(
@@ -250,93 +255,101 @@ const BlogEditor = () => {
     view: ({ attrs: { mdl } }) => {
       return m(
         ".grid",
-        m(
-          "form.container",
-          { ...onInput(state) },
+        state.status == "loading" && m(Loader),
+        state.status == "error" && m("p", "Error - redirecting"),
+        (state.status =
+          "loaded" &&
           m(
-            "section",
-            m("label", "Title", m("input", { id: "title", value: state.title }))
-          ),
-
-          m(
-            "section",
-            state.thumb &&
+            "form.container",
+            { ...onInput(state) },
+            m(
+              "section",
               m(
-                "aside.col-6",
-                m("img.col-12", { src: state.thumb }),
+                "label",
+                "Title",
+                m("input", { id: "title", value: state.title })
+              )
+            ),
+
+            m(
+              "section",
+              state.thumb &&
                 m(
-                  "button.primary.col-12",
+                  "aside.col-6",
+                  m("img.col-12", { src: state.thumb }),
+                  m(
+                    "button.primary.col-12",
+                    {
+                      onclick: (e) => {
+                        e.preventDefault()
+                        state.thumb = ""
+                        state.img = ""
+                      },
+                    },
+                    "Remove image"
+                  )
+                ),
+              m(
+                ".col-12",
+                m(
+                  "button.primary.col-6",
                   {
                     onclick: (e) => {
                       e.preventDefault()
-                      state.thumb = ""
-                      state.img = ""
+                      state.showModal(!state.showModal())
                     },
                   },
-                  "Remove image"
+                  state.thumb ? "Update Image" : "Add An Image"
                 )
+              )
+            ),
+            state.showModal() && m(Modal, { state, mdl }),
+
+            m(
+              "section",
+              m("#editor.fr-view", {
+                onupdate: (e) =>
+                  state.editor.then((e) => (state.text = e.getData())),
+                oncreate: initEditor(state),
+              })
+            ),
+
+            m(
+              "nav.container.grouped.is-center",
+              m(
+                m.route.Link,
+                {
+                  selector: "button.button.secondary",
+                  href: state.objectId
+                    ? `/social/blog-post:${state.objectId}`
+                    : `/social/blog`,
+                },
+                "Cancel"
               ),
-            m(
-              ".col-12",
               m(
-                "button.primary.col-6",
+                "button.button.primary",
                 {
+                  disabled: isInvalid(state),
                   onclick: (e) => {
                     e.preventDefault()
-                    state.showModal(!state.showModal())
+                    submitBlog(mdl)(state)
                   },
                 },
-                state.thumb ? "Update Image" : "Add An Image"
-              )
+                state.objectId ? "Update" : "Submit"
+              ),
+              state.isEditing() &&
+                m(
+                  "button.button.error",
+                  {
+                    onclick: (e) => {
+                      e.preventDefault()
+                      deleteBlog(mdl)(state.objectId)
+                    },
+                  },
+                  "Delete"
+                )
             )
-          ),
-          state.showModal() && m(Modal, { state, mdl }),
-
-          m(
-            "section",
-            m("#editor.fr-view", {
-              onupdate: (e) =>
-                state.editor.then((e) => (state.text = e.getData())),
-              oncreate: initEditor(state),
-            })
-          ),
-
-          m(
-            "nav.container.grouped.is-center",
-            m(
-              m.route.Link,
-              {
-                selector: "button.button.secondary",
-                href: state.objectId
-                  ? `/social/blog-post:${state.objectId}`
-                  : `/social/blog`,
-              },
-              "Cancel"
-            ),
-            m(
-              "button.button.primary",
-              {
-                disabled: isInvalid(state),
-                onclick: (e) => {
-                  e.preventDefault()
-                  submitBlog(mdl)(state)
-                },
-              },
-              state.objectId ? "Update" : "Submit"
-            ),
-            state.isEditing() &&
-              m(
-                "button.button.error",
-                {
-                  onclick: (e) => {
-                    e.preventDefault()
-                    deleteBlog(mdl)(state.objectId)
-                  },
-                },
-                "Delete"
-              )
-          )
-        )
+          ))
       )
     },
   }
