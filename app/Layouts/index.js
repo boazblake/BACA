@@ -25,6 +25,14 @@ const vertAlign = (mdl) => {
     : ""
 }
 
+const onLayout =
+  (mdl) =>
+  ({ dom }) => {
+    log("mdl")(mdl)
+    mdl.settings.screenSize == "desktop" &&
+      dom.parentNode.addEventListener("scroll", (e) => onBodyScroll(mdl)(e))
+  }
+
 const toEventViewModel = (event) => {
   let start = event.start.split("T")
   return {
@@ -42,6 +50,7 @@ const fetchTask = (mdl) => (url) => mdl.http.back4App.getTask(mdl)(url)
 export const fetchAll = ({ attrs: { mdl } }) => {
   const onError = (e) => {
     log("fetchAll - layout - error")(e)
+    e.code == 504 && fetchAll({ attrs: { mdl } })
     state.status = "error"
   }
   const onSuccess = ({ events, images, blogs }) => {
@@ -62,12 +71,21 @@ export const fetchAll = ({ attrs: { mdl } }) => {
     .fork(onError, onSuccess)
 }
 
+const onBodyScroll = (mdl) => (e) => {
+  log("event")(e.target.scrollTop)
+}
+
 const Layout = {
   oninit: fetchAll,
   view: ({ children, attrs: { mdl } }) =>
     m(
       "#layout",
-      { "data-theme": "light", id: "layout", role: "main" },
+      {
+        oncreate: onLayout(mdl),
+        "data-theme": "light",
+        id: "layout",
+        role: "main",
+      },
       m(Toolbar, { mdl }),
       mdl.settings.screenSize == "desktop" &&
         m(

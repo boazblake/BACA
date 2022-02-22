@@ -82,6 +82,12 @@
   //   --spacing-gutter: 1rem;
   //   --spacing-typography: 1.5rem;
   --spacing-form-element: 0.25rem;
+  overflow: hidden;
+}
+
+body {
+    overflow-y: scroll;
+    max-height: 100vh;
 }
 
 body.dark {

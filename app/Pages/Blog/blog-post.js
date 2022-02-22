@@ -125,7 +125,7 @@ const deleteBlog = (mdl) =>
 const fetchBlogPost = ({ attrs: { mdl, id } }) => {
   const onError = (e) => {
     log("fetchBlogPost")(e)
-    e.code == 101 && m.route.set("/social/blog")
+    e.code == 404 && m.route.set("/social/blog")
     state.status = "error"
   }
   const onSuccess = ([blog]) => {

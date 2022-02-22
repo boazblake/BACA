@@ -38,7 +38,8 @@ const xhrProgress = (mdl) => ({
 
 export const parseHttpError = (mdl) => (rej) => (e) => {
   mdl.state.isLoading(false)
-  return rej(e.response)
+
+  return rej(JSON.parse(JSON.stringify(e)))
 }
 
 export const parseHttpSuccess = (mdl) => (res) => (data) => {

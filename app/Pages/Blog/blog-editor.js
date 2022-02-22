@@ -39,7 +39,7 @@ const setupEditor = ({ attrs: { mdl } }) => {
   const onError = (e) => {
     log("setupEditor error")(e)
     state.status = "error"
-    e.code == 101 && m.route.set("/social/blog")
+    e.code == 404 && m.route.set("/social/blog")
   }
   const onSuccess = ({ title, text, img, thumb, objectId }) => {
     state.title = title

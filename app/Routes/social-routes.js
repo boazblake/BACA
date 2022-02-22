@@ -93,7 +93,7 @@ const SocialRoutes = [
     // icon: Icons.home,
     route: "/social/blog-editor:objectId",
     isNav: false,
-    group: ["social"],
+    group: ["social", "authenticated"],
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
