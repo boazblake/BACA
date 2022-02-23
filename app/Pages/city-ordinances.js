@@ -194,6 +194,12 @@ const Modal = () => {
       m(
         "article.modal-container",
         {
+          oncreate: ({ dom }) =>
+            dom.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+              inline: "center",
+            }),
           onclick: () => {
             state.contents = null
             state.showModal(false)

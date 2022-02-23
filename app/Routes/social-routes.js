@@ -7,7 +7,6 @@ import Gallery from "Pages/Gallery/gallery.js"
 import Album from "Pages/Gallery/album.js"
 import Events from "Pages/Events/index.js"
 import { scrollToAnchor, ScrollToPageTitle } from "Utils"
-import { m } from "mithril"
 
 const SocialRoutes = [
   {
