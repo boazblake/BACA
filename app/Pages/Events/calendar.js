@@ -1,4 +1,5 @@
 import { propEq, head, tail } from "ramda"
+import FullCalendar from "Utils/fullcalendar.min.js"
 
 const getCellDate = (target) => {
   if (["MAIN", "BUTTON"].includes(target.tagName)) return null
