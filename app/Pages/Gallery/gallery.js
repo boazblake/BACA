@@ -37,10 +37,8 @@ const createtNewAlbum = (mdl) => {
     fetchAllAlbums({ attrs: { mdl } })
   }
 
-  const image = new FormData()
-  image.append("image", state.newAlbum.img)
   mdl.http.imgBB
-    .postTask(mdl)(image)
+    .postTask(mdl)(state.newAlbum.img)
     .chain(saveImgToGalleryTask(mdl))
     .fork(onError, onSuccess)
 }

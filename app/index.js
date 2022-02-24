@@ -20,6 +20,7 @@ Model.navState = Model.Routes.reduce((acc, r) => {
 
 const root = document.body
 let winW = window.innerWidth
+
 window.log = (m) => (v) => {
   console.log(m, v)
   return v

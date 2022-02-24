@@ -137,10 +137,9 @@ const saveImgToGalleryTask =
 
 const uploadImage = (mdl) => (file) => {
   state.status("uploading-image")
-  const image = new FormData()
-  image.append("image", file)
+
   mdl.http.imgBB
-    .postTask(mdl)(image)
+    .postTask(mdl)(file)
     .chain(saveImgToGalleryTask(mdl))
     .fork(onImgError, onImgSuccess)
 }

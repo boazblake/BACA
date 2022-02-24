@@ -112,9 +112,13 @@ const back4App = {
 }
 
 const imgBB = {
-  postTask: (mdl) => (dto) => {
-    dto.set("key", IMGBB.apiKey)
-    return HttpTask()("POST")(mdl)(`${IMGBB.url}?key=${IMGBB.apiKey}`)(dto)
+  postTask: (mdl) => (file) => {
+    const image = new FormData()
+    image.append("image", file)
+    image.set("key", IMGBB.apiKey)
+
+    console.log(image, file)
+    return HttpTask()("POST")(mdl)(`${IMGBB.url}?key=${IMGBB.apiKey}`)(image)
   },
 }
 

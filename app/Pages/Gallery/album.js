@@ -72,11 +72,8 @@ const saveImgToGalleryTask =
       thumb: thumb.url,
     })
 
-const uploadImage = (mdl) => (file) => {
-  const image = new FormData()
-  image.append("image", file)
-  return mdl.http.imgBB.postTask(mdl)(image).chain(saveImgToGalleryTask(mdl))
-}
+const uploadImage = (mdl) => (file) =>
+  mdl.http.imgBB.postTask(mdl)(file).chain(saveImgToGalleryTask(mdl))
 
 const submitImages = (mdl, images) => {
   state.isUpLoading(true)

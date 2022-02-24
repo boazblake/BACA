@@ -1,10 +1,12 @@
 import Profile from "./profile"
+import PayPal from "./paypal"
 import { loadAllTask } from "./model"
 import { Table, formatDataForTable } from "Components/table.js"
 
 const nav = () => [
   "profile",
-  // "dues", "messages"
+  "dues",
+  //"messages"
 ]
 
 const state = {
@@ -18,7 +20,6 @@ const loadAll = (mdl) => {
     mdl.data.dues = dues
     mdl.data.messages = messages
     state.status = "success"
-    console.log(mdl)
   }
   const onError = (e) => {
     state.status = "error"
@@ -55,61 +56,13 @@ const Account = () => {
             ),
             m(
               "section.container",
-              state.tab == "profile" && [
+              state.tab == "profile" &&
                 m(Profile, { mdl, data: mdl.data.profile }),
-                m("#payment-request-button", {
-                  oncreate: ({ dom }) =>
-                    paypal
-                      .Buttons({
-                        style: {
-                          shape: "rect",
-                          color: "gold",
-                          layout: "vertical",
-                          label: "paypal",
-                        },
-
-                        createOrder: function (data, actions) {
-                          log("createOrder")(data)
-                          return actions.order.create({
-                            purchase_units: [
-                              { amount: { currency_code: "USD", value: 50 } },
-                            ],
-                          })
-                        },
-
-                        onApprove: function (data, actions) {
-                          log("onApprove")(data)
-                          return actions.order
-                            .capture()
-                            .then(function (orderData) {
-                              // Full available details
-                              console.log(
-                                "Capture result",
-                                orderData,
-                                JSON.stringify(orderData, null, 2)
-                              )
-
-                              // Show a success message within this page, e.g.
-                              const element = document.getElementById(
-                                "paypal-button-container"
-                              )
-                              element.innerHTML = ""
-                              element.innerHTML =
-                                "<h3>Thank you for your payment!</h3>"
-
-                              // Or go to another URL:  actions.redirect('thank_you.html');
-                            })
-                        },
-
-                        onError: function (err) {
-                          console.log(err)
-                        },
-                      })
-                      .render(dom),
-                }),
+              state.tab == "dues" && [
+                m(PayPal, { mdl, data: mdl.data.profile }),
+                mdl.data.dues.any() &&
+                  m(Table, { mdl, ...formatDataForTable(mdl.data.dues) }),
               ],
-              state.tab == "dues" &&
-                m(Table, { mdl, ...formatDataForTable(mdl.data.dues) }),
               state.tab == "messages" &&
                 m(Table, { mdl, ...formatDataForTable(mdl.data.messages) })
             )

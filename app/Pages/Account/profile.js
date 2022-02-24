@@ -3,34 +3,40 @@ import { path } from "ramda"
 
 const state = { files: [], locations: [], address: "", status: "" }
 
-const onError = (e) => {
-  console.log("error", e)
+const getImageSrc = (data) =>
+  data.avatar && !data.avatar.includes("fake") ? data.avatar : AVATAR_URL
+
+const onError = (x) => {
+  log("on error  profile")(x)
 }
-const onSuccess = (s) => {
-  console.log("success", s)
+const onSuccess = (x) => {
+  log("onsuccess = profile")(x)
 }
 
-const updateProfile = (mdl) => (data) =>
+const updateProfileTask = (mdl) => (data) =>
   mdl.http.back4App.putTask(mdl)(
     `Classes/Accounts/${mdl.data.profile.objectId}`
   )(data)
 
+const removeImage = (mdl, data) => {
+  data.avatar = null
+  updateProfileTask(mdl)(data).fork(log("e"), log("s"))
+}
+
 const updateProfileMeta =
   (mdl) =>
   ({ name, email, address }) =>
-    updateProfile(mdl)({ name, email, address }).fork(onError, onSuccess)
+    updateProfileTask(mdl)({ name, email, address }).fork(onError, onSuccess)
 
 const uploadImage = (mdl) => (file) => {
-  const image = new FormData()
-  image.append("image", file)
   mdl.http.imgBB
-    .postTask(mdl)(image)
+    .postTask(mdl)(file[0])
     .map(path(["data", "thumb", "url"]))
     .map((avatar) => {
       state.avatar = avatar
       return { avatar }
     })
-    .chain(updateProfile(mdl))
+    .chain(updateProfileTask(mdl))
     .map(() => (mdl.data.profile.avatar = state.avatar))
     .fork(onError, onSuccess)
 }
@@ -50,6 +56,7 @@ const onInput = (profile) =>
 const Profile = () => {
   return {
     view: ({ attrs: { mdl, data } }) => {
+      log("mdl")(mdl)
       return m(
         "section.p-y-50",
         m(
@@ -57,23 +64,30 @@ const Profile = () => {
           { ...onInput(data) },
           m(
             "figure.col",
-            m("img.avatar", { src: data.avatar ? data.avatar : AVATAR_URL }),
+            m("img.avatar", {
+              src: getImageSrc(data),
+            }),
             m(
               "figcaption",
               { style: { width: "180px" } },
-              m(
-                "label.button",
-                { label: "profile-pic" },
-                "update profile picture",
-                m("input", {
-                  style: { display: "none" },
-                  type: "file",
-                  id: "profile-pic",
-                  value: state.files,
-                  onchange: (e) => uploadImage(mdl)(e.target.files),
-                })
-              ),
-              ""
+              data.avatar
+                ? m(
+                    "button.button",
+                    { onclick: (e) => removeImage(mdl, data) },
+                    "Remove Profile Pic"
+                  )
+                : m(
+                    "label.button",
+                    { label: "profile-pic" },
+                    "Add profile picture",
+                    m("input", {
+                      style: { display: "none" },
+                      type: "file",
+                      id: "avatar",
+                      value: state.files,
+                      onchange: (e) => uploadImage(mdl)(e.target.files),
+                    })
+                  )
             )
           ),
           m(

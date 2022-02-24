@@ -2084,6 +2084,8 @@ exports["default"] = void 0;
 
 var _profile = _interopRequireDefault(require("./profile"));
 
+var _paypal = _interopRequireDefault(require("./paypal"));
+
 var _model = require("./model");
 
 var _table = require("Components/table.js");
@@ -2097,7 +2099,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var nav = function nav() {
-  return ["profile" // "dues", "messages"
+  return ["profile", "dues" //"messages"
   ];
 };
 
@@ -2115,7 +2117,6 @@ var loadAll = function loadAll(mdl) {
     mdl.data.dues = dues;
     mdl.data.messages = messages;
     state.status = "success";
-    console.log(mdl);
   };
 
   var onError = function onError(e) {
@@ -2142,49 +2143,15 @@ var Account = function Account() {
             return state.tab = tab;
           }
         }, tab.toUpperCase());
-      })), m("section.container", state.tab == "profile" && [m(_profile["default"], {
+      })), m("section.container", state.tab == "profile" && m(_profile["default"], {
         mdl: mdl,
         data: mdl.data.profile
-      }), m("#payment-request-button", {
-        oncreate: function oncreate(_ref4) {
-          var dom = _ref4.dom;
-          return paypal.Buttons({
-            style: {
-              shape: "rect",
-              color: "gold",
-              layout: "vertical",
-              label: "paypal"
-            },
-            createOrder: function createOrder(data, actions) {
-              log("createOrder")(data);
-              return actions.order.create({
-                purchase_units: [{
-                  amount: {
-                    currency_code: "USD",
-                    value: 50
-                  }
-                }]
-              });
-            },
-            onApprove: function onApprove(data, actions) {
-              log("onApprove")(data);
-              return actions.order.capture().then(function (orderData) {
-                // Full available details
-                console.log("Capture result", orderData, JSON.stringify(orderData, null, 2)); // Show a success message within this page, e.g.
-
-                var element = document.getElementById("paypal-button-container");
-                element.innerHTML = "";
-                element.innerHTML = "<h3>Thank you for your payment!</h3>"; // Or go to another URL:  actions.redirect('thank_you.html');
-              });
-            },
-            onError: function onError(err) {
-              console.log(err);
-            }
-          }).render(dom);
-        }
-      })], state.tab == "dues" && m(_table.Table, _objectSpread({
+      }), state.tab == "dues" && [m(_paypal["default"], {
+        mdl: mdl,
+        data: mdl.data.profile
+      }), mdl.data.dues.any() && m(_table.Table, _objectSpread({
         mdl: mdl
-      }, (0, _table.formatDataForTable)(mdl.data.dues))), state.tab == "messages" && m(_table.Table, _objectSpread({
+      }, (0, _table.formatDataForTable)(mdl.data.dues)))], state.tab == "messages" && m(_table.Table, _objectSpread({
         mdl: mdl
       }, (0, _table.formatDataForTable)(mdl.data.messages))))));
     }
@@ -2274,6 +2241,73 @@ var loadAllTask = function loadAllTask(mdl) {
 exports.loadAllTask = loadAllTask;
 });
 
+;require.register("Pages/Account/paypal.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var PayPal = function PayPal() {
+  var state = {
+    paydues: false
+  };
+
+  var togglePaypal = function togglePaypal() {
+    return state.paydues = !state.paydues;
+  };
+
+  return {
+    view: function view() {
+      return m("section", state.paydues ? m("#payment-request-button", {
+        oncreate: function oncreate(_ref) {
+          var dom = _ref.dom;
+          console.log(paypal);
+          paypal.Buttons({
+            style: {
+              shape: "rect",
+              color: "silver",
+              layout: "vertical",
+              label: "pay"
+            },
+            createOrder: function createOrder(data, actions) {
+              var res = actions.order.create({
+                purchase_units: [{
+                  amount: {
+                    currency_code: "USD",
+                    value: 50
+                  }
+                }]
+              });
+              log("createOrder")(res);
+              return res;
+            },
+            onApprove: function onApprove(data, actions) {
+              log("onApprove")(data);
+              return actions.order.capture().then(function (orderData) {
+                // Full available details
+                log("Capture result")(JSON.stringify(orderData, null, 2));
+              });
+            },
+            onError: function onError(err) {
+              log("onError with paypal")(err);
+            }
+          }).render(dom);
+        }
+      }, m("button.button", {
+        onclick: togglePaypal
+      }, "Close")) : m("button.button", {
+        onclick: togglePaypal
+      }, "Pay Dues"));
+    }
+  };
+};
+
+var _default = PayPal;
+exports["default"] = _default;
+});
+
 ;require.register("Pages/Account/profile.js", function(exports, require, module) {
 "use strict";
 
@@ -2299,18 +2333,27 @@ var state = {
   status: ""
 };
 
-var onError = function onError(e) {
-  console.log("error", e);
+var getImageSrc = function getImageSrc(data) {
+  return data.avatar && !data.avatar.includes("fake") ? data.avatar : _Utils.AVATAR_URL;
 };
 
-var onSuccess = function onSuccess(s) {
-  console.log("success", s);
+var onError = function onError(x) {
+  log("on error  profile")(x);
 };
 
-var updateProfile = function updateProfile(mdl) {
+var onSuccess = function onSuccess(x) {
+  log("onsuccess = profile")(x);
+};
+
+var updateProfileTask = function updateProfileTask(mdl) {
   return function (data) {
     return mdl.http.back4App.putTask(mdl)("Classes/Accounts/".concat(mdl.data.profile.objectId))(data);
   };
+};
+
+var removeImage = function removeImage(mdl, data) {
+  data.avatar = null;
+  updateProfileTask(mdl)(data).fork(log("e"), log("s"));
 };
 
 var updateProfileMeta = function updateProfileMeta(mdl) {
@@ -2318,7 +2361,7 @@ var updateProfileMeta = function updateProfileMeta(mdl) {
     var name = _ref.name,
         email = _ref.email,
         address = _ref.address;
-    return updateProfile(mdl)({
+    return updateProfileTask(mdl)({
       name: name,
       email: email,
       address: address
@@ -2328,14 +2371,12 @@ var updateProfileMeta = function updateProfileMeta(mdl) {
 
 var uploadImage = function uploadImage(mdl) {
   return function (file) {
-    var image = new FormData();
-    image.append("image", file);
-    mdl.http.imgBB.postTask(mdl)(image).map((0, _ramda.path)(["data", "thumb", "url"])).map(function (avatar) {
+    mdl.http.imgBB.postTask(mdl)(file[0]).map((0, _ramda.path)(["data", "thumb", "url"])).map(function (avatar) {
       state.avatar = avatar;
       return {
         avatar: avatar
       };
-    }).chain(updateProfile(mdl)).map(function () {
+    }).chain(updateProfileTask(mdl)).map(function () {
       return mdl.data.profile.avatar = state.avatar;
     }).fork(onError, onSuccess);
   };
@@ -2361,25 +2402,30 @@ var Profile = function Profile() {
       var _ref2$attrs = _ref2.attrs,
           mdl = _ref2$attrs.mdl,
           data = _ref2$attrs.data;
+      log("mdl")(mdl);
       return m("section.p-y-50", m("article.row", _objectSpread({}, onInput(data)), m("figure.col", m("img.avatar", {
-        src: data.avatar ? data.avatar : _Utils.AVATAR_URL
+        src: getImageSrc(data)
       }), m("figcaption", {
         style: {
           width: "180px"
         }
-      }, m("label.button", {
+      }, data.avatar ? m("button.button", {
+        onclick: function onclick(e) {
+          return removeImage(mdl, data);
+        }
+      }, "Remove Profile Pic") : m("label.button", {
         label: "profile-pic"
-      }, "update profile picture", m("input", {
+      }, "Add profile picture", m("input", {
         style: {
           display: "none"
         },
         type: "file",
-        id: "profile-pic",
+        id: "avatar",
         value: state.files,
         onchange: function onchange(e) {
           return uploadImage(mdl)(e.target.files);
         }
-      })), "")), m("form.col", !data.emailVerified && m("label.warning", "email not verified"), m("label", "name", m("input", {
+      })))), m("form.col", !data.emailVerified && m("label.warning", "email not verified"), m("label", "name", m("input", {
         id: "name",
         value: data.name
       })), m("label", "email", m("input", {
@@ -3145,9 +3191,7 @@ var uploadImage = function uploadImage(mdl) {
       state.showModal(false);
     };
 
-    var image = new FormData();
-    image.append("image", file);
-    mdl.http.imgBB.postTask(mdl)(image).chain((0, _fns.saveImgToGalleryTask)(mdl)).fork(onError, onSuccess);
+    mdl.http.imgBB.postTask(mdl)(file).chain((0, _fns.saveImgToGalleryTask)(mdl)).fork(onError, onSuccess);
   };
 };
 
@@ -4398,9 +4442,7 @@ var saveImgToGalleryTask = function saveImgToGalleryTask(mdl) {
 var uploadImage = function uploadImage(mdl) {
   return function (file) {
     state.status("uploading-image");
-    var image = new FormData();
-    image.append("image", file);
-    mdl.http.imgBB.postTask(mdl)(image).chain(saveImgToGalleryTask(mdl)).fork(onImgError, onImgSuccess);
+    mdl.http.imgBB.postTask(mdl)(file).chain(saveImgToGalleryTask(mdl)).fork(onImgError, onImgSuccess);
   };
 };
 
@@ -4634,9 +4676,7 @@ var saveImgToGalleryTask = function saveImgToGalleryTask(mdl) {
 
 var uploadImage = function uploadImage(mdl) {
   return function (file) {
-    var image = new FormData();
-    image.append("image", file);
-    return mdl.http.imgBB.postTask(mdl)(image).chain(saveImgToGalleryTask(mdl));
+    return mdl.http.imgBB.postTask(mdl)(file).chain(saveImgToGalleryTask(mdl));
   };
 };
 
@@ -4835,9 +4875,7 @@ var createtNewAlbum = function createtNewAlbum(mdl) {
     });
   };
 
-  var image = new FormData();
-  image.append("image", state.newAlbum.img);
-  mdl.http.imgBB.postTask(mdl)(image).chain(saveImgToGalleryTask(mdl)).fork(onError, onSuccess);
+  mdl.http.imgBB.postTask(mdl)(state.newAlbum.img).chain(saveImgToGalleryTask(mdl)).fork(onError, onSuccess);
 };
 
 var AlbumCover = {
@@ -20774,9 +20812,12 @@ var back4App = {
 };
 var imgBB = {
   postTask: function postTask(mdl) {
-    return function (dto) {
-      dto.set("key", _secrets.IMGBB.apiKey);
-      return HttpTask()("POST")(mdl)("".concat(_secrets.IMGBB.url, "?key=").concat(_secrets.IMGBB.apiKey))(dto);
+    return function (file) {
+      var image = new FormData();
+      image.append("image", file);
+      image.set("key", _secrets.IMGBB.apiKey);
+      console.log(image, file);
+      return HttpTask()("POST")(mdl)("".concat(_secrets.IMGBB.url, "?key=").concat(_secrets.IMGBB.apiKey))(image);
     };
   }
 };
