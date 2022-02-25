@@ -10,10 +10,11 @@ import Login from "Pages/Auth/login-user.js"
 import Register from "Pages/Auth/register-user.js"
 import Loader from "Components/loader"
 import Task from "data.task"
-import { head, map, prop, tail } from "ramda"
+import { clamp, head, map, max, min, prop, tail } from "ramda"
 
 const state = {
   status: "loading",
+  distanceFromTop: 0,
 }
 
 const showNavMenu = (mdl) =>
@@ -25,12 +26,14 @@ const vertAlign = (mdl) => {
     : ""
 }
 
+const onBodyScroll = () => (state.distanceFromTop = e.target.scrollTop)
+
 const onLayout =
   (mdl) =>
   ({ dom }) => {
     log("mdl")(mdl)
     mdl.settings.screenSize == "desktop" &&
-      dom.parentNode.addEventListener("scroll", (e) => onBodyScroll(mdl)(e))
+      dom.parentNode.addEventListener("scroll", onBodyScroll)
   }
 
 const toEventViewModel = (event) => {
@@ -69,10 +72,6 @@ export const fetchAll = ({ attrs: { mdl } }) => {
     .ap(fetchTask(mdl)("Classes/Gallery").map(prop("results")))
     .ap(fetchTask(mdl)("Classes/Blogs").map(prop("results")))
     .fork(onError, onSuccess)
-}
-
-const onBodyScroll = (mdl) => (e) => {
-  log("event")(e.target.scrollTop)
 }
 
 const Layout = {
