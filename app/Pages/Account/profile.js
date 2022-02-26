@@ -55,25 +55,25 @@ const onInput = (profile) =>
 
 const Profile = () => {
   return {
-    view: ({ attrs: { mdl, data } }) => {
+    view: ({ attrs: { mdl } }) => {
       log("mdl")(mdl)
       return m(
         "section.p-y-50",
         m(
           "article.row",
-          { ...onInput(data) },
+          { ...onInput(mdl.data.profile) },
           m(
             "figure.col",
             m("img.avatar", {
-              src: getImageSrc(data),
+              src: getImageSrc(mdl.data.profile),
             }),
             m(
               "figcaption",
               { style: { width: "180px" } },
-              data.avatar
+              mdl.data.profile.avatar
                 ? m(
                     "button.button",
-                    { onclick: (e) => removeImage(mdl, data) },
+                    { onclick: (e) => removeImage(mdl, mdl.data.profile) },
                     "Remove Profile Pic"
                   )
                 : m(
@@ -92,9 +92,18 @@ const Profile = () => {
           ),
           m(
             "form.col",
-            !data.emailVerified && m("label.warning", "email not verified"),
-            m("label", "name", m("input", { id: "name", value: data.name })),
-            m("label", "email", m("input", { id: "email", value: data.email })),
+            !mdl.data.profile.emailVerified &&
+              m("label.warning", "email not verified"),
+            m(
+              "label",
+              "name",
+              m("input", { id: "name", value: mdl.data.profile.name })
+            ),
+            m(
+              "label",
+              "email",
+              m("input", { id: "email", value: mdl.data.profile.email })
+            ),
             m(
               "label.icon",
               "Address",
@@ -117,7 +126,7 @@ const Profile = () => {
                   }
                 },
                 id: "address",
-                value: data.address,
+                value: mdl.data.profile.address,
               })
             ),
             state.locations.any() &&
@@ -134,7 +143,7 @@ const Profile = () => {
                         "li.pointer",
                         {
                           onclick: (e) => {
-                            data.address = formatted
+                            mdl.data.profile.address = formatted
                             state.locations = []
                           },
                         },
@@ -152,7 +161,7 @@ const Profile = () => {
             ".nav-left",
             m(
               "button.button.primary",
-              { onclick: () => updateProfileMeta(mdl)(data) },
+              { onclick: () => updateProfileMeta(mdl)(mdl.data.profile) },
               "Update"
             )
           )

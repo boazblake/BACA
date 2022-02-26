@@ -1,10 +1,12 @@
-import { toPairs, compose, map, keys } from "ramda"
+import { toPairs, compose, map, keys, clone } from "ramda"
 
 const toColCell = (x) => ({ col: x[0], val: x[1] })
 
-export const formatDataForTable = (data) => {
-  let cols = Array.from(new Set(data.flatMap(keys)))
-  let rows = compose(map(map(toColCell)), map(toPairs))(data)
+export const formatDataForTable = (removeProps, data) => {
+  let dto = clone(data)
+  removeProps.forEach((prop) => dto.map((d) => delete d[prop]))
+  let cols = Array.from(new Set(dto.flatMap(keys)))
+  let rows = compose(map(map(toColCell)), map(toPairs))(dto)
   return { cols, rows }
 }
 

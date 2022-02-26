@@ -1,13 +1,9 @@
 import Profile from "./profile"
-import PayPal from "./paypal"
+import Dues from "./dues"
+import Messages from "./messages"
 import { loadAllTask } from "./model"
-import { Table, formatDataForTable } from "Components/table.js"
 
-const nav = () => [
-  "profile",
-  "dues",
-  //"messages"
-]
+const nav = () => ["profile", "dues", "messages"]
 
 const state = {
   tab: "profile",
@@ -56,15 +52,9 @@ const Account = () => {
             ),
             m(
               "section.container",
-              state.tab == "profile" &&
-                m(Profile, { mdl, data: mdl.data.profile }),
-              state.tab == "dues" && [
-                m(PayPal, { mdl, data: mdl.data.profile }),
-                mdl.data.dues.any() &&
-                  m(Table, { mdl, ...formatDataForTable(mdl.data.dues) }),
-              ],
-              state.tab == "messages" &&
-                m(Table, { mdl, ...formatDataForTable(mdl.data.messages) })
+              state.tab == "profile" && m(Profile, { mdl }),
+              state.tab == "dues" && m(Dues, { mdl, reload: loadAll }),
+              state.tab == "messages" && m(Messages, { mdl })
             )
           )
       ),

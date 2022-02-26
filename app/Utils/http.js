@@ -85,11 +85,11 @@ const paypal = {
       paypalUrl + "v1/oauth2/token/"
     )(`grant_type=client_credentials`).map(updatePayPalAuth(mdl)),
   getTask: (mdl) => (url) =>
-    HttpTask(PAYPAL.sandbox.headers(mdl))("GET")(mdl)(paypalUrl + url)(null),
+    HttpTask(PAYPAL.sandbox.headers(PAYPAL))("GET")(mdl)(paypalUrl + url)(null),
   postTask: (mdl) => (url) => (dto) =>
-    HttpTask(PAYPAL.sandbox.headers(mdl))("POST")(mdl)(paypalUrl + url)(dto),
+    HttpTask(PAYPAL.sandbox.headers(PAYPAL))("POST")(mdl)(paypalUrl + url)(dto),
   putTask: (mdl) => (url) => (dto) =>
-    HttpTask(PAYPAL.sandbox.headers(mdl))("PUT")(mdl)(paypalUrl + url)(dto),
+    HttpTask(PAYPAL.sandbox.headers(PAYPAL))("PUT")(mdl)(paypalUrl + url)(dto),
 }
 
 const back4App = {
@@ -135,7 +135,7 @@ const http = {
   imgBB,
   openCage,
   back4App,
-  // paypal,
+  paypal,
   HttpTask,
   getTask,
   lookupLocationTask,

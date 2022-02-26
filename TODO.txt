@@ -1,2 +1,3 @@
-1. fix reeroute after bad route to dynamic
-2. add loader screen (montage of images)
+1. Add pp
+2. create invoice
+

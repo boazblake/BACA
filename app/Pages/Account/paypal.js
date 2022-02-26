@@ -1,10 +1,60 @@
-const PayPal = () => {
+import Task from "data.task"
+import { values } from "ramda"
+
+const makePaymentTask = (actions) =>
+  new Task((rej, res) => actions.order.capture().then(res, rej))
+
+const formatInvoice =
+  (mdl) =>
+  ({
+    create_time,
+    status,
+    payer: { email_address },
+    purchase_units: {
+      0: {
+        shipping: {
+          address,
+          name: { full_name },
+        },
+      },
+    },
+  }) => ({
+    date: create_time,
+    status,
+    full_name,
+    email: email_address,
+    address: values(address).join(" "),
+    userId: mdl.user.objectId,
+  })
+
+const saveInvoiceTask = (mdl) => (invoice) =>
+  mdl.http.back4App.postTask(mdl)("classes/Dues")(invoice)
+
+const PayPal = ({ attrs: { mdl, reload } }) => {
   const state = {
     paydues: false,
   }
+
   const togglePaypal = () => (state.paydues = !state.paydues)
+
+  const onSuccess = (mdl, reload) => (data) => {
+    log("on success", [state, data])
+    reload(mdl)
+  }
+
+  const onError = (mdl, state) => (error) => {
+    log("on onErrpr", [state, error])
+  }
+
+  const makePayment = (actions) => {
+    makePaymentTask(actions)
+      .map(formatInvoice(mdl))
+      .chain(saveInvoiceTask(mdl))
+      .fork(onError(mdl, state), onSuccess(mdl, reload))
+  }
+
   return {
-    view: () =>
+    view: ({ attrs: { mdl, status } }) =>
       m(
         "section",
         state.paydues
@@ -12,9 +62,7 @@ const PayPal = () => {
               "#payment-request-button",
               {
                 oncreate: ({ dom }) => {
-                  console.log(paypal)
                   paypal
-
                     .Buttons({
                       style: {
                         shape: "rect",
@@ -23,30 +71,17 @@ const PayPal = () => {
                         label: "pay",
                       },
 
-                      createOrder: function (data, actions) {
-                        let res = actions.order.create({
+                      createOrder: (data, actions) => {
+                        return actions.order.create({
                           purchase_units: [
                             { amount: { currency_code: "USD", value: 50 } },
                           ],
                         })
-                        log("createOrder")(res)
-                        return res
                       },
 
-                      onApprove: function (data, actions) {
-                        log("onApprove")(data)
-                        return actions.order
-                          .capture()
-                          .then(function (orderData) {
-                            // Full available details
-                            log("Capture result")(
-                              JSON.stringify(orderData, null, 2)
-                            )
-                          })
-                      },
-
-                      onError: function (err) {
-                        log("onError with paypal")(err)
+                      onApprove: (data, actions) => {
+                        status.paypal = "start"
+                        return makePayment(actions)
                       },
                     })
                     .render(dom)
