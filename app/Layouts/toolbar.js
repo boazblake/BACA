@@ -1,5 +1,6 @@
 import Hamburger from "Components/Hamburger.js"
 import AuthBox from "Components/authbox.js"
+import { ScrollToPageTitle } from "Utils"
 
 const Toolbar = () => {
   return {
@@ -27,7 +28,16 @@ const Toolbar = () => {
         ),
 
         mdl.settings.screenSize == "desktop"
-          ? m(".nav-right", m(AuthBox, { mdl }))
+          ? m(
+              ".nav-right is-right",
+              mdl.state.showNavMenu() &&
+                m(
+                  "Button.button success m-r-16",
+                  { onclick: () => ScrollToPageTitle() },
+                  "Show Menu"
+                ),
+              m(AuthBox, { mdl })
+            )
           : m(
               ".nav-right is-right",
               {

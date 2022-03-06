@@ -6,14 +6,14 @@ const AuthBox = () => {
     view: ({ attrs: { mdl } }) =>
       mdl.state.isAuth()
         ? m(
-            ".grouped.is-center",
+            ".is-center",
             ["admin", "mod"].includes(mdl.user.role) &&
               m(NavLink, {
                 mdl,
-                href: `/dashboard/${mdl.user.name}`,
-                link: "Dashboard",
+                href: `/admin/${mdl.user.name}`,
+                link: "Admin",
                 classList: `${isActiveRoute(
-                  `/dashboard/${mdl.user.name}`
+                  `/admin/${mdl.user.name}`
                 )} button dark`,
               }),
             m(NavLink, {

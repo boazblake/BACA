@@ -1,6 +1,6 @@
 import Default from "Pages/default.js"
 import Account from "Pages/Account/index.js"
-import Dashboard from "Pages/Dashboard"
+import Admin from "Pages/Admin"
 import Layout from "Layouts/index.js"
 import { scrollToAnchor, ScrollToPageTitle } from "Utils"
 
@@ -20,10 +20,10 @@ const AuthenticatedRoutes = [
     component: (mdl) => m(Layout, { mdl }, m(Account, { mdl })),
   },
   {
-    id: "dashboard",
-    name: "Dashboard",
+    id: "admin",
+    name: "Admin",
     // icon: Icons.logo,
-    route: "/dashboard/:name",
+    route: "/admin/:name",
     position: ["toolbar"],
     group: ["authenticated"],
     children: [],
@@ -31,7 +31,7 @@ const AuthenticatedRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
-    component: (mdl) => m(Layout, { mdl }, m(Dashboard, { mdl })),
+    component: (mdl) => m(Layout, { mdl }, m(Admin, { mdl })),
   },
   {
     id: "profile-page",

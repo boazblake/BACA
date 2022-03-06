@@ -29,6 +29,7 @@ const state = {
   isAuth: Stream(false),
   navSelected: Stream(""),
   showNavModal: Stream(false),
+  showNavMenu: Stream(false),
   navState: Stream("/"),
   subnavState: Stream(""),
   image: Stream(0),
@@ -36,6 +37,7 @@ const state = {
   editBlog: Stream(false),
   showAuthModal: Stream(false),
   selectedPreviewEvent: Stream(null),
+  distanceFromTop: Stream(0),
 }
 const user = {
   role: "user",

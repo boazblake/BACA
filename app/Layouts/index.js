@@ -14,7 +14,17 @@ import { head, map, prop, tail } from "ramda"
 
 const state = {
   status: "loading",
-  distanceFromTop: 0,
+  navDom: null,
+}
+
+const updateNavigationPostion = (dom, showNav) => {
+  if (dom) {
+    return showNav
+      ? (dom.classList.add("fadeOut"), "unset")
+      : (dom.classList.remove("fadeOut"), "sticky")
+  } else {
+    return showNav ? "unset" : "sticky"
+  }
 }
 
 const showNavMenu = (mdl) =>
@@ -26,14 +36,24 @@ const vertAlign = (mdl) => {
     : ""
 }
 
-const onBodyScroll = (e) => (state.distanceFromTop = e.target.scrollTop)
-
+const onBodyScroll =
+  (mdl) =>
+  ({ target: { scrollTop } }) => {
+    mdl.state.distanceFromTop(scrollTop)
+    if (scrollTop >= 300) {
+      mdl.state.showNavMenu(true)
+      m.redraw()
+    } else {
+      mdl.state.showNavMenu(false)
+      m.redraw()
+    }
+  }
 const onLayout =
   (mdl) =>
   ({ dom }) => {
     log("mdl")(mdl)
     mdl.settings.screenSize == "desktop" &&
-      dom.parentNode.addEventListener("scroll", onBodyScroll)
+      dom.parentNode.addEventListener("scroll", onBodyScroll(mdl))
   }
 
 const toEventViewModel = (event) => {
@@ -88,8 +108,15 @@ const Layout = {
       m(Toolbar, { mdl }),
       mdl.settings.screenSize == "desktop" &&
         m(
-          "nav.navigation",
+          `nav#navigation.animated`,
           {
+            oncreate: ({ dom }) => (state.navDom = dom),
+            style: {
+              position: updateNavigationPostion(
+                state.navDom,
+                mdl.state.showNavMenu()
+              ),
+            },
             class: vertAlign(mdl),
           },
           m(Navbar, { mdl }),

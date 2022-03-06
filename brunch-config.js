@@ -1,4 +1,5 @@
 // See http://brunch.io for documentation.
+
 exports.files = {
   javascripts: {
     joinTo: {
@@ -78,24 +79,29 @@ exports.plugins = {
       },
     },
   },
-  sharp: {
-    src: "app/assets/images",
-    dest: "docs/images",
-    imageExt: ["jpg", "png", "svg", "HEIC"],
-    tasks: [
-      [
-        { resize: [1200] }, //width, height
-        { ignoreAspectRatio: true },
-        { toFormat: "webp" },
-        { withoutEnlargement: true },
-        { quality: 100 },
-        { withoutAdaptiveFiltering: true },
-        { optimiseScans: true },
-        // { rename: "{base}-1200.{ext}" },
-      ],
-    ],
-  },
+  sharp:
+    process.env.ENVIRONMENT == "dev"
+      ? null
+      : {
+          src: "app/assets/images",
+          dest: "docs/images",
+          imageExt: ["jpg", "png", "svg", "HEIC"],
+          tasks: [
+            [
+              { resize: [1200] }, //width, height
+              { ignoreAspectRatio: true },
+              { toFormat: "webp" },
+              { withoutEnlargement: true },
+              { quality: 100 },
+              { withoutAdaptiveFiltering: true },
+              { optimiseScans: true },
+              // { rename: "{base}-1200.{ext}" },
+            ],
+          ],
+        },
 }
+
+process.env.ENVIRONMENT
 
 exports.paths = {
   public: "docs",

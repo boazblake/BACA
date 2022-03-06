@@ -6,7 +6,10 @@ const state = {
   timestamp: undefined,
 }
 
-const calcHeight = ({ settings: { screenSize } }) => {
+const calcHeight = ({
+  state: { showNavMenu, distanceFromTop },
+  settings: { screenSize },
+}) => {
   switch (screenSize) {
     case "desktop":
       return "540px"
@@ -19,7 +22,10 @@ const calcHeight = ({ settings: { screenSize } }) => {
   }
 }
 
-const calcMargin = ({ settings: { screenSize } }) => {
+const calcMargin = ({
+  state: { showNavMenu, distanceFromTop },
+  settings: { screenSize },
+}) => {
   switch (screenSize) {
     case "desktop":
       return "150px"
@@ -56,7 +62,7 @@ const Hero = () => {
     },
     view: ({ attrs: { mdl } }) =>
       m(
-        ".hero",
+        "#hero",
         {
           style: {
             marginTop: calcMargin(mdl),

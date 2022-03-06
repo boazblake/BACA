@@ -19,7 +19,7 @@ const calcTotalPrice = (invoice) =>
 
 const invoiceUrl = (mdl) => {
   let userInvoices = `{"userId":"${mdl.user.objectId}"}`
-  return mdl.state.route.id == "dashboard"
+  return mdl.state.route.id == "admin"
     ? "classes/Invoices"
     : `classes/Invoices?where=${encodeURI(userInvoices)}`
 }
@@ -121,7 +121,7 @@ const Invoice = ({ attrs: { mdl } }) => {
                 m("label", "Shipping Destination"),
                 `${invoice.shippingDestination.address.address_line_1} ${invoice.shippingDestination.address.admin_area_2} ${invoice.shippingDestination.address.admin_area_1} ${invoice.shippingDestination.address.postal_code}`
               ),
-              mdl.state.route.id == "dashboard" &&
+              mdl.state.route.id == "admin" &&
                 m("td", m("button", "Update Shipping Status"))
             ),
             m(
