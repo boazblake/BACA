@@ -23,7 +23,7 @@ const Cell = () => {
       screenSize == "phone"
         ? m("tr", [
             m("td", { style: { width: "25%" } }, m("label", children[0].key)),
-            children,
+            m("th", children),
           ])
         : m("td", { style: { width: "20%" } }, children),
   }
@@ -34,7 +34,7 @@ const Row = ({ attrs: { mdl } }) => {
     view: ({ attrs: { row } }) => {
       return [
         m(
-          "tr",
+          "tr.card",
           row.map((cell) =>
             m(Cell, { mdl }, m("", { key: cell.col }, cell.val))
           )

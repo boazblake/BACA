@@ -17,13 +17,15 @@ const state = {
   navDom: null,
 }
 
-const updateNavigationPostion = (dom, showNav) => {
+const updateNavigationStyle = (dom, showNav) => {
+  let hide = { position: "unset", top: 0 }
+  let show = { position: "sticky", top: "65px" }
   if (dom) {
     return showNav
-      ? (dom.classList.add("fadeOut"), "unset")
-      : (dom.classList.remove("fadeOut"), "sticky")
+      ? (dom.classList.add("fadeOut"), hide)
+      : (dom.classList.remove("fadeOut"), show)
   } else {
-    return showNav ? "unset" : "sticky"
+    return showNav ? hide : show
   }
 }
 
@@ -111,12 +113,7 @@ const Layout = {
           `nav#navigation.animated`,
           {
             oncreate: ({ dom }) => (state.navDom = dom),
-            style: {
-              position: updateNavigationPostion(
-                state.navDom,
-                mdl.state.showNavMenu()
-              ),
-            },
+            style: updateNavigationStyle(state.navDom, mdl.state.showNavMenu()),
             class: vertAlign(mdl),
           },
           m(Navbar, { mdl }),

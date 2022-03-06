@@ -1,7 +1,8 @@
-import { toPairs, compose, map, prop, filter, keys, head } from "ramda"
-import { EditLine } from "@mithril-icons/clarity/cjs"
-import { RemoveLine } from "@mithril-icons/clarity/cjs"
+import { toPairs, compose, map, prop, filter, keys, head, reverse } from "ramda"
 import Task from "data.task"
+import D from "dayjs"
+import af from "dayjs/plugin/advancedFormat"
+D.extend(af)
 
 const toProfileVM =
   ({ emailVerified, email, name }) =>
@@ -21,13 +22,17 @@ const getProfile = (mdl) => (id) =>
     .map(head)
     .map(toProfileVM(mdl.user))
 
-const toDuesVM = (dues) => dues
+const toDuesVM = (dues) => {
+  dues.date = new Date(dues.date).toString().split(" ").splice(0, 4).join(" ")
+  return dues
+}
 
 const getDues = (mdl) => (id) =>
   mdl.http.back4App
     .getTask(mdl)(`classes/Dues?${id}`)
     .map(prop("results"))
     .map(map(toDuesVM))
+    .map(reverse)
 
 const toMessagesVM = (dues) => dues
 
