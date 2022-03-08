@@ -6,7 +6,7 @@ const Loader = () => {
       m(
         ".logoLoader",
         { onremove: FadeBack },
-        m("img.heartbeat", { src: "images/logo.webp" })
+        m("img.heartbeat", { src: "images/baca-logo.webp" })
       ),
   }
 }

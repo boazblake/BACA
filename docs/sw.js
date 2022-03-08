@@ -35,7 +35,7 @@ self.__precacheManifest = [
   },
   {
     "url": "app.js",
-    "revision": "232697e0b7f7e2f0dfb2ad91bcc8bc36"
+    "revision": "59cb77f99d53b0c0507e85338799464c"
   },
   {
     "url": "app.js.gz",
@@ -180,6 +180,10 @@ self.__precacheManifest = [
   {
     "url": "icons/nextdoor.png",
     "revision": "9e2b1fbc6a59ce10f509a5f3e0b516f4"
+  },
+  {
+    "url": "images/baca-logo.png",
+    "revision": "c576c6ff40c0cbd6053cefc56da1e8c5"
   },
   {
     "url": "images/baca-map.webp",

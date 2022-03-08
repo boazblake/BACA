@@ -6,7 +6,7 @@ import JoinBACA from "Pages/join-baca.js"
 import { scrollToAnchor, ScrollToPageTitle } from "Utils/index.js"
 
 const Logo = m("img", {
-  src: "images/logo.webp",
+  src: "images/baca-logo.webp",
 })
 
 const Routes = [

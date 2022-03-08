@@ -22,7 +22,7 @@ const Toolbar = () => {
               selector: "img",
               id: "nav-logo",
               href: "/",
-              src: "images/logo.webp",
+              src: "images/baca-logo.webp",
             })
           )
         ),
