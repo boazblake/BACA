@@ -1,5 +1,5 @@
-const DeedRes = () => {
-  const Lugary = [
+const DeedRes = ({ attrs: { mdl } }) => {
+  const LUGARY = [
     m(
       "h3",
       {
@@ -498,7 +498,7 @@ const DeedRes = () => {
     ),
   ]
 
-  const Cadawac = [
+  const CADAWAC = [
     m(
       "h3",
       { style: { "text-align": "center", "white-space": "pre-wrap" } },
@@ -811,7 +811,7 @@ const DeedRes = () => {
     ]),
   ]
 
-  const Bonhomme = [
+  const BONHOMME = [
     m(
       "h3",
       { style: { "text-align": "center", "white-space": "pre-wrap" } },
@@ -1107,10 +1107,10 @@ const DeedRes = () => {
     ]),
   ]
 
-  const pages = { Bonhomme, Cadawac, Lugary }
+  const pages = { BONHOMME, CADAWAC, LUGARY }
 
   const state = {
-    page: "Bonhomme",
+    page: mdl.state.anchor?.toUpperCase() ?? "BONHOMME",
   }
 
   return {
@@ -1121,19 +1121,21 @@ const DeedRes = () => {
           "nav.tabs",
           Object.keys(pages).map((tab) =>
             m(
-              "a.tab.pointer",
+              m.route.Link,
               {
-                class: state.page == tab ? "active" : "",
-                onclick: () => (state.page = tab),
+                href: `/legal/deed-restrictions#${tab}`,
+                class: state.page == tab ? "active tab.pointer" : "tab.pointer",
               },
-              tab.toUpperCase()
+              tab
             )
           )
         ),
 
         m(
           "section.card.container",
-          { style: { height: "100vh", overflow: "scroll" } },
+          {
+            style: { height: "100vh", overflow: "scroll" },
+          },
           pages[state.page]
         )
       ),

@@ -2,6 +2,7 @@ import NavLink from "Components/nav-link"
 import { jsonCopy } from "Utils"
 import { validateUserRegistrationTask } from "./Validations"
 import { registerUserTask, createAccountTask } from "./fns.js"
+import Stream from "mithril-stream"
 // import LogoLoader from "Components/LogoLoader"
 
 const userModel = {
@@ -22,6 +23,7 @@ const state = {
   data: jsonCopy(dataModel),
   showErrorMsg: Stream(false),
   errorMsg: Stream(""),
+  countdown: Stream(10),
 }
 
 const resetState = () => {
@@ -37,9 +39,9 @@ export const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
     if (errs) {
       state.errors = errs
-      state.errorMsg(errs.error)
-      state.showErrorMsg(errs.error)
-      console.log("failed - state", JSON.stringify(state))
+      state.errorMsg(state.errors.response.error)
+      state.showErrorMsg(true)
+      console.log("failed - state", state)
     } else {
       state.errorMsg(
         "There seems to be an ssue with logging in. Have you registered?"
@@ -54,7 +56,7 @@ export const validateForm = (mdl) => (data) => {
     // sessionStorage.setItem("baca-session-token", mdl.user["sessionToken"])
     // sessionStorage.setItem("baca-user", JSON.stringify(mdl.user.objectId))
     state.errorMsg(
-      "Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login, if you are not redirected to the login page click login below."
+      `Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login, if you are not redirected to the login page in ${state.countdown()} seconds, click the login link below.`
     )
     state.showErrorMsg(true)
     setTimeout(() => m.route.set("/login"), 10000)

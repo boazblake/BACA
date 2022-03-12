@@ -52,11 +52,9 @@ const onBodyScroll =
   }
 const onLayout =
   (mdl) =>
-  ({ dom }) => {
-    log("mdl")(mdl)
+  ({ dom }) =>
     mdl.settings.screenSize == "desktop" &&
-      dom.parentNode.addEventListener("scroll", onBodyScroll(mdl))
-  }
+    dom.parentNode.addEventListener("scroll", onBodyScroll(mdl))
 
 const toEventViewModel = (event) => {
   let start = event.start.split("T")

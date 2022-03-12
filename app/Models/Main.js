@@ -38,6 +38,7 @@ const state = {
   showAuthModal: Stream(false),
   selectedPreviewEvent: Stream(null),
   distanceFromTop: Stream(0),
+  anchor: undefined,
 }
 const user = {
   role: "user",

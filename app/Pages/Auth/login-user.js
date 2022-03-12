@@ -9,8 +9,8 @@ const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
     if (errs.code != 209) {
       state.errors = errs
-      state.msg(errs.error)
-      state.showMsg(errs.error)
+      state.msg(state.errors.response.error)
+      state.showMsg(true)
     } else {
       state.msg(
         "There seems to be an issue with logging in. Have you registered or verified your email?"

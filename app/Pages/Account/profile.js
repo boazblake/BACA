@@ -56,7 +56,7 @@ const onInput = (profile) =>
 const Profile = () => {
   return {
     view: ({ attrs: { mdl } }) => {
-      log("mdl")(mdl)
+      log("mdl - profile page")(mdl)
       return m(
         "section.p-y-50",
         m(

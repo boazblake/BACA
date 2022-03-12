@@ -30,9 +30,10 @@ const LegalRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
+      return ScrollToPageTitle()
     },
-    component: (mdl) => m(Layout, { mdl }, m(DeedRes, { mdl })),
+    component: (mdl) =>
+      m(Layout, { mdl }, m(DeedRes, { key: mdl.state.anchor, mdl })),
   },
   {
     id: "city-ordinances",
