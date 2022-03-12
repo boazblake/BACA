@@ -10,7 +10,7 @@ const Hamburger = () => {
         {
           onclick: () => mdl.state.showNavModal(!mdl.state.showNavModal()),
           style: {
-            margin: mdl.settings.screenSize == "phone" ? "auto" : null,
+            ...(mdl.settings.screenSize == "phone" && { margin: "auto" }),
             transform: "scale(1.2)",
           },
         },
