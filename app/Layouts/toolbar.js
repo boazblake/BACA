@@ -4,7 +4,7 @@ import { ScrollToPageTitle } from "Utils"
 import { BellOutlineBadged } from "@mithril-icons/clarity"
 
 const AuthDisplay = ({ attrs: { mdl } }) => {
-  let toNotify = mdl.state.hasNotifications()
+  let route = mdl.state.hasNotifications()
     ? `${mdl.user.routename}#MESSAGES`
     : mdl.user.routename
   return {
@@ -13,9 +13,10 @@ const AuthDisplay = ({ attrs: { mdl } }) => {
         "",
         m(
           m.route.Link,
-          { href: `/account/${toNotify}`, selector: "label" },
+          { href: `/account/${route}`, selector: "label" },
           `Welcome ${mdl.user.name?.split(" ")[0]}`,
-          toNotify && m(BellOutlineBadged, { height: "24px", fill: "green" })
+          mdl.state.hasNotifications() &&
+            m(BellOutlineBadged, { height: "24px", fill: "green" })
         )
       ),
   }
