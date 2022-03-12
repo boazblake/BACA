@@ -1,4 +1,4 @@
-import Images from "../images"
+import Images from "../images.js"
 
 const state = {
   image: Stream(0),

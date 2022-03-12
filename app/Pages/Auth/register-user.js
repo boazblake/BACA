@@ -54,10 +54,10 @@ export const validateForm = (mdl) => (data) => {
     // sessionStorage.setItem("baca-session-token", mdl.user["sessionToken"])
     // sessionStorage.setItem("baca-user", JSON.stringify(mdl.user.objectId))
     state.errorMsg(
-      "Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login, you will be redirected to the login page now."
+      "Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login, if you are not redirected to the login page click login below."
     )
     state.showErrorMsg(true)
-    setTimeout(() => m.route.set("/login"), 3000)
+    setTimeout(() => m.route.set("/login"), 10000)
   }
   // return console.log(data)
   state.isSubmitted = true
@@ -104,7 +104,7 @@ export const Register = () => {
                   id: "reg-name",
                   type: "text",
                   placeholder: "Full Name",
-                  onkeyup: (e) => (state.data.userModel.name = e.target.value),
+                  oninput: (e) => (state.data.userModel.name = e.target.value),
                   value: state.data.userModel.name,
                 })
               ),
@@ -125,7 +125,7 @@ export const Register = () => {
                   type: "email",
                   autocomplete: "username",
                   placeholder: "Email",
-                  onkeyup: (e) => (state.data.userModel.email = e.target.value),
+                  oninput: (e) => (state.data.userModel.email = e.target.value),
                   value: state.data.userModel.email,
                 }),
                 state.errors.email && m("p.text-error", state.errors.email)
@@ -143,7 +143,7 @@ export const Register = () => {
                   type: "email",
                   autocomplete: "username",
                   placeholder: "Confirm Email",
-                  onkeyup: (e) =>
+                  oninput: (e) =>
                     (state.data.userModel.confirmEmail = e.target.value),
                   value: state.data.userModel.confirmEmail,
                 }),
@@ -167,7 +167,7 @@ export const Register = () => {
                   type: "password",
                   autocomplete: "new-password",
                   placeholder: "Password",
-                  onkeyup: (e) =>
+                  oninput: (e) =>
                     (state.data.userModel.password = e.target.value),
                   value: state.data.userModel.password,
                 }),
@@ -187,7 +187,7 @@ export const Register = () => {
                   type: "password",
                   autocomplete: "new-password",
                   placeholder: "Confirm Password",
-                  onkeyup: (e) =>
+                  oninput: (e) =>
                     (state.data.userModel.confirmPassword = e.target.value),
                   value: state.data.userModel.confirmPassword,
                 }),

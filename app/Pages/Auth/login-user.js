@@ -2,7 +2,7 @@ import NavLink from "Components/nav-link"
 import { jsonCopy } from "Utils"
 import { validateLoginTask } from "./Validations.js"
 import { loginTask, resetPasswordTask } from "./fns.js"
-import { GroupSolidBadged } from "@mithril-icons/clarity/cjs"
+// import { GroupSolidBadged } from "@mithril-icons/clarity/cjs"
 // import LogoLoader from "Components/LogoLoader"
 
 const validateForm = (mdl) => (data) => {
@@ -117,7 +117,7 @@ export const Login = () => {
                     type: "email",
                     autocomplete: "username",
                     placeholder: "Email",
-                    onkeyup: (e) => {
+                    oninput: (e) => {
                       // state.isSubmitted && validateForm(mdl)(state.data)
                       state.data.userModel.email = e.target.value
                     },
@@ -137,7 +137,7 @@ export const Login = () => {
                     type: "password",
                     autocomplete: "current-password",
                     placeholder: "Password",
-                    onkeyup: (e) => {
+                    oninput: (e) => {
                       // state.isSubmitted && validateForm(mdl)(state.data)
                       state.data.userModel.password = e.target.value
                     },
