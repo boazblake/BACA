@@ -9,7 +9,10 @@ const Hamburger = () => {
         "figure.pointer is-center",
         {
           onclick: () => mdl.state.showNavModal(!mdl.state.showNavModal()),
-          style: { margin: "auto", transform: "scale(1.2)" },
+          style: {
+            margin: mdl.settings.screenSize == "phone" ? "auto" : null,
+            transform: "scale(1.2)",
+          },
         },
         mdl.state.showNavModal()
           ? m(WindowCloseLine, filledGreen)
