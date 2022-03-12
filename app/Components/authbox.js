@@ -10,19 +10,19 @@ const AuthBox = () => {
             ["admin", "mod"].includes(mdl.user.role) &&
               m(NavLink, {
                 mdl,
-                href: `/admin/${mdl.user.name}`,
+                href: `/admin/${mdl.user.routename}`,
                 link: "Admin",
                 classList: `${isActiveRoute(
-                  `/admin/${mdl.user.name}`
+                  `/admin/${mdl.user.routename}`
                 )} button dark`,
               }),
             m(NavLink, {
               mdl,
-              href: `/account/${mdl.user.name}`,
+              href: `/account/${mdl.user.routename}`,
               role: "button",
               link: "Your Account",
               classList: `${isActiveRoute(
-                `/account/${mdl.user.name}`
+                `/account/${mdl.user.routename}`
               )} button primary`,
             }),
             m(NavLink, {

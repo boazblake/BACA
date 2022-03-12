@@ -197,6 +197,12 @@ exports["default"] = void 0;
 
 var _cjs = require("@mithril-icons/clarity/cjs");
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var filledGreen = {
   fill: "green"
 };
@@ -206,10 +212,15 @@ var Hamburger = function Hamburger() {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
       return m("figure.pointer is-center", {
+        onclick: function onclick() {
+          return mdl.state.showNavModal(!mdl.state.showNavModal());
+        },
         style: {
           transform: "scale(1.2)"
         }
-      }, [mdl.state.isAuth() && m("label", "Welcome ".concat(mdl.user.name && mdl.user.name.split(" ")[0])), mdl.state.showNavModal() ? m(_cjs.WindowCloseLine, filledGreen) : m(_cjs.MenuLine, filledGreen)]);
+      }, mdl.state.showNavModal() ? m(_cjs.WindowCloseLine, filledGreen) : m(_cjs.MenuLine, _objectSpread({
+        height: "20px"
+      }, filledGreen)));
     }
   };
 };
@@ -536,15 +547,15 @@ var AuthBox = function AuthBox() {
       var mdl = _ref.attrs.mdl;
       return mdl.state.isAuth() ? m(".is-center", ["admin", "mod"].includes(mdl.user.role) && m(_navLink["default"], {
         mdl: mdl,
-        href: "/admin/".concat(mdl.user.name),
+        href: "/admin/".concat(mdl.user.routename),
         link: "Admin",
-        classList: "".concat((0, _index.isActiveRoute)("/admin/".concat(mdl.user.name)), " button dark")
+        classList: "".concat((0, _index.isActiveRoute)("/admin/".concat(mdl.user.routename)), " button dark")
       }), m(_navLink["default"], {
         mdl: mdl,
-        href: "/account/".concat(mdl.user.name),
+        href: "/account/".concat(mdl.user.routename),
         role: "button",
         link: "Your Account",
-        classList: "".concat((0, _index.isActiveRoute)("/account/".concat(mdl.user.name)), " button primary")
+        classList: "".concat((0, _index.isActiveRoute)("/account/".concat(mdl.user.routename)), " button primary")
       }), m(_navLink["default"], {
         mdl: mdl,
         href: "/logout",
@@ -1986,12 +1997,33 @@ var _authbox = _interopRequireDefault(require("Components/authbox.js"));
 
 var _Utils = require("Utils");
 
+var _clarity = require("@mithril-icons/clarity");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var AuthDisplay = function AuthDisplay(_ref) {
+  var mdl = _ref.attrs.mdl;
+  var route = mdl.state.hasNotifications() ? "".concat(mdl.user.routename, "#MESSAGES") : mdl.user.routename;
+  return {
+    view: function view(_ref2) {
+      var _mdl$user$name;
+
+      var mdl = _ref2.attrs.mdl;
+      return m("", m(m.route.Link, {
+        href: "/account/".concat(route),
+        selector: "label"
+      }, "Welcome ".concat((_mdl$user$name = mdl.user.name) === null || _mdl$user$name === void 0 ? void 0 : _mdl$user$name.split(" ")[0]), mdl.state.hasNotifications() && m(_clarity.BellOutlineBadged, {
+        height: "24px",
+        fill: "green"
+      })));
+    }
+  };
+};
 
 var Toolbar = function Toolbar() {
   return {
-    view: function view(_ref) {
-      var mdl = _ref.attrs.mdl;
+    view: function view(_ref3) {
+      var mdl = _ref3.attrs.mdl;
       return m("nav#toolbar.sticky-nav.is-horizontal-align", {
         style: {
           "background-color": mdl.state.showNavModal() ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.9)"
@@ -2007,11 +2039,9 @@ var Toolbar = function Toolbar() {
         }
       }, "Show Menu"), m(_authbox["default"], {
         mdl: mdl
-      })) : m(".nav-right is-right", {
-        onclick: function onclick() {
-          return mdl.state.showNavModal(!mdl.state.showNavModal());
-        }
-      }, m(_Hamburger["default"], {
+      })) : m(".nav-right is-right", mdl.state.isAuth() && m(AuthDisplay, {
+        mdl: mdl
+      }), m(_Hamburger["default"], {
         mdl: mdl
       })));
     }
@@ -2071,7 +2101,8 @@ var state = {
   showAuthModal: Stream(false),
   selectedPreviewEvent: Stream(null),
   distanceFromTop: Stream(0),
-  anchor: undefined
+  anchor: undefined,
+  hasNotifications: Stream(false)
 };
 var user = {
   role: "user"
@@ -2178,56 +2209,58 @@ var _model = require("./model");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var nav = function nav() {
-  return ["profile", "dues", "messages"];
-};
+var Account = function Account(_ref) {
+  var _mdl$state$anchor, _mdl$state;
 
-var state = {
-  tab: "profile",
-  status: "loading"
-};
+  var mdl = _ref.attrs.mdl;
 
-var loadAll = function loadAll(mdl) {
-  var onSuccess = function onSuccess(_ref) {
-    var profile = _ref.profile,
-        dues = _ref.dues,
-        messages = _ref.messages;
-    mdl.data.profile = profile;
-    mdl.data.dues = dues;
-    mdl.data.messages = messages;
-    state.status = "success";
+  var nav = function nav() {
+    return ["PROFILE", "DUES", "MESSAGES"];
   };
 
-  var onError = function onError(e) {
-    state.status = "error";
-    console.error("issues w fetching data", e);
+  var state = {
+    tab: (_mdl$state$anchor = (_mdl$state = mdl.state) === null || _mdl$state === void 0 ? void 0 : _mdl$state.anchor) !== null && _mdl$state$anchor !== void 0 ? _mdl$state$anchor : "PROFILE",
+    status: "loading"
   };
 
-  (0, _model.loadAllTask)(mdl).fork(onError, onSuccess);
-};
+  var loadAll = function loadAll(mdl) {
+    var onSuccess = function onSuccess(_ref2) {
+      var profile = _ref2.profile,
+          dues = _ref2.dues,
+          messages = _ref2.messages;
+      mdl.data.profile = profile;
+      mdl.data.dues = dues;
+      mdl.data.messages = messages;
+      state.status = "success";
+    };
 
-var Account = function Account() {
+    var onError = function onError(e) {
+      state.status = "error";
+      console.error("issues w fetching data", e);
+    };
+
+    (0, _model.loadAllTask)(mdl).fork(onError, onSuccess);
+  };
+
   return {
     //future add param to quick nav the state.tab to messages pane.
-    oninit: function oninit(_ref2) {
-      var mdl = _ref2.attrs.mdl;
+    oninit: function oninit(_ref3) {
+      var mdl = _ref3.attrs.mdl;
       return loadAll(mdl);
     },
-    view: function view(_ref3) {
-      var mdl = _ref3.attrs.mdl;
+    view: function view(_ref4) {
+      var mdl = _ref4.attrs.mdl;
       return m("section", state.status == "error" && m("ERROR"), state.status == "loading" && m("loading"), state.status == "success" && m("section", m("nav.tabs", nav(mdl.user.role).map(function (tab) {
-        return m("a.tab.pointer", {
-          "class": state.tab == tab ? "active" : "",
-          onclick: function onclick() {
-            return state.tab = tab;
-          }
+        return m(m.route.Link, {
+          "class": state.tab == tab ? "active tab.pointer" : "tab.pointer",
+          href: "/account/".concat(mdl.user.routename, "/#").concat(tab)
         }, tab.toUpperCase());
-      })), m("section.container", state.tab == "profile" && m(_profile["default"], {
+      })), m("section.container", state.tab == "PROFILE" && m(_profile["default"], {
         mdl: mdl
-      }), state.tab == "dues" && m(_dues["default"], {
+      }), state.tab == "DUES" && m(_dues["default"], {
         mdl: mdl,
         reload: loadAll
-      }), state.tab == "messages" && m(_messages["default"], {
+      }), state.tab == "MESSAGES" && m(_messages["default"], {
         mdl: mdl
       }))));
     }
@@ -2322,13 +2355,20 @@ var getDues = function getDues(mdl) {
   };
 };
 
-var toMessagesVM = function toMessagesVM(dues) {
-  return dues;
+var toMessagesVM = function toMessagesVM(msgs) {
+  return msgs;
+};
+
+var hasNotifications = function hasNotifications(mdl) {
+  return function (msgs) {
+    mdl.state.hasNotifications(msgs.any());
+    return msgs;
+  };
 };
 
 var getMessages = function getMessages(mdl) {
   return function (id) {
-    return mdl.http.back4App.getTask(mdl)("classes/Messages?".concat(id)).map((0, _ramda.prop)("results")).map((0, _ramda.map)(toMessagesVM));
+    return mdl.http.back4App.getTask(mdl)("classes/Messages?".concat(id)).map((0, _ramda.prop)("results")).map(hasNotifications(mdl)).map((0, _ramda.map)(toMessagesVM));
   };
 };
 
@@ -2556,11 +2596,12 @@ var onInput = function onInput(profile) {
   });
 };
 
-var Profile = function Profile() {
+var Profile = function Profile(_ref2) {
+  var mdl = _ref2.attrs.mdl;
+  log("mdl - profile page")(mdl);
   return {
-    view: function view(_ref2) {
-      var mdl = _ref2.attrs.mdl;
-      log("mdl - profile page")(mdl);
+    view: function view(_ref3) {
+      var mdl = _ref3.attrs.mdl;
       return m("section.p-y-50", m("article.row", _objectSpread({}, onInput(mdl.data.profile)), m("figure.col", m("img.avatar", {
         src: getImageSrc(mdl.data.profile)
       }), m("figcaption", {
@@ -2596,8 +2637,8 @@ var Profile = function Profile() {
             mdl.http.openCage.getLocationTask(mdl)(e.target.value.trim()).fork(function (e) {
               state.status = "error";
               log("error fetching locations")(e);
-            }, function (_ref3) {
-              var results = _ref3.results;
+            }, function (_ref4) {
+              var results = _ref4.results;
               state.status = "loaded";
               state.locations = results;
             });
@@ -2605,8 +2646,8 @@ var Profile = function Profile() {
         },
         id: "address",
         value: mdl.data.profile.address
-      })), state.locations.any() && m("details.dropdown", m("summary.button.outline", "options"), m(".card", m("ul", state.locations.map(function (_ref4) {
-        var formatted = _ref4.formatted;
+      })), state.locations.any() && m("details.dropdown", m("summary.button.outline", "options"), m(".card", m("ul", state.locations.map(function (_ref5) {
+        var formatted = _ref5.formatted;
         return m("li.pointer", {
           onclick: function onclick(e) {
             mdl.data.profile.address = formatted;
@@ -2949,6 +2990,7 @@ var setUserAndSessionToken = function setUserAndSessionToken(mdl) {
     sessionStorage.setItem("baca-session-token", user["sessionToken"]);
     mdl.state.isAuth(true);
     mdl.user = user;
+    mdl.user.routename = mdl.user.name.replaceAll(" ", "");
     return mdl;
   };
 };
@@ -2983,19 +3025,28 @@ var getUserDuesTask = function getUserDuesTask(mdl) {
 var getUserMessagesTask = function getUserMessagesTask(mdl) {
   return function (encodeId) {
     return mdl.http.back4App.getTask(mdl)("classes/Messages?".concat(encodeId)).map((0, _ramda.prop)("results")).chain(function (messages) {
-      return messages.any() ? _data["default"].of(messages) : createMessagesTask(mdl);
+      return messages.any() ? function () {
+        var hasNotifications = messages.filter(function (message) {
+          return !message.hasRead;
+        });
+        mdl.state.hasNotifications(hasNotifications.any());
+        return _data["default"].of(messages);
+      } : createMessagesTask(mdl);
     });
   };
 };
 
 var getUserInfoTask = function getUserInfoTask(mdl) {
   var encodeId = encodeURI("where={\"userId\":\"".concat(mdl.user.objectId, "\"}"));
-  return _data["default"].of(function (account) // (dues) => (messages) =>
-  {
-    mdl.data.account = account; // mdl.data.dues = dues
-    // mdl.data.messages = messages
-  }).ap(getUserAccountTask(mdl)(encodeId)); // .ap(getUserDuesTask(mdl)(encodeId))
-  // .ap(getUserMessagesTask(mdl)(encodeId))
+  return _data["default"].of(function (account) {
+    return function (dues) {
+      return function (messages) {
+        mdl.data.account = account;
+        mdl.data.dues = dues;
+        mdl.data.messages = messages;
+      };
+    };
+  }).ap(getUserAccountTask(mdl)(encodeId)).ap(getUserDuesTask(mdl)(encodeId)).ap(getUserMessagesTask(mdl)(encodeId));
 };
 
 var loginTask = function loginTask(mdl) {
@@ -6805,12 +6856,13 @@ var AuthenticatedRoutes = [{
   children: [],
   options: [],
   onmatch: function onmatch(mdl, args, path, fullroute, isAnchor) {
-    isAnchor ? (0, _Utils.scrollToAnchor)(mdl.state.anchor) : (0, _Utils.ScrollToPageTitle)();
+    return (0, _Utils.ScrollToPageTitle)();
   },
   component: function component(mdl) {
     return m(_index2["default"], {
       mdl: mdl
     }, m(_index["default"], {
+      key: mdl.state.anchor,
       mdl: mdl
     }));
   }
@@ -22841,6 +22893,7 @@ if (sessionStorage.getItem("baca-session-token")) {
 
   var onSuccess = function onSuccess(user) {
     _index["default"].user = user;
+    _index["default"].user.routename = user.name.replaceAll(" ", "");
     user.emailVerified ? _index["default"].state.isAuth(true) : sessionStorage.clear();
   };
 

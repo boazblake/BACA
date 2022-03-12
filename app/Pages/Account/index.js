@@ -3,29 +3,29 @@ import Dues from "./dues"
 import Messages from "./messages"
 import { loadAllTask } from "./model"
 
-const nav = () => ["profile", "dues", "messages"]
+const Account = ({ attrs: { mdl } }) => {
+  const nav = () => ["PROFILE", "DUES", "MESSAGES"]
 
-const state = {
-  tab: "profile",
-  status: "loading",
-}
-
-const loadAll = (mdl) => {
-  const onSuccess = ({ profile, dues, messages }) => {
-    mdl.data.profile = profile
-    mdl.data.dues = dues
-    mdl.data.messages = messages
-    state.status = "success"
-  }
-  const onError = (e) => {
-    state.status = "error"
-    console.error("issues w fetching data", e)
+  const state = {
+    tab: mdl.state?.anchor ?? "PROFILE",
+    status: "loading",
   }
 
-  loadAllTask(mdl).fork(onError, onSuccess)
-}
+  const loadAll = (mdl) => {
+    const onSuccess = ({ profile, dues, messages }) => {
+      mdl.data.profile = profile
+      mdl.data.dues = dues
+      mdl.data.messages = messages
+      state.status = "success"
+    }
+    const onError = (e) => {
+      state.status = "error"
+      console.error("issues w fetching data", e)
+    }
 
-const Account = () => {
+    loadAllTask(mdl).fork(onError, onSuccess)
+  }
+
   return {
     //future add param to quick nav the state.tab to messages pane.
     oninit: ({ attrs: { mdl } }) => loadAll(mdl),
@@ -41,10 +41,11 @@ const Account = () => {
               "nav.tabs",
               nav(mdl.user.role).map((tab) =>
                 m(
-                  "a.tab.pointer",
+                  m.route.Link,
                   {
-                    class: state.tab == tab ? "active" : "",
-                    onclick: () => (state.tab = tab),
+                    class:
+                      state.tab == tab ? "active tab.pointer" : "tab.pointer",
+                    href: `/account/${mdl.user.routename}/#${tab}`,
                   },
                   tab.toUpperCase()
                 )
@@ -52,9 +53,9 @@ const Account = () => {
             ),
             m(
               "section.container",
-              state.tab == "profile" && m(Profile, { mdl }),
-              state.tab == "dues" && m(Dues, { mdl, reload: loadAll }),
-              state.tab == "messages" && m(Messages, { mdl })
+              state.tab == "PROFILE" && m(Profile, { mdl }),
+              state.tab == "DUES" && m(Dues, { mdl, reload: loadAll }),
+              state.tab == "MESSAGES" && m(Messages, { mdl })
             )
           )
       ),

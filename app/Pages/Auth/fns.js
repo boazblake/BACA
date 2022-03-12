@@ -6,6 +6,7 @@ const setUserAndSessionToken = (mdl) => (user) => {
   sessionStorage.setItem("baca-session-token", user["sessionToken"])
   mdl.state.isAuth(true)
   mdl.user = user
+  mdl.user.routename = mdl.user.name.replaceAll(" ", "")
   return mdl
 }
 
@@ -38,21 +39,27 @@ const getUserMessagesTask = (mdl) => (encodeId) =>
     .getTask(mdl)(`classes/Messages?${encodeId}`)
     .map(prop("results"))
     .chain((messages) =>
-      messages.any() ? Task.of(messages) : createMessagesTask(mdl)
+      messages.any()
+        ? () => {
+            let hasNotifications = messages.filter(
+              (message) => !message.hasRead
+            )
+            mdl.state.hasNotifications(hasNotifications.any())
+            return Task.of(messages)
+          }
+        : createMessagesTask(mdl)
     )
 
 const getUserInfoTask = (mdl) => {
   let encodeId = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
-  return Task.of((account) =>
-    // (dues) => (messages) =>
-    {
-      mdl.data.account = account
-      // mdl.data.dues = dues
-      // mdl.data.messages = messages
-    }
-  ).ap(getUserAccountTask(mdl)(encodeId))
-  // .ap(getUserDuesTask(mdl)(encodeId))
-  // .ap(getUserMessagesTask(mdl)(encodeId))
+  return Task.of((account) => (dues) => (messages) => {
+    mdl.data.account = account
+    mdl.data.dues = dues
+    mdl.data.messages = messages
+  })
+    .ap(getUserAccountTask(mdl)(encodeId))
+    .ap(getUserDuesTask(mdl)(encodeId))
+    .ap(getUserMessagesTask(mdl)(encodeId))
 }
 export const loginTask =
   (mdl) =>

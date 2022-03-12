@@ -34,12 +34,18 @@ const getDues = (mdl) => (id) =>
     .map(map(toDuesVM))
     .map(reverse)
 
-const toMessagesVM = (dues) => dues
+const toMessagesVM = (msgs) => msgs
+
+const hasNotifications = (mdl) => (msgs) => {
+  mdl.state.hasNotifications(msgs.any())
+  return msgs
+}
 
 const getMessages = (mdl) => (id) =>
   mdl.http.back4App
     .getTask(mdl)(`classes/Messages?${id}`)
     .map(prop("results"))
+    .map(hasNotifications(mdl))
     .map(map(toMessagesVM))
 
 export const loadAllTask = (mdl) => {

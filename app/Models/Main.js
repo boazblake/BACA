@@ -39,6 +39,7 @@ const state = {
   selectedPreviewEvent: Stream(null),
   distanceFromTop: Stream(0),
   anchor: undefined,
+  hasNotifications: Stream(false),
 }
 const user = {
   role: "user",

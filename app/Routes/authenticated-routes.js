@@ -15,9 +15,10 @@ const AuthenticatedRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
+      return ScrollToPageTitle()
     },
-    component: (mdl) => m(Layout, { mdl }, m(Account, { mdl })),
+    component: (mdl) =>
+      m(Layout, { mdl }, m(Account, { key: mdl.state.anchor, mdl })),
   },
   {
     id: "admin",

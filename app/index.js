@@ -77,6 +77,7 @@ if (sessionStorage.getItem("baca-session-token")) {
   }
   const onSuccess = (user) => {
     Model.user = user
+    Model.user.routename = user.name.replaceAll(" ", "")
     user.emailVerified ? Model.state.isAuth(true) : sessionStorage.clear()
   }
 
