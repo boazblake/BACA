@@ -9,11 +9,11 @@ const Hamburger = () => {
         "figure.pointer is-center",
         {
           onclick: () => mdl.state.showNavModal(!mdl.state.showNavModal()),
-          style: { transform: "scale(1.2)" },
+          style: { margin: "auto", transform: "scale(1.2)" },
         },
         mdl.state.showNavModal()
           ? m(WindowCloseLine, filledGreen)
-          : m(MenuLine, { height: "20px", ...filledGreen })
+          : m(MenuLine, filledGreen)
       ),
   }
 }
