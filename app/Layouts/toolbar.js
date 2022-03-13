@@ -20,50 +20,46 @@ const AuthDisplay = ({ attrs: { mdl } }) => {
   }
 }
 
-const Toolbar = () => {
-  return {
-    view: ({ attrs: { mdl } }) =>
-      m(
-        "nav#toolbar.sticky-nav.is-horizontal-align",
-        {
-          style: {
-            "background-color": mdl.state.showNavModal()
-              ? "rgba(255, 255, 255, 1)"
-              : "rgba(255, 255, 255, 0.9)",
-          },
+export default {
+  view: ({ attrs: { mdl } }) =>
+    m(
+      "nav#toolbar.sticky-nav.is-horizontal-align",
+      {
+        style: {
+          "background-color": mdl.state.showNavModal()
+            ? "rgba(255, 255, 255, 1)"
+            : "rgba(255, 255, 255, 0.9)",
         },
+      },
+      m(
+        ".nav-left.is-left",
         m(
-          ".nav-left.is-left",
-          m(
-            "figure.pointer",
-            m(m.route.Link, {
-              selector: "img",
-              id: "nav-logo",
-              href: "/",
-              src: "images/baca-logo.webp",
-            })
-          )
-        ),
-
-        mdl.settings.screenSize == "desktop"
-          ? m(
-              ".nav-right is-right",
-              mdl.state.showNavMenu() &&
-                m(
-                  "Button.button success m-r-16",
-                  { onclick: () => ScrollToPageTitle() },
-                  "Show Menu"
-                ),
-              m(AuthBox, { mdl })
-            )
-          : m(
-              ".nav-right is-right",
-              mdl.state.isAuth() && m(AuthDisplay, { mdl }),
-              m(Hamburger, { mdl })
-            ),
-        m(Toasts)
+          "figure.pointer",
+          m(m.route.Link, {
+            selector: "img",
+            id: "nav-logo",
+            href: "/",
+            src: "images/baca-logo.webp",
+          })
+        )
       ),
-  }
-}
 
-export default Toolbar
+      mdl.settings.screenSize == "desktop"
+        ? m(
+            ".nav-right is-right",
+            mdl.state.showNavMenu() &&
+              m(
+                "Button.button success m-r-16",
+                { onclick: () => ScrollToPageTitle() },
+                "Show Menu"
+              ),
+            m(AuthBox, { mdl })
+          )
+        : m(
+            ".nav-right is-right",
+            mdl.state.isAuth() && m(AuthDisplay, { mdl }),
+            m(Hamburger, { mdl })
+          ),
+      m(Toasts)
+    ),
+}
