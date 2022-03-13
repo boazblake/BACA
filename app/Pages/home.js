@@ -2,6 +2,7 @@ import { fetchAll } from "../Layouts"
 import DateTime from "Components/DateTime"
 import { AngleDoubleLine } from "@mithril-icons/clarity/cjs"
 import Glider from "Utils/glider.min.js"
+import { clone } from "ramda"
 
 const State = {
   events: null,
@@ -199,11 +200,13 @@ const Slider = {
       {
         style: { maxHeight: "350px" },
       },
-      data.map((item, idx) => {
-        if (type == "event") return m(Event, { mdl, event: item, idx })
-        if (type == "img") return m(Img, { mdl, img: item, idx })
-        if (type == "blog") return m(Blog, { mdl, blog: item, idx })
-      })
+      clone(data)
+        .reverse()
+        .map((item, idx) => {
+          if (type == "event") return m(Event, { mdl, event: item, idx })
+          if (type == "img") return m(Img, { mdl, img: item, idx })
+          if (type == "blog") return m(Blog, { mdl, blog: item, idx })
+        })
     ),
 }
 
@@ -271,19 +274,19 @@ const Home = {
         mdl,
         title: "Upcoming Events!",
         type: "event",
-        data: mdl.data.events.reverse(),
+        data: mdl.data.events,
       }),
       m(Section, {
         mdl,
         title: "Recent Photos",
         type: "img",
-        data: mdl.data.images.reverse(),
+        data: mdl.data.images,
       }),
       m(Section, {
         mdl,
         title: "Latest Blog Posts!",
         type: "blog",
-        data: mdl.data.blogs.reverse(),
+        data: mdl.data.blogs,
       })
     ),
 }
