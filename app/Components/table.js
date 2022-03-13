@@ -20,7 +20,7 @@ const Cell = () => {
       },
       children,
     }) =>
-      screenSize == "phone"
+      screenSize == "wide"
         ? m("tr", [
             m("td", { style: { width: "25%" } }, m("label", children[0].key)),
             m("th", children),
@@ -58,7 +58,7 @@ export const Table = () => {
         rows.any()
           ? m(
               "table.dash-table",
-              mdl.settings.screenSize != "phone" &&
+              mdl.settings.screenSize != "wide" &&
                 m(
                   "thead.dash-nav",
                   m(

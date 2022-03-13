@@ -10,14 +10,11 @@ const AuthDisplay = ({ attrs: { mdl } }) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "",
-        m(
-          m.route.Link,
-          { href: `/account/${route}`, selector: "label" },
-          `Welcome ${mdl.user.name?.split(" ")[0]}`,
-          mdl.state.hasNotifications() &&
-            m(BellOutlineBadged, { height: "24px", fill: "green" })
-        )
+        m.route.Link,
+        { href: `/account/${route}`, selector: "label.pointer" },
+        `Welcome ${mdl.user.name?.split(" ")[0]}`,
+        mdl.state.hasNotifications() &&
+          m(BellOutlineBadged, { height: "24px", fill: "green" })
       ),
   }
 }

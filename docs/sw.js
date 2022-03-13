@@ -27,7 +27,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "app.css",
-    "revision": "b3a62af3066ac4bc8644762790e45341"
+    "revision": "c216c447e3216994cd02c80ca49310e2"
   },
   {
     "url": "app.css.gz",
@@ -35,7 +35,7 @@ self.__precacheManifest = [
   },
   {
     "url": "app.js",
-    "revision": "b4f25707611e415be313f4583250b106"
+    "revision": "2ada5c7850628e17b933911ce81d9f0c"
   },
   {
     "url": "app.js.gz",

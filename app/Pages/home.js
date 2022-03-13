@@ -132,7 +132,7 @@ const Blog = {
           class: "button primary outline is-full-width",
           href: `/social/blog-post:${blog.objectId}`,
         },
-        "...Read More"
+        m("p", "...Read More")
       )
     ),
 }
@@ -182,7 +182,7 @@ const Event = {
       m(
         m.route.Link,
         {
-          selector: "",
+          selector: "button",
           class: "button primary outline is-full-width",
           onclick: () => mdl.state.selectedPreviewEvent(event.objectId),
           href: "/social/events",
@@ -262,32 +262,30 @@ const Section = {
     ),
 }
 
-const Home = () => {
-  return {
-    oninit: fetchAll,
-    view: ({ attrs: { mdl } }) =>
-      m(
-        "article.grid",
-        m(Section, {
-          mdl,
-          title: "Upcoming Events!",
-          type: "event",
-          data: mdl.data.events,
-        }),
-        m(Section, {
-          mdl,
-          title: "Recent Photos",
-          type: "img",
-          data: mdl.data.images,
-        }),
-        m(Section, {
-          mdl,
-          title: "Latest Blog Posts!",
-          type: "blog",
-          data: mdl.data.blogs,
-        })
-      ),
-  }
+const Home = {
+  oninit: fetchAll,
+  view: ({ attrs: { mdl } }) =>
+    m(
+      "article.grid",
+      m(Section, {
+        mdl,
+        title: "Upcoming Events!",
+        type: "event",
+        data: mdl.data.events.reverse(),
+      }),
+      m(Section, {
+        mdl,
+        title: "Recent Photos",
+        type: "img",
+        data: mdl.data.images.reverse(),
+      }),
+      m(Section, {
+        mdl,
+        title: "Latest Blog Posts!",
+        type: "blog",
+        data: mdl.data.blogs.reverse(),
+      })
+    ),
 }
 
 export default Home
