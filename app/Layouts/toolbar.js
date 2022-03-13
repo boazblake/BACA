@@ -2,6 +2,7 @@ import Hamburger from "Components/Hamburger.js"
 import AuthBox from "Components/authbox.js"
 import { ScrollToPageTitle } from "Utils"
 import { BellOutlineBadged } from "@mithril-icons/clarity"
+import Toasts from "Components/toast"
 
 const AuthDisplay = ({ attrs: { mdl } }) => {
   let route = mdl.state.hasNotifications()
@@ -59,7 +60,8 @@ const Toolbar = () => {
               ".nav-right is-right",
               mdl.state.isAuth() && m(AuthDisplay, { mdl }),
               m(Hamburger, { mdl })
-            )
+            ),
+        m(Toasts)
       ),
   }
 }

@@ -1,5 +1,6 @@
 import { handlers, AVATAR_URL } from "Utils/index.js"
 import { path } from "ramda"
+import { addSuccess } from "Components/toast"
 
 const state = { files: [], locations: [], address: "", status: "" }
 
@@ -9,9 +10,7 @@ const getImageSrc = (data) =>
 const onError = (x) => {
   log("on error  profile")(x)
 }
-const onSuccess = (x) => {
-  log("onsuccess = profile")(x)
-}
+const onSuccess = (_) => addSuccess("Image uploaded successfully")
 
 const updateProfileTask = (mdl) => (data) =>
   mdl.http.back4App.putTask(mdl)(
@@ -20,7 +19,9 @@ const updateProfileTask = (mdl) => (data) =>
 
 const removeImage = (mdl, data) => {
   data.avatar = null
-  updateProfileTask(mdl)(data).fork(log("e"), log("s"))
+  updateProfileTask(mdl)(data).fork(log("e"), () =>
+    addSuccess("Image deleted", 5000)
+  )
 }
 
 const updateProfileMeta =
@@ -73,7 +74,13 @@ const Profile = ({ attrs: { mdl } }) => {
               mdl.data.profile.avatar
                 ? m(
                     "button.button",
-                    { onclick: (e) => removeImage(mdl, mdl.data.profile) },
+                    {
+                      style: {
+                        borderColor: "var(--color-error)",
+                        color: "var(--color-error)",
+                      },
+                      onclick: (e) => removeImage(mdl, mdl.data.profile),
+                    },
                     "Remove Profile Pic"
                   )
                 : m(
