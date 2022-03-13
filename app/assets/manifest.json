@@ -29,7 +29,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "bonhamacres.org",
+  "start_url": "/",
   "id": "bonhamacres.org",
   "background_color": "#FFFFFF",
   "display": "fullscreen",
