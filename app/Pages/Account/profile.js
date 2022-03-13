@@ -132,7 +132,7 @@ const Profile = ({ attrs: { mdl } }) => {
             state.locations.any() &&
               m(
                 "details.dropdown",
-                m("summary.button.outline", "options"),
+                m("summary.button.outline", "Address Suggestions"),
                 m(
                   ".card",
                   m(

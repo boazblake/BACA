@@ -11,7 +11,7 @@ const AuthDisplay = ({ attrs: { mdl } }) => {
     view: ({ attrs: { mdl } }) =>
       m(
         m.route.Link,
-        { href: `/account/${route}`, selector: "label.pointer" },
+        { href: `/account/${route}`, selector: "a.underline.pointer" },
         `Welcome ${mdl.user.name?.split(" ")[0]}`,
         mdl.state.hasNotifications() &&
           m(BellOutlineBadged, { height: "24px", fill: "green" })
