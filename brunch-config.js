@@ -70,6 +70,7 @@ exports.plugins = {
   //     stripPrefix: "docs/",
   //   },
   // },
+  babel: { ignore: [/web\/static\/vendor/] },
   "@babel": { presets: ["env"] },
   terser: {
     mangle: false,

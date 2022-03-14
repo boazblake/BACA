@@ -1,6 +1,6 @@
 import Task from "data.task"
 import { values } from "ramda"
-
+import { addSuccess } from "Components/toast"
 const makePaymentTask = (actions) =>
   new Task((rej, res) => actions.order.capture().then(res, rej))
 
@@ -38,11 +38,13 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
   const togglePaypal = () => (state.paydues = !state.paydues)
 
   const onSuccess = (mdl, reload) => (data) => {
+    addSuccess("Dues Successfully Paid")
     log("on success", [state, data])
     reload(mdl)
   }
 
   const onError = (mdl, state) => (error) => {
+    addError("Dues Were NOT Successfully Paid")
     log("on onErrpr", [state, error])
   }
 
