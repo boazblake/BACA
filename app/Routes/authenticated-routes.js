@@ -30,7 +30,7 @@ const AuthenticatedRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
+      !isAnchor && ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Admin, { mdl })),
   },
@@ -53,7 +53,7 @@ const AuthenticatedRoutes = [
         isAnchor,
         !mdl.state.isAuth()
       )
-      isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
+      !isAnchor && ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },
@@ -77,7 +77,7 @@ const AuthenticatedRoutes = [
       //   mdl.state.isAuth(),
       // )
       mdl.user.role != "admin" && m.route.set(m.route.get())
-      isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
+      !isAnchor && ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
   },

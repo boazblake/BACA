@@ -23,11 +23,12 @@ const Account = ({ attrs: { mdl } }) => {
       console.error("issues w fetching data", e)
     }
 
-    loadAllTask(mdl).fork(onError, onSuccess)
+    mdl.state.anchor
+      ? (state.status = "success")
+      : loadAllTask(mdl).fork(onError, onSuccess)
   }
 
   return {
-    //future add param to quick nav the state.tab to messages pane.
     oninit: ({ attrs: { mdl } }) => loadAll(mdl),
     view: ({ attrs: { mdl } }) =>
       m(

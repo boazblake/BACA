@@ -3,6 +3,9 @@ import DateTime from "Components/DateTime"
 import { AngleDoubleLine } from "@mithril-icons/clarity/cjs"
 import Glider from "Utils/glider.min.js"
 import { clone } from "ramda"
+import dayjs from "dayjs"
+
+const eventIsUpcoming = (evt) => dayjs(evt.startDate).isAfter(dayjs())
 
 const State = {
   events: null,
@@ -12,13 +15,14 @@ const State = {
 
 const createCarousel = (dom) => {
   let slides = dom.children[1]
+  log("# of slides")(slides.children.length)
   let prev = dom.children[2].children[0]
   let next = dom.children[2].children[1]
   const slider = new Glider(slides, {
     // `auto` allows automatic responsive
     // width calculations
-    // slidesToShow: "auto",
-    // slidesToScroll: "auto",
+    slidesToShow: "auto",
+    slidesToScroll: "auto",
 
     // should have been named `itemMinWidth`
     // slides grow to fit the container viewport
@@ -274,7 +278,8 @@ const Home = {
         mdl,
         title: "Upcoming Events!",
         type: "event",
-        data: mdl.data.events,
+        //if the slider starts flickering: move the pred to the slider comp or clone events
+        data: mdl.data.events.filter(eventIsUpcoming),
       }),
       m(Section, {
         mdl,

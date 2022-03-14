@@ -30,7 +30,7 @@ const LegalRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return ScrollToPageTitle()
+      return !isAnchor && ScrollToPageTitle()
     },
     component: (mdl) =>
       m(Layout, { mdl }, m(DeedRes, { key: mdl.state.anchor, mdl })),

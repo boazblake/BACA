@@ -127,7 +127,9 @@ const OpenCageUrl = `${OpenCage.baseUrl}?key=${OpenCage.key}&q=`
 const openCage = {
   getLocationTask: (mdl) => (query) =>
     HttpTask(OpenCage.headers())("GET")(mdl)(
-      OpenCageUrl + query + `&pretty=1&json&bounds=${mdl.Map.bounds()}`
+      OpenCageUrl +
+        query +
+        `&pretty=1&countrycode=us&bounds=${mdl.Map.bounds()}`
     )(null),
 }
 
