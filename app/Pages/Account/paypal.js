@@ -1,6 +1,7 @@
 import Task from "data.task"
 import { values } from "ramda"
 import { addSuccess } from "Components/toast"
+
 const makePaymentTask = (actions) =>
   new Task((rej, res) => actions.order.capture().then(res, rej))
 
