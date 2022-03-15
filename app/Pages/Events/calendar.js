@@ -1,3 +1,4 @@
+import dayjs from "dayjs"
 import { propEq, head, tail } from "ramda"
 import FullCalendar from "Utils/fullcalendar.min.js"
 
@@ -36,8 +37,9 @@ const formatEventForCalendar = (event) =>
     : event
 
 const initCal = (dom, state, events) => {
+  console.log("events", events)
   return new FullCalendar.Calendar(dom, {
-    events: events,
+    events,
     eventClick: onEventClick(state),
     initialView: "dayGridMonth",
     initialDate: new Date(),
@@ -70,14 +72,15 @@ const Calendar = {
         state.calendar.render()
       },
       onclick: (e) => {
-        if (
-          mdl.state.isAuth() &&
-          !state.previewEvent() &&
-          getCellDate(e.target)
-        ) {
-          state.selectedDate(getCellDate(e.target))
+        let date = getCellDate(e.target)
+        if (mdl.state.isAuth() && !state.previewEvent() && date) {
+          console.log("date", date, dayjs(date).add(1, "day").toISOString())
+          state.selectedDate(date)
           state.event.startDate = state.selectedDate()
-          state.event.endDate = state.selectedDate()
+          state.event.endDate = dayjs(date)
+            .add(1, "day")
+            .toISOString()
+            .split("T")[0]
           state.selectedDate() && state.showEditor(true)
         }
       },
