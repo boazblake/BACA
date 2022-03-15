@@ -142,7 +142,9 @@ const toPriceModel = ({ Burpies, Wraps, Blankets, Collections }) => ({
 
 export const parsePrices = compose(toPriceModel, last, prop("results"))
 
+export const DAYSOFWEEK = ["Sun", "Mon", "Teus", "Wed", "Thurs", "Fri", "Sat"]
 export const formatDate = (date) => date.split("T")[0]
+
 export const handlers = (types, fn) =>
   types.reduce((acc, type) => Object.assign(acc, { [type]: fn }), {})
 

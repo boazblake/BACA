@@ -7,6 +7,7 @@ import {
   UserLine,
 } from "@mithril-icons/clarity/cjs"
 import DateTime from "Components/DateTime"
+import { DAYSOFWEEK } from "Utils"
 import { includes, without } from "ramda"
 
 const updateEventTask = (mdl) => (id) => (event) =>
@@ -59,6 +60,14 @@ const EventPreview = {
                 m(CalendarLine, { fill: "#14854f" }),
                 m(DateTime, { event })
               ),
+
+              event.isRecur &&
+                m(
+                  ".grouped",
+                  "This event reoccurs on the following days: ",
+                  event.daysRecur.map((idx) => DAYSOFWEEK[idx]).join(", ")
+                ),
+
               event.location &&
                 m(
                   ".grouped",

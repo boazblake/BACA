@@ -25,9 +25,19 @@ const onEventClick = (state) => (info) => {
   }
 }
 
-const initCal = (dom, state) => {
+const formatEventForCalendar = (event) =>
+  event.isRecur
+    ? {
+        daysOfWeek: event.daysRecur,
+        startRecur: event.start,
+        endRecur: event.end,
+        ...event,
+      }
+    : event
+
+const initCal = (dom, state, events) => {
   return new FullCalendar.Calendar(dom, {
-    events: state.events,
+    events: events,
     eventClick: onEventClick(state),
     initialView: "dayGridMonth",
     initialDate: new Date(),
@@ -55,7 +65,8 @@ const Calendar = {
   view: ({ attrs: { mdl, state } }) =>
     m("section#calendar", {
       oncreate: ({ dom }) => {
-        state.calendar = initCal(dom, state)
+        let events = state.events.map(formatEventForCalendar)
+        state.calendar = initCal(dom, state, events)
         state.calendar.render()
       },
       onclick: (e) => {
@@ -66,6 +77,7 @@ const Calendar = {
         ) {
           state.selectedDate(getCellDate(e.target))
           state.event.startDate = state.selectedDate()
+          state.event.endDate = state.selectedDate()
           state.selectedDate() && state.showEditor(true)
         }
       },

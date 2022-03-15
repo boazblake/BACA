@@ -1,7 +1,7 @@
 import Calendar from "./calendar"
 import Editor from "./editor"
 import EventPreview from "./event"
-import { propEq, prop, head, tail, clone } from "ramda"
+import { map, propEq, prop, head, tail, clone } from "ramda"
 import Loader from "Components/loader.js"
 import Task from "data.task"
 import { validateEventTask } from "./validations.js"
@@ -17,6 +17,7 @@ const state = {
   files: [],
   event: {
     attendees: [],
+    likes: [],
     image: null,
     id: "",
     startDate: "",
@@ -29,11 +30,15 @@ const state = {
     description: "",
     allDay: false,
     location: "",
+    isRecur: false,
+    daysRecur: [], //0 = sunday, 1 = monday ...
   },
 }
 
 const resetState = (s) => {
   state.event = {
+    attendees: [],
+    likes: [],
     image: "",
     id: "",
     startDate: "",
@@ -46,12 +51,14 @@ const resetState = (s) => {
     description: "",
     location: "",
     allDay: false,
+    isRecur: false,
+    daysRecur: [], //0 = sunday, 1 = monday ...
   }
 
   state.files = []
   state.errors = {}
 }
-const toViewModel = (event) => {
+const toPreviewModel = (event) => {
   let start = event.start.split("T")
   let end = event.end.split("T")
   event.startDate = head(start)
@@ -75,7 +82,7 @@ const fetchEvents = ({ attrs: { mdl } }) => {
         events
           .filter(propEq("objectId", mdl.state.selectedPreviewEvent()))
           .map(clone)
-          .map(toViewModel)
+          .map(toPreviewModel)
       )
       state.previewEvent(true)
     }
@@ -148,6 +155,8 @@ const submitEvent = (
   mdl,
   {
     id,
+    attendees,
+    likes,
     startDate,
     startTime,
     endDate,
@@ -157,11 +166,15 @@ const submitEvent = (
     description,
     image,
     location,
+    isRecur,
+    daysRecur,
   }
 ) => {
   let start = formatDate(startDate, startTime)
   let end = formatDate(endDate, endTime)
   let event = {
+    attendees,
+    likes,
     start,
     end,
     title,
@@ -170,6 +183,8 @@ const submitEvent = (
     createdBy: mdl.user.name,
     image,
     location,
+    isRecur,
+    daysRecur: daysRecur.sort(),
   }
 
   const onError = (errors) => {
@@ -185,11 +200,7 @@ const submitEvent = (
   const submitOrUpdateTask = (id) => (data) =>
     id
       ? mdl.http.back4App.putTask(mdl)(`Classes/Events/${id}`)(data)
-      : mdl.http.back4App.postTask(mdl)("Classes/Events")({
-          ...data,
-          attendees: [],
-          likes: [],
-        })
+      : mdl.http.back4App.postTask(mdl)("Classes/Events")(data)
 
   return validateEventTask(event)
     .chain(submitOrUpdateTask(id))

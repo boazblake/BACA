@@ -1,8 +1,9 @@
-import { handlers } from "Utils"
+import { handlers, DAYSOFWEEK } from "Utils"
 
 const onInput = (event) =>
   handlers(["oninput"], (e) => {
     if (e.target.type == "checkbox") {
+      if (e.target.id == "daysRecur") return
       return (event[e.target.id] = JSON.parse(e.target.checked))
     }
     if (e.target.id == "file") {
@@ -29,8 +30,8 @@ const Editor = {
       state,
       uploadImage,
     },
-  }) =>
-    m(
+  }) => {
+    return m(
       "aside.modal-container",
       m(
         "article.modal",
@@ -99,11 +100,43 @@ const Editor = {
                 m("input", {
                   type: "time",
                   id: "endTime",
-
                   value: state.event.endTime,
                 })
               )
             ),
+
+            m(
+              "formgroup",
+              m(
+                "label",
+                "Recurring Event?",
+                m("input", {
+                  type: "checkbox",
+                  id: "isRecur",
+                  value: state.event.isRecur,
+                  checked: state.event.isRecur,
+                })
+              )
+            ),
+
+            state.event.isRecur &&
+              m(
+                "formgroup.grouped",
+                DAYSOFWEEK.map((day, idx) =>
+                  m(
+                    "label",
+                    day,
+                    m("input", {
+                      type: "checkbox",
+                      id: "daysRecur",
+                      value: idx,
+                      checked: state.event.daysRecur.includes(idx),
+                      onchange: (e) =>
+                        state.event.daysRecur.push(parseInt(e.target.value)),
+                    })
+                  )
+                )
+              ),
 
             m(
               "formgroup",
@@ -244,7 +277,8 @@ const Editor = {
           )
         )
       )
-    ),
+    )
+  },
 }
 
 export default Editor
