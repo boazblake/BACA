@@ -2,11 +2,7 @@ import { prop, filter } from "ramda"
 import { Table, formatDataForTable } from "Components/table.js"
 import { EditLine, RemoveLine } from "@mithril-icons/clarity/cjs"
 
-const nav = (role) => {
-  let tabs = ["blogs", "events", "images"]
-  if (role == "admin") tabs.push("users")
-  return tabs
-}
+let tabs = ["blogs", "events", "images", "users"]
 
 const state = {
   tab: "blogs",
@@ -91,7 +87,7 @@ const Admin = () => {
         "section",
         m(
           "nav.tabs",
-          nav(mdl.user.role).map((tab) =>
+          tabs.map((tab) =>
             m(
               "a.tab.pointer",
               {
