@@ -1,7 +1,11 @@
+import dayjs from "dayjs"
 import { handlers, DAYSOFWEEK } from "Utils"
 
 const onInput = (event) =>
   handlers(["oninput"], (e) => {
+    if (e.target.id == "endDate") {
+      event.endDate = dayjs(e.target.value).add(1, "day")
+    }
     if (e.target.type == "checkbox") {
       if (e.target.id == "daysRecur") return
       return (event[e.target.id] = JSON.parse(e.target.checked))
@@ -48,6 +52,8 @@ const Editor = {
             "form.grid",
             { ...onInput(state.event) },
             m("h2.text-primary", "Date", m("span.text-error", "*")),
+            state.errors.startDate &&
+              m("h2.text-error", state.errors.startDate),
             m(
               "formgroup.grouped",
               m(
@@ -107,6 +113,7 @@ const Editor = {
 
             m(
               "formgroup",
+              state.errors.isRecur && m("h2.text-error", state.errors.isRecur),
               m(
                 "label",
                 "Recurring Event?",
