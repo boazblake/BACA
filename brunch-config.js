@@ -56,20 +56,24 @@ exports.plugins = {
     globDirectory: "docs/",
     globPatterns: ["**/*.*"],
     swDest: "docs/sw.js",
+    // runtimeCaching: [
+    //   {
+    //     urlPattern: "^https://baca.b4a.io$",
+    //     handler: "CacheFirst",
+    //     options: {
+    //       cacheName: "test-cache-v1",
+    //       expiration: {
+    //         // maxEntries: 5,
+    //         maxAgeSeconds: 3600,
+    //       },
+    //     },
+    //   },
+    //   // {
+    //   //   urlPattern: "/.*",
+    //   //   handler: "networkOnly",
+    //   // },
+    // ],
   },
-  // swPrecache: {
-  //   swFileName: "service-worker.js",
-  //   options: {
-  //     autorequire: ["app/assets/index.html"],
-  //     staticFileGlobs: [
-  //       "docs/app.css",
-  //       "docs/app.js",
-  //       "docs/vendor.js",
-  //       "docs/index.html",
-  //     ],
-  //     stripPrefix: "docs/",
-  //   },
-  // },
   babel: { ignore: [/web\/static\/vendor/] },
   "@babel": { presets: ["env"] },
   terser: {

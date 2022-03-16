@@ -92,9 +92,17 @@ const paypal = {
     HttpTask(PAYPAL.sandbox.headers(PAYPAL))("PUT")(mdl)(paypalUrl + url)(dto),
 }
 
+const cachCall = (url) =>
+  url == "users/me"
+    ? { "Cache-Control": "private" }
+    : {
+        "If-Modified-Since": new Date(),
+        "Cache-Control": "public, max-age=604800",
+      }
+
 const back4App = {
   getTask: (mdl) => (url) =>
-    HttpTask(BACK4APP.headers(mdl, BACK4APP))("GET")(mdl)(
+    HttpTask(BACK4APP.headers(mdl, BACK4APP, cachCall(url)))("GET")(mdl)(
       `${BACK4APP.baseUrl}/${url}`
     )(null),
   postTask: (mdl) => (url) => (dto) =>

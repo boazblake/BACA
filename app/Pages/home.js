@@ -15,7 +15,6 @@ const State = {
 
 const createCarousel = (dom) => {
   let slides = dom.children[1]
-  log("# of slides")(slides.children.length)
   let prev = dom.children[2].children[0]
   let next = dom.children[2].children[1]
   const slider = new Glider(slides, {

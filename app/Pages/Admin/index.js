@@ -85,14 +85,9 @@ const getUsersTask = (mdl) =>
     .getTask(mdl)("Users")
     .map(prop("results"))
     .map(filter(prop("name")))
-    .map(log("users"))
 
 const getDuesTask = (mdl) =>
-  mdl.http.back4App
-    .getTask(mdl)("Classes/Dues")
-    .map(prop("results"))
-    .map(log("dues"))
-// .map(filter(prop("name")))
+  mdl.http.back4App.getTask(mdl)("Classes/Dues").map(prop("results"))
 
 const getData = ({ attrs: { mdl } }) => {
   Task.of((users) => (dues) => ({
