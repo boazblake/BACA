@@ -1,8 +1,9 @@
 import { prop, filter } from "ramda"
 import { Table, formatDataForTable } from "Components/table.js"
 import { EditLine, RemoveLine } from "@mithril-icons/clarity/cjs"
-
-let tabs = ["blogs", "events", "images", "users"]
+import Task from "data.task"
+import { formatDate } from "Utils/helpers"
+let tabs = ["blogs", "events", "images", "users", "dues"]
 
 const state = {
   tab: "blogs",
@@ -63,6 +64,13 @@ const displayType = {
   events: eventsViewmodel,
   blogs: blogsViewmodel,
   images: imagesViewmodel,
+  dues: ({ date, status, full_name, email, address }) => ({
+    date: formatDate(date),
+    status,
+    full_name,
+    email,
+    address,
+  }),
 }
 
 const handleType = (tab) => (data) => displayType[tab](data)
@@ -72,16 +80,36 @@ const toViewmodel = (state, mdl) => {
   return formatDataForTable([], data)
 }
 
-const getUsers = (mdl) =>
+const getUsersTask = (mdl) =>
   mdl.http.back4App
     .getTask(mdl)("Users")
     .map(prop("results"))
     .map(filter(prop("name")))
-    .fork(log("error"), (u) => (mdl.data.users = u))
+    .map(log("users"))
+
+const getDuesTask = (mdl) =>
+  mdl.http.back4App
+    .getTask(mdl)("Classes/Dues")
+    .map(prop("results"))
+    .map(log("dues"))
+// .map(filter(prop("name")))
+
+const getData = ({ attrs: { mdl } }) => {
+  Task.of((users) => (dues) => ({
+    users,
+    dues,
+  }))
+    .ap(getUsersTask(mdl))
+    .ap(getDuesTask(mdl))
+    .fork(log("error"), ({ users, dues }) => {
+      mdl.data.users = users
+      mdl.data.dues = dues
+    })
+}
 
 const Admin = () => {
   return {
-    oninit: ({ attrs: { mdl } }) => mdl.user.role == "admin" && getUsers(mdl),
+    oninit: getData,
     view: ({ attrs: { mdl } }) =>
       m(
         "section",
