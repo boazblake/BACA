@@ -213,7 +213,7 @@ const Album = {
             m("h2", state.title.toLocaleUpperCase()),
             m(
               ".row",
-              state.album.map((pic) =>
+              state.album.map((pic, idx) =>
                 m(
                   "figure.is-center.col-4.pos-rel",
                   mdl.state.isAuth() &&
@@ -223,7 +223,10 @@ const Album = {
                       fill: "red",
                       onclick: (e) => deleteImg(mdl, pic),
                     }),
-                  m("img", { src: pic.thumb })
+                  m("img.pointer", {
+                    src: pic.thumb,
+                    // onclick: showImage(pic, idx)
+                  })
                 )
               )
             )

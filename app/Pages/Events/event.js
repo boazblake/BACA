@@ -57,7 +57,7 @@ const EventPreview = {
               ".col",
               m(
                 ".grouped",
-                m(CalendarLine, { fill: "#14854f" }),
+                m(CalendarLine, { fill: "#14854f", height: 35, width: 35 }),
                 m(DateTime, { event })
               ),
 
@@ -70,8 +70,8 @@ const EventPreview = {
 
               event.location &&
                 m(
-                  ".grouped",
-                  m(HomeSolid, { fill: "#14854f", height: 60, width: 60 }),
+                  "h4.grouped",
+                  m(HomeSolid, { fill: "#14854f", height: 35, width: 35 }),
                   m("label", event.location)
                 ),
               event.allDay &&
@@ -81,7 +81,7 @@ const EventPreview = {
               ".col",
               m(
                 ".grouped clear icon",
-                m(UserLine, { fill: "#14854f" }),
+                m(UserLine, { height: 35, width: 35, fill: "#14854f" }),
                 m("label", "Attendees: ", event.attendees.length)
               ),
               mdl.state.isAuth() &&

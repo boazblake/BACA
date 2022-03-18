@@ -133,11 +133,18 @@ img {
   width: intrinsic;
 }
 
-.logoLoader {
-  width: max-content;
-  margin: 0 auto;
+#logo-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: white;
+  z-index: 10000;
   .heartbeat {
-    width: 50rem;
+    position: fixed;
+    width: 50vh;
   }
 }
 

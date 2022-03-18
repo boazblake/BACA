@@ -4,9 +4,9 @@ const Loader = () => {
   return {
     view: () =>
       m(
-        ".logoLoader",
+        "#logo-container",
         { onremove: FadeBack },
-        m("img.heartbeat", { src: "images/baca-logo.webp" })
+        m("img#heartbeat.heartbeat", { src: "images/logo.webp" })
       ),
   }
 }

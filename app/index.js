@@ -39,6 +39,28 @@ if (process.env.NODE_ENV !== "production") {
         .register("./sw.js")
         .then((registration) => {
           console.log("⚙️ SW registered: ", registration)
+          // Notification.requestPermission(function (result) {
+          //   if (result === "granted") {
+          //     navigator.serviceWorker.ready.then(function (registration) {
+          //       registration.showNotification("Notification with ServiceWorker")
+          //     })
+          //   }
+          // })
+          // registration.pushManager.getSubscription()
+
+          // //Subscribes user to Push notifications
+          // registration.pushManager
+          //   .subscribe({
+          //     userVisibleOnly: true, //Set user to see every notification
+          //   })
+          //   .then((subscription) => {
+          //     addSuccess("Subscribed successfully.")
+          //     console.info("Push notification subscribed.")
+          //     console.log(subscription)
+          //   })
+          //   .catch((error) => {
+          //     console.error("Push notification subscription error: ", error)
+          //   })
         })
         .catch((registrationError) => {
           console.log("🧟 SW registration failed: ", registrationError)
@@ -46,7 +68,6 @@ if (process.env.NODE_ENV !== "production") {
     })
   }
 }
-
 // set display profiles
 const getProfile = (w) => {
   if (w < 464) return "phone"
