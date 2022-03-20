@@ -39,7 +39,7 @@ const Account = ({ attrs: { mdl } }) => {
           m(
             "section",
             m(
-              "nav.tabs",
+              "nav.nav.tabs",
               nav(mdl.user.role).map((tab) =>
                 m(
                   m.route.Link,

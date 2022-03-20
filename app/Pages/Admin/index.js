@@ -128,7 +128,7 @@ const Admin = () => {
       m(
         "section",
         m(
-          "nav.tabs",
+          "nav.nav.tabs",
           tabs.map((tab) =>
             m(
               "a.tab.pointer",
