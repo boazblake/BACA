@@ -30,16 +30,8 @@ self.__precacheManifest = [
     "revision": "491d81df15e317315289fc39396f458c"
   },
   {
-    "url": "app.css.gz",
-    "revision": "d41d8cd98f00b204e9800998ecf8427e"
-  },
-  {
     "url": "app.js",
-    "revision": "ba95917d0b4772e66c59fe7e97f0c8a0"
-  },
-  {
-    "url": "app.js.gz",
-    "revision": "d41d8cd98f00b204e9800998ecf8427e"
+    "revision": "51f565dc28452b1474f0942bb391e5a7"
   },
   {
     "url": "files/Bonham_Acres_Sec_1_Amendent_3.pdf",
@@ -190,16 +182,8 @@ self.__precacheManifest = [
     "revision": "94db90297296cb11e1ef2ae27ef06cc4"
   },
   {
-    "url": "index.html.gz",
-    "revision": "d41d8cd98f00b204e9800998ecf8427e"
-  },
-  {
     "url": "manifest.json",
     "revision": "66fba0463b7f8a94b44aef864ba46875"
-  },
-  {
-    "url": "vendor.js.gz",
-    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});

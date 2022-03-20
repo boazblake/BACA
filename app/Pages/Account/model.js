@@ -22,9 +22,22 @@ const getProfile = (mdl) => (id) =>
     .map(head)
     .map(toProfileVM(mdl.user))
 
-const toDuesVM = (dues) => {
-  dues.date = new Date(dues.date).toString().split(" ").splice(0, 4).join(" ")
-  return dues
+const toDuesVM = ({ date, createdAt, status, full_name, address }) => {
+  return date
+    ? {
+        date: formatDate(date),
+        status,
+        full_name,
+        email,
+        address,
+      }
+    : {
+        date: formatDate(createdAt),
+        status: "ERROR - contact administrator",
+        full_name: JSON.stringify(full_name),
+        email: JSON.stringify(email),
+        address: JSON.stringify(address),
+      }
 }
 
 const getDues = (mdl) => (id) =>

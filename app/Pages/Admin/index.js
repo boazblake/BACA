@@ -59,18 +59,37 @@ const imagesViewmodel = ({ objectId, album, image }) => ({
   ],
 })
 
+const duesViewModel = ({
+  date,
+  createdAt,
+  status,
+  full_name,
+  email,
+  address,
+}) => {
+  return date
+    ? {
+        date: formatDate(date),
+        status,
+        full_name,
+        email,
+        address,
+      }
+    : {
+        date: formatDate(createdAt),
+        status: "ERROR - contact administrator",
+        full_name: JSON.stringify(full_name),
+        email: JSON.stringify(email),
+        address: JSON.stringify(address),
+      }
+}
+
 const displayType = {
   users: userViewmodel,
   events: eventsViewmodel,
   blogs: blogsViewmodel,
   images: imagesViewmodel,
-  dues: ({ date, status, full_name, email, address }) => ({
-    date: formatDate(date),
-    status,
-    full_name,
-    email,
-    address,
-  }),
+  dues: duesViewModel,
 }
 
 const handleType = (tab) => (data) => displayType[tab](data)

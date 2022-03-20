@@ -1,6 +1,7 @@
 import Task from "data.task"
 import { values } from "ramda"
 import { addSuccess } from "Components/toast"
+import { logItem } from "Utils/helpers"
 
 const makePaymentTask = (actions) =>
   new Task((rej, res) => actions.order.capture().then(res, rej))
@@ -45,14 +46,25 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
   }
 
   const onError = (mdl, state) => (error) => {
-    addError("Dues Were NOT Successfully Paid")
     log("on onErrpr", [state, error])
+    addError(
+      "There was an error with your payment. Please contact an administrator."
+    )
   }
+
+  const logItem = (mdl) => (data) =>
+    mdl.http.back4App.postTask(mdl)("classes/Logging")({
+      mdl: JSON.stringify(mdl),
+      title: "paypal issue",
+      description: "paypal success returns undefined",
+      data: JSON.stringify(data),
+    })
 
   const makePayment = (actions) => {
     makePaymentTask(actions)
       .map(formatInvoice(mdl))
       .chain(saveInvoiceTask(mdl))
+      .chain(logItem(mdl, state))
       .fork(onError(mdl, state), onSuccess(mdl, reload))
   }
 
