@@ -1,4 +1,5 @@
-import { toPairs, compose, map, prop, filter, keys, head, reverse } from "ramda"
+import { map, prop, head, reverse } from "ramda"
+import { formatDate } from "Utils/helpers"
 import Task from "data.task"
 import D from "dayjs"
 import af from "dayjs/plugin/advancedFormat"
@@ -22,7 +23,7 @@ const getProfile = (mdl) => (id) =>
     .map(head)
     .map(toProfileVM(mdl.user))
 
-const toDuesVM = ({ date, createdAt, status, full_name, address }) => {
+const toDuesVM = ({ date, createdAt, status, full_name, address, email }) => {
   return date
     ? {
         date: formatDate(date),
