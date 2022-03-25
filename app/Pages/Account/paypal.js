@@ -1,7 +1,6 @@
 import Task from "data.task"
 import { values } from "ramda"
 import { addSuccess } from "Components/toast"
-import { logItem } from "Utils/helpers"
 
 const makePaymentTask = (actions) =>
   new Task((rej, res) => actions.order.capture().then(res, rej))
@@ -62,9 +61,9 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
 
   const makePayment = (actions) => {
     makePaymentTask(actions)
+      .chain(logItem(mdl, state))
       .map(formatInvoice(mdl))
       .chain(saveInvoiceTask(mdl))
-      .chain(logItem(mdl, state))
       .fork(onError(mdl, state), onSuccess(mdl, reload))
   }
 

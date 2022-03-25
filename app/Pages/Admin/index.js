@@ -141,7 +141,7 @@ const Admin = () => {
           )
         ),
 
-        m("section.container", m(Table, { mdl, ...toViewmodel(state, mdl) }))
+        m("section.container", m(Table, { mdl, data: toViewmodel(state, mdl) }))
       ),
   }
 }

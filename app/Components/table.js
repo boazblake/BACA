@@ -1,6 +1,17 @@
+import { Times, CheckLine } from "@mithril-icons/clarity/cjs"
 import { toPairs, compose, map, keys, clone } from "ramda"
 
-const toColCell = (x) => ({ col: x[0], val: x[1] })
+const formatUIValue = (val) => {
+  switch (val) {
+    case typeof val == "boolean":
+      return val ? m(CheckLine) : m(Times)
+      break
+    default:
+      return val
+  }
+}
+
+const toColCell = (x) => ({ col: x[0], val: formatUIValue(x[1]) })
 
 export const formatDataForTable = (removeProps, data) => {
   let dto = clone(data)
@@ -20,7 +31,7 @@ const Cell = () => {
       },
       children,
     }) =>
-      screenSize == "wide"
+      ["phone", "wide"].includes(screenSize)
         ? m("tr", [
             m("td", { style: { width: "25%" } }, m("label", children[0].key)),
             m("th", children),
@@ -46,8 +57,13 @@ const Row = ({ attrs: { mdl } }) => {
 
 export const Table = () => {
   return {
-    view: ({ attrs: { mdl, cols, rows } }) =>
-      m(
+    view: ({
+      attrs: {
+        mdl,
+        data: { cols, rows },
+      },
+    }) => {
+      return m(
         "section.table",
         {
           style: {
@@ -72,6 +88,7 @@ export const Table = () => {
               )
             )
           : m("h2", "No data")
-      ),
+      )
+    },
   }
 }

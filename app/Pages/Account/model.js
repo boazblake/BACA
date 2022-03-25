@@ -28,7 +28,7 @@ const toDuesVM = ({ date, createdAt, status, full_name, address, email }) => {
     ? {
         date: formatDate(date),
         status,
-        full_name,
+        name: full_name,
         email,
         address,
       }

@@ -4,7 +4,7 @@ import Messages from "./messages"
 import { loadAllTask } from "./model"
 
 const Account = ({ attrs: { mdl } }) => {
-  const nav = () => ["PROFILE", "DUES", "MESSAGES"]
+  const nav = () => ["PROFILE", "DUES"]
 
   const state = {
     tab: mdl.state?.anchor ?? "PROFILE",

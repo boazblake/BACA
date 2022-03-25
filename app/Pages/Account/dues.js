@@ -13,7 +13,7 @@ const Dues = {
       mdl.data.dues.any() &&
         m(Table, {
           mdl,
-          ...formatDataForTable(
+          data: formatDataForTable(
             ["userId", "objectId", "createdAt", "updatedAt"],
             mdl.data.dues
           ),
