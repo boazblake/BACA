@@ -70,6 +70,7 @@ const Hero = () => {
         },
         Images.map((image, idx) =>
           m("img.hero-img.animated.fadeout", {
+            alt: "hero",
             key: idx,
             class: state.image() == idx ? "fadeInRight" : "fadeOutLeft",
             onload: (e) => e.target.classList.replace("fadeout", "fadeInRight"),
@@ -93,3 +94,4 @@ const Hero = () => {
 }
 
 export default Hero
+

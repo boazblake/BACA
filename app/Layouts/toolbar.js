@@ -37,6 +37,7 @@ export default {
           "figure.pointer",
           m(m.route.Link, {
             selector: "img",
+            alt: "logo",
             id: "nav-logo",
             href: "/",
             src: "images/baca-logo.webp",
@@ -63,3 +64,4 @@ export default {
       m(Toasts)
     ),
 }
+

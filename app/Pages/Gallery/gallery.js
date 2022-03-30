@@ -56,7 +56,10 @@ const AlbumCover = {
         class: "button card col-4 bg-white",
         href: `social/gallery/album:${album}`,
       },
-      m("img", { src: thumb }),
+      m("img", {
+        alt: "",
+        src: thumb,
+      }),
       m("figcaption", album)
     ),
 }
@@ -150,3 +153,4 @@ const Gallery = {
 }
 
 export default Gallery
+

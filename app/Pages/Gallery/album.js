@@ -143,6 +143,8 @@ const AddImagesModal = () => {
                           onclick: (e) => selectImg(src, file),
                         },
                         m("img", {
+                          alt: "",
+
                           src,
                         })
                       )
@@ -247,7 +249,10 @@ const Album = {
                     {
                       onclick: (e) => state.showSelectedImage(null),
                     },
-                    m("img", { src: state.showSelectedImage() })
+                    m("img", {
+                      alt: "",
+                      src: state.showSelectedImage(),
+                    })
                   )
                 )
               )

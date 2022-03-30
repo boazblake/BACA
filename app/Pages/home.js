@@ -126,6 +126,7 @@ const Blog = {
       },
       m("img", {
         src: blog.img || "images/main.webp",
+        alt: "",
         style: {
           objectFit: "contain",
           maxHeight: "150px",
@@ -158,6 +159,7 @@ const Img = {
         style: { height: "100%", margin: "0 auto" },
         key: idx,
         src: img.thumb,
+        alt: "",
       })
     ),
 }
@@ -180,6 +182,7 @@ const Event = {
         ".row.grouped",
         m("h2.is-left.text-primary text-wrap", event.title),
         m("img.is-right", {
+          alt: "",
           style: {
             maxHeight: "100px",
           },
@@ -289,7 +292,10 @@ const Home = {
                 {
                   onclick: (e) => state.image(null),
                 },
-                m("img", { src: state.image() })
+                m("img", {
+                  alt: "",
+                  src: state.image(),
+                })
               )
             )
           )
