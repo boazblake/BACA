@@ -6,7 +6,8 @@ import { TimesCircleLine, ArrowLine } from "@mithril-icons/clarity/cjs"
 const state = {
   album: [],
   title: "",
-  showModal: Stream(false),
+  showSelectedImage: Stream(),
+  addImagesModal: Stream(false),
   isUpLoading: Stream(false),
   modalState: {
     imgFiles: [],
@@ -80,7 +81,7 @@ const submitImages = (mdl, images) => {
   const onSuccess = (d) => {
     fetchAlbum({ attrs: { mdl } })
     state.isUpLoading(false)
-    state.showModal(false)
+    state.addImagesModal(false)
   }
   const onError = (e) => console.error("e", e)
   traverse(Task.of, uploadImage(mdl), Object.values(images)).fork(
@@ -103,7 +104,7 @@ const handleUploadedImages = () => {
     .map(createObUrl)
 }
 
-const Modal = () => {
+const AddImagesModal = () => {
   return {
     onremove: () => resetModalState(state),
     view: ({ attrs: { mdl } }) =>
@@ -151,7 +152,11 @@ const Modal = () => {
           ),
           m(
             "section.modal-footer.grouped",
-            m("button", { onclick: () => state.showModal(false) }, "Cancel"),
+            m(
+              "button",
+              { onclick: () => state.addImagesModal(false) },
+              "Cancel"
+            ),
             m(
               "button",
               {
@@ -192,7 +197,7 @@ const Album = {
               m(
                 "button.button.primary",
                 {
-                  onclick: (e) => state.showModal(true),
+                  onclick: (e) => state.addImagesModal(true),
                 },
                 "Add more Images to Album"
               ),
@@ -206,7 +211,7 @@ const Album = {
                 "Delete Album"
               ),
             ],
-            state.showModal() && m(Modal, { mdl })
+            state.addImagesModal() && m(AddImagesModal, { mdl })
           ),
           m(
             "section.container",
@@ -225,13 +230,30 @@ const Album = {
                     }),
                   m("img.pointer", {
                     src: pic.thumb,
-                    // onclick: showImage(pic, idx)
+                    onclick: (e) => state.showSelectedImage(pic.image),
                   })
                 )
               )
-            )
+            ),
+            state.showSelectedImage() &&
+              m(
+                ".modal-container",
+                { style: { minHeight: "100vh" } },
+                m(
+                  ".modal",
+                  m("header.modal-header"),
+                  m(
+                    "section.modal-content.flex-col",
+                    {
+                      onclick: (e) => state.showSelectedImage(null),
+                    },
+                    m("img", { src: state.showSelectedImage() })
+                  )
+                )
+              )
           )
         ),
 }
 
 export default Album
+

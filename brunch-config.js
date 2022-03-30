@@ -106,8 +106,6 @@ exports.plugins = {
         },
 }
 
-process.env.ENVIRONMENT
-
 exports.paths = {
   public: "docs",
   watched: [

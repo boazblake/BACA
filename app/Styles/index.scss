@@ -183,6 +183,17 @@ small {
 
 }
 
+.flex-row {
+  display: flex;
+  flex-flow: row;
+}
+
+.flex-col {
+  display: flex;
+  flex-flow: column;
+}
+
+
 .strong {
   font-weight: 400;
 }

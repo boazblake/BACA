@@ -37,7 +37,6 @@ const formatEventForCalendar = (event) =>
     : event
 
 const initCal = (dom, state, events) => {
-  console.log("events", events)
   return new FullCalendar.Calendar(dom, {
     events,
     eventClick: onEventClick(state),
@@ -88,3 +87,4 @@ const Calendar = {
 }
 
 export default Calendar
+

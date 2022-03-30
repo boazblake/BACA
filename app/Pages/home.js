@@ -5,12 +5,15 @@ import Glider from "Utils/glider.min.js"
 import { clone } from "ramda"
 import dayjs from "dayjs"
 
-const eventIsUpcoming = (evt) => dayjs(evt.startDate).isAfter(dayjs())
+const tomorrow = dayjs().add(-1, "day")
 
-const State = {
+const eventIsUpcoming = (evt) => dayjs(evt.startDate).isAfter(tomorrow)
+
+const state = {
   events: null,
   blogs: null,
   images: null,
+  image: Stream(),
 }
 
 const createCarousel = (dom) => {
@@ -106,7 +109,7 @@ const createCarousel = (dom) => {
     ],
   })
 
-  State[dom.id] = slider
+  state[dom.id] = slider
 }
 
 const Blog = {
@@ -146,6 +149,7 @@ const Img = {
     m(
       ".card.m6",
       {
+        onclick: () => state.image(img.image),
         style: {
           width: "250px",
         },
@@ -258,7 +262,7 @@ const Section = {
         m(
           ".glider-contain",
           {
-            onbeforeremove: ({ dom }) => State[dom.id].destroy(),
+            onbeforeremove: ({ dom }) => state[dom.id].destroy(),
             oncreate: ({ dom }) => createCarousel(dom),
           },
           m("h2.is-center.strong", title),
@@ -272,27 +276,47 @@ const Home = {
   oninit: fetchAll,
   view: ({ attrs: { mdl } }) =>
     m(
-      "article.grid",
-      m(Section, {
-        mdl,
-        title: "Upcoming Events!",
-        type: "event",
-        //if the slider starts flickering: move the pred to the slider comp or clone events
-        data: mdl.data.events.filter(eventIsUpcoming),
-      }),
-      m(Section, {
-        mdl,
-        title: "Recent Photos",
-        type: "img",
-        data: mdl.data.images,
-      }),
-      m(Section, {
-        mdl,
-        title: "Latest Blog Posts!",
-        type: "blog",
-        data: mdl.data.blogs,
-      })
+      "",
+      state.image()
+        ? m(
+            ".modal-container",
+            { style: { minHeight: "100vh" } },
+            m(
+              ".modal",
+              m("header.modal-header"),
+              m(
+                "section.modal-content.flex-col",
+                {
+                  onclick: (e) => state.image(null),
+                },
+                m("img", { src: state.image() })
+              )
+            )
+          )
+        : m(
+            "article.grid",
+            m(Section, {
+              mdl,
+              title: "Upcoming Events!",
+              type: "event",
+              //if the slider starts flickering: move the pred to the slider comp or clone events
+              data: mdl.data.events.filter(eventIsUpcoming),
+            }),
+            m(Section, {
+              mdl,
+              title: "Recent Photos",
+              type: "img",
+              data: mdl.data.images,
+            }),
+            m(Section, {
+              mdl,
+              title: "Latest Blog Posts!",
+              type: "blog",
+              data: mdl.data.blogs,
+            })
+          )
     ),
 }
 
 export default Home
+
