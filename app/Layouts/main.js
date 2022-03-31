@@ -7,7 +7,7 @@ export default {
         m(
           "p.text-center.p-t-25",
           {
-            class: mdl.state.route.name ? "" : "m-t-25",
+            style: { height: mdl.state.route.name && "57px" },
           },
           mdl.state.route.name
         )
