@@ -1,7 +1,7 @@
 import Calendar from "./calendar"
 import Editor from "./editor"
 import EventPreview from "./event"
-import { map, propEq, prop, head, tail, clone } from "ramda"
+import { propEq, prop, head, tail, clone } from "ramda"
 import Loader from "Components/loader.js"
 import Task from "data.task"
 import { validateEventTask } from "./validations.js"
@@ -241,3 +241,4 @@ const Events = {
 }
 
 export default Events
+
