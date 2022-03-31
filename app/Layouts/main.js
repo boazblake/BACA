@@ -6,7 +6,9 @@ export default {
         "#page-title.is-marginless.bg-primary.text-white.is-vertical-align.is-horizontal-align.is-center",
         m(
           "p.text-center.p-t-25",
-          { style: { minHeight: "25px" } },
+          {
+            class: mdl.state.route.name ? "" : "m-t-25",
+          },
           mdl.state.route.name
         )
       ),
