@@ -277,6 +277,10 @@ const Section = {
 
 const Home = {
   oninit: fetchAll,
+  // oncreate: ({ dom }) => {
+  //   let imgs = Array.from(dom.getElementsByTagName("img"))
+  //   imgs.map((img) => (img.src = img.dataset.src))
+  // },
   view: ({ attrs: { mdl } }) =>
     m(
       "",
