@@ -89,6 +89,10 @@ body {
     max-height: 100vh;
 }
 
+.no-list {
+    list-style: none;
+}
+
 body.dark {
   --bg-color: #000;
   --bg-secondary-color: #131316;
