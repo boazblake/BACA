@@ -55,7 +55,7 @@ const Footer = () => {
             ".col-6",
             m("h3", "Useful Links"),
             m(
-              "ul",
+              "ul.no-list",
               m(
                 "li",
                 m(
