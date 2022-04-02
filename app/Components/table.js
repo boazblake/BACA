@@ -44,12 +44,15 @@ const Cell = () => {
   }
 }
 
-const Row = ({ attrs: { mdl } }) => {
+const Row = ({ attrs: { mdl, idxR } }) => {
   return {
     view: ({ attrs: { row } }) => {
       return [
         m(
           "tr.card",
+          {
+            style: { borderBottom: "2px solid var(--color-lightGrey)" },
+          },
           row.map((cell) =>
             m(Cell, { mdl }, m("", { key: cell.col }, cell.val))
           )
@@ -88,7 +91,7 @@ export const Table = () => {
                 ),
               m(
                 "tbody",
-                rows.map((row) => m(Row, { mdl, row }))
+                rows.map((row, idxR) => m(Row, { mdl, row, idxR }))
               )
             )
           : m("h2", "No data")

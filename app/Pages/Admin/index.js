@@ -68,14 +68,14 @@ const duesViewModel = (
     ? {
         date: formatDate(date),
         status,
-        full_name,
+        name: full_name,
         email,
         address,
       }
     : {
         date: formatDate(createdAt),
         status: "ERROR - contact administrator",
-        full_name: getUserByUserId(userId, mdl).name,
+        name: getUserByUserId(userId, mdl).name,
         email: getUserByUserId(userId, mdl).email,
         address: JSON.stringify(address),
       }
