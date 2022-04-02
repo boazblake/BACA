@@ -33,7 +33,11 @@ const Cell = () => {
     }) =>
       ["phone", "wide"].includes(screenSize)
         ? m("tr", [
-            m("td", { style: { width: "25%" } }, m("label", children[0].key)),
+            m(
+              "td",
+              { style: { width: "25%" } },
+              m("label", children[0].key.toUpperCase())
+            ),
             m("th", children),
           ])
         : m("td", { style: { width: "20%" } }, children),
@@ -74,7 +78,7 @@ export const Table = () => {
         rows.any()
           ? m(
               "table.dash-table",
-              mdl.settings.screenSize != "wide" &&
+              !["phone", "wide"].includes(mdl.settings.screenSize) &&
                 m(
                   "thead.dash-nav",
                   m(
@@ -92,3 +96,4 @@ export const Table = () => {
     },
   }
 }
+

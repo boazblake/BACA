@@ -9,6 +9,7 @@ const AuthBox = () => {
             ".is-center",
             ["admin", "mod"].includes(mdl.user.role) &&
               m(NavLink, {
+                selector: "button",
                 mdl,
                 href: `/admin/${mdl.user.routename}`,
                 link: "Admin",
@@ -17,6 +18,7 @@ const AuthBox = () => {
                 )} button dark`,
               }),
             m(NavLink, {
+              selector: "button",
               mdl,
               href: `/account/${mdl.user.routename}`,
               role: "button",
@@ -26,6 +28,7 @@ const AuthBox = () => {
               )} button primary`,
             }),
             m(NavLink, {
+              selector: "button",
               mdl,
               href: "/logout",
               role: "button",
@@ -36,6 +39,7 @@ const AuthBox = () => {
         : m(
             ".grouped.is-center",
             m(NavLink, {
+              selector: "button",
               mdl,
               role: "button",
               href: "/login",
@@ -43,6 +47,7 @@ const AuthBox = () => {
               classList: `${isActiveRoute("/login")} button primary`,
             }),
             m(NavLink, {
+              selector: "button",
               mdl,
               role: "button",
               href: "/register",
@@ -54,3 +59,4 @@ const AuthBox = () => {
 }
 
 export default AuthBox
+
