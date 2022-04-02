@@ -2,7 +2,8 @@ import { prop, filter } from "ramda"
 import { Table, formatDataForTable } from "Components/table.js"
 import { EditLine, RemoveLine } from "@mithril-icons/clarity/cjs"
 import Task from "data.task"
-import { formatDate } from "Utils/helpers"
+import { formatDate, getUserByUserId } from "Utils/helpers"
+import { add } from "ramda"
 let tabs = ["blogs", "events", "images", "users", "dues"]
 
 const state = {
@@ -59,14 +60,10 @@ const imagesViewmodel = ({ objectId, album, image }) => ({
   ],
 })
 
-const duesViewModel = ({
-  date,
-  createdAt,
-  status,
-  full_name,
-  email,
-  address,
-}) => {
+const duesViewModel = (
+  { date, createdAt, status, full_name, email, address, userId },
+  mdl
+) => {
   return date
     ? {
         date: formatDate(date),
@@ -78,8 +75,8 @@ const duesViewModel = ({
     : {
         date: formatDate(createdAt),
         status: "ERROR - contact administrator",
-        full_name: JSON.stringify(full_name),
-        email: JSON.stringify(email),
+        full_name: getUserByUserId(userId, mdl).name,
+        email: getUserByUserId(userId, mdl).email,
         address: JSON.stringify(address),
       }
 }
@@ -92,10 +89,10 @@ const displayType = {
   dues: duesViewModel,
 }
 
-const handleType = (tab) => (data) => displayType[tab](data)
+const handleType = (tab) => (mdl) => (data) => displayType[tab](data, mdl)
 
 const toViewmodel = (state, mdl) => {
-  let data = mdl.data[state.tab].map(handleType(state.tab))
+  let data = mdl.data[state.tab].map(handleType(state.tab)(mdl))
   return formatDataForTable([], data)
 }
 
@@ -147,3 +144,4 @@ const Admin = () => {
 }
 
 export default Admin
+

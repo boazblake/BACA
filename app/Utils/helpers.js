@@ -165,3 +165,6 @@ export const ScrollToPageTitle = () =>
       })
 
 export const AVATAR_URL = "https://i.ibb.co/6W0zsZH/avatar.webp"
+
+export const getUserByUserId = (userId, mdl) =>
+  mdl.data.users.find((u) => u.objectId == userId)
