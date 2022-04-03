@@ -38,8 +38,9 @@ const getUserMessagesTask = (mdl) => (encodeId) =>
   mdl.http.back4App
     .getTask(mdl)(`classes/Messages?${encodeId}`)
     .map(prop("results"))
-    .chain((messages) =>
-      messages.any()
+    .chain((messages) => {
+      console.log("messages", messages)
+      return messages.any()
         ? () => {
             let hasNotifications = messages.filter(
               (message) => !message.hasRead
@@ -48,18 +49,21 @@ const getUserMessagesTask = (mdl) => (encodeId) =>
             return Task.of(messages)
           }
         : createMessagesTask(mdl)
-    )
+    })
 
 const getUserInfoTask = (mdl) => {
   let encodeId = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
-  return Task.of((account) => (dues) => (messages) => {
-    mdl.data.account = account
-    mdl.data.dues = dues
-    mdl.data.messages = messages
-  })
+  return Task.of((account) => (dues) =>
+    // (messages) =>
+    {
+      mdl.data.account = account
+      mdl.data.dues = dues
+      mdl.data.messages = []
+    }
+  )
     .ap(getUserAccountTask(mdl)(encodeId))
     .ap(getUserDuesTask(mdl)(encodeId))
-    .ap(getUserMessagesTask(mdl)(encodeId))
+  // .ap(getUserMessagesTask(mdl)(encodeId))
 }
 export const loginTask =
   (mdl) =>
@@ -121,3 +125,4 @@ export const createMessagesTask = (mdl) => {
       return mdl
     })
 }
+

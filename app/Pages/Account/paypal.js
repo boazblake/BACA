@@ -51,17 +51,17 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
     )
   }
 
-  const logItem = (mdl) => (data) =>
-    mdl.http.back4App.postTask(mdl)("classes/Logging")({
-      mdl: JSON.stringify(mdl),
-      title: "paypal issue",
-      description: "paypal success returns undefined",
-      data: JSON.stringify(data),
-    })
+  // const logItem = (mdl) => (data) =>
+  //   mdl.http.back4App.postTask(mdl)("classes/Logging")({
+  //     mdl: JSON.stringify(mdl),
+  //     title: "paypal issue",
+  //     description: "paypal success returns undefined",
+  //     data: JSON.stringify(data),
+  //   })
 
   const makePayment = (actions) => {
     makePaymentTask(actions)
-      .chain(logItem(mdl, state))
+      // .chain(logItem(mdl))
       .map(formatInvoice(mdl))
       .chain(saveInvoiceTask(mdl))
       .fork(onError(mdl, state), onSuccess(mdl, reload))
@@ -109,3 +109,4 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
 }
 
 export default PayPal
+

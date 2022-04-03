@@ -52,7 +52,7 @@ export default {
               m(
                 "Button.button success m-r-16",
                 { onclick: () => ScrollToPageTitle() },
-                "Show Menu"
+                "Menu"
               ),
             m(AuthBox, { mdl })
           )
