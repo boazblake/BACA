@@ -1,6 +1,12 @@
 import { FunConfig } from "@boazblake/fun-config"
 import App from "./app.js"
 import Model from "Models/index.js"
+const root = document.body
+let winW = window.innerWidth
+window.log = (m) => (v) => {
+  console.log(m, v)
+  return v
+}
 
 window.perf = (fn) => {
   const startTime = performance.now()
@@ -18,14 +24,6 @@ Model.navState = Model.Routes.reduce((acc, r) => {
   return acc
 }, {})
 
-const root = document.body
-let winW = window.innerWidth
-
-window.log = (m) => (v) => {
-  console.log(m, v)
-  return v
-}
-
 if (module.hot) {
   module.hot.accept()
 }
@@ -37,31 +35,30 @@ if (process.env.NODE_ENV !== "production") {
     window.addEventListener("load", () => {
       navigator.serviceWorker
         .register("./sw.js")
-        .then((registration) => {
-          console.log("⚙️ SW registered: ", registration)
-          // Notification.requestPermission(function (result) {
-          //   if (result === "granted") {
-          //     navigator.serviceWorker.ready.then(function (registration) {
-          //       registration.showNotification("Notification with ServiceWorker")
-          //     })
-          //   }
-          // })
-          // registration.pushManager.getSubscription()
-
-          // //Subscribes user to Push notifications
-          // registration.pushManager
-          //   .subscribe({
-          //     userVisibleOnly: true, //Set user to see every notification
-          //   })
-          //   .then((subscription) => {
-          //     addSuccess("Subscribed successfully.")
-          //     console.info("Push notification subscribed.")
-          //     console.log(subscription)
-          //   })
-          //   .catch((error) => {
-          //     console.error("Push notification subscription error: ", error)
-          //   })
-        })
+        // .then((registration) => {
+        // console.log("⚙️ SW registered: ", registration)
+        // Notification.requestPermission(function (result) {
+        //   if (result === "granted") {
+        //     navigator.serviceWorker.ready.then(function (registration) {
+        //       registration.showNotification("Notification with ServiceWorker")
+        //     })
+        //   }
+        // })
+        // registration.pushManager.getSubscription()
+        // //Subscribes user to Push notifications
+        // registration.pushManager
+        //   .subscribe({
+        //     userVisibleOnly: true, //Set user to see every notification
+        //   })
+        //   .then((subscription) => {
+        //     addSuccess("Subscribed successfully.")
+        //     console.info("Push notification subscribed.")
+        //     console.log(subscription)
+        //   })
+        //   .catch((error) => {
+        //     console.error("Push notification subscription error: ", error)
+        //   })
+        // })
         .catch((registrationError) => {
           console.log("🧟 SW registration failed: ", registrationError)
         })
@@ -106,3 +103,4 @@ if (sessionStorage.getItem("baca-session-token")) {
 }
 
 m.route(root, "/", App(Model))
+
