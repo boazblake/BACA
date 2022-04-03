@@ -126,7 +126,7 @@ const Gallery = {
     mdl.state.isLoading()
       ? m(Loader)
       : m(
-          "article.grid.p-y-6.fade",
+          "article.fade",
           mdl.state.isAuth() &&
             m(
               "nav.nav",
@@ -144,7 +144,7 @@ const Gallery = {
               )
             ),
           m(
-            "section.row.container",
+            ".row.container-fluid",
             Object.keys(state.albums).map((album) =>
               m(AlbumCover, { mdl, album: state.albums[album][0] })
             )

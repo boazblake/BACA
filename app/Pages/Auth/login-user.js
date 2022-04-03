@@ -9,7 +9,7 @@ const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
     if (errs.code != 209) {
       state.errors = errs
-      state.msg(state.errors.response.error)
+      state.msg(state.errors?.response?.error)
       state.showMsg(true)
     } else {
       state.msg(
@@ -145,17 +145,17 @@ export const Login = () => {
                   }),
                   state.errors.password &&
                     m("p.text-error", state.errors.password)
+                ),
+                m(
+                  "button.button.primary.col-12",
+                  {
+                    role: "button",
+                    form: `login-form`,
+                    onclick: () => validateForm(mdl)(state.data),
+                    class: mdl.state.isLoading() && "loading",
+                  },
+                  "LOGIN"
                 )
-              ),
-              m(
-                "button.button.primary.is-center",
-                {
-                  role: "button",
-                  form: `login-form`,
-                  onclick: () => validateForm(mdl)(state.data),
-                  class: mdl.state.isLoading() && "loading",
-                },
-                "LOGIN"
               ),
 
               m(
@@ -226,3 +226,4 @@ export const Login = () => {
 }
 
 export default Login
+

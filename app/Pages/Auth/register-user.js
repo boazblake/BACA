@@ -39,7 +39,7 @@ export const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
     if (errs) {
       state.errors = errs
-      state.errorMsg(state.errors.response.error)
+      state.errorMsg(state.errors?.response?.error)
       state.showErrorMsg(true)
       console.log("failed - state", state)
     } else {
@@ -201,6 +201,7 @@ export const Register = () => {
             m(
               "button.button.primary.col-12",
               {
+                role: "button",
                 form: `register-form`,
                 onclick: () => validateForm(mdl)(state.data.userModel),
                 class: mdl.state.isLoading() && "loading",
@@ -226,3 +227,4 @@ export const Register = () => {
 }
 
 export default Register
+
