@@ -283,7 +283,7 @@ const Home = {
   // },
   view: ({ attrs: { mdl } }) =>
     m(
-      "",
+      "#home-page",
       state.image()
         ? m(
             ".modal-container",
