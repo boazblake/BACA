@@ -58,10 +58,15 @@ const onLayout =
 
 const toEventViewModel = (event) => {
   let start = event.start.split("T")
+  let end = event.end.split("T")
   return {
+    start: event.start,
+    end: event.end,
     image: event.image,
     startDate: head(start),
     startTime: tail(start),
+    endDate: head(end),
+    endTime: tail(end),
     title: event.title,
     allDay: event.allDay,
     objectId: event.objectId,
