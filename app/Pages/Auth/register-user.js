@@ -59,6 +59,7 @@ export const validateForm = (mdl) => (data) => {
       `Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login, if you are not redirected to the login page in ${state.countdown()} seconds, click the login link below.`
     )
     state.showErrorMsg(true)
+    setInterval(() => state.countdown(state.countdown() - 1), 1000)
     setTimeout(() => m.route.set("/login"), 10000)
   }
   // return console.log(data)

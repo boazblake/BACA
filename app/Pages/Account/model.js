@@ -7,9 +7,10 @@ D.extend(af)
 
 const toProfileVM =
   ({ emailVerified, email, name }) =>
-  ({ objectId, avatar, address }) => ({
+  ({ objectId, avatar, address, telephone }) => ({
     objectId,
     address,
+    telephone,
     emailVerified,
     email,
     name,
@@ -73,3 +74,4 @@ export const loadAllTask = (mdl) => {
     .ap(getDues(mdl)(id))
     .ap(getMessages(mdl)(id))
 }
+

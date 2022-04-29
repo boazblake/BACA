@@ -7,9 +7,9 @@ const BoardMembers = [
   },
   {
     title: "Vice President",
-    name: "Cortney Meza",
-    phones: ["832-491-9705"],
-    emails: ["mezacort@yahoo.com"],
+    name: "",
+    phones: [],
+    emails: [],
   },
   {
     title: "Secretary",
@@ -76,3 +76,4 @@ const Contact = (mdl) => {
 }
 
 export default Contact
+

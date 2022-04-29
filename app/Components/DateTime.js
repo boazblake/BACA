@@ -7,9 +7,8 @@ const DateTime = ({ attrs: { event } }) => {
   const formatTime = (x) => D(x).format("h:mm a")
 
   return {
-    view: () => {
-      console.log(event)
-      return event.startDate == event.endDate
+    view: () =>
+      event.startDate == event.endDate
         ? m(
             ".",
             m("h3", m("label.strong", formatDate(event.startDate))),
@@ -25,8 +24,7 @@ const DateTime = ({ attrs: { event } }) => {
             m("label.strong", formatDate(event.start)),
             m("label", " - "),
             m("label.strong", formatDate(event.end))
-          )
-    },
+          ),
   }
 }
 

@@ -4,6 +4,7 @@ import { EditLine, RemoveLine } from "@mithril-icons/clarity/cjs"
 import Task from "data.task"
 import { formatDate, getUserByUserId } from "Utils/helpers"
 import { add } from "ramda"
+import { m } from "mithril"
 let tabs = ["blogs", "events", "images", "users", "dues"]
 
 const state = {
@@ -23,10 +24,10 @@ const userViewmodel = ({
   email,
   emailVerified,
   role,
-  action: [
-    m(EditLine, { onclick: () => console.log("edit", objectId) }),
-    m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
-  ],
+  // action: [
+  //   m(EditLine, { onclick: () => console.log("edit", objectId) }),
+  //   m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
+  // ],
 })
 
 const eventsViewmodel = ({ objectId, title, image, startDate, startTime }) => ({
@@ -34,10 +35,10 @@ const eventsViewmodel = ({ objectId, title, image, startDate, startTime }) => ({
   image: m("img", { src: image }),
   startDate,
   startTime,
-  action: [
-    m(EditLine, { onclick: () => console.log("edit", objectId) }),
-    m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
-  ],
+  // action: [
+  //   m(EditLine, { onclick: () => console.log("edit", objectId) }),
+  //   m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
+  // ],
 })
 
 const blogsViewmodel = ({ objectId, title, img, text, author }) => ({
@@ -45,19 +46,19 @@ const blogsViewmodel = ({ objectId, title, img, text, author }) => ({
   img: m("img", { style: { maxWidth: "150px" }, src: img }),
   text: text.slice(0, 300),
   author,
-  action: [
-    m(EditLine, { onclick: () => console.log("edit", objectId) }),
-    m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
-  ],
+  // action: [
+  //   m(EditLine, { onclick: () => console.log("edit", objectId) }),
+  //   m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
+  // ],
 })
 
 const imagesViewmodel = ({ objectId, album, image }) => ({
   album,
   image: m("img", { style: { maxWidth: "150px" }, src: image }),
-  action: [
-    m(EditLine, { onclick: () => console.log("edit", objectId) }),
-    m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
-  ],
+  // action: [
+  //   m(EditLine, { onclick: () => console.log("edit", objectId) }),
+  //   m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
+  // ],
 })
 
 const duesViewModel = (
@@ -93,7 +94,7 @@ const handleType = (tab) => (mdl) => (data) => displayType[tab](data, mdl)
 
 const toViewmodel = (state, mdl) => {
   let data = mdl.data[state.tab].map(handleType(state.tab)(mdl))
-  return formatDataForTable([], data)
+  return formatDataForTable(["username"], data)
 }
 
 const getUsersTask = (mdl) =>

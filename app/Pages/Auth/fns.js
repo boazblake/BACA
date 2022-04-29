@@ -92,6 +92,7 @@ export const createAccountTask = (mdl) => {
   return mdl.http.back4App
     .postTask(mdl)("classes/Accounts")({
       userId: mdl.user.objectId,
+      email: mdl.user.email,
       avatar: "",
       address: "",
     })

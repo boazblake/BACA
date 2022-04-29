@@ -26,8 +26,11 @@ const removeImage = (mdl, data) => {
 
 const updateProfileMeta =
   (mdl) =>
-  ({ name, email, address }) =>
-    updateProfileTask(mdl)({ name, email, address }).fork(onError, onSuccess)
+  ({ name, address, telephone }) =>
+    updateProfileTask(mdl)({ name, address, telephone }).fork(
+      onError,
+      onSuccess
+    )
 
 const uploadImage = (mdl) => (file) => {
   mdl.http.imgBB
@@ -108,8 +111,8 @@ const Profile = ({ attrs: { mdl } }) => {
             ),
             m(
               "label",
-              "email",
-              m("input", { id: "email", value: mdl.data.profile.email })
+              "telephone",
+              m("input", { id: "telephone", value: mdl.data.profile.telephone })
             ),
             m(
               "label.icon",
@@ -180,3 +183,4 @@ const Profile = ({ attrs: { mdl } }) => {
 }
 
 export default Profile
+
