@@ -3,27 +3,44 @@ import { Table, formatDataForTable } from "Components/table.js"
 import { EditLine, RemoveLine } from "@mithril-icons/clarity/cjs"
 import Task from "data.task"
 import { formatDate, getUserByUserId } from "Utils/helpers"
-import { add } from "ramda"
-import { m } from "mithril"
 let tabs = ["blogs", "events", "images", "users", "dues"]
+import { addSuccess, addDanger } from "Components/toast"
 
 const state = {
   tab: "blogs",
 }
 
-const userViewmodel = ({
-  objectId,
+const updateUserRole = (mdl) => (id) => (role) => (name) =>
+  mdl.http.back4App
+    .putTask(mdl)(`Users/${id}`)({ role })
+    .fork(
+      () => addDanger(`Was unable to update ${name}'s role`),
+      () => {
+        addSuccess(`${name}'s role was updated`)
+        getData({ attrs: { mdl } })
+      }
+    )
+
+const userViewmodel = (
+  { objectId, email, emailVerified, name, role, username },
+  mdl
+) => ({
+  name,
+  username,
   email,
   emailVerified,
-  name,
-  role,
-  username,
-}) => ({
-  name,
-  username,
-  email,
-  emailVerified,
-  role,
+  role: [
+    m(
+      "select",
+      {
+        value: role,
+        onchange: (e) => updateUserRole(mdl)(objectId)(e.target.value)(name),
+      },
+      m("option", { value: "admin" }, "admin"),
+      m("option", { value: "mod" }, "mod"),
+      m("option", { value: "user" }, "user")
+    ),
+  ],
   // action: [
   //   m(EditLine, { onclick: () => console.log("edit", objectId) }),
   //   m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
