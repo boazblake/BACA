@@ -2,8 +2,6 @@ import NavLink from "Components/nav-link"
 import { jsonCopy } from "Utils"
 import { validateLoginTask } from "./Validations.js"
 import { loginTask, resetPasswordTask } from "./fns.js"
-// import { GroupSolidBadged } from "@mithril-icons/clarity/cjs"
-// import LogoLoader from "Components/LogoLoader"
 
 const validateForm = (mdl) => (data) => {
   const onError = (errs) => {

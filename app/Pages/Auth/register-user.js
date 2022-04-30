@@ -1,9 +1,8 @@
 import NavLink from "Components/nav-link"
 import { jsonCopy } from "Utils"
 import { validateUserRegistrationTask } from "./Validations"
-import { registerUserTask, createAccountTask } from "./fns.js"
+import { registerUserTask } from "./fns.js"
 import Stream from "mithril-stream"
-// import LogoLoader from "Components/LogoLoader"
 
 const userModel = {
   name: "",
@@ -56,17 +55,19 @@ export const validateForm = (mdl) => (data) => {
     // sessionStorage.setItem("baca-session-token", mdl.user["sessionToken"])
     // sessionStorage.setItem("baca-user", JSON.stringify(mdl.user.objectId))
     state.errorMsg(
-      `Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login, if you are not redirected to the login page in ${state.countdown()} seconds, click the login link below.`
+      `Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login. If you are not redirected to the login page in ${state.countdown()} seconds, click the login link below.`
     )
     state.showErrorMsg(true)
-    setInterval(() => state.countdown(state.countdown() - 1), 1000)
+    setInterval(() => {
+      state.countdown(state.countdown() - 1)
+      m.redraw()
+    }, 1000)
     setTimeout(() => m.route.set("/login"), 10000)
   }
   // return console.log(data)
   state.isSubmitted = true
   validateUserRegistrationTask(data)
     .chain(registerUserTask(mdl))
-    // .chain(createAccountTask)
     .fork(onError, onSuccess)
 }
 

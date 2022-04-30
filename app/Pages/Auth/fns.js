@@ -10,7 +10,7 @@ const setUserAndSessionToken = (mdl) => (user) => {
   return mdl
 }
 
-export const loginUserTask =
+const loginUserTask =
   (mdl) =>
   ({ email, password }) => {
     let login = encodeURI(`username=${email}&password=${password}`)
@@ -86,16 +86,15 @@ export const registerUserTask =
 
 export const createAccountTask = (mdl) => {
   mdl.user.account = {
-    address: "",
+    userId: mdl.user.objectId,
+    email: mdl.user.email,
+    name: mdl.user.name,
     avatar: "",
+    address: "",
+    telephone: "",
   }
   return mdl.http.back4App
-    .postTask(mdl)("classes/Accounts")({
-      userId: mdl.user.objectId,
-      email: mdl.user.email,
-      avatar: "",
-      address: "",
-    })
+    .postTask(mdl)("classes/Accounts")(mdl.user.account)
     .map(({ objectId }) => {
       mdl.user.account.objectId = objectId
       return mdl
@@ -103,12 +102,12 @@ export const createAccountTask = (mdl) => {
 }
 
 export const createDuesTask = (mdl) => {
-  mdl.user.dues = {}
+  mdl.user.dues = {
+    userId: mdl.user.objectId,
+    address: "",
+  }
   return mdl.http.back4App
-    .postTask(mdl)("classes/Dues")({
-      userId: mdl.user.objectId,
-      address: "",
-    })
+    .postTask(mdl)("classes/Dues")(mdl.user.dues)
     .map(({ objectId }) => {
       mdl.user.dues.objectId = objectId
       return mdl
@@ -116,11 +115,11 @@ export const createDuesTask = (mdl) => {
 }
 
 export const createMessagesTask = (mdl) => {
-  mdl.user.conversations = {}
+  mdl.user.conversations = {
+    userId: mdl.user.objectId,
+  }
   return mdl.http.back4App
-    .postTask(mdl)("classes/Conversations")({
-      userId: mdl.user.objectId,
-    })
+    .postTask(mdl)("classes/Conversations")(mdl.user.conversations)
     .map(({ objectId }) => {
       mdl.user.conversations.objectId = objectId
       return mdl
