@@ -1,5 +1,5 @@
 import Layout from "Layouts/index.js"
-import Contact from "Pages/contact.js"
+import BoardMembers from "Pages/board-members.js"
 import Home from "Pages/home.js"
 import About from "Pages/about.js"
 import JoinBACA from "Pages/join-baca.js"
@@ -39,10 +39,10 @@ const Routes = [
     component: (mdl) => m(Layout, { mdl }, m(About, { mdl })),
   },
   {
-    id: "contact",
-    name: "Contact BACA",
+    id: "board-members",
+    name: "BACA Board Members",
     // icon: Icons.search,
-    route: "/contact",
+    route: "/board-members",
     isNav: true,
     group: ["navmenu"],
     children: [],
@@ -50,7 +50,7 @@ const Routes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
-    component: (mdl) => m(Layout, { mdl }, m(Contact, { mdl })),
+    component: (mdl) => m(Layout, { mdl }, m(BoardMembers, { mdl })),
   },
   {
     id: "join-BACA",
@@ -69,3 +69,4 @@ const Routes = [
 ]
 
 export default Routes
+
