@@ -6,7 +6,7 @@ const About = (mdl) => {
         { class: mdl.settings.screenSize == "desktop" ? "p-50" : "" },
 
         m(
-          "section.is-marginless.bd-primary.p-x-50.p-y-6",
+          "section.is-marginless.p-x-50.p-y-6",
           m(
             "hgroup.grid",
             m("h2.strong", "About Us"),
@@ -24,7 +24,7 @@ const About = (mdl) => {
           )
         ),
         m(
-          "section.is-marginless.bd-primary.p-x-50.p-y-6.bg-primary.text-white",
+          "section.is-marginless.p-x-50.p-y-6.bg-primary.text-white",
           m(
             "hgroup.grid",
 
@@ -102,3 +102,4 @@ const About = (mdl) => {
 }
 
 export default About
+
