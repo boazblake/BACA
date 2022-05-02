@@ -9,9 +9,32 @@ const state = {
   status: "loading",
   blog: null,
   comments: null,
+  modal: Stream(false),
   new: {
     comment: "",
   },
+}
+
+const Modal = {
+  view: () =>
+    m(
+      ".modal-container",
+      { style: { minHeight: "100vh" } },
+      m(
+        ".modal",
+        m("header.modal-header"),
+        m(
+          "section.modal-content.flex-col",
+          {
+            onclick: (e) => state.modal(null),
+          },
+          m("img", {
+            alt: "",
+            src: state.modal(),
+          })
+        )
+      )
+    ),
 }
 
 const Post = {
@@ -40,7 +63,10 @@ const Post = {
         ),
         m(
           "figure.col-3.is-horizontal-align",
-          m("img", { src: blog.thumb || "images/main.webp" })
+          m("img", {
+            src: blog.thumb || "images/main.webp",
+            onclick: (e) => state.modal(blog.img),
+          })
         )
       ),
       m(
@@ -159,6 +185,7 @@ const BlogPost = {
         ),
 
         m(Post, { blog: state.blog, mdl }),
+        state.modal() && m(Modal),
         // m(Comments, { blog: state.blog, comments: state.comments, mdl }),
         m(
           m.route.Link,
@@ -175,3 +202,4 @@ const BlogPost = {
 }
 
 export default BlogPost
+
