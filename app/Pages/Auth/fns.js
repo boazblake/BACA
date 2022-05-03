@@ -32,7 +32,6 @@ const getUserDuesTask = (mdl) => (encodeId) =>
   mdl.http.back4App
     .getTask(mdl)(`classes/Dues?${encodeId}`)
     .map(prop("results"))
-    .chain((dues) => (dues.any() ? Task.of(dues) : createDuesTask(mdl)))
 
 const getUserMessagesTask = (mdl) => (encodeId) =>
   mdl.http.back4App
@@ -101,18 +100,18 @@ export const createAccountTask = (mdl) => {
     })
 }
 
-export const createDuesTask = (mdl) => {
-  mdl.user.dues = {
-    userId: mdl.user.objectId,
-    address: "",
-  }
-  return mdl.http.back4App
-    .postTask(mdl)("classes/Dues")(mdl.user.dues)
-    .map(({ objectId }) => {
-      mdl.user.dues.objectId = objectId
-      return mdl
-    })
-}
+// export const createDuesTask = (mdl) => {
+//   mdl.user.dues = {
+//     userId: mdl.user.objectId,
+//     address: "",
+//   }
+//   return mdl.http.back4App
+//     .postTask(mdl)("classes/Dues")(mdl.user.dues)
+//     .map(({ objectId }) => {
+//       mdl.user.dues.objectId = objectId
+//       return mdl
+//     })
+// }
 
 export const createMessagesTask = (mdl) => {
   mdl.user.conversations = {
