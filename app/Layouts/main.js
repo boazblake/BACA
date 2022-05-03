@@ -1,21 +1,22 @@
 export default {
   view: ({ attrs: { mdl, children } }) =>
     m(
-      "main",
-      m(
-        "#page-title.is-marginless.text-primary",
+      "main.bg-white",
+      mdl.state.route.name &&
         m(
-          "p.text-center.p-t-25.is-vertical-align.is-horizontal-align.is-center",
-          {
-            style: {
-              fontWeight: "bolder",
-              fontSize: "xx-large",
-              // height: !mdl.state.route.name && "57px",
+          "#page-title.is-marginless.text-primary",
+          m(
+            "p.text-center.p-t-25.is-vertical-align.is-horizontal-align.is-center",
+            {
+              style: {
+                fontWeight: "bolder",
+                fontSize: "xx-large",
+                // height: !mdl.state.route.name && "57px",
+              },
             },
-          },
-          mdl.state.route.name
-        )
-      ),
+            mdl.state.route.name
+          )
+        ),
       children
     ),
 }

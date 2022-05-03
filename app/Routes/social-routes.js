@@ -74,7 +74,7 @@ const SocialRoutes = [
   },
   {
     id: "blog",
-    name: "Blog",
+    name: "Blog!",
     // icon: Icons.home,
     route: "/social/blog",
     isNav: true,
@@ -147,3 +147,4 @@ const SocialRoutes = [
 ]
 
 export default SocialRoutes
+

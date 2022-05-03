@@ -35,7 +35,7 @@ self.__precacheManifest = [
   },
   {
     "url": "app.js",
-    "revision": "3a7c743c80b9144ad532746f3f3c1095"
+    "revision": "ba7e50ceb0dcaaa4c40139c034b9cf74"
   },
   {
     "url": "app.js.gz",

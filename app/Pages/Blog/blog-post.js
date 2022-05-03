@@ -165,6 +165,18 @@ const fetchBlogPost = ({ attrs: { mdl, id } }) => {
     .fork(onError, onSuccess)
 }
 
+const BackToBlogs = () =>
+  m(
+    m.route.Link,
+    {
+      selector: "button.button.primary.outline.icon",
+      href: "/social/blog",
+      class: "primary",
+    },
+    m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
+    "Back To Blogs"
+  )
+
 const BlogPost = {
   oninit: fetchBlogPost,
   view: ({ attrs: { mdl } }) =>
@@ -173,30 +185,11 @@ const BlogPost = {
       state.status == "error" && m("p", "error redirecting"),
       state.status == "loading" && m(Loader),
       state.status == "loaded" && [
-        m(
-          m.route.Link,
-          {
-            selector: "button.button.primary.outline.icon",
-            href: "/social/blog",
-            class: "primary",
-          },
-          m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
-          "Back To Blogs"
-        ),
-
+        BackToBlogs(),
         m(Post, { blog: state.blog, mdl }),
+        BackToBlogs(),
         state.modal() && m(Modal),
         // m(Comments, { blog: state.blog, comments: state.comments, mdl }),
-        m(
-          m.route.Link,
-          {
-            selector: "button.button.primary.outline.icon",
-            href: "/social/blog",
-            class: "primary",
-          },
-          m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
-          "Back To Blogs"
-        ),
       ]
     ),
 }
