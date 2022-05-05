@@ -11,7 +11,7 @@ const current = [
   },
   {
     title: "Secretary",
-    name: "Elain Lupovitch",
+    name: "Elaine Lupovitch",
   },
   {
     title: "Treasurer",
