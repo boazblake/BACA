@@ -48,7 +48,6 @@ const Footer = () => {
               )
             ),
             m("p", "bonhamacrescivicassociation at gmail dot com"),
-            m("p", "P O Box 2886"),
             m("p", "Bellaire, TX 77401")
           ),
           m(

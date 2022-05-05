@@ -1,6 +1,7 @@
 import Task from "data.task"
 import { values } from "ramda"
 import { addSuccess } from "Components/toast"
+import { m } from "mithril"
 
 const makePaymentTask = (actions) =>
   new Task((rej, res) => actions.order.capture().then(res, rej))
@@ -73,35 +74,50 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
         "section",
         state.paydues
           ? m(
-              "#payment-request-button",
-              {
-                oncreate: ({ dom }) => {
-                  paypal
-                    .Buttons({
-                      style: {
-                        shape: "rect",
-                        color: "silver",
-                        layout: "vertical",
-                        label: "pay",
-                      },
+              ".modal-container",
+              m(
+                ".modal",
+                m(
+                  ".modal-header",
+                  m(
+                    "button.button",
+                    { onclick: togglePaypal },
+                    "Cancel Payment"
+                  )
+                ),
+                m(
+                  ".modal-content",
+                  m("#payment-request-button.is-center", {
+                    oncreate: ({ dom }) => {
+                      paypal
+                        .Buttons({
+                          style: {
+                            shape: "rect",
+                            color: "silver",
+                            layout: "vertical",
+                            label: "pay",
+                          },
 
-                      createOrder: (data, actions) => {
-                        return actions.order.create({
-                          purchase_units: [
-                            { amount: { currency_code: "USD", value: 50 } },
-                          ],
+                          createOrder: (data, actions) => {
+                            return actions.order.create({
+                              purchase_units: [
+                                {
+                                  amount: { currency_code: "USD", value: 50 },
+                                },
+                              ],
+                            })
+                          },
+
+                          onApprove: (data, actions) => {
+                            status.paypal = "start"
+                            return makePayment(actions)
+                          },
                         })
-                      },
-
-                      onApprove: (data, actions) => {
-                        status.paypal = "start"
-                        return makePayment(actions)
-                      },
-                    })
-                    .render(dom)
-                },
-              },
-              m("button.button", { onclick: togglePaypal }, "Close")
+                        .render(dom)
+                    },
+                  })
+                )
+              )
             )
           : m("button.button", { onclick: togglePaypal }, "Pay Dues")
       ),
