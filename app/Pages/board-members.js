@@ -62,7 +62,7 @@ const BoardMembers = (mdl) => {
             "2022-2023 Bonham Acres Civic Association Board Members"
           ),
           m(
-            ".row.container",
+            ".row",
             current.map(({ title, name }) =>
               m(
                 `.card.col-${calcSize(mdl)}`,

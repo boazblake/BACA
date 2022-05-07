@@ -169,7 +169,7 @@ const BackToBlogs = () =>
   m(
     m.route.Link,
     {
-      selector: "button.button.primary.outline.icon",
+      selector: "button.button.clear.icon",
       href: "/social/blog",
       class: "primary",
     },

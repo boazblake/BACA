@@ -115,8 +115,10 @@ const createCarousel = (dom) => {
 const Blog = {
   view: ({ attrs: { mdl, idx, blog } }) =>
     m(
-      ".card.opacity-overlay.is-vertical-align m6 row",
+      m.route.Link,
       {
+        selector: "",
+        href: `/social/blog-post:${blog.objectId}`,
         key: idx,
         style: {
           height: "200px",
@@ -124,33 +126,37 @@ const Blog = {
           overflow: "auto",
         },
       },
-      m("img", {
-        src: blog.img || "images/main.webp",
-        alt: "",
-        style: {
-          objectFit: "contain",
-          maxHeight: "150px",
-        },
-      }),
-      m("h2.text-primary text-wrap", blog.title),
       m(
-        m.route.Link,
-        {
-          selector: "button",
-          class: "button primary outline is-full-width",
-          href: `/social/blog-post:${blog.objectId}`,
-        },
-        m("p", "...Read More")
+        ".card.opacity-overlay.is-vertical-align m6 row",
+        {},
+        m("img", {
+          src: blog.img || "images/main.webp",
+          alt: "",
+          style: {
+            objectFit: "contain",
+            maxHeight: "150px",
+          },
+        }),
+        m("h2.text-primary text-wrap", blog.title)
       )
     ),
 }
 
 const Img = {
-  view: ({ attrs: { idx, img } }) =>
+  view: ({ attrs: { mdl, idx, img } }) =>
     m(
       ".card.m6",
       {
-        onclick: () => state.image(img.image),
+        onclick: () => {
+          mdl.modal.content(
+            m("img.is-center", {
+              style: { height: "100%", margin: "0 auto" },
+              src: img.image,
+              alt: "",
+            })
+          )
+          mdl.state.showLayoutModal(true)
+        },
         style: {
           width: "250px",
         },
@@ -167,8 +173,11 @@ const Img = {
 const Event = {
   view: ({ attrs: { mdl, idx, event } }) =>
     m(
-      ".card.is-vertical-align m6 row",
+      m.route.Link,
       {
+        selector: "",
+        onclick: () => mdl.state.selectedPreviewEvent(event.objectId),
+        href: "/social/events",
         key: idx,
         style: {
           height: "200px",
@@ -177,28 +186,22 @@ const Event = {
           overflow: "auto",
         },
       },
-      event.allDay && m("p.tag", "All Day Event!"),
       m(
-        ".row.grouped",
-        m("h2.is-left.text-primary text-wrap", event.title),
-        m("img.is-right", {
-          alt: "",
-          style: {
-            maxHeight: "100px",
-          },
-          src: event.image,
-        })
-      ),
-      m(DateTime, { event }),
-      m(
-        m.route.Link,
-        {
-          selector: "button",
-          class: "button primary outline is-full-width",
-          onclick: () => mdl.state.selectedPreviewEvent(event.objectId),
-          href: "/social/events",
-        },
-        m("p", "...Read More")
+        ".card.is-vertical-align m6 row",
+        {},
+        event.allDay && m("p.tag", "All Day Event!"),
+        m(
+          ".row.grouped",
+          m("h2.is-left.text-primary text-wrap", event.title),
+          m("img.is-right", {
+            alt: "",
+            style: {
+              maxHeight: "100px",
+            },
+            src: event.image,
+          })
+        ),
+        m(DateTime, { event })
       )
     ),
 }
@@ -283,48 +286,49 @@ const Home = {
   // },
   view: ({ attrs: { mdl } }) =>
     m(
-      "#home-page",
-      state.image()
-        ? m(
-            ".modal-container",
-            { style: { minHeight: "100vh" } },
-            m(
-              ".modal",
-              m("header.modal-header"),
-              m(
-                "section.modal-content.flex-col",
-                {
-                  onclick: (e) => state.image(null),
-                },
-                m("img", {
-                  alt: "",
-                  src: state.image(),
-                })
-              )
-            )
-          )
-        : m(
-            "article.grid",
-            m(Section, {
-              mdl,
-              title: "Upcoming Events!",
-              type: "event",
-              //if the slider starts flickering: move the pred to the slider comp or clone events
-              data: mdl.data.events.filter(eventIsUpcoming),
-            }),
-            m(Section, {
-              mdl,
-              title: "Recent Photos",
-              type: "img",
-              data: mdl.data.images,
-            }),
-            m(Section, {
-              mdl,
-              title: "Latest Blog Posts!",
-              type: "blog",
-              data: mdl.data.blogs,
-            })
-          )
+      "#home-page.container-fluid",
+      // state.image()
+      //   ? m(
+      //       ".modal-container",
+      //       { style: { minHeight: "100vh" } },
+      //       m(
+      //         ".modal",
+      //         m("header.modal-header"),
+      //         m(
+      //           "section.modal-content.flex-col",
+      //           {
+      //             onclick: (e) => state.image(null),
+      //           },
+      //           m("img", {
+      //             alt: "",
+      //             src: state.image(),
+      //           })
+      //         )
+      //       )
+      //     )
+      // :
+      m(
+        "article.grid",
+        m(Section, {
+          mdl,
+          title: "Upcoming Events!",
+          type: "event",
+          //if the slider starts flickering: move the pred to the slider comp or clone events
+          data: mdl.data.events.filter(eventIsUpcoming),
+        }),
+        m(Section, {
+          mdl,
+          title: "Recent Photos",
+          type: "img",
+          data: mdl.data.images,
+        }),
+        m(Section, {
+          mdl,
+          title: "Latest Blog Posts!",
+          type: "blog",
+          data: mdl.data.blogs,
+        })
+      )
     ),
 }
 

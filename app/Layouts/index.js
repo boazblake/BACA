@@ -3,6 +3,7 @@ import Navbar from "./navbar.js"
 import SubNavbar from "./subnavbar.js"
 import Main from "./main.js"
 import Footer from "./footer.js"
+import Modal from "Components/modal.js"
 import NavModal from "./nav-modal.js"
 import { SlideOutRight, SlideInLeft } from "Styles/animations.js"
 import Toolbar from "./toolbar.js"
@@ -133,8 +134,9 @@ const Layout = {
           onbeforeremove: SlideOutRight,
           mdl,
         }),
-      mdl.state.showAuthModal() == "login" && m(Login, { mdl }),
-      mdl.state.showAuthModal() == "register" && m(Register, { mdl }),
+      mdl.state.showLayoutModal() && m(Modal, { mdl }),
+      // mdl.state.showAuthModal() == "login" && m(Login, { mdl }),
+      // mdl.state.showAuthModal() == "register" && m(Register, { mdl }),
       m(Footer, { mdl })
     ),
 }

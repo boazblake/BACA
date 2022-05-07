@@ -188,7 +188,7 @@ const Album = {
             m(
               m.route.Link,
               {
-                selector: "button.button.primary.outline.icon",
+                selector: "button.button.clear.icon",
                 href: "/social/gallery",
                 class: "primary",
               },
