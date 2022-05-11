@@ -58,6 +58,8 @@ const setupEditor = ({ attrs: { mdl } }) => {
     mdl.http.back4App
       .getTask(mdl)(`Classes/Blogs/${id}`)
       .fork(onError, onSuccess)
+  } else {
+    state.status = "loaded"
   }
 }
 

@@ -125,7 +125,7 @@ const imgBB = {
     image.append("image", file)
     image.set("key", IMGBB.apiKey)
 
-    console.log(image, file)
+    // console.log(image, file)
     return HttpTask()("POST")(mdl)(`${IMGBB.url}?key=${IMGBB.apiKey}`)(image)
   },
 }

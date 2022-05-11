@@ -30,7 +30,13 @@ export const saveImgToGalleryTask =
         image: image.url,
         thumb: thumb.url,
       })
-      .chain((_) => Task.of({ image: image.url, thumb: thumb.url }))
+      .chain(({ objectId }) =>
+        Task.of({
+          image: image.url,
+          thumb: thumb.url,
+          objectId,
+        })
+      )
 
 export const toBlogs = () => m.route.set("/social/blog")
 
