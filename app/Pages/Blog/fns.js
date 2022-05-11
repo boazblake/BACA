@@ -36,8 +36,13 @@ export const toBlogs = () => m.route.set("/social/blog")
 
 export const deleteBlog =
   (mdl) =>
-  ({ title, objectId }) =>
+  ({ title, objectId, imageId }) =>
     confirmTask(`Are you sure you want to delete the blog ${title}?`)
+      .chain((_) =>
+        imageId
+          ? mdl.http.back4App.deleteTask(mdl)(`Classes/Gallery/${imageId}`)
+          : Task.of()
+      )
       .chain((_) =>
         mdl.http.back4App.deleteTask(mdl)(`Classes/Blogs/${objectId}`)
       )

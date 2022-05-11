@@ -18,6 +18,7 @@ const state = {
   img: "",
   thumb: "",
   file: null,
+  imageId: null,
   showModal: Stream(false),
   images: [],
   modalState: Stream("upload"),
@@ -114,9 +115,10 @@ const handleImage = (mdl) => (state) =>
 
 const uploadImage = (mdl) => (file) => {
   const onError = (e) => (state.errors.img = e)
-  const onSuccess = ({ image, thumb }) => {
+  const onSuccess = ({ image, thumb, objectId }) => {
     state.img = image
     state.thumb = thumb
+    state.imageId = objectId
     state.showModal(false)
   }
 
@@ -128,7 +130,7 @@ const uploadImage = (mdl) => (file) => {
 
 const submitBlog =
   (mdl) =>
-  ({ title, img, text, thumb, objectId }) => {
+  ({ title, img, text, thumb, objectId, imageId }) => {
     const onError = (e) => console.log("e", e)
     const onSuccess = (data) =>
       m.route.set(`/social/blog-post:${objectId ? objectId : data.objectId}`)
@@ -139,6 +141,7 @@ const submitBlog =
       text,
       author: mdl.user.name,
       thumb,
+      imageId,
     }
     const updateOrSubmitBlog = objectId
       ? mdl.http.back4App.putTask(mdl)(`Classes/Blogs/${objectId}`)(dto)
