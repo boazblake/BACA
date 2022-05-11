@@ -1,5 +1,6 @@
 import Loader from "Components/loader.js"
-import { compose, groupBy, prop } from "ramda"
+import { groupBy } from "ramda"
+import { compose, prop, descend, ascend, sortWith } from "ramda"
 
 const state = {
   albums: [],
@@ -7,7 +8,11 @@ const state = {
   newAlbum: { title: "", img: null },
 }
 
-const groupByAlbum = compose(groupBy(prop("album")), prop("results"))
+const groupByAlbum = compose(
+  groupBy(prop("album")),
+  sortWith([descend(prop("updatedAt")), ascend(prop("album"))]),
+  prop("results")
+)
 
 const fetchAllAlbums = ({ attrs: { mdl } }) => {
   const onError = (e) => log("fetchAllAlbums- error")(e)
@@ -23,14 +28,14 @@ const saveImgToGalleryTask =
   (mdl) =>
   ({ data: { image, medium, thumb } }) =>
     mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
-      album: state.newAlbum.title,
+      album: state.newAlbum.title.trim(),
       image: image.url,
       // medium: medium.url,
       thumb: thumb.url,
     })
 
-const createtNewAlbum = (mdl) => {
-  const onError = (e) => log("createtNewAlbum- error")(e)
+const createNewAlbum = (mdl) => {
+  const onError = (e) => log("createNewAlbum- error")(e)
   const onSuccess = () => {
     state.newAlbum = { title: "", img: "" }
     state.showModal(false)
@@ -110,7 +115,7 @@ const NewAlbumModal = {
               disabled: !state.newAlbum.img,
               onclick: (e) => {
                 e.preventDefault()
-                createtNewAlbum(mdl)
+                createNewAlbum(mdl)
               },
             },
             "Create Album"

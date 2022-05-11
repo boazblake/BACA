@@ -13,7 +13,6 @@ const state = {
   events: null,
   blogs: null,
   images: null,
-  image: Stream(),
 }
 
 const createCarousel = (dom) => {
@@ -287,46 +286,25 @@ const Home = {
   view: ({ attrs: { mdl } }) =>
     m(
       "#home-page.container-fluid",
-      // state.image()
-      //   ? m(
-      //       ".modal-container",
-      //       { style: { minHeight: "100vh" } },
-      //       m(
-      //         ".modal",
-      //         m("header.modal-header"),
-      //         m(
-      //           "section.modal-content.flex-col",
-      //           {
-      //             onclick: (e) => state.image(null),
-      //           },
-      //           m("img", {
-      //             alt: "",
-      //             src: state.image(),
-      //           })
-      //         )
-      //       )
-      //     )
-      // :
       m(
         "article.grid",
         m(Section, {
           mdl,
           title: "Upcoming Events!",
           type: "event",
-          //if the slider starts flickering: move the pred to the slider comp or clone events
           data: mdl.data.events.filter(eventIsUpcoming),
-        }),
-        m(Section, {
-          mdl,
-          title: "Recent Photos",
-          type: "img",
-          data: mdl.data.images,
         }),
         m(Section, {
           mdl,
           title: "Latest Blog Posts!",
           type: "blog",
           data: mdl.data.blogs,
+        }),
+        m(Section, {
+          mdl,
+          title: "Recent Photos",
+          type: "img",
+          data: mdl.data.images,
         })
       )
     ),

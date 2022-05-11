@@ -152,3 +152,4 @@ const EventPreview = {
 }
 
 export default EventPreview
+
