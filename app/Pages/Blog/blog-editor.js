@@ -341,7 +341,7 @@ const BlogEditor = () => {
                   {
                     onclick: (e) => {
                       e.preventDefault()
-                      deleteBlog(mdl)(state.objectId)
+                      deleteBlog(mdl)(state)
                     },
                   },
                   "Delete"
@@ -354,3 +354,4 @@ const BlogEditor = () => {
 }
 
 export default BlogEditor
+

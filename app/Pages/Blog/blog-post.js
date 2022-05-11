@@ -84,8 +84,7 @@ const Post = {
             },
             "Edit",
             m(NoteEditLine, { fill: "white" })
-          ),
-          m("button.button.error", { onclick: () => deleteBlog(mdl) }, "Delete")
+          )
         )
     ),
 }
@@ -140,13 +139,6 @@ const Post = {
 //         )
 //     ),
 // }
-
-const toBlogs = () => m.route.set("/social/blog")
-
-const deleteBlog = (mdl) =>
-  mdl.http.back4App
-    .deleteTask(mdl)(`Classes/Blogs/${state.blog.objectId}`)
-    .fork(toBlogs, toBlogs)
 
 const fetchBlogPost = ({ attrs: { mdl, id } }) => {
   const onError = (e) => {

@@ -1,4 +1,4 @@
-import { handlers, exists } from "Utils"
+import { handlers, exists, confirmTask } from "Utils"
 import Task from "data.task"
 
 export const resetModalState = (state) => {
@@ -34,10 +34,16 @@ export const saveImgToGalleryTask =
 
 export const toBlogs = () => m.route.set("/social/blog")
 
-export const deleteBlog = (mdl) => (id) =>
-  mdl.http.back4App
-    .deleteTask(mdl)(`Classes/Blogs/${id}`)
-    .fork(toBlogs, toBlogs)
+export const deleteBlog =
+  (mdl) =>
+  ({ title, objectId }) =>
+    confirmTask(`Are you sure you want to delete the blog ${title}?`)
+      .chain((_) =>
+        mdl.http.back4App.deleteTask(mdl)(`Classes/Blogs/${objectId}`)
+      )
+      .fork((e) => {
+        console.log(e)
+      }, toBlogs)
 
 export const onInput = (state) =>
   handlers(["oninput"], (e) => {
@@ -47,3 +53,4 @@ export const onInput = (state) =>
       state[e.target.id] = e.target.value
     }
   })
+

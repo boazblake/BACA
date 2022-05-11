@@ -1,6 +1,6 @@
 import Loader from "Components/loader.js"
 import { prop, startsWith, traverse } from "ramda"
-import { exists } from "Utils"
+import { exists, confirmTask } from "Utils"
 import Task from "data.task"
 import { TimesCircleLine, ArrowLine } from "@mithril-icons/clarity/cjs"
 const state = {
@@ -36,15 +36,22 @@ const deleteAlbum = (mdl) => {
   //   .deleteTask(mdl)(`Classes/Gallery?${byAlbumName}`)
   const onError = (e) => console.error(e)
   const onSuccess = () => m.route.set("/social/gallery")
-  traverse(Task.of, deleteImageTask(mdl), state.album).fork(onError, onSuccess)
+  confirmTask(`Are you sure you want to delete Album ${state.title}?`)
+    .chain((_) => traverse(Task.of, deleteImageTask(mdl), state.album))
+    .fork(onError, onSuccess)
 }
 
 const deleteImg = (mdl, pic) => {
+  log("wtf")(pic)
   // console.log(pic)
-  const onError = (e) => log("deleteImg - error")(e)
+  const onError = (e) => {
+    log("deleteImg - error")(e)
+  }
   const onSuccess = () => fetchAlbum({ attrs: { mdl } })
 
-  deleteImageTask(mdl)(pic).fork(onError, onSuccess)
+  confirmTask("Are you sure you want to delete this Image?")
+    .chain((_) => deleteImageTask(mdl)(pic))
+    .fork(onError, onSuccess)
 }
 
 const fetchAlbum = ({ attrs: { mdl } }) => {
