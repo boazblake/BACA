@@ -27,27 +27,19 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "app.css",
-    "revision": "4f04677b83fbd9002eaeb1e241fc1023"
+    "revision": "5abe974c079d884b091da0b85bc5cfea"
   },
   {
     "url": "app.css.gz",
-    "revision": "0a19f56bbce5e5c47441cfb5c7330bbf"
-  },
-  {
-    "url": "app.css.map",
-    "revision": "9efe1b59a54268b874a4fe3cc85acc2c"
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
     "url": "app.js",
-    "revision": "27bc9fcab9fedab66b8df793eaa68488"
+    "revision": "096c524c823ec13114af1a2984d9244e"
   },
   {
     "url": "app.js.gz",
-    "revision": "09432c6b29d566261a8d3c991742f877"
-  },
-  {
-    "url": "app.js.map",
-    "revision": "f4397bd9d1e513fc58608ccda9b50818"
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
     "url": "files/Bonham_Acres_Sec_1_Amendent_3.pdf",
@@ -351,7 +343,7 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html.gz",
-    "revision": "1c6c3ea49f1676e25a0c864ddb128e7e"
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
     "url": "manifest.json",
@@ -363,7 +355,7 @@ self.__precacheManifest = [
   },
   {
     "url": "vendor.js.gz",
-    "revision": "7a58406494e97ef4b985319a97f99788"
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
