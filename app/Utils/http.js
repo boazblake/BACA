@@ -137,7 +137,9 @@ const openCage = {
     HttpTask(OpenCage.headers())("GET")(mdl)(
       OpenCageUrl +
         query +
-        `&pretty=1&countrycode=us&bounds=${mdl.Map.bounds()}`
+        `&pretty=1&countrycode=us&bounds=${encodeURIComponent(
+          mdl.Map.bounds()
+        )}`
     )(null),
 }
 
