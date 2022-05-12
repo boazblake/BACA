@@ -20,6 +20,27 @@ const NavItem = () => {
   }
 }
 
+const displayRoute = (mdl) => (r) => {
+  if (r.group.includes("authenticated")) {
+    if (mdl.state.isAuth()) {
+      return m(NavItem, {
+        mdl,
+        href: r.route,
+        link: r.name,
+        classList: `${isActiveRoute(r.route)} col-12`,
+      })
+    } else {
+      return
+    }
+  } else
+    return m(NavItem, {
+      mdl,
+      href: r.route,
+      link: r.name,
+      classList: `${isActiveRoute(r.route)} col-12`,
+    })
+}
+
 const getChildRoutes = (mdl, routeIds) =>
   mdl.Routes.filter((r) => routeIds.includes(r.id))
 
@@ -48,12 +69,7 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
                     height: "15px",
                   })
                 )
-              : m(NavItem, {
-                  mdl,
-                  href: r.route,
-                  link: r.name,
-                  classList: `${isActiveRoute(r.route)} col-12`,
-                })
+              : displayRoute(mdl)(r)
           )
         )
       ),
@@ -93,12 +109,7 @@ const NavModal = ({ attrs: { mdl } }) => {
                     toggleRoutes,
                     isSelected: mdl.navState[r.id],
                   })
-                : m(NavItem, {
-                    mdl,
-                    href: r.route,
-                    link: r.name,
-                    classList: `${isActiveRoute(r.route)} col-12`,
-                  })
+                : displayRoute(mdl)(r)
             )
           )
         )
@@ -107,3 +118,4 @@ const NavModal = ({ attrs: { mdl } }) => {
 }
 
 export default NavModal
+

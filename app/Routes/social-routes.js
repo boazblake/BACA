@@ -125,7 +125,7 @@ const SocialRoutes = [
     // icon: Icons.home,
     route: "/social/map",
     isNav: true,
-    group: ["nav", "social"],
+    group: ["nav", "social", "authenticated"],
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
