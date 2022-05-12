@@ -68,7 +68,7 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
           oncreate: ({ dom }) => (state.dom = dom),
           style: {
             position: "relative",
-            width: "500px",
+            // width: "500px",
             height: "500px",
             margin: "0 auto",
           },

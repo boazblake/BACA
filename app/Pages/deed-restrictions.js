@@ -1128,6 +1128,15 @@ const DeedRes = ({ attrs: { mdl } }) => {
               },
               tab
             )
+          ),
+
+          m(
+            "a.button.grouped",
+            {
+              target: "_blank",
+              href: "https://drive.google.com/drive/folders/17H-Zq2BBN8yKp19c4BQGIYvMPIqhgYL-",
+            },
+            "Link to PDF files"
           )
         ),
 
@@ -1143,3 +1152,4 @@ const DeedRes = ({ attrs: { mdl } }) => {
 }
 
 export default DeedRes
+
