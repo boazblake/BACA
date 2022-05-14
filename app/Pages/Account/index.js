@@ -2,6 +2,7 @@ import Profile from "./profile"
 import Dues from "./dues"
 import Messages from "./messages"
 import { loadAllTask } from "./model"
+import { prop } from "ramda"
 
 const Account = ({ attrs: { mdl } }) => {
   const nav = () => ["PROFILE", "DUES"]
@@ -12,10 +13,12 @@ const Account = ({ attrs: { mdl } }) => {
   }
 
   const loadAll = (mdl) => {
-    const onSuccess = ({ profile, dues, messages }) => {
+    const onSuccess = ({ profile, dues, messages, addresses }) => {
       mdl.data.profile = profile
       mdl.data.dues = dues
       mdl.data.messages = messages
+      mdl.data.addresses = addresses
+      mdl.data.profile.addressIds = addresses.map(prop("objectId"))
       state.status = "success"
     }
     const onError = (e) => {
@@ -54,7 +57,7 @@ const Account = ({ attrs: { mdl } }) => {
             ),
             m(
               "section.container",
-              state.tab == "PROFILE" && m(Profile, { mdl }),
+              state.tab == "PROFILE" && m(Profile, { mdl, reload: loadAll }),
               state.tab == "DUES" && m(Dues, { mdl, reload: loadAll }),
               state.tab == "MESSAGES" && m(Messages, { mdl })
             )
@@ -64,3 +67,4 @@ const Account = ({ attrs: { mdl } }) => {
 }
 
 export default Account
+

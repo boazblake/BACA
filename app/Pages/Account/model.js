@@ -5,11 +5,23 @@ import D from "dayjs"
 import af from "dayjs/plugin/advancedFormat"
 D.extend(af)
 
+const getAddressTask = (mdl) => (id) =>
+  mdl.http.back4App.getTask(mdl)(`classes/Addresses/${id}`)
+
+const getAddressesTask = (mdl) => (ids) =>
+  ids.any() ? ids.traverse(getAddressTask(mdl), Task.of) : Task.of([])
+
 const toProfileVM =
-  ({ emailVerified, email, name }) =>
-  ({ objectId, avatar, address, telephone }) => ({
+  ({
+    user: { emailVerified, email, name },
+    data: {
+      account: { objectId, avatar, address, telephone },
+    },
+  }) =>
+  ({ addressIds }) => ({
     objectId,
     address,
+    addressIds,
     telephone,
     emailVerified,
     email,
@@ -17,12 +29,12 @@ const toProfileVM =
     avatar,
   })
 
-const getProfile = (mdl) => (id) =>
+const getProfileTask = (mdl) => (id) =>
   mdl.http.back4App
     .getTask(mdl)(`classes/Accounts?${id}`)
     .map(prop("results"))
     .map(head)
-    .map(toProfileVM(mdl.user))
+    .map(toProfileVM(mdl))
 
 const toDuesVM = ({ date, createdAt, status, full_name, address, email }) => {
   return date
@@ -42,7 +54,7 @@ const toDuesVM = ({ date, createdAt, status, full_name, address, email }) => {
       }
 }
 
-const getDues = (mdl) => (id) =>
+const getDuesTask = (mdl) => (id) =>
   mdl.http.back4App
     .getTask(mdl)(`classes/Dues?${id}`)
     .map(prop("results"))
@@ -56,7 +68,7 @@ const hasNotifications = (mdl) => (msgs) => {
   return msgs
 }
 
-const getMessages = (mdl) => (id) =>
+const getMessagesTask = (mdl) => (id) =>
   mdl.http.back4App
     .getTask(mdl)(`classes/Messages?${id}`)
     .map(prop("results"))
@@ -65,13 +77,15 @@ const getMessages = (mdl) => (id) =>
 
 export const loadAllTask = (mdl) => {
   let id = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
-  return Task.of((profile) => (dues) => (messages) => ({
+  return Task.of((profile) => (dues) => (messages) => (addresses) => ({
     profile,
     dues,
     messages,
+    addresses,
   }))
-    .ap(getProfile(mdl)(id))
-    .ap(getDues(mdl)(id))
-    .ap(getMessages(mdl)(id))
+    .ap(getProfileTask(mdl)(id))
+    .ap(getDuesTask(mdl)(id))
+    .ap(getMessagesTask(mdl)(id))
+    .ap(getAddressesTask(mdl)(mdl.data.account.addressIds))
 }
 

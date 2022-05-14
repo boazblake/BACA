@@ -1,8 +1,33 @@
 import { handlers, AVATAR_URL } from "Utils/index.js"
-import { path } from "ramda"
+import { path, prop, without, assoc, propEq } from "ramda"
 import { addSuccess } from "Components/toast"
 
-const state = { files: [], locations: [], address: "", status: "" }
+const state = {
+  files: [],
+  locations: [],
+  address: "",
+  status: "",
+  disableEdit: true,
+}
+
+const fetchLocationsTask = (mdl) =>
+  mdl.http.back4App.getTask(mdl)("classes/Addresses").map(prop("results"))
+
+const toLocationVM = (addressIds) => (locations) =>
+  locations.map((location) =>
+    assoc("selected", addressIds.includes(location.objectId), location)
+  )
+
+const fetchLocations = (mdl) => (state) => {
+  const onError = log("error fetching locations")
+  const onSuccess = (locations) => {
+    state.locations = locations
+  }
+
+  fetchLocationsTask(mdl)
+    .map(toLocationVM(mdl.data.profile.addressIds))
+    .fork(onError, onSuccess)
+}
 
 const getImageSrc = (data) =>
   data.avatar && !data.avatar.includes("fake") ? data.avatar : AVATAR_URL
@@ -10,7 +35,10 @@ const getImageSrc = (data) =>
 const onError = (x) => {
   log("on error  profile")(x)
 }
-const onSuccess = (_) => addSuccess("Image uploaded successfully")
+const onSuccess = (mdl, reload) => {
+  addSuccess("Profile updated successfully", 5000)
+  reload(mdl)
+}
 
 const updateProfileTask = (mdl) => (data) =>
   mdl.http.back4App.putTask(mdl)(
@@ -24,13 +52,19 @@ const removeImage = (mdl, data) => {
   )
 }
 
+const updateModelAccount = (mdl, addressIds) => {
+  mdl.data.account.addressIds = addressIds
+  return mdl
+}
+
 const updateProfileMeta =
   (mdl) =>
-  ({ name, address, telephone }) =>
-    updateProfileTask(mdl)({ name, address, telephone }).fork(
-      onError,
-      onSuccess
-    )
+  ({ name, addressIds, telephone }) =>
+  (reload) => {
+    return updateProfileTask(mdl)({ name, addressIds, telephone })
+      .map((_) => updateModelAccount(mdl, addressIds))
+      .fork(onError, (_) => onSuccess(mdl, reload))
+  }
 
 const uploadImage = (mdl) => (file) => {
   mdl.http.imgBB
@@ -42,7 +76,7 @@ const uploadImage = (mdl) => (file) => {
     })
     .chain(updateProfileTask(mdl))
     .map(() => (mdl.data.profile.avatar = state.avatar))
-    .fork(onError, onSuccess)
+    .fork(onError, () => addSuccess("Image Updated", 5000))
 }
 
 const onInput = (profile) =>
@@ -57,8 +91,20 @@ const onInput = (profile) =>
     }
   })
 
-const Profile = ({ attrs: { mdl } }) => {
-  log("mdl - profile page")(mdl)
+const addAddress = (profile, addressId) => profile.addressIds.push(addressId)
+
+const removeAddress = (profile, addressId) => {
+  state.locations.find((l) => l.objectId == addressId).selected = false
+  profile.addressIds = without([addressId], profile.addressIds)
+}
+
+const toggleEditProfile = (mdl, state, reload) => {
+  state.disableEdit = !state.disableEdit
+  fetchLocations(mdl)(state)
+  state.disableEdit && updateProfileMeta(mdl)(mdl.data.profile)(reload)
+}
+
+const Profile = ({ attrs: { mdl, reload } }) => {
   return {
     view: ({ attrs: { mdl } }) => {
       return m(
@@ -84,7 +130,7 @@ const Profile = ({ attrs: { mdl } }) => {
                       },
                       onclick: (e) => removeImage(mdl, mdl.data.profile),
                     },
-                    "Remove Profile Pic"
+                    "Remove Image"
                   )
                 : m(
                     "label.button",
@@ -101,81 +147,144 @@ const Profile = ({ attrs: { mdl } }) => {
             )
           ),
           m(
-            "form.col",
-            !mdl.data.profile.emailVerified &&
-              m("label.warning", "email not verified"),
-            m(
-              "label",
-              "name",
-              m("input", { id: "name", value: mdl.data.profile.name })
-            ),
-            m(
-              "label",
-              "telephone",
-              m("input", { id: "telephone", value: mdl.data.profile.telephone })
-            ),
-            m(
-              "label.icon",
-              "Address",
-              m("input", {
-                oninput: (e) => {
-                  if (e.target.value.length > 3) {
-                    state.status = "isloading"
-                    mdl.http.openCage
-                      .getLocationTask(mdl)(e.target.value.trim())
-                      .fork(
-                        (e) => {
-                          state.status = "error"
-                          log("error fetching locations")(e)
-                        },
-                        ({ results }) => {
-                          state.status = "loaded"
-                          state.locations = results
-                        }
-                      )
-                  }
-                },
-                id: "address",
-                value: mdl.data.profile.address,
-              })
-            ),
-            state.locations.any() &&
-              m(
-                "details.dropdown",
-                m("summary.button.outline", "Address Suggestions"),
-                m(
-                  ".card",
-                  m(
-                    "ul",
-
-                    state.locations.map(({ formatted }) =>
-                      m(
-                        "li.pointer",
-                        {
-                          onclick: (e) => {
-                            mdl.data.profile.address = formatted
-                            state.locations = []
-                          },
-                        },
-                        formatted
-                      )
-                    )
-                  )
+            "section.col",
+            state.disableEdit
+              ? m(
+                  "button.button",
+                  {
+                    style: {
+                      borderColor: "var(--blue)",
+                      color: "var(--blue)",
+                    },
+                    onclick: (e) => toggleEditProfile(mdl, state),
+                  },
+                  "Edit Profile Info"
                 )
-              )
-          )
-        ),
-        m(
-          ".nav",
-          m(
-            ".nav-left",
+              : m(
+                  ".grouped",
+                  m(
+                    "button.button",
+                    {
+                      style: {
+                        borderColor: "var(--red)",
+                        color: "var(--red)",
+                      },
+                      onclick: () => (state.disableEdit = !state.disableEdit),
+                    },
+                    "Cancel Edit"
+                  ),
+                  m(
+                    "button.button",
+                    {
+                      style: {
+                        borderColor: "var(--green)",
+                        color: "var(--green)",
+                      },
+                      onclick: (e) => toggleEditProfile(mdl, state, reload),
+                    },
+                    "Finish Edit and Save"
+                  )
+                ),
             m(
-              "button.button.primary",
-              { onclick: () => updateProfileMeta(mdl)(mdl.data.profile) },
-              "Update"
+              "form",
+              !mdl.data.profile.emailVerified &&
+                m("label.warning", "email not verified"),
+              m(
+                "label",
+                "email",
+                m("input", {
+                  disabled: true,
+                  id: "email",
+                  value: mdl.data.profile.email,
+                })
+              ),
+              m(
+                "label",
+                "name",
+                m("input", {
+                  disabled: state.disableEdit,
+                  id: "name",
+                  value: mdl.data.profile.name,
+                })
+              ),
+              m(
+                "label",
+                "telephone",
+                m("input", {
+                  disabled: state.disableEdit,
+                  id: "telephone",
+                  value: mdl.data.profile.telephone,
+                })
+              ),
+              m(
+                "label.icon",
+                "Address",
+                state.disableEdit
+                  ? mdl.data.addresses.map((address) =>
+                      m("input", {
+                        disabled: true,
+                        id: "address",
+                        value: address.property,
+                      })
+                    )
+                  : [
+                      m(
+                        "label.label",
+                        m(
+                          "select",
+                          {
+                            multiple: true,
+                            value: mdl.data.profile.addressId,
+                          },
+                          state.locations.map((location) =>
+                            m(
+                              "option",
+                              {
+                                onclick: (e) => {
+                                  location.selected = true
+
+                                  addAddress(
+                                    mdl.data.profile,
+                                    location.objectId
+                                  )
+                                },
+                                class: mdl.data.profile.addressIds.includes(
+                                  location.objectId
+                                )
+                                  ? "option text-primary"
+                                  : "option",
+                                value: location.objectId,
+                              },
+                              location.property
+                            )
+                          )
+                        )
+                      ),
+                      m(
+                        "ul",
+                        state.locations
+                          .filter(propEq("selected", true))
+                          .map((l) =>
+                            m(
+                              "li.grouped",
+                              m("p", l.property),
+                              m(
+                                "icon",
+                                {
+                                  onclick: (_) => {
+                                    location.selected = false
+                                    removeAddress(mdl.data.profile, l.objectId)
+                                  },
+                                },
+                                "remove"
+                              )
+                            )
+                          )
+                      ),
+                    ]
+              )
             )
           )
-          // m(".nav-right", m("button.button.error", "Delete Account"))
         )
       )
     },

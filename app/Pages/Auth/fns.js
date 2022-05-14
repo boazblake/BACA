@@ -19,6 +19,13 @@ const loginUserTask =
       .map(setUserAndSessionToken(mdl))
   }
 
+const getAddressTask = (mdl) => (addressId) => {
+  let login = encodeURI(`objectId=${addressId}`)
+  return mdl.http.back4App
+    .getTask(mdl)(`classes/Addresses`)
+    .map(log("address??"))
+}
+
 const getUserAccountTask = (mdl) => (encodeId) =>
   mdl.http.back4App
     .getTask(mdl)(`classes/Accounts?${encodeId}`)
@@ -55,9 +62,12 @@ const getUserInfoTask = (mdl) => {
   return Task.of((account) => (dues) =>
     // (messages) =>
     {
-      mdl.data.account = account
-      mdl.data.dues = dues
-      mdl.data.messages = []
+      {
+        mdl.data.account = account
+        mdl.data.dues = dues
+        mdl.data.messages = []
+        console.log(mdl)
+      }
     }
   )
     .ap(getUserAccountTask(mdl)(encodeId))

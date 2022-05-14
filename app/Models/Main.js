@@ -5,6 +5,10 @@ const data = {
   events: [],
   images: [],
   blogs: [],
+  addresses: [],
+  accounts: [],
+  dues: [],
+  messages: [],
 }
 
 const Map = {

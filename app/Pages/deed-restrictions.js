@@ -1,3 +1,5 @@
+import { PopOutLine } from "@mithril-icons/clarity/cjs"
+
 const DeedRes = ({ attrs: { mdl } }) => {
   const LUGARY = [
     m(
@@ -1118,6 +1120,19 @@ const DeedRes = ({ attrs: { mdl } }) => {
       m(
         "section",
         m(
+          "a.button.grouped.isLeft.icon",
+          {
+            target: "_blank",
+            href: "https://drive.google.com/drive/folders/17H-Zq2BBN8yKp19c4BQGIYvMPIqhgYL-",
+          },
+          "View All Bonham Acres files",
+          m(PopOutLine, {
+            margin: "8px",
+            width: "15px",
+            height: "15px",
+          })
+        ),
+        m(
           "nav.tabs",
           Object.keys(pages).map((tab) =>
             m(
@@ -1128,15 +1143,6 @@ const DeedRes = ({ attrs: { mdl } }) => {
               },
               tab
             )
-          ),
-
-          m(
-            "a.button.grouped",
-            {
-              target: "_blank",
-              href: "https://drive.google.com/drive/folders/17H-Zq2BBN8yKp19c4BQGIYvMPIqhgYL-",
-            },
-            "Link to PDF files"
           )
         ),
 

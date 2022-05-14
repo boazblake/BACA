@@ -22,7 +22,7 @@ const AuthBox = () => {
               mdl,
               href: `/account/${mdl.user.routename}`,
               role: "button",
-              link: "Your Account",
+              link: "Account",
               classList: `${isActiveRoute(
                 `/account/${mdl.user.routename}`
               )} button primary`,

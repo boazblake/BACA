@@ -1,6 +1,8 @@
 import { FunConfig } from "@boazblake/fun-config"
 import App from "./app.js"
 import Model from "Models/index.js"
+import { head, prop } from "ramda"
+
 const root = document.body
 let winW = window.innerWidth
 window.log = (m) => (v) => {
@@ -66,7 +68,7 @@ if (process.env.NODE_ENV !== "production") {
   }
 }
 // set display profiles
-const getProfile = (w) => {
+const getWinSize = (w) => {
   if (w < 464) return "phone"
   if (w < 624) return "wide"
   if (w < 1000) return "tablet"
@@ -78,28 +80,53 @@ const checkWidth = (winW) => {
   if (winW !== w) {
     winW = w
     var lastProfile = Model.settings.screenSize
-    Model.settings.screenSize = getProfile(w)
+    Model.settings.screenSize = getWinSize(w)
     if (lastProfile != Model.settings.screenSize) m.redraw()
   }
   return requestAnimationFrame(checkWidth)
 }
 
-Model.settings.screenSize = getProfile(winW)
+Model.settings.screenSize = getWinSize(winW)
 
 checkWidth(winW)
 
 if (sessionStorage.getItem("baca-session-token")) {
+  const getUserTask = (mdl) => Model.http.back4App.getTask(Model)(`users/me`)
+  const getUserAccountTask = (mdl) => (user) => {
+    let encodeId = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
+    return mdl.http.back4App
+      .getTask(mdl)(`classes/Accounts?${encodeId}`)
+      .map(prop("results"))
+      .map(head)
+  }
+
+  const updateModelWithUser = (mdl) => (user) => {
+    mdl.user = user
+    mdl.user.routename = user.name.replaceAll(" ", "")
+    user.emailVerified ? mdl.state.isAuth(true) : sessionStorage.clear()
+    return user
+  }
+
+  const updateModelWithAccount = (mdl) => (account) => {
+    mdl.data.account = account
+    return mdl
+  }
+
+  const reloginTask = (mdl) =>
+    getUserTask(mdl)
+      .map(updateModelWithUser(mdl))
+      .chain(getUserAccountTask(mdl))
+      .map(updateModelWithAccount(mdl))
+
   const onError = (e) => {
     sessionStorage.clear()
     console.error("problem fetching user", e)
   }
-  const onSuccess = (user) => {
-    Model.user = user
-    Model.user.routename = user.name.replaceAll(" ", "")
-    user.emailVerified ? Model.state.isAuth(true) : sessionStorage.clear()
+  const onSuccess = (data) => {
+    console.log("relogin success")
   }
 
-  Model.http.back4App.getTask(Model)(`users/me`).fork(onError, onSuccess)
+  reloginTask(Model).fork(onError, onSuccess)
 }
 
 m.route(root, "/", App(Model))
