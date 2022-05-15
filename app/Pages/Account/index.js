@@ -20,7 +20,6 @@ const Account = ({ attrs: { mdl } }) => {
       mdl.data.addresses = addresses
       mdl.data.profile.addressIds = addresses.map(prop("objectId"))
       state.status = "success"
-      console.log("load", mdl.data.addresses)
     }
     const onError = (e) => {
       state.status = "error"

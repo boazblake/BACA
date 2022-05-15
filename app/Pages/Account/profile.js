@@ -2,12 +2,12 @@ import { handlers, AVATAR_URL } from "Utils/index.js"
 import { path, prop, without, assoc, propEq } from "ramda"
 import { addSuccess } from "Components/toast"
 import Map from "./map.js"
+import { m } from "mithril"
 
 const state = {
   addresses: [],
   files: [],
   locations: [],
-  // address: "",
   status: "",
   disableEdit: true,
 }
@@ -282,15 +282,13 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                               "li.grouped",
                               m("p", l.property),
                               m(
-                                "icon",
+                                ".text-primary.underline",
                                 {
                                   onclick: (_) => {
                                     location.selected = false
-                                    console.log("state b", state.addresses)
                                     state.addresses = state.addresses.filter(
                                       (a) => a.objectId != l.objectId
                                     )
-                                    console.log("state b", state.addresses)
                                     removeAddress(mdl.data.profile, l.objectId)
                                   },
                                 },
@@ -304,11 +302,19 @@ const Profile = ({ attrs: { mdl, reload } }) => {
             )
           )
         ),
-        state.addresses.any() &&
-          m(Map, {
-            mdl,
-            locations: state.addresses,
-          })
+        state.addresses.any()
+          ? m(
+              "section",
+              m(
+                "h4",
+                "If the coordinates of the icon are not on top of your home please contact an administrator at BonhamAcresCivicAssociation at gmail dot com."
+              ),
+              m(Map, {
+                mdl,
+                locations: state.addresses,
+              })
+            )
+          : m("p.hero", "Edit your profile to select your address(s)")
       )
     },
   }

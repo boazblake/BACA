@@ -1,4 +1,5 @@
 import HtmlSanitizer from "Utils/html-sanitize"
+import { isAdminOrMod } from "Utils/helpers"
 
 const BlogPreview = {
   view: ({
@@ -42,7 +43,7 @@ const BlogPreview = {
           "continue reading"
         )
       ),
-      (author == mdl.user.name || ["admin", "mod"].includes(mdl.user.role)) &&
+      (author == mdl.user.name || isAdminOrMod(mdl)) &&
         m(
           "footer",
           m(
@@ -58,3 +59,4 @@ const BlogPreview = {
 }
 
 export default BlogPreview
+

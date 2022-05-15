@@ -498,7 +498,7 @@ var AuthBox = function AuthBox() {
   return {
     view: function view(_ref) {
       var mdl = _ref.attrs.mdl;
-      return mdl.state.isAuth() ? m(".is-center", ["admin", "mod"].includes(mdl.user.role) && m(_navLink["default"], {
+      return mdl.state.isAuth() ? m(".is-center", (0, _index.isAdminOrMod)(mdl) && m(_navLink["default"], {
         selector: "button",
         mdl: mdl,
         href: "/admin/".concat(mdl.user.routename),
@@ -1722,7 +1722,7 @@ var Layout = {
       mdl: mdl
     })), m(_hero["default"], {
       mdl: mdl
-    }), state.status == "error" && m("p", "ERROR"), state.status == "loading" && m(_loader["default"]), state.status == "loaded" && m("section.animated.zoomIn", m(_main["default"], {
+    }), state.status == "error" && m("p", "ERROR"), state.status == "loading" && m(_loader["default"]), state.status == "loaded" && m("section", m(_main["default"], {
       mdl: mdl,
       children: children
     })), showNavMenu(mdl) && m(_navModal["default"], {
@@ -1754,7 +1754,7 @@ var _default = {
     var _ref$attrs = _ref.attrs,
         mdl = _ref$attrs.mdl,
         children = _ref$attrs.children;
-    return m("main.bg-white", mdl.state.route.name && m("#page-title.is-marginless.text-primary", m("p.text-center.p-t-25.is-vertical-align.is-horizontal-align.is-center", {
+    return m("main.bg-white.animated.zoomIn", mdl.state.route.name && m("#page-title.is-marginless.text-primary", m("p.text-center.p-t-25.is-vertical-align.is-horizontal-align.is-center", {
       style: {
         fontWeight: "bolder",
         fontSize: "xx-large" // height: !mdl.state.route.name && "57px",
@@ -2290,7 +2290,6 @@ var Account = function Account(_ref) {
       mdl.data.addresses = addresses;
       mdl.data.profile.addressIds = addresses.map((0, _ramda.prop)("objectId"));
       state.status = "success";
-      console.log("load", mdl.data.addresses);
     };
 
     var onError = function onError(e) {
@@ -2376,8 +2375,7 @@ var toPushPin = function toPushPin(_ref) {
 exports.toPushPin = toPushPin;
 
 var AddResidentsTask = function AddResidentsTask(state, xs) {
-  state.locations = xs ? xs : state.locations; // console.log("add residents", locations, state.locations)
-
+  state.locations = xs ? xs : state.locations;
   state.entities = state.locations.map(toPushPin);
   return _data["default"].of(state);
 };
@@ -2404,21 +2402,7 @@ var loadMapConfig = function loadMapConfig(mdl) {
     setCenterView(state)(centerPoint);
     return state;
   };
-}; // const addResident = (mdl, state) => {
-//   const onError = (e) => {
-//     let msg = "error finding resident"
-//     console.log(msg, e)
-//   }
-//   const onSuccess = (pin) => {
-//     state.entities.push(pin)
-//     state.map.entities.push(pin)
-//     setCenterView(state)(
-//       getCenterView(state.entities.map((e) => e.getLocation()))
-//     )
-//   }
-//   findLatLongTask(mdl, state.input).fork(onError, onSuccess)
-// }
-
+};
 
 var Map = function Map(_ref2) {
   var _ref2$attrs = _ref2.attrs,
@@ -2429,8 +2413,7 @@ var Map = function Map(_ref2) {
     return log("err")(err);
   };
 
-  var onSuccess = function onSuccess(data) {
-    log("mad go state success")(data);
+  var onSuccess = function onSuccess(data) {// log("mad go state success")(data)
   };
 
   var state = {
@@ -2453,10 +2436,6 @@ var Map = function Map(_ref2) {
     onupdate: function onupdate(x) {
       return x.attrs.locations.length != state.locations.length && go(x.attrs.locations);
     },
-    // onbeforeupdate: (n, o) => {
-    //   console.log(o.attrs.locations, n.attrs.locations)
-    //   o.attrs.locations?.length == n.attrs.locations?.length ? false : true
-    // },
     view: function view(_ref3) {
       var _ref3$attrs = _ref3.attrs,
           mdl = _ref3$attrs.mdl,
@@ -2785,6 +2764,8 @@ var _toast = require("Components/toast");
 
 var _map = _interopRequireDefault(require("./map.js"));
 
+var _mithril = require("mithril");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -2797,7 +2778,6 @@ var state = {
   addresses: [],
   files: [],
   locations: [],
-  // address: "",
   status: "",
   disableEdit: true
 };
@@ -2930,13 +2910,13 @@ var Profile = function Profile(_ref2) {
   return {
     view: function view(_ref3) {
       var mdl = _ref3.attrs.mdl;
-      return m("section.p-y-50", m("article.row", _objectSpread({}, onInput(mdl.data.profile)), m("figure.col", m("img.avatar", {
+      return (0, _mithril.m)("section.p-y-50", (0, _mithril.m)("article.row", _objectSpread({}, onInput(mdl.data.profile)), (0, _mithril.m)("figure.col", (0, _mithril.m)("img.avatar", {
         src: getImageSrc(mdl.data.profile)
-      }), m("figcaption", {
+      }), (0, _mithril.m)("figcaption", {
         style: {
           width: "180px"
         }
-      }, mdl.data.profile.avatar ? m("button.button", {
+      }, mdl.data.profile.avatar ? (0, _mithril.m)("button.button", {
         style: {
           borderColor: "var(--color-error)",
           color: "var(--color-error)"
@@ -2944,9 +2924,9 @@ var Profile = function Profile(_ref2) {
         onclick: function onclick(e) {
           return removeImage(mdl, mdl.data.profile);
         }
-      }, "Remove Image") : m("label.button", {
+      }, "Remove Image") : (0, _mithril.m)("label.button", {
         label: "profile-pic"
-      }, "Add profile picture", m("input", {
+      }, "Add profile picture", (0, _mithril.m)("input", {
         style: {
           display: "none"
         },
@@ -2956,7 +2936,7 @@ var Profile = function Profile(_ref2) {
         onchange: function onchange(e) {
           return uploadImage(mdl)(e.target.files);
         }
-      })))), m("section.col", state.disableEdit ? m("button.button", {
+      })))), (0, _mithril.m)("section.col", state.disableEdit ? (0, _mithril.m)("button.button", {
         style: {
           borderColor: "var(--blue)",
           color: "var(--blue)"
@@ -2964,7 +2944,7 @@ var Profile = function Profile(_ref2) {
         onclick: function onclick(e) {
           return toggleEditProfile(mdl, state);
         }
-      }, "Edit Profile Info") : m(".grouped", m("button.button", {
+      }, "Edit Profile Info") : (0, _mithril.m)(".grouped", (0, _mithril.m)("button.button", {
         style: {
           borderColor: "var(--red)",
           color: "var(--red)"
@@ -2972,7 +2952,7 @@ var Profile = function Profile(_ref2) {
         onclick: function onclick() {
           return state.disableEdit = !state.disableEdit;
         }
-      }, "Cancel Edit"), m("button.button", {
+      }, "Cancel Edit"), (0, _mithril.m)("button.button", {
         style: {
           borderColor: "var(--green)",
           color: "var(--green)"
@@ -2980,29 +2960,29 @@ var Profile = function Profile(_ref2) {
         onclick: function onclick(e) {
           return toggleEditProfile(mdl, state, reload);
         }
-      }, "Finish Edit and Save")), m("form", !mdl.data.profile.emailVerified && m("label.warning", "email not verified"), m("label", "email", m("input", {
+      }, "Finish Edit and Save")), (0, _mithril.m)("form", !mdl.data.profile.emailVerified && (0, _mithril.m)("label.warning", "email not verified"), (0, _mithril.m)("label", "email", (0, _mithril.m)("input", {
         disabled: true,
         id: "email",
         value: mdl.data.profile.email
-      })), m("label", "name", m("input", {
+      })), (0, _mithril.m)("label", "name", (0, _mithril.m)("input", {
         disabled: state.disableEdit,
         id: "name",
         value: mdl.data.profile.name
-      })), m("label", "telephone", m("input", {
+      })), (0, _mithril.m)("label", "telephone", (0, _mithril.m)("input", {
         disabled: state.disableEdit,
         id: "telephone",
         value: mdl.data.profile.telephone
-      })), m("label.icon", "Address", state.disableEdit ? mdl.data.addresses.map(function (address) {
-        return m("input", {
+      })), (0, _mithril.m)("label.icon", "Address", state.disableEdit ? mdl.data.addresses.map(function (address) {
+        return (0, _mithril.m)("input", {
           disabled: true,
           id: "address",
           value: address.property
         });
-      }) : [m("label.label", m("select", {
+      }) : [(0, _mithril.m)("label.label", (0, _mithril.m)("select", {
         multiple: true,
         value: mdl.data.profile.addressId
       }, state.locations.map(function (location) {
-        return m("option", {
+        return (0, _mithril.m)("option", {
           onclick: function onclick(e) {
             location.selected = true;
             state.addresses = state.addresses.filter(function (l) {
@@ -3013,22 +2993,20 @@ var Profile = function Profile(_ref2) {
           "class": mdl.data.profile.addressIds.includes(location.objectId) ? "option text-primary" : "option",
           value: location.objectId
         }, location.property);
-      }))), m("ul", state.locations.filter((0, _ramda.propEq)("selected", true)).map(function (l) {
-        return m("li.grouped", m("p", l.property), m("icon", {
+      }))), (0, _mithril.m)("ul", state.locations.filter((0, _ramda.propEq)("selected", true)).map(function (l) {
+        return (0, _mithril.m)("li.grouped", (0, _mithril.m)("p", l.property), (0, _mithril.m)(".text-primary.underline", {
           onclick: function onclick(_) {
             location.selected = false;
-            console.log("state b", state.addresses);
             state.addresses = state.addresses.filter(function (a) {
               return a.objectId != l.objectId;
             });
-            console.log("state b", state.addresses);
             removeAddress(mdl.data.profile, l.objectId);
           }
         }, "remove"));
-      }))])))), state.addresses.any() && m(_map["default"], {
+      }))])))), state.addresses.any() ? (0, _mithril.m)("section", (0, _mithril.m)("h4", "If the coordinates of the icon are not on top of your home please contact an administrator at BonhamAcresCivicAssociation at gmail dot com."), (0, _mithril.m)(_map["default"], {
         mdl: mdl,
         locations: state.addresses
-      }));
+      })) : (0, _mithril.m)("p.hero", "Edit your profile to select your address(s)"));
     }
   };
 };
@@ -4409,6 +4387,8 @@ exports["default"] = void 0;
 
 var _htmlSanitize = _interopRequireDefault(require("Utils/html-sanitize"));
 
+var _helpers = require("Utils/helpers");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var BlogPreview = {
@@ -4428,7 +4408,7 @@ var BlogPreview = {
     }))), m("hgroup.col", m.trust(_htmlSanitize["default"].SanitizeHtml(text.replace(/<[^>]*>/g, "").slice(0, 100))), "...", m(m.route.Link, // "a.pointer",
     {
       href: "/social/blog-post:".concat(objectId)
-    }, "continue reading")), (author == mdl.user.name || ["admin", "mod"].includes(mdl.user.role)) && m("footer", m(m.route.Link, {
+    }, "continue reading")), (author == mdl.user.name || (0, _helpers.isAdminOrMod)(mdl)) && m("footer", m(m.route.Link, {
       selector: "button",
       href: "/social/blog-editor:".concat(objectId)
     }, "Edit")));
@@ -4622,7 +4602,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _mithril = require("mithril");
+var _helpers = require("Utils/helpers");
 
 var _model = require("./model.js");
 
@@ -4631,17 +4611,18 @@ var load = function load(mdl, state) {
 };
 
 var findResident = function findResident(mdl, state) {
+  var _state$input;
+
   var onError = function onError(e) {
     var msg = "error finding resident";
     console.log(msg, e);
   };
 
   var onSuccess = function onSuccess(results) {
-    console.log(results);
-    state.findLocationResults = results;
+    return state.findLocationResults = results;
   };
 
-  (0, _model.findLocationTask)(mdl, state.input).fork(onError, onSuccess);
+  ((_state$input = state.input) === null || _state$input === void 0 ? void 0 : _state$input.length) > 5 && (0, _model.findLocationTask)(mdl, state.input).fork(onError, onSuccess);
 };
 
 var restartFindResident = function restartFindResident(mdl, state) {
@@ -4649,8 +4630,11 @@ var restartFindResident = function restartFindResident(mdl, state) {
     state.newLocation = null;
     state.findLocationResults = [];
     state.input = null;
-    log("restardone")(state);
   });
+};
+
+var toggleEditResidents = function toggleEditResidents(mdl, state) {
+  return state.isEdit = !state.isEdit;
 };
 
 var saveResident = function saveResident(mdl, state) {
@@ -4667,38 +4651,8 @@ var saveResident = function saveResident(mdl, state) {
   }).fork(onError, onSuccess);
 };
 
-var selectLocation = function selectLocation(mdl, state, _ref) {
-  var formatted = _ref.formatted,
-      _ref$geometry = _ref.geometry,
-      lat = _ref$geometry.lat,
-      lng = _ref$geometry.lng;
-  state.newLocation = {
-    property: formatted,
-    lat: lat,
-    lng: lng
-  };
-  var pin = (0, _model.toPushPin)(state.newLocation, {
-    color: "green",
-    draggable: true
-  });
-  state.findLocationResults = [];
-  state.entities.push(pin);
-  state.map.entities.push(pin);
-  (0, _model.setCenterView)(state)((0, _model.getCenterView)(state.entities.map(function (e) {
-    return e.getLocation();
-  }))); // Microsoft.Maps.Events.addHandler(pin, "drag", () => log("pushpinDrag")(pin))
-
-  Microsoft.Maps.Events.addHandler(pin, "dragend", function () {
-    log("pushpinDragEnd")(pin);
-    state.newLocation.lng = pin.geometry.x;
-    state.newLocation.lat = pin.geometry.y;
-  }); // Microsoft.Maps.Events.addHandler(pin, "dragstart", () =>
-  //   log("pushpinDragStart")(pin)
-  // )
-};
-
-var BonhamAcresMap = function BonhamAcresMap(_ref2) {
-  var mdl = _ref2.attrs.mdl;
+var BonhamAcresMap = function BonhamAcresMap(_ref) {
+  var mdl = _ref.attrs.mdl;
   var state = {
     findLocationResults: [],
     newLocation: null,
@@ -4706,6 +4660,7 @@ var BonhamAcresMap = function BonhamAcresMap(_ref2) {
     entities: (0, _model.defaultPushPinEntities)(mdl),
     input: null,
     map: null,
+    isEdit: false,
     opts: {
       mapTypeId: Microsoft.Maps.MapTypeId.road,
       zoom: 16 // center: Microsoft.Maps.Location(
@@ -4724,35 +4679,43 @@ var BonhamAcresMap = function BonhamAcresMap(_ref2) {
 
   load(mdl, state).fork(onError, onSuccess);
   return {
-    view: function view(_ref3) {
-      var mdl = _ref3.attrs.mdl;
-      return (0, _mithril.m)("section", ["mod", "admin"].includes(mdl.user.role) && (0, _mithril.m)("section", (0, _mithril.m)(".grouped", (0, _mithril.m)("input", {
+    view: function view(_ref2) {
+      var mdl = _ref2.attrs.mdl;
+      return m("section", (0, _helpers.isAdminOrMod)(mdl) && m("section", state.isEdit ? m(".grouped", m("input", {
         type: "text",
         value: state.input,
         oninput: function oninput(e) {
           return state.input = e.target.value;
         }
-      }), state.newLocation ? [(0, _mithril.m)("button.grouped", {
+      }), state.newLocation ? [m("button.outline.bd-danger", {
         onclick: function onclick() {
           return restartFindResident(mdl, state);
         }
-      }, "Restart", (0, _mithril.m)("icon", "icon")), (0, _mithril.m)("button", {
+      }, "restart"), m("button.outline.bd-primary", {
         onclick: function onclick() {
           return saveResident(mdl, state);
         }
-      }, "Add Resident")] : (0, _mithril.m)("button", {
+      }, "Save")] : [m("button.primary", {
         onclick: function onclick() {
           return findResident(mdl, state);
         }
-      }, "Find Resident")), state.findLocationResults.any() && (0, _mithril.m)("ul", state.findLocationResults.map(function (location) {
-        return (0, _mithril.m)("li.grouped", (0, _mithril.m)("p", location.formatted), (0, _mithril.m)("button", {
+      }, "Search"), m("button.outline.bd-danger", {
+        onclick: function onclick() {
+          return toggleEditResidents(mdl, state);
+        }
+      }, "Cancel")]) : m("button.outline.bd-primary", {
+        onclick: function onclick() {
+          return toggleEditResidents(mdl, state);
+        }
+      }, "Edit"), state.findLocationResults.any() && m("ul", state.findLocationResults.map(function (location) {
+        return m("li.grouped", m("p", location.formatted), m("button", {
           onclick: function onclick() {
-            return selectLocation(mdl, state, location);
+            return (0, _model.selectLocation)(mdl, state, location);
           }
         }, "Select"));
-      }))), (0, _mithril.m)("section#map", {
-        oncreate: function oncreate(_ref4) {
-          var dom = _ref4.dom;
+      }))), m("section#map", {
+        oncreate: function oncreate(_ref3) {
+          var dom = _ref3.dom;
           return state.dom = dom;
         },
         style: {
@@ -4776,11 +4739,13 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.saveResidentTask = exports.findLocationTask = exports.loadResidentsTask = exports.formatLocationToPushPin = exports.toPushPin = exports.loadMapConfig = exports.setCenterView = exports.getCenterView = exports.defaultPushPinEntities = void 0;
+exports.saveResidentTask = exports.findLocationTask = exports.loadResidentsTask = exports.formatLocationToPushPin = exports.selectLocation = exports.toPushPin = exports.loadMapConfig = exports.setCenterView = exports.getCenterView = exports.defaultPushPinEntities = void 0;
 
 var _data = _interopRequireDefault(require("data.task"));
 
 var _ramda = require("ramda");
+
+var _helpers = require("Utils/helpers");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -4845,8 +4810,7 @@ var loadMapConfig = function loadMapConfig(mdl) {
 
     state.map = new Microsoft.Maps.Map(state.dom, state.opts);
     state.map.entities.push(state.entities);
-    setCenterView(state)(centerPoint);
-    console.log(state.map.entities[0]); // Info box
+    setCenterView(state)(centerPoint); // Info box
 
     state.infobox = new Microsoft.Maps.Infobox(state.entities[0], {
       visible: false,
@@ -4865,7 +4829,9 @@ var toPin = function toPin(lat, lng, opts) {
     altitudeReference: -1,
     latitude: lat,
     longitude: lng
-  }, _objectSpread({}, opts));
+  }, _objectSpread(_objectSpread({}, opts), {}, {
+    color: "purple"
+  }));
 };
 
 var addMetaData = function addMetaData(title) {
@@ -4896,56 +4862,83 @@ var updateStateEntities = function updateStateEntities(state) {
   };
 };
 
+var selectLocation = function selectLocation(mdl, state, _ref2) {
+  var formatted = _ref2.formatted,
+      _ref2$geometry = _ref2.geometry,
+      lat = _ref2$geometry.lat,
+      lng = _ref2$geometry.lng;
+  state.newLocation = {
+    property: formatted,
+    lat: lat,
+    lng: lng
+  };
+  var pin = toPushPin(state.newLocation);
+  state.findLocationResults = [];
+  state.entities.push(pin);
+  state.map.entities.push(pin);
+  setCenterView(state)(getCenterView(state.entities.map(function (e) {
+    return e.getLocation();
+  })));
+};
+
+exports.selectLocation = selectLocation;
+
 var addEventHandlers = function addEventHandlers(mdl, state) {
   return function (pin) {
     var pinClicked = function pinClicked(pin, e) {
-      console.log("pin clicked", pin, e.target.metadata.title);
-      pin.setOptions({
-        enableHoverStyle: true,
-        enableClickedStyle: true
+      state.entities.map(function (e) {
+        return e.setOptions({
+          color: "purple"
+        });
       });
+
+      if ((0, _helpers.isAdminOrMod)(mdl)) {
+        //only admins
+        pin.setOptions({
+          // enableHoverStyle: true,
+          // enableClickedStyle: true,
+          color: "green",
+          draggable: true
+        });
+        state.newLocation = {
+          property: pin.metadata.title,
+          lat: pin.geometry.y,
+          lng: pin.geometry.x
+        };
+        Microsoft.Maps.Events.addHandler(pin, "dragend", function (e) {
+          state.newLocation.lng = pin.geometry.x;
+          state.newLocation.lat = pin.geometry.y;
+        });
+      } else {
+        //regular user
+        pin.setOptions({
+          color: "green"
+        });
+      } //all users
+
+
       state.infobox.setOptions({
         location: e.target.getLocation(),
         title: e.target.metadata.title,
         visible: true
-      }); // //Highlight the mouse event div to indicate that the event has fired.
-      // dom.style.backgroundColor = "LightGreen"
-      // //Remove the highlighting after a second.
-
-      setTimeout(function () {// dom.style.background = "white"
-      }, 1000);
+      });
+      m.redraw();
     }; // //Add mouse events to the pin.
 
 
     Microsoft.Maps.Events.addHandler(pin, "click", function (e) {
       return pinClicked(pin, e);
-    }); // Microsoft.Maps.Events.addHandler(pin, "mousedown", function () {
-    //   console.log(pin)
-    //   highlight("pushpinMousedown")
-    // })
-    // Microsoft.Maps.Events.addHandler(pin, "mouseout", function () {
-    //   console.log(pin)
-    //   highlight("pushpinMouseout")
-    // })
-    // Microsoft.Maps.Events.addHandler(pin, "mouseover", function () {
-    //   console.log(pin)
-    //   highlight("pushpinMouseover")
-    // })
-    // Microsoft.Maps.Events.addHandler(pin, "mouseup", function () {
-    //   console.log(pin)
-    //   highlight("pushpinMouseup")
-    // })
-
+    });
     return pin;
   };
 };
 
-var formatLocationToPushPin = function formatLocationToPushPin(_ref2) {
-  var _ref3 = _slicedToArray(_ref2, 2),
-      property = _ref3[0],
-      _ref3$ = _ref3[1],
-      lat = _ref3$.lat,
-      lng = _ref3$.lng;
+var formatLocationToPushPin = function formatLocationToPushPin(_ref3) {
+  var _ref4 = _slicedToArray(_ref3, 2),
+      property = _ref4[0],
+      _ref4$ = _ref4[1],
+      lat = _ref4$.lat,
+      lng = _ref4$.lng;
 
   return toPushPin({
     property: property,
@@ -4956,8 +4949,15 @@ var formatLocationToPushPin = function formatLocationToPushPin(_ref2) {
 
 exports.formatLocationToPushPin = formatLocationToPushPin;
 
+var updateModelDate = function updateModelDate(mdl) {
+  return function (addresses) {
+    mdl.data.addresses = addresses;
+    return addresses;
+  };
+};
+
 var loadResidentsTask = function loadResidentsTask(mdl, state) {
-  return mdl.http.back4App.getTask(mdl)("classes/Addresses?limit=1000").map((0, _ramda.prop)("results")).map((0, _ramda.map)(toPushPin)).map((0, _ramda.map)(addEventHandlers(mdl, state))).map(updateStateEntities(state));
+  return mdl.http.back4App.getTask(mdl)("classes/Addresses?limit=1000").map((0, _ramda.prop)("results")).map(updateModelDate(mdl)).map((0, _ramda.map)(toPushPin)).map((0, _ramda.map)(addEventHandlers(mdl, state))).map(updateStateEntities(state));
 };
 
 exports.loadResidentsTask = loadResidentsTask;
@@ -4970,8 +4970,19 @@ var findLocationTask = function findLocationTask(mdl, query) {
 
 exports.findLocationTask = findLocationTask;
 
-var saveResidentTask = function saveResidentTask(mdl, location) {
+var addAddressTask = function addAddressTask(mdl, location) {
   return mdl.http.back4App.postTask(mdl)("classes/Addresses")(location).map((0, _ramda.prop)("results"));
+};
+
+var updateAddressTask = function updateAddressTask(mdl, location, id) {
+  return mdl.http.back4App.putTask(mdl)("classes/Addresses/".concat(id))(location).map((0, _ramda.prop)("results"));
+};
+
+var saveResidentTask = function saveResidentTask(mdl, location) {
+  var currentAddress = mdl.data.addresses.find(function (l) {
+    return l.property == location.property;
+  });
+  return currentAddress ? updateAddressTask(mdl, location, currentAddress.objectId) : addAddressTask(mdl, location);
 };
 
 exports.saveResidentTask = saveResidentTask;
@@ -5340,7 +5351,7 @@ var EventPreview = {
       fill: (0, _ramda.includes)(mdl.user.objectId, event.likes) && "red"
     }))))), m(".grouped", m("img", {
       src: event.image
-    })), m("hr.bd-primary"), m(".grouped.container", m("p.p-t-25", event.description))), m("footer.modal-footer", m(".tabs grouped", (event.createdBy == mdl.user.name || ["admin", "mod"].includes(mdl.user.role)) && m("button.button.secondary.is-full-width", {
+    })), m("hr.bd-primary"), m(".grouped.container", m("p.p-t-25", event.description))), m("footer.modal-footer", m(".tabs grouped", (event.createdBy == mdl.user.name || (0, _Utils.isAdminOrMod)(mdl)) && m("button.button.secondary.is-full-width", {
       onclick: function onclick(e) {
         editEvent(true);
         previewEvent(false);
@@ -21609,7 +21620,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.confirmTask = exports.getUserByUserId = exports.AVATAR_URL = exports.ScrollToPageTitle = exports.oneExists = exports.exists = exports.handlers = exports.formatDate = exports.DAYSOFWEEK = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.listOf = exports.uuid = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.makeRoute = void 0;
+exports.isAdminOrMod = exports.confirmTask = exports.getUserByUserId = exports.AVATAR_URL = exports.ScrollToPageTitle = exports.oneExists = exports.exists = exports.handlers = exports.formatDate = exports.DAYSOFWEEK = exports.parsePrices = exports.getTotal = exports.getQuantity = exports.getPrice = exports.toProducts = exports.listOf = exports.uuid = exports.isActiveRoute = exports.jsonCopy = exports.randomEl = exports.scrollToAnchor = exports.getRoute = exports.debounce = exports.filterTask = exports._paginate = exports._direction = exports._sort = exports._search = exports.addTerms = exports.infiniteScroll = exports.isEmpty = exports.makeRoute = void 0;
 
 var _ramda = require("ramda");
 
@@ -21897,6 +21908,12 @@ var confirmTask = function confirmTask(msg) {
 };
 
 exports.confirmTask = confirmTask;
+
+var isAdminOrMod = function isAdminOrMod(mdl) {
+  return ["admin", "mod"].includes(mdl.user.role);
+};
+
+exports.isAdminOrMod = isAdminOrMod;
 });
 
 ;require.register("Utils/html-sanitize.js", function(exports, require, module) {

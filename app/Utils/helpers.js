@@ -171,3 +171,5 @@ export const getUserByUserId = (userId, mdl) =>
 
 export const confirmTask = (msg) =>
   new Task((rej, res) => (window.confirm(msg) ? res() : rej()))
+
+export const isAdminOrMod = (mdl) => ["admin", "mod"].includes(mdl.user.role)

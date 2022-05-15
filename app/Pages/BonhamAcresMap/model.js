@@ -1,5 +1,6 @@
 import Task from "data.task"
 import { compose, path, prop, map } from "ramda"
+import { isAdminOrMod } from "Utils/helpers"
 
 export const defaultPushPinEntities = (mdl) => [
   toPushPin({
@@ -33,7 +34,6 @@ export const loadMapConfig = (mdl) => (state) => {
   state.map.entities.push(state.entities)
   setCenterView(state)(centerPoint)
 
-  console.log(state.map.entities[0])
   // Info box
   state.infobox = new Microsoft.Maps.Infobox(state.entities[0], {
     visible: false,
@@ -54,6 +54,7 @@ const toPin = (lat, lng, opts) =>
     },
     {
       ...opts,
+      color: "purple",
     }
   )
 
@@ -72,42 +73,60 @@ const updateStateEntities = (state) => (entities) => {
   return state
 }
 
+export const selectLocation = (
+  mdl,
+  state,
+  { formatted, geometry: { lat, lng } }
+) => {
+  state.newLocation = { property: formatted, lat, lng }
+  let pin = toPushPin(state.newLocation)
+
+  state.findLocationResults = []
+  state.entities.push(pin)
+  state.map.entities.push(pin)
+  setCenterView(state)(
+    getCenterView(state.entities.map((e) => e.getLocation()))
+  )
+}
+
 const addEventHandlers = (mdl, state) => (pin) => {
   const pinClicked = (pin, e) => {
-    console.log("pin clicked", pin, e.target.metadata.title)
-    pin.setOptions({ enableHoverStyle: true, enableClickedStyle: true })
+    state.entities.map((e) => e.setOptions({ color: "purple" }))
 
+    if (isAdminOrMod(mdl)) {
+      //only admins
+      pin.setOptions({
+        // enableHoverStyle: true,
+        // enableClickedStyle: true,
+        color: "green",
+        draggable: true,
+      })
+
+      state.newLocation = {
+        property: pin.metadata.title,
+        lat: pin.geometry.y,
+        lng: pin.geometry.x,
+      }
+
+      Microsoft.Maps.Events.addHandler(pin, "dragend", (e) => {
+        state.newLocation.lng = pin.geometry.x
+        state.newLocation.lat = pin.geometry.y
+      })
+    } else {
+      //regular user
+      pin.setOptions({ color: "green" })
+    }
+
+    //all users
     state.infobox.setOptions({
       location: e.target.getLocation(),
       title: e.target.metadata.title,
       visible: true,
     })
-    // //Highlight the mouse event div to indicate that the event has fired.
-    // dom.style.backgroundColor = "LightGreen"
-
-    // //Remove the highlighting after a second.
-    setTimeout(function () {
-      // dom.style.background = "white"
-    }, 1000)
+    m.redraw()
   }
   // //Add mouse events to the pin.
   Microsoft.Maps.Events.addHandler(pin, "click", (e) => pinClicked(pin, e))
-  // Microsoft.Maps.Events.addHandler(pin, "mousedown", function () {
-  //   console.log(pin)
-  //   highlight("pushpinMousedown")
-  // })
-  // Microsoft.Maps.Events.addHandler(pin, "mouseout", function () {
-  //   console.log(pin)
-  //   highlight("pushpinMouseout")
-  // })
-  // Microsoft.Maps.Events.addHandler(pin, "mouseover", function () {
-  //   console.log(pin)
-  //   highlight("pushpinMouseover")
-  // })
-  // Microsoft.Maps.Events.addHandler(pin, "mouseup", function () {
-  //   console.log(pin)
-  //   highlight("pushpinMouseup")
-  // })
 
   return pin
 }
@@ -115,10 +134,16 @@ const addEventHandlers = (mdl, state) => (pin) => {
 export const formatLocationToPushPin = ([property, { lat, lng }]) =>
   toPushPin({ property, lat, lng })
 
+const updateModelDate = (mdl) => (addresses) => {
+  mdl.data.addresses = addresses
+  return addresses
+}
+
 export const loadResidentsTask = (mdl, state) =>
   mdl.http.back4App
     .getTask(mdl)("classes/Addresses?limit=1000")
     .map(prop("results"))
+    .map(updateModelDate(mdl))
     .map(map(toPushPin))
     .map(map(addEventHandlers(mdl, state)))
     .map(updateStateEntities(state))
@@ -130,8 +155,23 @@ export const findLocationTask = (mdl, query) =>
 // .map(paths([["formatted"], ["geometry"]]))
 // .chain((xs) => (xs.includes(undefined) ? Task.rejected() : Task.of(xs)))
 
-export const saveResidentTask = (mdl, location) =>
+const addAddressTask = (mdl, location) =>
   mdl.http.back4App
     .postTask(mdl)("classes/Addresses")(location)
     .map(prop("results"))
+
+const updateAddressTask = (mdl, location, id) =>
+  mdl.http.back4App
+    .putTask(mdl)(`classes/Addresses/${id}`)(location)
+    .map(prop("results"))
+
+export const saveResidentTask = (mdl, location) => {
+  let currentAddress = mdl.data.addresses.find(
+    (l) => l.property == location.property
+  )
+
+  return currentAddress
+    ? updateAddressTask(mdl, location, currentAddress.objectId)
+    : addAddressTask(mdl, location)
+}
 

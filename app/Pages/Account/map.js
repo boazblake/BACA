@@ -21,7 +21,6 @@ export const toPushPin = ({ property, lat, lng }) =>
 
 const AddResidentsTask = (state, xs) => {
   state.locations = xs ? xs : state.locations
-  // console.log("add residents", locations, state.locations)
   state.entities = state.locations.map(toPushPin)
   return Task.of(state)
 }
@@ -52,26 +51,10 @@ const loadMapConfig = (mdl) => (state) => {
   return state
 }
 
-// const addResident = (mdl, state) => {
-//   const onError = (e) => {
-//     let msg = "error finding resident"
-//     console.log(msg, e)
-//   }
-//   const onSuccess = (pin) => {
-//     state.entities.push(pin)
-//     state.map.entities.push(pin)
-//     setCenterView(state)(
-//       getCenterView(state.entities.map((e) => e.getLocation()))
-//     )
-//   }
-
-//   findLatLongTask(mdl, state.input).fork(onError, onSuccess)
-// }
-
 const Map = ({ attrs: { mdl, locations } }) => {
   const onError = (err) => log("err")(err)
   const onSuccess = (data) => {
-    log("mad go state success")(data)
+    // log("mad go state success")(data)
   }
 
   const state = {
@@ -93,10 +76,6 @@ const Map = ({ attrs: { mdl, locations } }) => {
     onupdate: (x) =>
       x.attrs.locations.length != state.locations.length &&
       go(x.attrs.locations),
-    // onbeforeupdate: (n, o) => {
-    //   console.log(o.attrs.locations, n.attrs.locations)
-    //   o.attrs.locations?.length == n.attrs.locations?.length ? false : true
-    // },
     view: ({ attrs: { mdl, locations } }) => {
       return m(
         "section",

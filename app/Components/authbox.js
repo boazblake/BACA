@@ -1,5 +1,5 @@
 import NavLink from "Components/nav-link.js"
-import { isActiveRoute } from "Utils/index.js"
+import { isActiveRoute, isAdminOrMod } from "Utils/index.js"
 
 const AuthBox = () => {
   return {
@@ -7,7 +7,7 @@ const AuthBox = () => {
       mdl.state.isAuth()
         ? m(
             ".is-center",
-            ["admin", "mod"].includes(mdl.user.role) &&
+            isAdminOrMod(mdl) &&
               m(NavLink, {
                 selector: "button",
                 mdl,

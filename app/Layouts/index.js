@@ -126,8 +126,7 @@ const Layout = {
       m(Hero, { mdl }),
       state.status == "error" && m("p", "ERROR"),
       state.status == "loading" && m(Loader),
-      state.status == "loaded" &&
-        m("section.animated.zoomIn", m(Main, { mdl, children })),
+      state.status == "loaded" && m("section", m(Main, { mdl, children })),
       showNavMenu(mdl) &&
         m(NavModal, {
           oncreate: SlideInLeft,

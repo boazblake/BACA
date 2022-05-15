@@ -1,7 +1,7 @@
 export default {
   view: ({ attrs: { mdl, children } }) =>
     m(
-      "main.bg-white",
+      "main.bg-white.animated.zoomIn",
       mdl.state.route.name &&
         m(
           "#page-title.is-marginless.text-primary",

@@ -7,7 +7,7 @@ import {
   UserLine,
 } from "@mithril-icons/clarity/cjs"
 import DateTime from "Components/DateTime"
-import { DAYSOFWEEK } from "Utils"
+import { DAYSOFWEEK, isAdminOrMod } from "Utils"
 import { includes, without } from "ramda"
 
 const updateEventTask = (mdl) => (id) => (event) =>
@@ -119,8 +119,7 @@ const EventPreview = {
 
           m(
             ".tabs grouped",
-            (event.createdBy == mdl.user.name ||
-              ["admin", "mod"].includes(mdl.user.role)) &&
+            (event.createdBy == mdl.user.name || isAdminOrMod(mdl)) &&
               m(
                 "button.button.secondary.is-full-width",
                 {
