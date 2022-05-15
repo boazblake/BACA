@@ -1,40 +1,79 @@
+import { m } from "mithril"
 import {
   loadResidentsTask,
   loadMapConfig,
-  findLatLongTask,
+  findLocationTask,
   getCenterView,
   setCenterView,
-  defaultPushPin,
+  saveResidentTask,
+  defaultPushPinEntities,
+  toPushPin,
 } from "./model.js"
 
-const addResident = (mdl, state) => {
+const load = (mdl, state) =>
+  loadResidentsTask(mdl, state).map(loadMapConfig(mdl))
+
+const findResident = (mdl, state) => {
   const onError = (e) => {
     let msg = "error finding resident"
     console.log(msg, e)
   }
-  const onSuccess = (pin) => {
-    state.entities.push(pin)
-    state.map.entities.push(pin)
-    setCenterView(state)(
-      getCenterView(state.entities.map((e) => e.getLocation()))
-    )
+
+  const onSuccess = (results) => {
+    console.log(results)
+    state.findLocationResults = results
   }
 
-  findLatLongTask(mdl, state.input).fork(onError, onSuccess)
+  findLocationTask(mdl, state.input).fork(onError, onSuccess)
+}
+
+const restartFindResident = (mdl, state) => {
+  load(mdl, state).fork(log("e"), () => {
+    state.newLocation = null
+    state.findLocationResults = []
+    state.input = null
+    log("restardone")(state)
+  })
+}
+
+const saveResident = (mdl, state) => {
+  const onError = (e) => log("e")(e)
+  const onSuccess = (data) => log("suc")(data)
+
+  saveResidentTask(mdl, state.newLocation)
+    .chain(() => load(mdl, state))
+    .fork(onError, onSuccess)
+}
+
+const selectLocation = (mdl, state, { formatted, geometry: { lat, lng } }) => {
+  state.newLocation = { property: formatted, lat, lng }
+  let pin = toPushPin(state.newLocation, { color: "green", draggable: true })
+  state.findLocationResults = []
+  state.entities.push(pin)
+  state.map.entities.push(pin)
+  setCenterView(state)(
+    getCenterView(state.entities.map((e) => e.getLocation()))
+  )
+  // Microsoft.Maps.Events.addHandler(pin, "drag", () => log("pushpinDrag")(pin))
+  Microsoft.Maps.Events.addHandler(pin, "dragend", () => {
+    log("pushpinDragEnd")(pin)
+    state.newLocation.lng = pin.geometry.x
+    state.newLocation.lat = pin.geometry.y
+  })
+  // Microsoft.Maps.Events.addHandler(pin, "dragstart", () =>
+  //   log("pushpinDragStart")(pin)
+  // )
 }
 
 const BonhamAcresMap = ({ attrs: { mdl } }) => {
-  const onError = (err) => log("err")(err)
-  const onSuccess = (data) => {}
-
   const state = {
+    findLocationResults: [],
+    newLocation: null,
     dom: null,
-    entities: defaultPushPin(mdl),
+    entities: defaultPushPinEntities(mdl),
     input: null,
     map: null,
     opts: {
-      credentials:
-        "AhqSb9RscePM37EHU7fTFalyXaXPiKCbkxRjYld0ZKrUsOUHzwNCMngoGVgqrht_",
       mapTypeId: Microsoft.Maps.MapTypeId.road,
       zoom: 16,
       // center: Microsoft.Maps.Location(
@@ -44,7 +83,10 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
     },
   }
 
-  loadResidentsTask(mdl, state).map(loadMapConfig(mdl)).fork(onError, onSuccess)
+  const onError = (err) => log("err")(err)
+  const onSuccess = (location) => {}
+
+  load(mdl, state).fork(onError, onSuccess)
   return {
     view: ({ attrs: { mdl } }) =>
       m(
@@ -52,16 +94,52 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
 
         ["mod", "admin"].includes(mdl.user.role) &&
           m(
-            "section.grouped",
-            m("input", {
-              type: "text",
-              oninput: (e) => (state.input = e.target.value),
-            }),
+            "section",
             m(
-              "button",
-              { onclick: () => addResident(mdl, state) },
-              "Add Resident"
-            )
+              ".grouped",
+              m("input", {
+                type: "text",
+                value: state.input,
+                oninput: (e) => (state.input = e.target.value),
+              }),
+              state.newLocation
+                ? [
+                    m(
+                      "button.grouped",
+                      { onclick: () => restartFindResident(mdl, state) },
+                      "Restart",
+                      m("icon", "icon")
+                    ),
+                    m(
+                      "button",
+                      { onclick: () => saveResident(mdl, state) },
+                      "Add Resident"
+                    ),
+                  ]
+                : m(
+                    "button",
+                    { onclick: () => findResident(mdl, state) },
+                    "Find Resident"
+                  )
+            ),
+
+            state.findLocationResults.any() &&
+              m(
+                "ul",
+                state.findLocationResults.map((location) =>
+                  m(
+                    "li.grouped",
+                    m("p", location.formatted),
+                    m(
+                      "button",
+                      {
+                        onclick: () => selectLocation(mdl, state, location),
+                      },
+                      "Select"
+                    )
+                  )
+                )
+              )
           ),
 
         m("section#map", {

@@ -1,17 +1,21 @@
 import { handlers, AVATAR_URL } from "Utils/index.js"
 import { path, prop, without, assoc, propEq } from "ramda"
 import { addSuccess } from "Components/toast"
+import Map from "./map.js"
 
 const state = {
+  addresses: [],
   files: [],
   locations: [],
-  address: "",
+  // address: "",
   status: "",
   disableEdit: true,
 }
 
 const fetchLocationsTask = (mdl) =>
-  mdl.http.back4App.getTask(mdl)("classes/Addresses").map(prop("results"))
+  mdl.http.back4App
+    .getTask(mdl)("classes/Addresses?limit=1000")
+    .map(prop("results"))
 
 const toLocationVM = (addressIds) => (locations) =>
   locations.map((location) =>
@@ -105,6 +109,7 @@ const toggleEditProfile = (mdl, state, reload) => {
 }
 
 const Profile = ({ attrs: { mdl, reload } }) => {
+  state.addresses = mdl.data.addresses
   return {
     view: ({ attrs: { mdl } }) => {
       return m(
@@ -243,6 +248,14 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                                 onclick: (e) => {
                                   location.selected = true
 
+                                  state.addresses = state.addresses
+                                    .filter(
+                                      (l) => l.objectId == location.objectId
+                                    )
+                                    .any()
+                                    ? state.addresses
+                                    : state.addresses.concat([location])
+
                                   addAddress(
                                     mdl.data.profile,
                                     location.objectId
@@ -273,6 +286,11 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                                 {
                                   onclick: (_) => {
                                     location.selected = false
+                                    console.log("state b", state.addresses)
+                                    state.addresses = state.addresses.filter(
+                                      (a) => a.objectId != l.objectId
+                                    )
+                                    console.log("state b", state.addresses)
                                     removeAddress(mdl.data.profile, l.objectId)
                                   },
                                 },
@@ -285,7 +303,12 @@ const Profile = ({ attrs: { mdl, reload } }) => {
               )
             )
           )
-        )
+        ),
+        state.addresses.any() &&
+          m(Map, {
+            mdl,
+            locations: state.addresses,
+          })
       )
     },
   }
