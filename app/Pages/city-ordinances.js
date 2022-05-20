@@ -282,8 +282,12 @@ const CityOrd = {
             mdl.state.isAuth()
               ? m(
                   "button.button.icon.bd-error",
-                  { onclick: (e) => state.showOrdinanceViolation(true) },
-                  "Report City Ordinance Violation",
+                  {
+                    disabled: true,
+                    onclick: (e) => ViolationReport(mdl),
+                    // state.showOrdinanceViolation(true)
+                  },
+                  "COMING SOON Report City Ordinance Violation",
                   m(ExclamationTriangleLine, { fill: "red" })
                 )
               : m(
@@ -294,12 +298,12 @@ const CityOrd = {
                     href: "/login",
                   },
                   "Login To Report City Ordinance Violation"
-                ),
-            state.showOrdinanceViolation() &&
-              m(ViolationReport, {
-                mdl,
-                showModal: state.showOrdinanceViolation,
-              })
+                )
+            // state.showOrdinanceViolation() &&
+            //   m(ViolationReport, {
+            //     mdl,
+            //     showModal: state.showOrdinanceViolation,
+            //   })
           ),
           m(
             "p",
