@@ -1,8 +1,9 @@
 import Loader from "Components/loader.js"
-import { prop, startsWith, traverse } from "ramda"
+import { startsWith, traverse, prop, reverse, uniqWith, eqBy } from "ramda"
 import { exists, confirmTask } from "Utils"
 import Task from "data.task"
 import { TimesCircleLine, ArrowLine } from "@mithril-icons/clarity/cjs"
+
 const state = {
   album: [],
   title: "",
@@ -60,7 +61,7 @@ const fetchAlbum = ({ attrs: { mdl } }) => {
   const onError = (e) => {
     log("fetchAlbum - error")(e)
   }
-  const onSuccess = ({ results }) => {
+  const onSuccess = (results) => {
     results.any()
       ? ((state.album = results), (state.title = album))
       : m.route.set("/social/gallery")
@@ -68,6 +69,9 @@ const fetchAlbum = ({ attrs: { mdl } }) => {
 
   mdl.http.back4App
     .getTask(mdl)(`Classes/Gallery?${byAlbumName}`)
+    .map(prop("results"))
+    .map(reverse)
+    .map(uniqWith(eqBy(prop("thumb"))))
     .fork(onError, onSuccess)
 }
 

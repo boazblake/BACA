@@ -8,13 +8,22 @@ const Modal = {
           ".modal-overlay",
           {
             "aria-label": "Close",
-            onclick: () => mdl.state.showLayoutModal(false),
+            onclick: (e) => mdl.state.showLayoutModal(false),
           },
           m(
             ".modal-container",
-            m("header.modal-header", mdl.modal.header()),
-            m(".modal-body", m(".content", mdl.modal.content())),
-            m(".modal-footer", mdl.modal.footer())
+            m(
+              ".card",
+              {
+                onclick: (e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                },
+              },
+              m("header.modal-header", mdl.modal.header()),
+              m(".modal-body", m(".content", mdl.modal.content())),
+              m(".modal-footer", mdl.modal.footer())
+            )
           )
         ),
       ]

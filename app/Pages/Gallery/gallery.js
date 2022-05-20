@@ -1,6 +1,10 @@
 import Loader from "Components/loader.js"
-import { groupBy } from "ramda"
-import { compose, prop, descend, ascend, sortWith } from "ramda"
+import { groupBy, compose, prop, descend, ascend, sortWith } from "ramda"
+
+const log = (m) => (v) => {
+  console.log(m, v)
+  return v
+}
 
 const state = {
   albums: [],
@@ -8,11 +12,14 @@ const state = {
   newAlbum: { title: "", img: null },
 }
 
-const groupByAlbum = compose(
-  groupBy(prop("album")),
-  sortWith([descend(prop("updatedAt")), ascend(prop("album"))]),
-  prop("results")
-)
+const groupByAlbum = groupBy(prop("album"))
+
+const sortByUpdatedAlbum = sortWith([
+  descend(prop("updatedAt")),
+  ascend(prop("album")),
+])
+
+const groupByAlbumAndDate = compose(groupByAlbum, sortByUpdatedAlbum)
 
 const fetchAllAlbums = ({ attrs: { mdl } }) => {
   const onError = (e) => log("fetchAllAlbums- error")(e)
@@ -20,7 +27,8 @@ const fetchAllAlbums = ({ attrs: { mdl } }) => {
 
   mdl.http.back4App
     .getTask(mdl)("Classes/Gallery")
-    .map(groupByAlbum)
+    .map(prop("results"))
+    .map(groupByAlbumAndDate)
     .fork(onError, onSuccess)
 }
 

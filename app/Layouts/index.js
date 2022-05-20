@@ -11,7 +11,7 @@ import Login from "Pages/Auth/login-user.js"
 import Register from "Pages/Auth/register-user.js"
 import Loader from "Components/loader"
 import Task from "data.task"
-import { head, map, prop, tail } from "ramda"
+import { head, map, prop, tail, uniqWith, eqBy, reverse } from "ramda"
 
 const state = {
   status: "loading",
@@ -95,7 +95,11 @@ export const fetchAll = ({ attrs: { mdl } }) => {
         .map(prop("results"))
         .map(map(toEventViewModel))
     )
-    .ap(fetchTask(mdl)("Classes/Gallery").map(prop("results")))
+    .ap(
+      fetchTask(mdl)("Classes/Gallery")
+        .map(prop("results"))
+        .map(uniqWith(eqBy(prop("thumb"))))
+    )
     .ap(fetchTask(mdl)("Classes/Blogs").map(prop("results")))
     .fork(onError, onSuccess)
 }
