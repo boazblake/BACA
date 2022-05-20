@@ -20,67 +20,66 @@ const contents = {
   car: {
     icons: { default: CarLine },
     title: "Car Parking in Residential Area",
-    contents: [
+    contents: m(
+      ".container",
       m(
-        ".card",
+        "em",
+        "Parking of Vehicles on Residential Property Chapter 28, Article X"
+      ),
+      m(
+        "p",
+        "To read the complete ordinance, go to ",
         m(
-          "em",
-          "Parking of Vehicles on Residential Property Chapter 28, Article X"
+          "a.nav-link",
+          { target: "__blank", href: "www.Municode.com" },
+          "www.Municode.com"
         ),
+        " on the internet and search for City of Houston, Chapter 28, Article X, or enter Parking of Vehicles on Residential Property in the search block."
+      ),
+      m(
+        "p",
         m(
-          "p",
-          "To read the complete ordinance, go to ",
-          m(
-            "a.nav-link",
-            { target: "__blank", href: "www.Municode.com" },
-            "www.Municode.com"
-          ),
-          " on the internet and search for City of Houston, Chapter 28, Article X, or enter Parking of Vehicles on Residential Property in the search block."
-        ),
-        m(
-          "p",
-          m(
-            "a.nav-link",
-            {
-              target: "__blank",
-              href: "https://www.houstontx.gov/police/pdfs/brochures/english/Parking_of_vehicles_on_residential_propert.pdf",
-            },
-            "https://www.houstontx.gov/police/pdfs/brochures/english/Parking_of_vehicles_on_residential_propert.pdf"
-          )
-        ),
-
-        m(
-          "p",
-          "You can find out if a residence is covered by the ordinance by calling 311 or going to the city map viewer on the internet at ",
-          m(
-            "a.nav-link",
-            {
-              target: "__blank",
-              href: "http://mycity.houstontx.gov/public/",
-            },
-            " http://mycity.houstontx.gov/public/ "
-          ),
-          "and activating ",
-          m("em", "the Prohibited Yard Parking application: ")
-        ),
-        m(
-          "p",
-          m(
-            "a.nav-link",
-            {
-              target: "__blank",
-              href: "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html",
-            },
-            "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html"
-          )
+          "a.nav-link",
+          {
+            target: "__blank",
+            href: "https://www.houstontx.gov/police/pdfs/brochures/english/Parking_of_vehicles_on_residential_propert.pdf",
+          },
+          "https://www.houstontx.gov/police/pdfs/brochures/english/Parking_of_vehicles_on_residential_propert.pdf"
         )
       ),
-    ],
+
+      m(
+        "p",
+        "You can find out if a residence is covered by the ordinance by calling 311 or going to the city map viewer on the internet at ",
+        m(
+          "a.nav-link",
+          {
+            target: "__blank",
+            href: "http://mycity.houstontx.gov/public/",
+          },
+          " http://mycity.houstontx.gov/public/ "
+        ),
+        "and activating ",
+        m("em", "the Prohibited Yard Parking application: ")
+      ),
+      m(
+        "p",
+        m(
+          "a.nav-link",
+          {
+            target: "__blank",
+            href: "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html",
+          },
+          "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html"
+        )
+      )
+    ),
   },
   trash: {
     icons: { default: TrashLine },
     title: "Trash & Dumpster Ordinances",
-    contents: [
+    contents: m(
+      ".container",
       m(
         "p",
         m(
@@ -99,13 +98,14 @@ const contents = {
           },
           ["Houston Trash Facts PDF", m(PopOutLine)]
         )
-      ),
-    ],
+      )
+    ),
   },
   noise: {
     icons: { default: MusicNoteLine },
     title: "Noise Ordinances",
-    contents: [
+    contents: m(
+      ".container",
       m(
         "p",
         "According to the ",
@@ -131,13 +131,14 @@ const contents = {
           },
           "https://library.municode.com/tx/houston/codes/code_of_ordinances?nodeId=COOR_CH30NOSOLERE"
         )
-      ),
-    ],
+      )
+    ),
   },
   nuisance: {
     icons: { default: HomeLine },
     title: "Nuisance Ordinances",
-    contents: [
+    contents: m(
+      ".container",
       m(
         "p",
         m(
@@ -183,8 +184,8 @@ const contents = {
       m(
         "p",
         "State law governing junked vehicles; declaring them a public nuisance."
-      ),
-    ],
+      )
+    ),
   },
 }
 
@@ -218,7 +219,7 @@ const CardOrd = () => {
   let isSelected = false
 
   return {
-    view: ({ attrs: { id, title, icons, contents } }) =>
+    view: ({ attrs: { mdl, id, title, icons, contents } }) =>
       m(
         "article.card.col-6.bd-primary.p-x-50.p-y-6.pointer",
         {
@@ -227,9 +228,10 @@ const CardOrd = () => {
           onmouseover: () => (isSelected = true),
           onmouseout: () => (isSelected = false),
           onclick: () => {
-            state.title = title
-            state.contents = contents
-            state.showModal(true)
+            mdl.modal.header(m("h2", title))
+            mdl.modal.content(contents)
+            mdl.toggleLayoutModal(mdl)
+            // state.showModal(true)
           },
         },
 
@@ -340,3 +342,4 @@ const CityOrd = {
 }
 
 export default CityOrd
+

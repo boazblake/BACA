@@ -13,7 +13,7 @@ const Modal = {
           m(
             ".modal-container",
             m(
-              ".card",
+              ".card.container",
               {
                 onclick: (e) => {
                   e.preventDefault()
