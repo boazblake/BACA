@@ -67,6 +67,7 @@ const Model = {
   modal: {
     header: Stream([]),
     content: Stream([]),
+    classList: Stream([]),
     footer: Stream([]),
   },
   toggleLayoutModal: (mdl) =>

@@ -21,7 +21,10 @@ const contents = {
     icons: { default: CarLine },
     title: "Car Parking in Residential Area",
     contents: m(
-      ".container",
+      "", // ".container",
+      // {
+      //   style: { maxHeight: "50vh", overflow: "auto", wordBreak: "break-word" },
+      // },
       m(
         "em",
         "Parking of Vehicles on Residential Property Chapter 28, Article X"
@@ -79,7 +82,10 @@ const contents = {
     icons: { default: TrashLine },
     title: "Trash & Dumpster Ordinances",
     contents: m(
-      ".container",
+      "", // ".container",
+      // {
+      //   style: { maxHeight: "50vh", overflow: "auto", wordBreak: "break-word" },
+      // },
       m(
         "p",
         m(
@@ -105,7 +111,10 @@ const contents = {
     icons: { default: MusicNoteLine },
     title: "Noise Ordinances",
     contents: m(
-      ".container",
+      "", // ".container",
+      // {
+      //   style: { maxHeight: "50vh", overflow: "auto", wordBreak: "break-word" },
+      // },
       m(
         "p",
         "According to the ",
@@ -138,7 +147,10 @@ const contents = {
     icons: { default: HomeLine },
     title: "Nuisance Ordinances",
     contents: m(
-      ".container",
+      "", // ".container",
+      // {
+      //   style: { maxHeight: "50vh", overflow: "auto", wordBreak: "break-word" },
+      // },
       m(
         "p",
         m(
