@@ -9,32 +9,9 @@ const state = {
   status: "loading",
   blog: null,
   comments: null,
-  modal: Stream(false),
   new: {
     comment: "",
   },
-}
-
-const Modal = {
-  view: () =>
-    m(
-      ".modal-container",
-      { style: { minHeight: "100vh" } },
-      m(
-        ".modal",
-        m("header.modal-header"),
-        m(
-          "section.modal-content.flex-col",
-          {
-            onclick: (e) => state.modal(null),
-          },
-          m("img", {
-            alt: "",
-            src: state.modal(),
-          })
-        )
-      )
-    ),
 }
 
 const Post = {
@@ -65,7 +42,16 @@ const Post = {
           "figure.col-3.is-horizontal-align",
           m("img", {
             src: blog.thumb || "images/main.webp",
-            onclick: (e) => state.modal(blog.img),
+            onclick: (e) => {
+              mdl.modal.content(
+                m("img.is-center", {
+                  style: { height: "100%", margin: "0 auto" },
+                  src: blog.img || "images/main.webp",
+                  alt: "",
+                })
+              )
+              mdl.toggleLayoutModal(mdl)
+            },
           })
         )
       ),
@@ -180,7 +166,6 @@ const BlogPost = {
         BackToBlogs(),
         m(Post, { blog: state.blog, mdl }),
         BackToBlogs(),
-        state.modal() && m(Modal),
         // m(Comments, { blog: state.blog, comments: state.comments, mdl }),
       ]
     ),
