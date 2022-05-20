@@ -243,30 +243,20 @@ const Album = {
                     }),
                   m("img.pointer", {
                     src: pic.thumb,
-                    onclick: (e) => state.showSelectedImage(pic.image),
+                    onclick: (e) => {
+                      mdl.modal.content(
+                        m("img.is-center", {
+                          style: { height: "100%", margin: "0 auto" },
+                          src: pic.image,
+                          alt: "",
+                        })
+                      )
+                      mdl.toggleLayoutModal(mdl)
+                    },
                   })
                 )
               )
-            ),
-            state.showSelectedImage() &&
-              m(
-                ".modal-container",
-                { style: { minHeight: "100vh" } },
-                m(
-                  ".modal",
-                  m("header.modal-header"),
-                  m(
-                    "section.modal-content.flex-col",
-                    {
-                      onclick: (e) => state.showSelectedImage(null),
-                    },
-                    m("img", {
-                      alt: "",
-                      src: state.showSelectedImage(),
-                    })
-                  )
-                )
-              )
+            )
           )
         ),
 }
