@@ -1,3 +1,16 @@
+const scaleWidth = (mdl) => {
+  switch (mdl.settings.screenSize) {
+    case "phone":
+      return "scale(1.3)"
+    case "wide":
+      return "scale(1.2)"
+    case "tablet":
+      return "scale(1.1)"
+    case "desktop":
+      return "scale(1)"
+  }
+}
+
 const Modal = {
   onremove: ({ attrs: { mdl } }) => {
     mdl.modal.header(null)
@@ -19,6 +32,11 @@ const Modal = {
           m(
             ".card.container.grid",
             {
+              style: {
+                maxHeight: "800px",
+                overflow: "auto",
+                transform: `${scaleWidth(mdl)}`,
+              },
               onclick: (e) => {
                 e.preventDefault()
                 e.stopPropagation()
@@ -31,8 +49,7 @@ const Modal = {
                 "",
                 {
                   style: {
-                    maxHeight: "50vh",
-                    overflow: "auto",
+                    maxHeight: "90vh",
                     wordBreak: "break-word",
                   },
                 },
