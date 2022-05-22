@@ -20,7 +20,7 @@ const titleLens = lensProp("title")
 const detailsLens = lensProp("description")
 const locationLens = lensProp("location")
 const isRecurLens = lensProp("isRecur")
-const startDateLens = lensProp("startDate")
+const startDateLens = lensProp("start")
 
 const validateDates = (data) =>
   Success(data).apLeft(
@@ -81,3 +81,4 @@ export const validateEventTask = (data) => {
     .failureMap(mergeAll)
     .toTask()
 }
+

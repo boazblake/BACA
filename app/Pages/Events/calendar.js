@@ -9,7 +9,7 @@ const getCellDate = (target) => {
     : getCellDate(target.parentNode)
 }
 
-const onEventClick = (state) => (info) => {
+const onEventClick = (mdl, state) => (info) => {
   info.jsEvent.preventDefault()
   let id = info.event.extendedProps.objectId
   state.event = state.events.find(propEq("objectId", id))
@@ -21,6 +21,7 @@ const onEventClick = (state) => (info) => {
   state.event.endTime = head(tail(end))
   state.event.id = id
   state.previewEvent(true)
+
   if (info.event.url) {
     window.open(info.event.url)
   }
@@ -36,10 +37,10 @@ const formatEventForCalendar = (event) =>
       }
     : event
 
-const initCal = (dom, state, events) => {
+const initCal = (mdl, dom, state, events) => {
   return new FullCalendar.Calendar(dom, {
     events,
-    eventClick: onEventClick(state),
+    eventClick: onEventClick(mdl, state),
     initialView: "dayGridMonth",
     initialDate: new Date(),
     selectable: true,
@@ -67,7 +68,7 @@ const Calendar = {
     m("section#calendar", {
       oncreate: ({ dom }) => {
         let events = state.events.map(formatEventForCalendar)
-        state.calendar = initCal(dom, state, events)
+        state.calendar = initCal(mdl, dom, state, events)
         state.calendar.render()
       },
       onclick: (e) => {

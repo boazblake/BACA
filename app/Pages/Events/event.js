@@ -35,7 +35,7 @@ const updateLikes = (mdl, event) => {
   )
 }
 
-const EventPreview = {
+const Event = {
   view: ({
     attrs: { mdl, event, previewEvent, editEvent, resetState, state },
   }) =>
@@ -150,5 +150,5 @@ const EventPreview = {
     ),
 }
 
-export default EventPreview
+export default Event
 

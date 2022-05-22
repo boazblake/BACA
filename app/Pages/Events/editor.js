@@ -52,8 +52,7 @@ const Editor = {
             "form.grid",
             { ...onInput(state.event) },
             m("h2.text-primary", "Date", m("span.text-error", "*")),
-            state.errors.startDate &&
-              m("h2.text-error", state.errors.startDate),
+            state.errors.start && m("h2.text-error", state.errors.start),
             m(
               "formgroup.grouped",
               m(
@@ -289,3 +288,4 @@ const Editor = {
 }
 
 export default Editor
+

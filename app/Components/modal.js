@@ -33,11 +33,16 @@ const Modal = {
             ".card.container.grid",
             {
               style: {
-                maxHeight: "800px",
+                position: "fixed",
+                top: "5%",
+                left: "10%",
+                maxHeight: "90vh",
                 overflow: "auto",
-                transform: `${scaleWidth(mdl)}`,
+                width: "80%",
+                // transform: `${scaleWidth(mdl)}`,
               },
               onclick: (e) => {
+                console.log("modal", e)
                 e.preventDefault()
                 e.stopPropagation()
               },
@@ -49,7 +54,6 @@ const Modal = {
                 "",
                 {
                   style: {
-                    maxHeight: "90vh",
                     wordBreak: "break-word",
                   },
                 },

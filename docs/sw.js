@@ -30,8 +30,12 @@ self.__precacheManifest = [
     "revision": "afb90e50a7a493316ccf7ab94017651e"
   },
   {
+    "url": "app.css.gz",
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  {
     "url": "app.js",
-    "revision": "96712b6a4a13aae04ce4354704b5ff87"
+    "revision": "f2115ea1edfe89df1f7792e9d3668e2f"
   },
   {
     "url": "app.js.gz",
@@ -335,7 +339,7 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "63c5b0e33a4123360277b0c35bb6f732"
+    "revision": "7bacc0e89ac9773fe42cde446ee6a4a4"
   },
   {
     "url": "index.html.gz",

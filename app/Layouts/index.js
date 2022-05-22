@@ -7,11 +7,18 @@ import Modal from "Components/modal.js"
 import NavModal from "./nav-modal.js"
 import { SlideOutRight, SlideInLeft } from "Styles/animations.js"
 import Toolbar from "./toolbar.js"
-import Login from "Pages/Auth/login-user.js"
-import Register from "Pages/Auth/register-user.js"
 import Loader from "Components/loader"
 import Task from "data.task"
 import { head, map, prop, tail, uniqWith, eqBy, reverse } from "ramda"
+import {
+  state as eventState,
+  submitEvent,
+  deleteEvent,
+  resetState,
+  uploadImage,
+} from "../Pages/Events/index.js"
+import Editor from "../Pages/Events/editor.js"
+import Event from "../Pages/Events/event.js"
 
 const state = {
   status: "loading",
@@ -138,8 +145,26 @@ const Layout = {
           mdl,
         }),
       mdl.state.showLayoutModal() && m(Modal, { mdl }),
-      // mdl.state.showAuthModal() == "login" && m(Login, { mdl }),
-      // mdl.state.showAuthModal() == "register" && m(Register, { mdl }),
+      eventState.showEditor() &&
+        m(Editor, {
+          mdl,
+          state: eventState,
+          showEditor: eventState.showEditor,
+          submitEvent,
+          deleteEvent,
+          resetState,
+          uploadImage: uploadImage(mdl),
+        }),
+      eventState.previewEvent() &&
+        m(Event, {
+          mdl,
+          state: eventState,
+          editEvent: eventState.showEditor,
+          previewEvent: eventState.previewEvent,
+          event: eventState.event,
+          resetState,
+        }),
+
       m(Footer, { mdl })
     ),
 }

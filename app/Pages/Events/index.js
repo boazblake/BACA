@@ -1,12 +1,10 @@
 import Calendar from "./calendar"
-import Editor from "./editor"
-import EventPreview from "./event"
 import { propEq, prop, head, tail, clone } from "ramda"
 import Loader from "Components/loader.js"
 import Task from "data.task"
 import { validateEventTask } from "./validations.js"
 
-const state = {
+export const state = {
   errors: {},
   status: Stream("loading"),
   calendar: null,
@@ -35,7 +33,7 @@ const state = {
   },
 }
 
-const resetState = (s) => {
+export const resetState = (s) => {
   state.event = {
     attendees: [],
     likes: [],
@@ -84,6 +82,7 @@ const fetchEvents = ({ attrs: { mdl } }) => {
           .map(clone)
           .map(toPreviewModel)
       )
+
       state.previewEvent(true)
     }
     state.status("loaded")
@@ -94,15 +93,17 @@ const fetchEvents = ({ attrs: { mdl } }) => {
     .fork(onError, onSuccess)
 }
 
-const deleteEvent = (mdl, id) => {
+export const deleteEvent = (mdl, id) => {
   state.status("loading")
   const onError = (e) => {
     console.error(e)
   }
 
   const onSuccess = (evt) => {
-    fetchEvents({ attrs: { mdl } })
     state.showEditor(false)
+    state.previewEvent(false)
+    mdl.state.selectedPreviewEvent(null)
+    fetchEvents({ attrs: { mdl } })
   }
 
   mdl.http.back4App
@@ -142,7 +143,7 @@ const saveImgToGalleryTask =
       })
       .chain((_) => Task.of({ image: image.url, thumb: thumb.url }))
 
-const uploadImage = (mdl) => (file) => {
+export const uploadImage = (mdl) => (file) => {
   state.status("uploading-image")
 
   mdl.http.imgBB
@@ -151,7 +152,7 @@ const uploadImage = (mdl) => (file) => {
     .fork(onImgError, onImgSuccess)
 }
 
-const submitEvent = (
+export const submitEvent = (
   mdl,
   {
     id,
@@ -193,6 +194,7 @@ const submitEvent = (
   }
 
   const onSuccess = (evt) => {
+    console.log(evt)
     fetchEvents({ attrs: { mdl } })
     state.showEditor(false)
   }
@@ -212,27 +214,6 @@ const Events = {
   view: ({ attrs: { mdl } }) =>
     m(
       "article",
-      state.showEditor() &&
-        m(Editor, {
-          mdl,
-          state,
-          showEditor: state.showEditor,
-          submitEvent,
-          deleteEvent,
-          resetState,
-          uploadImage: uploadImage(mdl),
-        }),
-
-      state.previewEvent() &&
-        m(EventPreview, {
-          mdl,
-          state,
-          editEvent: state.showEditor,
-          previewEvent: state.previewEvent,
-          event: state.event,
-          resetState,
-        }),
-
       state.status() == "loaded" &&
         m("section.container", m(Calendar, { mdl, state })),
       state.status() == "loading" && m("section", m(Loader)),
