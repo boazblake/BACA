@@ -30,7 +30,7 @@ const Modal = {
         m(
           ".modal-container",
           m(
-            ".card.container.grid",
+            ".card.grid",
             {
               style: {
                 position: "fixed",
@@ -49,9 +49,9 @@ const Modal = {
             },
             m("header.modal-header.row", mdl.modal.header()),
             m(
-              ".modal-body.row",
+              ".modal-body",
               m(
-                "",
+                ".",
                 {
                   style: {
                     wordBreak: "break-word",
