@@ -20,7 +20,7 @@ const Modal = {
   },
   view: ({ attrs: { mdl } }) => {
     return m(
-      `section.modal.${mdl.modal.classList()}`,
+      `dialog.modal.${mdl.modal.classList()}`,
       m(
         ".modal-overlay",
         {
@@ -28,13 +28,13 @@ const Modal = {
           onclick: (e) => mdl.state.showLayoutModal(false),
         },
         m(
-          ".modal-container",
+          "section.modal-container",
           m(
             ".card.grid",
             {
               style: {
                 position: "fixed",
-                top: "5%",
+                // top: "5%",
                 left: "10%",
                 maxHeight: "90vh",
                 overflow: "auto",

@@ -248,6 +248,7 @@ const Album = {
                         m("img.is-center", {
                           style: { height: "100%", margin: "0 auto" },
                           src: pic.image,
+                          onload: (e) => console.log("onload", e),
                           alt: "",
                         })
                       )

@@ -149,7 +149,7 @@ const Img = {
         onclick: () => {
           mdl.modal.content(
             m("img.is-center", {
-              // style: { height: "100%", margin: "0 auto" },
+              style: { height: "100%", margin: "0 auto" },
               src: img.image,
               alt: "",
             })
