@@ -48,7 +48,7 @@ const imageMin = () => viteImagemin({
 
 const sharper = () => vsharp({
   src: "./public/",
-  dest: "docs",
+  dest: "docs/assets/",
   imageExt: ["jpg", "png", "svg", "HEIC"],
   tasks: [
     [
