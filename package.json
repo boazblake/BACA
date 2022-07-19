@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf ./dist && rm -rf ./node_modules",
-    "clean-start": "rm -rf dist && yarn run start",
+    "clean": "rm -rf ./docs && rm -rf ./node_modules",
+    "clean-start": "rm -rf docs && yarn run start",
     "fresh": "yarn run clean && yarn install && yarn run start",
     "start": "vite",
     "build": "yarn run build:pre && vite build",
@@ -14,7 +14,6 @@
     "send": "yarn build; git add .; git commit -m 'build'; git push; git push gitlab master"
   },
   "dependencies": {
-    "@bunchtogether/vite-plugin-flow": "^1.0.2",
     "@boazblake/fun-config": "https://github.com/boazblake/fun-config",
     "@mithril-icons/clarity": "^1.2.0",
     "daggy": "^1.5.0",
@@ -25,13 +24,14 @@
     "dayjs": "^1.10.7",
     "mithril": "2.2.0",
     "mithril-stream": "^2.0.0",
-    "ramda": "^0.27.2",
+    "ramda": "^0.27.2"
+  },
+  "devDependencies": {
+    "@bunchtogether/vite-plugin-flow": "^1.0.2",
+    "sass": "^1.53.0",
+    "vite": "^2.6.2",
     "vite-plugin-imagemin": "^0.6.1",
     "vite-plugin-pwa": "^0.12.3",
     "vite-plugin-vsharp": "^1.1.4"
-  },
-  "devDependencies": {
-    "sass": "^1.53.0",
-    "vite": "^2.6.2"
   }
 }
