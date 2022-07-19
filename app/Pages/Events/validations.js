@@ -1,6 +1,6 @@
 import { curryN, identity, lensProp, mergeAll } from "ramda"
 import { Success } from "data.validation"
-import { validate, isRequired } from "Utils"
+import { validate, isRequired } from "@/Utils"
 import dayjs from "dayjs"
 
 const hasDaysOfWeekSelected = (data) => (isRecur) =>

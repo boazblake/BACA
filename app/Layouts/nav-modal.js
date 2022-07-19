@@ -1,10 +1,11 @@
+import m from "mithril"
 import { PopOutLine } from "@mithril-icons/clarity/cjs"
-import NavLink from "Components/nav-link"
-import AuthBox from "Components/authbox"
-import { isActiveRoute } from "Utils/index.js"
+import NavLink from "@/Components/nav-link"
+import AuthBox from "@/Components/authbox"
+import { isActiveRoute } from "@/Utils/index.js"
 
 let navItemstate = {
-  onHover: () => {},
+  onHover: () => { },
 }
 
 const toggleRoutes = (mdl) => (id) => {
@@ -60,15 +61,15 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
           childRoutes.map((r) =>
             r.group.includes("external")
               ? m(
-                  "a.col-12 icon nav-link",
-                  { target: "_blank", href: r.external },
-                  r.name,
-                  m(PopOutLine, {
-                    margin: "8px",
-                    width: "15px",
-                    height: "15px",
-                  })
-                )
+                "a.col-12 icon nav-link",
+                { target: "_blank", href: r.external },
+                r.name,
+                m(PopOutLine, {
+                  margin: "8px",
+                  width: "15px",
+                  height: "15px",
+                })
+              )
               : displayRoute(mdl)(r)
           )
         )
@@ -104,11 +105,11 @@ const NavModal = ({ attrs: { mdl } }) => {
             routes(mdl).map((r) =>
               r.children.any()
                 ? m(NavSection, {
-                    mdl,
-                    route: r,
-                    toggleRoutes,
-                    isSelected: mdl.navState[r.id],
-                  })
+                  mdl,
+                  route: r,
+                  toggleRoutes,
+                  isSelected: mdl.navState[r.id],
+                })
                 : displayRoute(mdl)(r)
             )
           )

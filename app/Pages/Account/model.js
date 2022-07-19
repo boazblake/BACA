@@ -1,5 +1,6 @@
+import m from "mithril"
 import { map, prop, head, reverse } from "ramda"
-import { formatDate } from "Utils/helpers"
+import { formatDate } from "@/Utils/helpers"
 import Task from "data.task"
 import D from "dayjs"
 import af from "dayjs/plugin/advancedFormat"
@@ -18,16 +19,16 @@ const toProfileVM =
       account: { objectId, avatar, address, telephone },
     },
   }) =>
-  ({ addressIds }) => ({
-    objectId,
-    address,
-    addressIds,
-    telephone,
-    emailVerified,
-    email,
-    name,
-    avatar,
-  })
+    ({ addressIds }) => ({
+      objectId,
+      address,
+      addressIds,
+      telephone,
+      emailVerified,
+      email,
+      name,
+      avatar,
+    })
 
 const getProfileTask = (mdl) => (id) =>
   mdl.http.back4App
@@ -39,19 +40,19 @@ const getProfileTask = (mdl) => (id) =>
 const toDuesVM = ({ date, createdAt, status, full_name, address, email }) => {
   return date
     ? {
-        date: formatDate(date),
-        status,
-        name: full_name,
-        email,
-        address,
-      }
+      date: formatDate(date),
+      status,
+      name: full_name,
+      email,
+      address,
+    }
     : {
-        date: formatDate(createdAt),
-        status: "ERROR - contact administrator",
-        full_name: JSON.stringify(full_name),
-        email: JSON.stringify(email),
-        address: JSON.stringify(address),
-      }
+      date: formatDate(createdAt),
+      status: "ERROR - contact administrator",
+      full_name: JSON.stringify(full_name),
+      email: JSON.stringify(email),
+      address: JSON.stringify(address),
+    }
 }
 
 const getDuesTask = (mdl) => (id) =>

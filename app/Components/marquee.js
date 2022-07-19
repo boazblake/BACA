@@ -1,3 +1,4 @@
+import m from "mithril"
 const Marq = {
   view: () =>
     m(

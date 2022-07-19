@@ -1,5 +1,7 @@
-import { saveStorageTask } from "Utils/storage"
-import { AddToCartOut } from "Styles/animations"
+import m from "mithril"
+import { saveStorageTask } from "@/Utils/storage"
+import { AddToCartOut } from "@/Styles/animations"
+import Stream from "mithril-stream"
 
 const Selector = () => {
   const state = {
@@ -74,13 +76,13 @@ const Selector = () => {
             )
           ),
           mdl.addToCart.show() == product &&
-            m(".animated", {
-              oncreate: AddToCartOut,
-              id: "add-to-cart-img",
-              style: {
-                "background-image": `url(${mdl.addToCart.id()})`,
-              },
-            }),
+          m(".animated", {
+            oncreate: AddToCartOut,
+            id: "add-to-cart-img",
+            style: {
+              "background-image": `url(${mdl.addToCart.id()})`,
+            },
+          }),
           m(
             ".col-xs-1",
             m(

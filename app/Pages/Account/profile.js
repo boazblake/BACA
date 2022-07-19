@@ -1,8 +1,8 @@
-import { handlers, AVATAR_URL } from "Utils/index.js"
+import m from "mithril"
+import { handlers, AVATAR_URL } from "@/Utils/index.js"
 import { path, prop, without, assoc, propEq } from "ramda"
-import { addSuccess } from "Components/toast"
+import { addSuccess } from "@/Components/toast"
 import Map from "./map.js"
-import { m } from "mithril"
 
 const state = {
   addresses: [],
@@ -63,12 +63,12 @@ const updateModelAccount = (mdl, addressIds) => {
 
 const updateProfileMeta =
   (mdl) =>
-  ({ name, addressIds, telephone }) =>
-  (reload) => {
-    return updateProfileTask(mdl)({ name, addressIds, telephone })
-      .map((_) => updateModelAccount(mdl, addressIds))
-      .fork(onError, (_) => onSuccess(mdl, reload))
-  }
+    ({ name, addressIds, telephone }) =>
+      (reload) => {
+        return updateProfileTask(mdl)({ name, addressIds, telephone })
+          .map((_) => updateModelAccount(mdl, addressIds))
+          .fork(onError, (_) => onSuccess(mdl, reload))
+      }
 
 const uploadImage = (mdl) => (file) => {
   mdl.http.imgBB
@@ -127,73 +127,73 @@ const Profile = ({ attrs: { mdl, reload } }) => {
               { style: { width: "180px" } },
               mdl.data.profile.avatar
                 ? m(
-                    "button.button",
-                    {
-                      style: {
-                        borderColor: "var(--color-error)",
-                        color: "var(--color-error)",
-                      },
-                      onclick: (e) => removeImage(mdl, mdl.data.profile),
+                  "button.button",
+                  {
+                    style: {
+                      borderColor: "var(--color-error)",
+                      color: "var(--color-error)",
                     },
-                    "Remove Image"
-                  )
+                    onclick: (e) => removeImage(mdl, mdl.data.profile),
+                  },
+                  "Remove Image"
+                )
                 : m(
-                    "label.button",
-                    { label: "profile-pic" },
-                    "Add profile picture",
-                    m("input", {
-                      style: { display: "none" },
-                      type: "file",
-                      id: "avatar",
-                      value: state.files,
-                      onchange: (e) => uploadImage(mdl)(e.target.files),
-                    })
-                  )
+                  "label.button",
+                  { label: "profile-pic" },
+                  "Add profile picture",
+                  m("input", {
+                    style: { display: "none" },
+                    type: "file",
+                    id: "avatar",
+                    value: state.files,
+                    onchange: (e) => uploadImage(mdl)(e.target.files),
+                  })
+                )
             )
           ),
           m(
             "section.col",
             state.disableEdit
               ? m(
+                "button.button",
+                {
+                  style: {
+                    borderColor: "var(--blue)",
+                    color: "var(--blue)",
+                  },
+                  onclick: (e) => toggleEditProfile(mdl, state),
+                },
+                "Edit Profile Info"
+              )
+              : m(
+                ".grouped",
+                m(
                   "button.button",
                   {
                     style: {
-                      borderColor: "var(--blue)",
-                      color: "var(--blue)",
+                      borderColor: "var(--red)",
+                      color: "var(--red)",
                     },
-                    onclick: (e) => toggleEditProfile(mdl, state),
+                    onclick: () => (state.disableEdit = !state.disableEdit),
                   },
-                  "Edit Profile Info"
-                )
-              : m(
-                  ".grouped",
-                  m(
-                    "button.button",
-                    {
-                      style: {
-                        borderColor: "var(--red)",
-                        color: "var(--red)",
-                      },
-                      onclick: () => (state.disableEdit = !state.disableEdit),
-                    },
-                    "Cancel Edit"
-                  ),
-                  m(
-                    "button.button",
-                    {
-                      style: {
-                        borderColor: "var(--green)",
-                        color: "var(--green)",
-                      },
-                      onclick: (e) => toggleEditProfile(mdl, state, reload),
-                    },
-                    "Finish Edit and Save"
-                  )
+                  "Cancel Edit"
                 ),
+                m(
+                  "button.button",
+                  {
+                    style: {
+                      borderColor: "var(--green)",
+                      color: "var(--green)",
+                    },
+                    onclick: (e) => toggleEditProfile(mdl, state, reload),
+                  },
+                  "Finish Edit and Save"
+                )
+              ),
             m(
               "form",
               !mdl.data.profile.emailVerified &&
-                m("label.warning", "email not verified"),
+              m("label.warning", "email not verified"),
               m(
                 "label",
                 "email",
@@ -226,94 +226,94 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                 "Address",
                 state.disableEdit
                   ? mdl.data.addresses.map((address) =>
-                      m("input", {
-                        disabled: true,
-                        id: "address",
-                        value: address.property,
-                      })
-                    )
+                    m("input", {
+                      disabled: true,
+                      id: "address",
+                      value: address.property,
+                    })
+                  )
                   : [
+                    m(
+                      "label.label",
                       m(
-                        "label.label",
-                        m(
-                          "select",
-                          {
-                            multiple: true,
-                            value: mdl.data.profile.addressId,
-                          },
-                          state.locations.map((location) =>
-                            m(
-                              "option",
-                              {
-                                onclick: (e) => {
-                                  location.selected = true
+                        "select",
+                        {
+                          multiple: true,
+                          value: mdl.data.profile.addressId,
+                        },
+                        state.locations.map((location) =>
+                          m(
+                            "option",
+                            {
+                              onclick: (e) => {
+                                location.selected = true
 
-                                  state.addresses = state.addresses
-                                    .filter(
-                                      (l) => l.objectId == location.objectId
-                                    )
-                                    .any()
-                                    ? state.addresses
-                                    : state.addresses.concat([location])
-
-                                  addAddress(
-                                    mdl.data.profile,
-                                    location.objectId
+                                state.addresses = state.addresses
+                                  .filter(
+                                    (l) => l.objectId == location.objectId
                                   )
-                                },
-                                class: mdl.data.profile.addressIds.includes(
+                                  .any()
+                                  ? state.addresses
+                                  : state.addresses.concat([location])
+
+                                addAddress(
+                                  mdl.data.profile,
                                   location.objectId
                                 )
-                                  ? "option text-primary"
-                                  : "option",
-                                value: location.objectId,
                               },
-                              location.property
+                              class: mdl.data.profile.addressIds.includes(
+                                location.objectId
+                              )
+                                ? "option text-primary"
+                                : "option",
+                              value: location.objectId,
+                            },
+                            location.property
+                          )
+                        )
+                      )
+                    ),
+                    m(
+                      "ul",
+                      state.locations
+                        .filter(propEq("selected", true))
+                        .map((l) =>
+                          m(
+                            "li.grouped",
+                            m("p", l.property),
+                            m(
+                              ".text-primary.underline",
+                              {
+                                onclick: (_) => {
+                                  location.selected = false
+                                  state.addresses = state.addresses.filter(
+                                    (a) => a.objectId != l.objectId
+                                  )
+                                  removeAddress(mdl.data.profile, l.objectId)
+                                },
+                              },
+                              "remove"
                             )
                           )
                         )
-                      ),
-                      m(
-                        "ul",
-                        state.locations
-                          .filter(propEq("selected", true))
-                          .map((l) =>
-                            m(
-                              "li.grouped",
-                              m("p", l.property),
-                              m(
-                                ".text-primary.underline",
-                                {
-                                  onclick: (_) => {
-                                    location.selected = false
-                                    state.addresses = state.addresses.filter(
-                                      (a) => a.objectId != l.objectId
-                                    )
-                                    removeAddress(mdl.data.profile, l.objectId)
-                                  },
-                                },
-                                "remove"
-                              )
-                            )
-                          )
-                      ),
-                    ]
+                    ),
+                  ]
               )
             )
           )
         ),
         state.addresses.any()
           ? m(
-              "section",
-              m(
-                "h4",
-                "If the coordinates of the icon are not on top of your home please contact an administrator at BonhamAcresCivicAssociation at gmail dot com."
-              ),
-              m(Map, {
-                mdl,
-                locations: state.addresses,
-              })
-            )
+            "section",
+            m(
+              "h4",
+              "If the coordinates of the icon are not on top of your home please contact an administrator at BonhamAcresCivicAssociation at gmail dot com."
+            ),
+            m(Map, {
+              mdl,
+              locations: state.addresses,
+            })
+          )
           : m("p.hero", "Edit your profile to select your address(s)")
       )
     },

@@ -1,9 +1,10 @@
+import m from "mithril"
 import { ArrowLine, NoteEditLine } from "@mithril-icons/clarity/cjs"
-import { parseMarkdown, AVATAR_URL } from "Utils"
-import HtmlSanitizer from "Utils/html-sanitize"
+import { parseMarkdown, AVATAR_URL } from "@/Utils"
+import HtmlSanitizer from "@/Utils/html-sanitize"
 
 import { toViewModel } from "./blog"
-import Loader from "Components/loader.js"
+import Loader from "@/Components/loader.js"
 
 const state = {
   status: "loading",
@@ -60,18 +61,18 @@ const Post = {
         m.trust(HtmlSanitizer.SanitizeHtml(parseMarkdown(blog.text)))
       ),
       blog.author == mdl.user.name &&
+      m(
+        "footer.grouped",
         m(
-          "footer.grouped",
-          m(
-            m.route.Link,
-            {
-              selector: "button.button.primary.icon",
-              href: `/social/blog-editor:${blog.objectId}`,
-            },
-            "Edit",
-            m(NoteEditLine, { fill: "white" })
-          )
+          m.route.Link,
+          {
+            selector: "button.button.primary.icon",
+            href: `/social/blog-editor:${blog.objectId}`,
+          },
+          "Edit",
+          m(NoteEditLine, { fill: "white" })
         )
+      )
     ),
 }
 

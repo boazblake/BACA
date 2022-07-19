@@ -1,8 +1,9 @@
-import Default from "Pages/default.js"
-import Account from "Pages/Account/index.js"
-import Admin from "Pages/Admin"
-import Layout from "Layouts/index.js"
-import { scrollToAnchor, ScrollToPageTitle } from "Utils"
+import m from "mithril"
+import Default from "@/Pages/default.js"
+import Account from "@/Pages/Account/index.js"
+import Admin from "@/Pages/Admin"
+import Layout from "@/Layouts/index.js"
+import { scrollToAnchor, ScrollToPageTitle } from "@/Utils"
 
 const AuthenticatedRoutes = [
   {

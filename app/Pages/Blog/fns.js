@@ -1,4 +1,4 @@
-import { handlers, exists, confirmTask } from "Utils"
+import { handlers, exists, confirmTask } from "@/Utils"
 import Task from "data.task"
 
 export const resetModalState = (state) => {
@@ -23,38 +23,38 @@ export const isInvalid = (s) => !exists(s.title) || !exists(s.text)
 
 export const saveImgToGalleryTask =
   (mdl) =>
-  ({ data: { image, thumb } }) =>
-    mdl.http.back4App
-      .postTask(mdl)("Classes/Gallery")({
-        album: "blog",
-        image: image.url,
-        thumb: thumb.url,
-      })
-      .chain(({ objectId }) =>
-        Task.of({
+    ({ data: { image, thumb } }) =>
+      mdl.http.back4App
+        .postTask(mdl)("Classes/Gallery")({
+          album: "blog",
           image: image.url,
           thumb: thumb.url,
-          objectId,
         })
-      )
+        .chain(({ objectId }) =>
+          Task.of({
+            image: image.url,
+            thumb: thumb.url,
+            objectId,
+          })
+        )
 
 export const toBlogs = () => m.route.set("/social/blog")
 
 export const deleteBlog =
   (mdl) =>
-  ({ title, objectId, imageId }) =>
-    confirmTask(`Are you sure you want to delete the blog ${title}?`)
-      .chain((_) =>
-        imageId
-          ? mdl.http.back4App.deleteTask(mdl)(`Classes/Gallery/${imageId}`)
-          : Task.of()
-      )
-      .chain((_) =>
-        mdl.http.back4App.deleteTask(mdl)(`Classes/Blogs/${objectId}`)
-      )
-      .fork((e) => {
-        console.log(e)
-      }, toBlogs)
+    ({ title, objectId, imageId }) =>
+      confirmTask(`Are you sure you want to delete the blog ${title}?`)
+        .chain((_) =>
+          imageId
+            ? mdl.http.back4App.deleteTask(mdl)(`Classes/Gallery/${imageId}`)
+            : Task.of()
+        )
+        .chain((_) =>
+          mdl.http.back4App.deleteTask(mdl)(`Classes/Blogs/${objectId}`)
+        )
+        .fork((e) => {
+          console.log(e)
+        }, toBlogs)
 
 export const onInput = (state) =>
   handlers(["oninput"], (e) => {

@@ -1,5 +1,7 @@
-import ViolationReport from "Components/report"
-// import Modal from "Components/Modal"
+import m from "mithril"
+import ViolationReport from "@/Components/report"
+import Stream from "mithril-stream"
+// import Modal from "@/Components/Modal"
 import {
   CarLine,
   ExclamationTriangleLine,
@@ -119,8 +121,8 @@ const contents = {
         "p",
         "According to the ",
         ("a.nav-link",
-        { target: "__blank", href: "#" },
-        " Houston Sound Ordinance, "),
+          { target: "__blank", href: "#" },
+          " Houston Sound Ordinance, "),
         " sound ",
         m("span.strong", " cannot exceed 65 decibels during the day "),
         "and",
@@ -293,24 +295,24 @@ const CityOrd = {
             ".p-y-6.is-center",
             mdl.state.isAuth()
               ? m(
-                  "button.button.icon.bd-error",
-                  {
-                    disabled: true,
-                    onclick: (e) => ViolationReport(mdl),
-                    // state.showOrdinanceViolation(true)
-                  },
-                  "COMING SOON Report City Ordinance Violation",
-                  m(ExclamationTriangleLine, { fill: "red" })
-                )
+                "button.button.icon.bd-error",
+                {
+                  disabled: true,
+                  onclick: (e) => ViolationReport(mdl),
+                  // state.showOrdinanceViolation(true)
+                },
+                "COMING SOON Report City Ordinance Violation",
+                m(ExclamationTriangleLine, { fill: "red" })
+              )
               : m(
-                  m.route.Link,
-                  {
-                    selector: "button",
-                    class: "button.bd-error",
-                    href: "/login",
-                  },
-                  "Login To Report City Ordinance Violation"
-                )
+                m.route.Link,
+                {
+                  selector: "button",
+                  class: "button.bd-error",
+                  href: "/login",
+                },
+                "Login To Report City Ordinance Violation"
+              )
             // state.showOrdinanceViolation() &&
             //   m(ViolationReport, {
             //     mdl,
@@ -344,16 +346,16 @@ const CityOrd = {
         )
       ),
       state.showModal() &&
-        m(Modal, {
-          mdl,
-          title: state.title,
-          contents: state.contents,
-          close: () => {
-            state.contents = null
-            state.title = null
-            state.showModal(false)
-          },
-        })
+      m(Modal, {
+        mdl,
+        title: state.title,
+        contents: state.contents,
+        close: () => {
+          state.contents = null
+          state.title = null
+          state.showModal(false)
+        },
+      })
     ),
 }
 

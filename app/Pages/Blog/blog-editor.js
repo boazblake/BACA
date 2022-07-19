@@ -1,4 +1,5 @@
-import { exists } from "Utils"
+import m from "mithril"
+import { exists } from "@/Utils"
 import {
   resetModalState,
   resetEditorState,
@@ -7,7 +8,8 @@ import {
   deleteBlog,
   onInput,
 } from "./fns"
-import Loader from "Components/loader.js"
+import Loader from "@/Components/loader.js"
+import Stream from "mithril-stream"
 
 const state = {
   status: "loading",
@@ -65,52 +67,52 @@ const setupEditor = ({ attrs: { mdl } }) => {
 
 const initEditor =
   (state) =>
-  ({ dom }) => {
-    state.editor = ClassicEditor.create(dom, {
-      toolbar: [
-        "heading",
-        "selectAll",
-        "undo",
-        "redo",
-        "bold",
-        "italic",
-        "blockQuote",
-        "link",
-        "indent",
-        "outdent",
-        "numberedList",
-        "bulletedList",
-        "mediaEmbed",
-        "insertTable",
-        "tableColumn",
-        "tableRow",
-        "mergeTableCells",
-      ],
-      heading: {
-        options: [
-          {
-            model: "paragraph",
-            title: "Paragraph",
-            class: "ck-heading_paragraph",
-          },
-          {
-            model: "heading1",
-            view: "h1",
-            title: "Heading 1",
-            class: "ck-heading_heading1",
-          },
-          {
-            model: "heading2",
-            view: "h2",
-            title: "Heading 2",
-            class: "ck-heading_heading2",
-          },
+    ({ dom }) => {
+      state.editor = ClassicEditor.create(dom, {
+        toolbar: [
+          "heading",
+          "selectAll",
+          "undo",
+          "redo",
+          "bold",
+          "italic",
+          "blockQuote",
+          "link",
+          "indent",
+          "outdent",
+          "numberedList",
+          "bulletedList",
+          "mediaEmbed",
+          "insertTable",
+          "tableColumn",
+          "tableRow",
+          "mergeTableCells",
         ],
-      },
-    })
+        heading: {
+          options: [
+            {
+              model: "paragraph",
+              title: "Paragraph",
+              class: "ck-heading_paragraph",
+            },
+            {
+              model: "heading1",
+              view: "h1",
+              title: "Heading 1",
+              class: "ck-heading_heading1",
+            },
+            {
+              model: "heading2",
+              view: "h2",
+              title: "Heading 2",
+              class: "ck-heading_heading2",
+            },
+          ],
+        },
+      })
 
-    state.editor.then((e) => e.setData(state.text))
-  }
+      state.editor.then((e) => e.setData(state.text))
+    }
 
 const handleImage = (mdl) => (state) =>
   state.file ? uploadImage(mdl)(state.file) : state.showModal(false)
@@ -132,25 +134,25 @@ const uploadImage = (mdl) => (file) => {
 
 const submitBlog =
   (mdl) =>
-  ({ title, img, text, thumb, objectId, imageId }) => {
-    const onError = (e) => console.log("e", e)
-    const onSuccess = (data) =>
-      m.route.set(`/social/blog-post:${objectId ? objectId : data.objectId}`)
+    ({ title, img, text, thumb, objectId, imageId }) => {
+      const onError = (e) => console.log("e", e)
+      const onSuccess = (data) =>
+        m.route.set(`/social/blog-post:${objectId ? objectId : data.objectId}`)
 
-    let dto = {
-      title,
-      img,
-      text,
-      author: mdl.user.name,
-      thumb,
-      imageId,
+      let dto = {
+        title,
+        img,
+        text,
+        author: mdl.user.name,
+        thumb,
+        imageId,
+      }
+      const updateOrSubmitBlog = objectId
+        ? mdl.http.back4App.putTask(mdl)(`Classes/Blogs/${objectId}`)(dto)
+        : mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto)
+
+      updateOrSubmitBlog.fork(onError, onSuccess)
     }
-    const updateOrSubmitBlog = objectId
-      ? mdl.http.back4App.putTask(mdl)(`Classes/Blogs/${objectId}`)(dto)
-      : mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto)
-
-    updateOrSubmitBlog.fork(onError, onSuccess)
-  }
 
 const assignImg = (img, thumb) => {
   if (state.img == img) {
@@ -207,20 +209,19 @@ const Modal = () => {
               state.modalState() == "upload"
                 ? m("input", { type: "file", id: "file" })
                 : state.images.map(({ image, thumb }) =>
-                    m(
-                      `figure.col-6.button.${
-                        thumb == state.thumb ? "primary" : "outline"
-                      }`,
-                      {
-                        onclick: (e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          assignImg(image, thumb)
-                        },
+                  m(
+                    `figure.col-6.button.${thumb == state.thumb ? "primary" : "outline"
+                    }`,
+                    {
+                      onclick: (e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        assignImg(image, thumb)
                       },
-                      m("img", { src: thumb })
-                    )
+                    },
+                    m("img", { src: thumb })
                   )
+                )
             )
           ),
           m(
@@ -277,21 +278,21 @@ const BlogEditor = () => {
             m(
               "section",
               state.thumb &&
+              m(
+                "aside.col-6",
+                m("img.col-12", { src: state.thumb }),
                 m(
-                  "aside.col-6",
-                  m("img.col-12", { src: state.thumb }),
-                  m(
-                    "button.primary.col-12",
-                    {
-                      onclick: (e) => {
-                        e.preventDefault()
-                        state.thumb = ""
-                        state.img = ""
-                      },
+                  "button.primary.col-12",
+                  {
+                    onclick: (e) => {
+                      e.preventDefault()
+                      state.thumb = ""
+                      state.img = ""
                     },
-                    "Remove image"
-                  )
-                ),
+                  },
+                  "Remove image"
+                )
+              ),
               m(
                 ".col-12",
                 m(
@@ -341,16 +342,16 @@ const BlogEditor = () => {
                 state.objectId ? "Update" : "Submit"
               ),
               state.isEditing() &&
-                m(
-                  "button.button.error",
-                  {
-                    onclick: (e) => {
-                      e.preventDefault()
-                      deleteBlog(mdl)(state)
-                    },
+              m(
+                "button.button.error",
+                {
+                  onclick: (e) => {
+                    e.preventDefault()
+                    deleteBlog(mdl)(state)
                   },
-                  "Delete"
-                )
+                },
+                "Delete"
+              )
             )
           ))
       )

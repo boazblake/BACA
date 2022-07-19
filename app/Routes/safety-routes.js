@@ -1,6 +1,7 @@
-import Layout from "Layouts/index.js"
-import Default from "Pages/default.js"
-import { scrollToAnchor, ScrollToPageTitle } from "Utils"
+import m from "mithril"
+import Layout from "@/Layouts/index.js"
+import Default from "@/Pages/default.js"
+import { scrollToAnchor, ScrollToPageTitle } from "@/Utils"
 
 const MemberRoutes = [
   {

@@ -1,8 +1,11 @@
+import m from 'mithril'
+
 const toRoutes = (mdl) => (acc, route) => {
   acc[route.route] = {
     onmatch: (args, path, fullroute) => {
       mdl.state.showNavModal(false)
       if (route.group.includes("authenticated") && !mdl.state.isAuth()) {
+        console.log('m.route.get()', mdl.state.isAuth(), m.route.get())
         mdl.route.set(m.route.get())
       }
       mdl.state.route = route

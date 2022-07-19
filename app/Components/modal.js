@@ -1,3 +1,4 @@
+import m from "mithril"
 const scaleWidth = (mdl) => {
   switch (mdl.settings.screenSize) {
     case "phone":

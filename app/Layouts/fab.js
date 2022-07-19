@@ -1,4 +1,5 @@
-import Hamburger from "Components/Hamburger.js"
+import m from "mithril"
+import Hamburger from "@/Components/Hamburger.js"
 
 const Fab = () => ({
   view: ({ attrs: { mdl } }) => {

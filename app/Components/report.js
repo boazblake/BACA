@@ -1,3 +1,4 @@
+import m from "mithril"
 const state = {
   date: "",
   time: "",
@@ -23,7 +24,7 @@ const resetState = () => {
 }
 
 const submitReport = (mdl) => {
-  const onSuccess = (s) => {}
+  const onSuccess = (s) => { }
   const onError = (e) => log("submitReport - error")(e)
   console.log("submit", state)
   // save imgBB then
@@ -181,9 +182,9 @@ const form = m(
         id: "files",
       }),
       state.images[0] &&
-        m("img", {
-          src: URL.createObjectURL(state.images[0]),
-        })
+      m("img", {
+        src: URL.createObjectURL(state.images[0]),
+      })
     )
   )
 )

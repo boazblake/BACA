@@ -1,7 +1,18 @@
+import m from "mithril"
+import Stream from "mithril-stream"
 import { FunConfig } from "@boazblake/fun-config"
 import App from "./app.js"
-import Model from "Models/index.js"
+import Model from "@/Models/index.js"
 import { head, prop } from "ramda"
+
+import '@/Styles/chota.scss'
+import '@/Styles/pico.scss'
+import '@/Styles/masonry.sass'
+import '@/Styles/glider.min.css'
+import '@/Styles/index.scss'
+import '@/Styles/animations.scss'
+import '@/Styles/fullcalendar.css'
+import '@/Styles/toast.css'
 
 const root = document.body
 let winW = window.innerWidth
@@ -26,9 +37,9 @@ Model.navState = Model.Routes.reduce((acc, r) => {
   return acc
 }, {})
 
-if (module.hot) {
-  module.hot.accept()
-}
+// if (module.hot) {
+//   module.hot.accept()
+// }
 
 if (process.env.NODE_ENV !== "production") {
   console.log("Looks like we are in development mode!")
@@ -36,7 +47,7 @@ if (process.env.NODE_ENV !== "production") {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker
-        .register("./sw.js")
+        .register("./vite-sw.js")
         // .then((registration) => {
         // console.log("⚙️ SW registered: ", registration)
         // Notification.requestPermission(function (result) {

@@ -1,4 +1,5 @@
-import { handlers } from "Utils"
+import m from "mithril"
+import { handlers } from "@/Utils"
 
 const showBorderStyle = (style) => {
   style.border = "1px solid black"
@@ -26,9 +27,8 @@ export const NavLink = () => {
           //   }),
           // },
           href,
-          class: `nav-link ${classList} ${
-            mdl.state.navSelected() == link ? "is-active" : ""
-          }`,
+          class: `nav-link ${classList} ${mdl.state.navSelected() == link ? "is-active" : ""
+            }`,
           ...rest,
         },
         link

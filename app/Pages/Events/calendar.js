@@ -1,6 +1,7 @@
+import m from "mithril"
 import dayjs from "dayjs"
 import { propEq, head, tail } from "ramda"
-import FullCalendar from "Utils/fullcalendar.min.js"
+import FullCalendar from "@/Utils/fullcalendar.min.js"
 
 const getCellDate = (target) => {
   if (["MAIN", "BUTTON"].includes(target.tagName)) return null
@@ -30,11 +31,11 @@ const onEventClick = (mdl, state) => (info) => {
 const formatEventForCalendar = (event) =>
   event.isRecur
     ? {
-        daysOfWeek: event.daysRecur,
-        startRecur: event.start,
-        endRecur: event.end,
-        ...event,
-      }
+      daysOfWeek: event.daysRecur,
+      startRecur: event.start,
+      endRecur: event.end,
+      ...event,
+    }
     : event
 
 const initCal = (mdl, dom, state, events) => {

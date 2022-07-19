@@ -1,5 +1,6 @@
-import NavLink from "Components/nav-link"
-import { jsonCopy } from "Utils"
+import m from "mithril"
+import NavLink from "@/Components/nav-link"
+import { jsonCopy } from "@/Utils"
 import { validateUserRegistrationTask } from "./Validations"
 import { registerUserTask } from "./fns.js"
 import Stream from "mithril-stream"
@@ -152,7 +153,7 @@ export const Register = () => {
                   value: state.data.userModel.confirmEmail,
                 }),
                 state.errors.confirmEmail &&
-                  m("p.text-error", state.errors.confirmEmail)
+                m("p.text-error", state.errors.confirmEmail)
               )
             ),
 
@@ -176,7 +177,7 @@ export const Register = () => {
                   value: state.data.userModel.password,
                 }),
                 state.errors.password &&
-                  m("p.text-error", state.errors.password)
+                m("p.text-error", state.errors.password)
               ),
 
               m(
@@ -196,7 +197,7 @@ export const Register = () => {
                   value: state.data.userModel.confirmPassword,
                 }),
                 state.errors.confirmPassword &&
-                  m("p.text-error", state.errors.confirmPassword)
+                m("p.text-error", state.errors.confirmPassword)
               )
             ),
 

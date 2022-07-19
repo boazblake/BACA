@@ -1,7 +1,9 @@
-import NavLink from "Components/nav-link"
-import { jsonCopy } from "Utils"
+import m from "mithril"
+import NavLink from "@/Components/nav-link"
+import { jsonCopy } from "@/Utils"
 import { validateLoginTask } from "./Validations.js"
 import { loginTask, resetPasswordTask } from "./fns.js"
+import Stream from "mithril-stream"
 
 const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
@@ -85,141 +87,141 @@ export const Login = () => {
       mdl.state.isLoading()
         ? "" //m(LogoLoader, { mdl })
         : m(
-            "section.container.p-y-50",
+          "section.container.p-y-50",
 
-            state.showMsg() && m("p.text-error", state.msg()),
+          state.showMsg() && m("p.text-error", state.msg()),
+          m(
+            "article.card",
+            mdl.settings.screenSize != "phone" && {
+              style: { maxWidth: "80%", margin: "0 auto" },
+            },
             m(
-              "article.card",
-              mdl.settings.screenSize != "phone" && {
-                style: { maxWidth: "80%", margin: "0 auto" },
+              "form.row",
+              {
+                role: "form",
+                id: "login-form",
+                onsubmit: (e) => e.preventDefault(),
               },
               m(
-                "form.row",
-                {
-                  role: "form",
-                  id: "login-form",
-                  onsubmit: (e) => e.preventDefault(),
-                },
-                m(
-                  "formgroup.col-12",
-                  // {
-                  //   class: mdl.settings.screenSize == "desktop" && "grouped",
-                  // },
-                  m("input", {
-                    class: state.isSubmitted
-                      ? state.errors.email
-                        ? "error"
-                        : "success"
-                      : "",
-                    id: "reg-email",
-                    type: "email",
-                    autocomplete: "username",
-                    placeholder: "Email",
-                    oninput: (e) => {
-                      // state.isSubmitted && validateForm(mdl)(state.data)
-                      state.data.userModel.email = e.target.value
-                    },
-                    value: state.data.userModel.email,
-                  }),
-                  state.errors.email && m("p.text-error", state.errors.email)
-                ),
-                m(
-                  "formgroup.col-12",
-                  m("input", {
-                    class: state.isSubmitted
-                      ? state.errors.password
-                        ? "error"
-                        : "success"
-                      : "",
-                    id: "reg-pass",
-                    type: "password",
-                    autocomplete: "current-password",
-                    placeholder: "Password",
-                    oninput: (e) => {
-                      // state.isSubmitted && validateForm(mdl)(state.data)
-                      state.data.userModel.password = e.target.value
-                    },
-                    value: state.data.userModel.password,
-                  }),
-                  state.errors.password &&
-                    m("p.text-error", state.errors.password)
-                ),
-                m(
-                  "button.button.primary.col-12",
-                  {
-                    role: "button",
-                    form: `login-form`,
-                    onclick: () => validateForm(mdl)(state.data),
-                    class: mdl.state.isLoading() && "loading",
+                "formgroup.col-12",
+                // {
+                //   class: mdl.settings.screenSize == "desktop" && "grouped",
+                // },
+                m("input", {
+                  class: state.isSubmitted
+                    ? state.errors.email
+                      ? "error"
+                      : "success"
+                    : "",
+                  id: "reg-email",
+                  type: "email",
+                  autocomplete: "username",
+                  placeholder: "Email",
+                  oninput: (e) => {
+                    // state.isSubmitted && validateForm(mdl)(state.data)
+                    state.data.userModel.email = e.target.value
                   },
-                  "LOGIN"
-                )
+                  value: state.data.userModel.email,
+                }),
+                state.errors.email && m("p.text-error", state.errors.email)
               ),
-
               m(
-                "p.pointer.text-primary",
-                { onclick: () => state.showResetModal(true) },
-                "Need to reset password ?"
+                "formgroup.col-12",
+                m("input", {
+                  class: state.isSubmitted
+                    ? state.errors.password
+                      ? "error"
+                      : "success"
+                    : "",
+                  id: "reg-pass",
+                  type: "password",
+                  autocomplete: "current-password",
+                  placeholder: "Password",
+                  oninput: (e) => {
+                    // state.isSubmitted && validateForm(mdl)(state.data)
+                    state.data.userModel.password = e.target.value
+                  },
+                  value: state.data.userModel.password,
+                }),
+                state.errors.password &&
+                m("p.text-error", state.errors.password)
               ),
-              state.showResetModal() &&
+              m(
+                "button.button.primary.col-12",
+                {
+                  role: "button",
+                  form: `login-form`,
+                  onclick: () => validateForm(mdl)(state.data),
+                  class: mdl.state.isLoading() && "loading",
+                },
+                "LOGIN"
+              )
+            ),
+
+            m(
+              "p.pointer.text-primary",
+              { onclick: () => state.showResetModal(true) },
+              "Need to reset password ?"
+            ),
+            state.showResetModal() &&
+            m(
+              "section.modal-container#modal",
+              m(
+                "article.modal.card.grid",
                 m(
-                  "section.modal-container#modal",
+                  "header.modal-header",
+                  "Reset Password",
                   m(
-                    "article.modal.card.grid",
-                    m(
-                      "header.modal-header",
-                      "Reset Password",
-                      m(
-                        "button.button.icon-only",
-                        {
-                          id: "modal-close",
-                          "aria-label": "Close",
-                          onclick: () => state.showResetModal(false),
-                        },
-                        "X"
-                      )
-                    ),
-                    m(
-                      "section.modal-content",
-                      m("input", {
-                        type: "email",
-                        autocomplete: "username",
-                        placeholder: "Enter Email",
-                        value: state.data.userModel.email,
-                        oninput: (e) =>
-                          (state.data.userModel.email = e.target.value),
-                      })
-                    ),
-                    m(
-                      "section.modal-footer",
-                      m(
-                        "button",
-                        {
-                          onclick: () =>
-                            resetPassword(mdl, state.data.userModel.email),
-                        },
-                        "Reset Password"
-                      )
-                    )
+                    "button.button.icon-only",
+                    {
+                      id: "modal-close",
+                      "aria-label": "Close",
+                      onclick: () => state.showResetModal(false),
+                    },
+                    "X"
                   )
                 ),
-              state.httpError && m(".toast toast-error", state.httpError)
+                m(
+                  "section.modal-content",
+                  m("input", {
+                    type: "email",
+                    autocomplete: "username",
+                    placeholder: "Enter Email",
+                    value: state.data.userModel.email,
+                    oninput: (e) =>
+                      (state.data.userModel.email = e.target.value),
+                  })
+                ),
+                m(
+                  "section.modal-footer",
+                  m(
+                    "button",
+                    {
+                      onclick: () =>
+                        resetPassword(mdl, state.data.userModel.email),
+                    },
+                    "Reset Password"
+                  )
+                )
+              )
             ),
-            m(
-              ".auth-link",
-              "Need to ",
-              m(
-                "u",
-                m(NavLink, {
-                  mdl,
-                  href: "/register",
-                  link: "register",
-                  classList: "",
-                })
-              ),
-              " ?"
-            )
+            state.httpError && m(".toast toast-error", state.httpError)
           ),
+          m(
+            ".auth-link",
+            "Need to ",
+            m(
+              "u",
+              m(NavLink, {
+                mdl,
+                href: "/register",
+                link: "register",
+                classList: "",
+              })
+            ),
+            " ?"
+          )
+        ),
   }
 }
 

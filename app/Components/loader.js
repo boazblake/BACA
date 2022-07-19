@@ -1,4 +1,5 @@
-import { FadeBack } from "Styles/animations"
+import { FadeBack } from "@/Styles/animations"
+import m from "mithril"
 
 const Loader = () => {
   return {

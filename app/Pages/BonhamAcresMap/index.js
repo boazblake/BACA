@@ -1,4 +1,5 @@
-import { isAdminOrMod } from "Utils/helpers"
+import m from "mithril"
+import { isAdminOrMod } from "@/Utils/helpers"
 import {
   loadResidentsTask,
   loadMapConfig,
@@ -62,7 +63,7 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
   }
 
   const onError = (err) => log("err")(err)
-  const onSuccess = (location) => {}
+  const onSuccess = (location) => { }
 
   load(mdl, state).fork(onError, onSuccess)
   return {
@@ -71,66 +72,66 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
         "section",
 
         isAdminOrMod(mdl) &&
-          m(
-            "section",
-            state.isEdit
-              ? m(
-                  ".grouped",
-                  m("input", {
-                    type: "text",
-                    value: state.input,
-                    oninput: (e) => (state.input = e.target.value),
-                  }),
-                  state.newLocation
-                    ? [
-                        m(
-                          "button.outline.bd-danger",
-                          { onclick: () => restartFindResident(mdl, state) },
-                          "restart"
-                        ),
-                        m(
-                          "button.outline.bd-primary",
-                          { onclick: () => saveResident(mdl, state) },
-                          "Save"
-                        ),
-                      ]
-                    : [
-                        m(
-                          "button.primary",
-                          { onclick: () => findResident(mdl, state) },
-                          "Search"
-                        ),
-                        m(
-                          "button.outline.bd-danger",
-                          { onclick: () => toggleEditResidents(mdl, state) },
-                          "Cancel"
-                        ),
-                      ]
-                )
-              : m(
-                  "button.outline.bd-primary",
-                  { onclick: () => toggleEditResidents(mdl, state) },
-                  "Edit"
-                ),
-
-            state.findLocationResults.any() &&
-              m(
-                "ul",
-                state.findLocationResults.map((location) =>
+        m(
+          "section",
+          state.isEdit
+            ? m(
+              ".grouped",
+              m("input", {
+                type: "text",
+                value: state.input,
+                oninput: (e) => (state.input = e.target.value),
+              }),
+              state.newLocation
+                ? [
                   m(
-                    "li.grouped",
-                    m("p", location.formatted),
-                    m(
-                      "button",
-                      {
-                        onclick: () => selectLocation(mdl, state, location),
-                      },
-                      "Select"
-                    )
-                  )
+                    "button.outline.bd-danger",
+                    { onclick: () => restartFindResident(mdl, state) },
+                    "restart"
+                  ),
+                  m(
+                    "button.outline.bd-primary",
+                    { onclick: () => saveResident(mdl, state) },
+                    "Save"
+                  ),
+                ]
+                : [
+                  m(
+                    "button.primary",
+                    { onclick: () => findResident(mdl, state) },
+                    "Search"
+                  ),
+                  m(
+                    "button.outline.bd-danger",
+                    { onclick: () => toggleEditResidents(mdl, state) },
+                    "Cancel"
+                  ),
+                ]
+            )
+            : m(
+              "button.outline.bd-primary",
+              { onclick: () => toggleEditResidents(mdl, state) },
+              "Edit"
+            ),
+
+          state.findLocationResults.any() &&
+          m(
+            "ul",
+            state.findLocationResults.map((location) =>
+              m(
+                "li.grouped",
+                m("p", location.formatted),
+                m(
+                  "button",
+                  {
+                    onclick: () => selectLocation(mdl, state, location),
+                  },
+                  "Select"
                 )
               )
-          ),
+            )
+          )
+        ),
 
         m("section#map", {
           oncreate: ({ dom }) => (state.dom = dom),

@@ -1,3 +1,4 @@
+import m from "mithril"
 import { PopOutLine } from "@mithril-icons/clarity/cjs"
 
 const DeedRes = ({ attrs: { mdl } }) => {

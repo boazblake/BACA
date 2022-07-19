@@ -1,3 +1,4 @@
+import m from "mithril"
 import D from "dayjs"
 import af from "dayjs/plugin/advancedFormat"
 D.extend(af)
@@ -10,21 +11,21 @@ const DateTime = ({ attrs: { event } }) => {
     view: () =>
       event.startDate == event.endDate
         ? m(
-            ".",
-            m("h3", m("label.strong", formatDate(event.startDate))),
-            m(
-              "h4.grouped",
-              m("label", formatTime(event.start)),
-              m("label", " - "),
-              m("label", formatTime(event.end))
-            )
-          )
-        : m(
+          ".",
+          m("h3", m("label.strong", formatDate(event.startDate))),
+          m(
             "h4.grouped",
-            m("label.strong", formatDate(event.start)),
+            m("label", formatTime(event.start)),
             m("label", " - "),
-            m("label.strong", formatDate(event.end))
-          ),
+            m("label", formatTime(event.end))
+          )
+        )
+        : m(
+          "h4.grouped",
+          m("label.strong", formatDate(event.start)),
+          m("label", " - "),
+          m("label.strong", formatDate(event.end))
+        ),
   }
 }
 

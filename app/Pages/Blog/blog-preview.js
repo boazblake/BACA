@@ -1,5 +1,6 @@
-import HtmlSanitizer from "Utils/html-sanitize"
-import { isAdminOrMod } from "Utils/helpers"
+import m from "mithril"
+import HtmlSanitizer from "@/Utils/html-sanitize"
+import { isAdminOrMod } from "@/Utils/helpers"
 
 const BlogPreview = {
   view: ({
@@ -44,17 +45,17 @@ const BlogPreview = {
         )
       ),
       (author == mdl.user.name || isAdminOrMod(mdl)) &&
+      m(
+        "footer",
         m(
-          "footer",
-          m(
-            m.route.Link,
-            {
-              selector: "button",
-              href: `/social/blog-editor:${objectId}`,
-            },
-            "Edit"
-          )
+          m.route.Link,
+          {
+            selector: "button",
+            href: `/social/blog-editor:${objectId}`,
+          },
+          "Edit"
         )
+      )
     ),
 }
 

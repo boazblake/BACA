@@ -1,5 +1,6 @@
-import Loader from "Components/loader.js"
+import Loader from "@/Components/loader.js"
 import { groupBy, compose, prop, descend, ascend, sortWith } from "ramda"
+import Stream from "mithril-stream"
 
 const log = (m) => (v) => {
   console.log(m, v)
@@ -21,6 +22,7 @@ const sortByUpdatedAlbum = sortWith([
 
 const groupByAlbumAndDate = compose(groupByAlbum, sortByUpdatedAlbum)
 
+import m from "mithril"
 const fetchAllAlbums = ({ attrs: { mdl } }) => {
   const onError = (e) => log("fetchAllAlbums- error")(e)
   const onSuccess = (albums) => (state.albums = albums)
@@ -34,13 +36,13 @@ const fetchAllAlbums = ({ attrs: { mdl } }) => {
 
 const saveImgToGalleryTask =
   (mdl) =>
-  ({ data: { image, medium, thumb } }) =>
-    mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
-      album: state.newAlbum.title.trim(),
-      image: image.url,
-      // medium: medium.url,
-      thumb: thumb.url,
-    })
+    ({ data: { image, medium, thumb } }) =>
+      mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
+        album: state.newAlbum.title.trim(),
+        image: image.url,
+        // medium: medium.url,
+        thumb: thumb.url,
+      })
 
 const createNewAlbum = (mdl) => {
   const onError = (e) => log("createNewAlbum- error")(e)
@@ -139,30 +141,30 @@ const Gallery = {
     mdl.state.isLoading()
       ? m(Loader)
       : m(
-          "article.fade",
-          mdl.state.isAuth() &&
-            m(
-              "nav.nav",
-              m(
-                ".nav-center",
-                m(
-                  "button.button.primary",
-                  {
-                    onclick: (e) => state.showModal(true),
-                    class: mdl.settings.screenSize == "phone" ? "col-12" : "",
-                  },
-                  "Add A New Album"
-                ),
-                state.showModal() && m(NewAlbumModal, { mdl })
-              )
-            ),
+        "article.fade",
+        mdl.state.isAuth() &&
+        m(
+          "nav.nav",
           m(
-            ".row.container-fluid",
-            Object.keys(state.albums).map((album) =>
-              m(AlbumCover, { mdl, album: state.albums[album][0] })
-            )
+            ".nav-center",
+            m(
+              "button.button.primary",
+              {
+                onclick: (e) => state.showModal(true),
+                class: mdl.settings.screenSize == "phone" ? "col-12" : "",
+              },
+              "Add A New Album"
+            ),
+            state.showModal() && m(NewAlbumModal, { mdl })
           )
         ),
+        m(
+          ".row.container-fluid",
+          Object.keys(state.albums).map((album) =>
+            m(AlbumCover, { mdl, album: state.albums[album][0] })
+          )
+        )
+      ),
 }
 
 export default Gallery

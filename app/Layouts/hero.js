@@ -1,4 +1,6 @@
+import m from "mithril"
 import Images from "../images.js"
+import Stream from "mithril-stream"
 
 const state = {
   image: Stream(0),

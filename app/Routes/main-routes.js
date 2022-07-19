@@ -1,9 +1,10 @@
-import Layout from "Layouts/index.js"
-import BoardMembers from "Pages/board-members.js"
-import Home from "Pages/home.js"
-import About from "Pages/about.js"
-import JoinBACA from "Pages/join-baca.js"
-import { scrollToAnchor, ScrollToPageTitle } from "Utils/index.js"
+import m from "mithril"
+import Layout from "@/Layouts/index.js"
+import BoardMembers from "@/Pages/board-members.js"
+import Home from "@/Pages/home.js"
+import About from "@/Pages/about.js"
+import JoinBACA from "@/Pages/join-baca.js"
+import { scrollToAnchor, ScrollToPageTitle } from "@/Utils/index.js"
 
 const Logo = m("img", {
   src: "images/baca-logo.webp",

@@ -1,6 +1,7 @@
-import { formatDate } from "Utils"
+import { formatDate } from "@/Utils"
 import { AngleLine } from "@mithril-icons/clarity/cjs"
 import { assoc, map, add, prop } from "ramda"
+import m from "mithril"
 
 const STATE = () => ({
   invoices: [],
@@ -52,9 +53,9 @@ const InvoiceCell = () => {
     }) =>
       screenSize == "phone"
         ? m("tr", [
-            m("td", { style: { width: "25%" } }, m("label", children[0].key)),
-            children,
-          ])
+          m("td", { style: { width: "25%" } }, m("label", children[0].key)),
+          children,
+        ])
         : m("td", { style: { width: "20%" } }, children),
   }
 }
@@ -111,51 +112,51 @@ const Invoice = ({ attrs: { mdl } }) => {
           )
         ),
         invoice.isSelected &&
+        m(
+          "td",
+          { colspan: 5, style: { width: "100%" } },
           m(
-            "td",
-            { colspan: 5, style: { width: "100%" } },
+            "tr",
             m(
-              "tr",
-              m(
-                "td",
-                m("label", "Shipping Destination"),
-                `${invoice.shippingDestination.address.address_line_1} ${invoice.shippingDestination.address.admin_area_2} ${invoice.shippingDestination.address.admin_area_1} ${invoice.shippingDestination.address.postal_code}`
-              ),
-              mdl.state.route.id == "admin" &&
-                m("td", m("button", "Update Shipping Status"))
+              "td",
+              m("label", "Shipping Destination"),
+              `${invoice.shippingDestination.address.address_line_1} ${invoice.shippingDestination.address.admin_area_2} ${invoice.shippingDestination.address.admin_area_1} ${invoice.shippingDestination.address.postal_code}`
             ),
-            m(
-              "table",
-              { style: { width: "100%", borderBottom: "1px solid gold" } },
-              [
-                m(
-                  "thead",
+            mdl.state.route.id == "admin" &&
+            m("td", m("button", "Update Shipping Status"))
+          ),
+          m(
+            "table",
+            { style: { width: "100%", borderBottom: "1px solid gold" } },
+            [
+              m(
+                "thead",
+                m("tr", [
+                  m("th", "Product"),
+                  m("th", "Quantities"),
+                  m("th", "Unit Price"),
+                  m("th", "Unit Total"),
+                ])
+              ),
+              m(
+                "tbody",
+                Object.keys(invoice.cart).map((product) =>
                   m("tr", [
-                    m("th", "Product"),
-                    m("th", "Quantities"),
-                    m("th", "Unit Price"),
-                    m("th", "Unit Total"),
+                    m("td", product),
+                    m("td", JSON.stringify(invoice.cart[product])),
+                    m("td", invoice.prices[product]),
+                    m("td", calcProductPrice(invoice, product)),
                   ])
                 ),
                 m(
-                  "tbody",
-                  Object.keys(invoice.cart).map((product) =>
-                    m("tr", [
-                      m("td", product),
-                      m("td", JSON.stringify(invoice.cart[product])),
-                      m("td", invoice.prices[product]),
-                      m("td", calcProductPrice(invoice, product)),
-                    ])
-                  ),
-                  m(
-                    "tr",
-                    m("th", "Order Total"),
-                    m("th", calcTotalPrice(invoice))
-                  )
-                ),
-              ]
-            )
-          ),
+                  "tr",
+                  m("th", "Order Total"),
+                  m("th", calcTotalPrice(invoice))
+                )
+              ),
+            ]
+          )
+        ),
       ]
     },
   }
@@ -176,24 +177,24 @@ export const Orders = () => {
         },
         state.invoices.any()
           ? m(
-              "table.dash-table",
-              mdl.settings.screenSize != "phone" &&
-                m(
-                  "thead.dash-nav",
-                  m("tr.mb-5", [
-                    m("th", "Date"),
-                    m("th", "Order Id"),
-                    m("th", "Name"),
-                    m("th", "Payment Status"),
-                    m("th", "Shipping Status"),
-                    m("th"),
-                  ])
-                ),
-              m(
-                "tbody",
-                state.invoices.map((invoice) => m(Invoice, { mdl, invoice }))
-              )
+            "table.dash-table",
+            mdl.settings.screenSize != "phone" &&
+            m(
+              "thead.dash-nav",
+              m("tr.mb-5", [
+                m("th", "Date"),
+                m("th", "Order Id"),
+                m("th", "Name"),
+                m("th", "Payment Status"),
+                m("th", "Shipping Status"),
+                m("th"),
+              ])
+            ),
+            m(
+              "tbody",
+              state.invoices.map((invoice) => m(Invoice, { mdl, invoice }))
             )
+          )
           : m("h2", "No Orders")
       ),
   }

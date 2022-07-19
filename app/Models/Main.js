@@ -1,5 +1,7 @@
+import m from "mithril"
 import Routes from "../Routes/index.js"
-import http from "Utils/http"
+import http from "@/Utils/http"
+import Stream from "mithril-stream"
 
 const data = {
   events: [],

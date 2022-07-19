@@ -5,6 +5,7 @@
 //   )
 //   return mdl.settings.screenSize == "phone" ? "none" : overflow
 // }
+import m from "mithril"
 
 const Fig = {
   view: ({ children, attrs: { id } }) =>
@@ -20,7 +21,7 @@ const Fig = {
 }
 
 const Grid = {
-  onremove: () => {},
+  onremove: () => { },
   view: ({ children, attrs: { id, maxheight, height, overflow, mdl } }) =>
     m(
       `frow-row`,

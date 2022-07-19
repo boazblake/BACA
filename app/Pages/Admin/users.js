@@ -1,3 +1,4 @@
+import m from "mithril"
 import { prop, filter } from "ramda"
 
 export const Users = () => {

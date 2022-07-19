@@ -1,3 +1,4 @@
+import m from 'mithril'
 import Task from "data.task"
 import { PAYPAL, BACK4APP, IMGBB, OpenCage } from "../../.secrets.js"
 
@@ -96,9 +97,9 @@ const cachCall = (url) =>
   url == "users/me"
     ? { "Cache-Control": "private" }
     : {
-        "If-Modified-Since": new Date(),
-        "Cache-Control": "public, max-age=604800",
-      }
+      "If-Modified-Since": new Date(),
+      "Cache-Control": "public, max-age=604800",
+    }
 
 const back4App = {
   getTask: (mdl) => (url) =>
@@ -136,10 +137,10 @@ const openCage = {
   getLocationTask: (mdl) => (query) =>
     HttpTask(OpenCage.headers())("GET")(mdl)(
       OpenCageUrl +
-        query +
-        `&pretty=1&countrycode=us&bounds=${encodeURIComponent(
-          mdl.Map.bounds()
-        )}`
+      query +
+      `&pretty=1&countrycode=us&bounds=${encodeURIComponent(
+        mdl.Map.bounds()
+      )}`
     )(null),
 }
 

@@ -1,9 +1,10 @@
-import Layout from "Layouts/index.js"
-import Default from "Pages/default.js"
-import CityOrd from "Pages/city-ordinances.js"
-import DeedRes from "Pages/deed-restrictions.js"
+import m from "mithril"
+import Layout from "@/Layouts/index.js"
+import Default from "@/Pages/default.js"
+import CityOrd from "@/Pages/city-ordinances.js"
+import DeedRes from "@/Pages/deed-restrictions.js"
 
-import { scrollToAnchor, ScrollToPageTitle } from "Utils/index.js"
+import { scrollToAnchor, ScrollToPageTitle } from "@/Utils/index.js"
 
 const LegalRoutes = [
   {

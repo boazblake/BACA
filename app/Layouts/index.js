@@ -1,13 +1,14 @@
+import m from "mithril"
 import Hero from "./hero.js"
 import Navbar from "./navbar.js"
 import SubNavbar from "./subnavbar.js"
 import Main from "./main.js"
 import Footer from "./footer.js"
-import Modal from "Components/modal.js"
+import Modal from "@/Components/Modal.js"
 import NavModal from "./nav-modal.js"
-import { SlideOutRight, SlideInLeft } from "Styles/animations.js"
+import { SlideOutRight, SlideInLeft } from "@/Styles/animations.js"
 import Toolbar from "./toolbar.js"
-import Loader from "Components/loader"
+import Loader from "@/Components/loader"
 import Task from "data.task"
 import { head, map, prop, tail, uniqWith, eqBy, reverse } from "ramda"
 import {
@@ -16,9 +17,9 @@ import {
   deleteEvent,
   resetState,
   uploadImage,
-} from "../Pages/Events/index.js"
-import Editor from "../Pages/Events/editor.js"
-import Event from "../Pages/Events/event.js"
+} from "@/Pages/Events/index.js"
+import Editor from "@/Pages/Events/editor.js"
+import Event from "@/Pages/Events/event.js"
 
 const state = {
   status: "loading",
@@ -48,21 +49,21 @@ const vertAlign = (mdl) => {
 
 const onBodyScroll =
   (mdl) =>
-  ({ target: { scrollTop } }) => {
-    mdl.state.distanceFromTop(scrollTop)
-    if (scrollTop >= 300) {
-      mdl.state.showNavMenu(true)
-      m.redraw()
-    } else {
-      mdl.state.showNavMenu(false)
-      m.redraw()
+    ({ target: { scrollTop } }) => {
+      mdl.state.distanceFromTop(scrollTop)
+      if (scrollTop >= 300) {
+        mdl.state.showNavMenu(true)
+        m.redraw()
+      } else {
+        mdl.state.showNavMenu(false)
+        m.redraw()
+      }
     }
-  }
 const onLayout =
   (mdl) =>
-  ({ dom }) =>
-    mdl.settings.screenSize == "desktop" &&
-    dom.parentNode.addEventListener("scroll", onBodyScroll(mdl))
+    ({ dom }) =>
+      mdl.settings.screenSize == "desktop" &&
+      dom.parentNode.addEventListener("scroll", onBodyScroll(mdl))
 
 const toEventViewModel = (event) => {
   let start = event.start.split("T")
@@ -124,46 +125,46 @@ const Layout = {
       },
       m(Toolbar, { mdl }),
       mdl.settings.screenSize == "desktop" &&
-        m(
-          `nav#navigation.animated`,
-          {
-            oncreate: ({ dom }) => (state.navDom = dom),
-            style: updateNavigationStyle(state.navDom, mdl.state.showNavMenu()),
-            class: vertAlign(mdl),
-          },
-          m(Navbar, { mdl }),
-          m(SubNavbar, { mdl })
-        ),
+      m(
+        `nav#navigation.animated`,
+        {
+          oncreate: ({ dom }) => (state.navDom = dom),
+          style: updateNavigationStyle(state.navDom, mdl.state.showNavMenu()),
+          class: vertAlign(mdl),
+        },
+        m(Navbar, { mdl }),
+        m(SubNavbar, { mdl })
+      ),
       m(Hero, { mdl }),
       state.status == "error" && m("p", "ERROR"),
       state.status == "loading" && m(Loader),
       state.status == "loaded" && m("section", m(Main, { mdl, children })),
       showNavMenu(mdl) &&
-        m(NavModal, {
-          oncreate: SlideInLeft,
-          onbeforeremove: SlideOutRight,
-          mdl,
-        }),
+      m(NavModal, {
+        oncreate: SlideInLeft,
+        onbeforeremove: SlideOutRight,
+        mdl,
+      }),
       mdl.state.showLayoutModal() && m(Modal, { mdl }),
       eventState.showEditor() &&
-        m(Editor, {
-          mdl,
-          state: eventState,
-          showEditor: eventState.showEditor,
-          submitEvent,
-          deleteEvent,
-          resetState,
-          uploadImage: uploadImage(mdl),
-        }),
+      m(Editor, {
+        mdl,
+        state: eventState,
+        showEditor: eventState.showEditor,
+        submitEvent,
+        deleteEvent,
+        resetState,
+        uploadImage: uploadImage(mdl),
+      }),
       eventState.previewEvent() &&
-        m(Event, {
-          mdl,
-          state: eventState,
-          editEvent: eventState.showEditor,
-          previewEvent: eventState.previewEvent,
-          event: eventState.event,
-          resetState,
-        }),
+      m(Event, {
+        mdl,
+        state: eventState,
+        editEvent: eventState.showEditor,
+        previewEvent: eventState.previewEvent,
+        event: eventState.event,
+        resetState,
+      }),
 
       m(Footer, { mdl })
     ),

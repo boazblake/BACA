@@ -1,3 +1,4 @@
+import m from "mithril"
 import Task from "data.task"
 
 export const getCenterView = (locations) =>
@@ -29,12 +30,12 @@ const loadMapConfig = (mdl) => (state) => {
     let locations = state.entities.any()
       ? state.entities.map((e) => e.getLocation())
       : [
-          toPushPin({
-            property: "BACA",
-            lat: Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).latitude,
-            lng: Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).longitude,
-          }).getLocation(),
-        ]
+        toPushPin({
+          property: "BACA",
+          lat: Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).latitude,
+          lng: Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).longitude,
+        }).getLocation(),
+      ]
 
     return getCenterView(locations)
   }

@@ -1,6 +1,6 @@
 import Task from "data.task"
 import { compose, path, prop, map } from "ramda"
-import { isAdminOrMod } from "Utils/helpers"
+import { isAdminOrMod } from "@/Utils/helpers"
 
 export const defaultPushPinEntities = (mdl) => [
   toPushPin({

@@ -1,8 +1,10 @@
+import m from "mithril"
 import Calendar from "./calendar"
 import { propEq, prop, head, tail, clone } from "ramda"
-import Loader from "Components/loader.js"
+import Loader from "@/Components/loader.js"
 import Task from "data.task"
 import { validateEventTask } from "./validations.js"
+import Stream from "mithril-stream"
 
 export const state = {
   errors: {},
@@ -134,14 +136,14 @@ const onImgSuccess = (img) => {
 
 const saveImgToGalleryTask =
   (mdl) =>
-  ({ data: { image, thumb } }) =>
-    mdl.http.back4App
-      .postTask(mdl)("Classes/Gallery")({
-        album: "events",
-        image: image.url,
-        thumb: thumb.url,
-      })
-      .chain((_) => Task.of({ image: image.url, thumb: thumb.url }))
+    ({ data: { image, thumb } }) =>
+      mdl.http.back4App
+        .postTask(mdl)("Classes/Gallery")({
+          album: "events",
+          image: image.url,
+          thumb: thumb.url,
+        })
+        .chain((_) => Task.of({ image: image.url, thumb: thumb.url }))
 
 export const uploadImage = (mdl) => (file) => {
   state.status("uploading-image")
@@ -215,7 +217,7 @@ const Events = {
     m(
       "article",
       state.status() == "loaded" &&
-        m("section.container", m(Calendar, { mdl, state })),
+      m("section.container", m(Calendar, { mdl, state })),
       state.status() == "loading" && m("section", m(Loader)),
       state.status() == "error" && m("section", "is error")
     ),

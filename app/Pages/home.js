@@ -1,7 +1,8 @@
+import m from "mithril"
 import { fetchAll } from "../Layouts"
-import DateTime from "Components/DateTime"
+import DateTime from "@/Components/DateTime"
 import { AngleDoubleLine } from "@mithril-icons/clarity/cjs"
-import Glider from "Utils/glider.min.js"
+import GliderJS from "@/Utils/glider.js"
 import { clone } from "ramda"
 import dayjs from "dayjs"
 
@@ -19,7 +20,8 @@ const createCarousel = (dom) => {
   let slides = dom.children[1]
   let prev = dom.children[2].children[0]
   let next = dom.children[2].children[1]
-  const slider = new Glider(slides, {
+
+  const slider = new GliderJS(slides, {
     // `auto` allows automatic responsive
     // width calculations
     slidesToShow: "auto",
@@ -107,6 +109,8 @@ const createCarousel = (dom) => {
       },
     ],
   })
+
+
 
   state[dom.id] = slider
 }
@@ -264,16 +268,16 @@ const Section = {
     m(
       "section.row.p-b-25",
       data.any() &&
-        m(
-          ".glider-contain",
-          {
-            onbeforeremove: ({ dom }) => state[dom.id].destroy(),
-            oncreate: ({ dom }) => createCarousel(dom),
-          },
-          m("h2.is-center.strong", title),
-          m(Slider, { mdl, data, type }),
-          m(Nav)
-        )
+      m(
+        ".glider-contain",
+        {
+          onbeforeremove: ({ dom }) => state[dom.id].destroy(),
+          oncreate: ({ dom }) => createCarousel(dom),
+        },
+        m("h2.is-center.strong", title),
+        m(Slider, { mdl, data, type }),
+        m(Nav)
+      )
     ),
 }
 

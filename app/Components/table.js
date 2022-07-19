@@ -1,3 +1,4 @@
+import m from "mithril"
 import { Times, CheckLine } from "@mithril-icons/clarity/cjs"
 import { toPairs, compose, map, keys, clone } from "ramda"
 
@@ -33,13 +34,13 @@ const Cell = () => {
     }) =>
       ["phone", "wide"].includes(screenSize)
         ? m("tr", [
-            m(
-              "td",
-              { style: { width: "25%" } },
-              m("label", children[0].key.toUpperCase())
-            ),
-            m("th", children),
-          ])
+          m(
+            "td",
+            { style: { width: "25%" } },
+            m("label", children[0].key.toUpperCase())
+          ),
+          m("th", children),
+        ])
         : m("td", { style: { width: "20%" } }, children),
   }
 }
@@ -80,20 +81,20 @@ export const Table = () => {
         },
         rows.any()
           ? m(
-              "table.dash-table",
-              !["phone", "wide"].includes(mdl.settings.screenSize) &&
-                m(
-                  "thead.dash-nav",
-                  m(
-                    "tr.mb-5",
-                    cols.map((col) => m("th.primary", col.toUpperCase()))
-                  )
-                ),
+            "table.dash-table",
+            !["phone", "wide"].includes(mdl.settings.screenSize) &&
+            m(
+              "thead.dash-nav",
               m(
-                "tbody",
-                rows.map((row, idxR) => m(Row, { mdl, row, idxR }))
+                "tr.mb-5",
+                cols.map((col) => m("th.primary", col.toUpperCase()))
               )
+            ),
+            m(
+              "tbody",
+              rows.map((row, idxR) => m(Row, { mdl, row, idxR }))
             )
+          )
           : m("h2", "No data")
       )
     },

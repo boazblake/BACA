@@ -1,3 +1,4 @@
+import m from "mithril"
 const About = (mdl) => {
   return {
     view: ({ attrs: { mdl } }) =>

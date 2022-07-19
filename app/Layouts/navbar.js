@@ -1,4 +1,5 @@
-import NavLink from "Components/nav-link.js"
+import m from "mithril"
+import NavLink from "@/Components/nav-link.js"
 const isActiveRoute = (a, b) => (a == b ? "active button outline" : "")
 
 const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))

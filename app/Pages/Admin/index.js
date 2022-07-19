@@ -1,10 +1,11 @@
+import m from "mithril"
 import { prop, filter } from "ramda"
-import { Table, formatDataForTable } from "Components/table.js"
+import { Table, formatDataForTable } from "@/Components/table.js"
 import { EditLine, RemoveLine } from "@mithril-icons/clarity/cjs"
 import Task from "data.task"
-import { formatDate, getUserByUserId } from "Utils/helpers"
+import { formatDate, getUserByUserId } from "@/Utils/helpers"
 let tabs = ["blogs", "events", "images", "users", "dues"]
-import { addSuccess, addDanger } from "Components/toast"
+import { addSuccess, addDanger } from "@/Components/toast"
 
 const state = {
   tab: "blogs",
@@ -84,19 +85,19 @@ const duesViewModel = (
 ) => {
   return date
     ? {
-        date: formatDate(date),
-        status,
-        name: full_name,
-        email,
-        address,
-      }
+      date: formatDate(date),
+      status,
+      name: full_name,
+      email,
+      address,
+    }
     : {
-        date: formatDate(createdAt),
-        status: "ERROR - contact administrator",
-        name: getUserByUserId(userId, mdl).name,
-        email: getUserByUserId(userId, mdl).email,
-        address: JSON.stringify(address),
-      }
+      date: formatDate(createdAt),
+      status: "ERROR - contact administrator",
+      name: getUserByUserId(userId, mdl).name,
+      email: getUserByUserId(userId, mdl).email,
+      address: JSON.stringify(address),
+    }
 }
 
 const displayType = {

@@ -1,3 +1,4 @@
+import m from "mithril"
 import Task from "data.task"
 import { head, prop } from "ramda"
 
@@ -12,12 +13,12 @@ const setUserAndSessionToken = (mdl) => (user) => {
 
 const loginUserTask =
   (mdl) =>
-  ({ email, password }) => {
-    let login = encodeURI(`username=${email}&password=${password}`)
-    return mdl.http.back4App
-      .getTask(mdl)(`login?${login}`)
-      .map(setUserAndSessionToken(mdl))
-  }
+    ({ email, password }) => {
+      let login = encodeURI(`username=${email}&password=${password}`)
+      return mdl.http.back4App
+        .getTask(mdl)(`login?${login}`)
+        .map(setUserAndSessionToken(mdl))
+    }
 
 const getAddressTask = (mdl) => (addressId) => {
   let login = encodeURI(`objectId=${addressId}`)
@@ -48,27 +49,27 @@ const getUserMessagesTask = (mdl) => (encodeId) =>
       console.log("messages", messages)
       return messages.any()
         ? () => {
-            let hasNotifications = messages.filter(
-              (message) => !message.hasRead
-            )
-            mdl.state.hasNotifications(hasNotifications.any())
-            return Task.of(messages)
-          }
+          let hasNotifications = messages.filter(
+            (message) => !message.hasRead
+          )
+          mdl.state.hasNotifications(hasNotifications.any())
+          return Task.of(messages)
+        }
         : createMessagesTask(mdl)
     })
 
 const getUserInfoTask = (mdl) => {
   let encodeId = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
   return Task.of((account) => (dues) =>
-    // (messages) =>
+  // (messages) =>
+  {
     {
-      {
-        mdl.data.account = account
-        mdl.data.dues = dues
-        mdl.data.messages = []
-        console.log(mdl)
-      }
+      mdl.data.account = account
+      mdl.data.dues = dues
+      mdl.data.messages = []
+      // console.log(mdl)
     }
+  }
   )
     .ap(getUserAccountTask(mdl)(encodeId))
     .ap(getUserDuesTask(mdl)(encodeId))
@@ -76,22 +77,22 @@ const getUserInfoTask = (mdl) => {
 }
 export const loginTask =
   (mdl) =>
-  ({ email, password }) =>
-    loginUserTask(mdl)({ email, password }).chain((_) => getUserInfoTask(mdl))
+    ({ email, password }) =>
+      loginUserTask(mdl)({ email, password }).chain((_) => getUserInfoTask(mdl))
 
 export const resetPasswordTask = (mdl, email) =>
   mdl.http.back4App.postTask(mdl)("requestPasswordReset")({ email })
 
 export const registerUserTask =
   (mdl) =>
-  ({ name, email, password, role }) =>
-    mdl.http.back4App.postTask(mdl)("users")({
-      username: email,
-      name,
-      email,
-      password,
-      role,
-    })
+    ({ name, email, password, role }) =>
+      mdl.http.back4App.postTask(mdl)("users")({
+        username: email,
+        name,
+        email,
+        password,
+        role,
+      })
 
 export const createAccountTask = (mdl) => {
   mdl.user.account = {

@@ -1,5 +1,6 @@
+import m from "mithril"
 import dayjs from "dayjs"
-import { handlers, DAYSOFWEEK } from "Utils"
+import { handlers, DAYSOFWEEK } from "@/Utils"
 
 const onInput = (event) =>
   handlers(["oninput"], (e) => {
@@ -126,23 +127,23 @@ const Editor = {
             ),
 
             state.event.isRecur &&
-              m(
-                "formgroup.grouped",
-                DAYSOFWEEK.map((day, idx) =>
-                  m(
-                    "label",
-                    day,
-                    m("input", {
-                      type: "checkbox",
-                      id: "daysRecur",
-                      value: idx,
-                      checked: state.event.daysRecur.includes(idx),
-                      onchange: (e) =>
-                        state.event.daysRecur.push(parseInt(e.target.value)),
-                    })
-                  )
+            m(
+              "formgroup.grouped",
+              DAYSOFWEEK.map((day, idx) =>
+                m(
+                  "label",
+                  day,
+                  m("input", {
+                    type: "checkbox",
+                    id: "daysRecur",
+                    value: idx,
+                    checked: state.event.daysRecur.includes(idx),
+                    onchange: (e) =>
+                      state.event.daysRecur.push(parseInt(e.target.value)),
+                  })
                 )
-              ),
+              )
+            ),
 
             m(
               "formgroup",
@@ -161,28 +162,28 @@ const Editor = {
             state.status() == "uploading-image"
               ? m("h2.tag.is-center", "Attaching Image - please be patient")
               : m(
-                  "formgroup.grouped",
-                  m(
-                    "label",
-                    "Upload an Image",
-                    m("input", {
-                      type: "file",
-                      id: "file",
-                      value: state.files,
-                      onchange: () => uploadImage(state.event.file),
-                    }),
-                    state.event.image &&
-                      m("img", {
-                        src: state.event.image,
-                      })
-                  )
-                ),
+                "formgroup.grouped",
+                m(
+                  "label",
+                  "Upload an Image",
+                  m("input", {
+                    type: "file",
+                    id: "file",
+                    value: state.files,
+                    onchange: () => uploadImage(state.event.file),
+                  }),
+                  state.event.image &&
+                  m("img", {
+                    src: state.event.image,
+                  })
+                )
+              ),
 
             m(
               "label.icon",
               m("h2.text-primary", "Location", m("span.text-error", "*")),
               state.errors.location &&
-                m("h2.text-error", state.errors.location),
+              m("h2.text-error", state.errors.location),
               m("input", {
                 oninput: (e) => {
                   if (e.target.value.length > 3) {
@@ -206,28 +207,28 @@ const Editor = {
               })
             ),
             data.locations.any() &&
+            m(
+              "details.dropdown",
+              m("summary.button.outline", "options"),
               m(
-                "details.dropdown",
-                m("summary.button.outline", "options"),
+                ".card",
                 m(
-                  ".card",
-                  m(
-                    "ul",
+                  "ul",
 
-                    data.locations.map(({ formatted }) =>
-                      m(
-                        "li.pointer",
-                        {
-                          onclick: (e) => {
-                            state.event.location = formatted
-                          },
+                  data.locations.map(({ formatted }) =>
+                    m(
+                      "li.pointer",
+                      {
+                        onclick: (e) => {
+                          state.event.location = formatted
                         },
-                        formatted
-                      )
+                      },
+                      formatted
                     )
                   )
                 )
-              ),
+              )
+            ),
 
             m(
               "formgroup",
@@ -235,7 +236,7 @@ const Editor = {
                 "label",
                 m("h2.text-primary", "Details", m("span.text-error", "*")),
                 state.errors.description &&
-                  m("h2.text-error", state.errors.description),
+                m("h2.text-error", state.errors.description),
                 m("textarea", {
                   id: "description",
                   value: state.event.description,
@@ -260,16 +261,16 @@ const Editor = {
               "Cancel"
             ),
             state.event.id &&
-              m(
-                "button.button.error",
-                {
-                  onclick: (e) => {
-                    deleteEvent(mdl, state.event.id)
-                  },
-                  role: "button",
+            m(
+              "button.button.error",
+              {
+                onclick: (e) => {
+                  deleteEvent(mdl, state.event.id)
                 },
-                "Delete"
-              ),
+                role: "button",
+              },
+              "Delete"
+            ),
             m(
               "button.button.primary",
               {

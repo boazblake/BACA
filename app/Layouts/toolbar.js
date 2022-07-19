@@ -1,8 +1,9 @@
-import Hamburger from "Components/Hamburger.js"
-import AuthBox from "Components/authbox.js"
-import { ScrollToPageTitle } from "Utils"
+import m from "mithril"
+import Hamburger from "@/Components/Hamburger.js"
+import AuthBox from "@/Components/authbox.js"
+import { ScrollToPageTitle } from "@/Utils"
 import { BellOutlineBadged } from "@mithril-icons/clarity"
-import Toasts from "Components/toast"
+import Toasts from "@/Components/toast"
 
 const AuthDisplay = ({ attrs: { mdl } }) => {
   let route = mdl.state.hasNotifications()
@@ -15,7 +16,7 @@ const AuthDisplay = ({ attrs: { mdl } }) => {
         { href: `/account/${route}`, selector: "a.underline.pointer" },
         `Welcome ${mdl.user.name?.split(" ")[0]}`,
         mdl.state.hasNotifications() &&
-          m(BellOutlineBadged, { height: "24px", fill: "green" })
+        m(BellOutlineBadged, { height: "24px", fill: "green" })
       ),
   }
 }
@@ -47,20 +48,20 @@ export default {
 
       mdl.settings.screenSize == "desktop"
         ? m(
-            ".nav-right is-right",
-            mdl.state.showNavMenu() &&
-              m(
-                "Button.button success m-r-16",
-                { onclick: () => ScrollToPageTitle() },
-                "Menu"
-              ),
-            m(AuthBox, { mdl })
-          )
-        : m(
-            ".nav-right is-right",
-            mdl.state.isAuth() && m(AuthDisplay, { mdl }),
-            m(Hamburger, { mdl })
+          ".nav-right is-right",
+          mdl.state.showNavMenu() &&
+          m(
+            "Button.button success m-r-16",
+            { onclick: () => ScrollToPageTitle() },
+            "Menu"
           ),
+          m(AuthBox, { mdl })
+        )
+        : m(
+          ".nav-right is-right",
+          mdl.state.isAuth() && m(AuthDisplay, { mdl }),
+          m(Hamburger, { mdl })
+        ),
       m(Toasts)
     ),
 }

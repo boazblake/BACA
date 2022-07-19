@@ -1,4 +1,5 @@
-import { uuid } from "../Utils/helpers"
+import m from "mithril"
+import { uuid } from "@/Utils/helpers"
 
 const toastTypes = ["info", "warning", "success", "danger"]
 // Toasts.js
