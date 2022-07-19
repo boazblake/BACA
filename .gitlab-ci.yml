@@ -6,9 +6,9 @@ pages:
     - node_modules/
 
   script:
-  - cp -r ./docs ./public
+  - cp -r ./docs ./dist
   artifacts:
     paths:
-    - public
+    - dist
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
