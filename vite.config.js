@@ -12,7 +12,7 @@ const pwa = () =>
       enabled: false,
     },
     strategies: "generateSW",
-    srcDir: 'app',
+    // srcDir: 'app',
     filename: 'vite-sw.js',
     includeAssets: ['fonts/*.ttf', 'images/*.png']
   })
