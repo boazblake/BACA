@@ -2,6 +2,10 @@ import m from 'mithril'
 import Task from "data.task"
 import { PAYPAL, BACK4APP, IMGBB, OpenCage } from "../../.secrets.js"
 
+
+
+console.log('?', import.meta.env) // 123
+
 const updatePayPalAuth = (mdl) => (paypal) => (mdl.state.paypal = paypal)
 
 const onProgress = (mdl) => (e) => {
@@ -101,24 +105,24 @@ const cachCall = (url) =>
       "Cache-Control": "public, max-age=604800",
     }
 
-const back4App = {
-  getTask: (mdl) => (url) =>
-    HttpTask(BACK4APP.headers(mdl, BACK4APP, cachCall(url)))("GET")(mdl)(
-      `${BACK4APP.baseUrl}/${url}`
-    )(null),
-  postTask: (mdl) => (url) => (dto) =>
-    HttpTask(BACK4APP.headers(mdl, BACK4APP))("POST")(mdl)(
-      `${BACK4APP.baseUrl}/${url}`
-    )(dto),
-  putTask: (mdl) => (url) => (dto) =>
-    HttpTask(BACK4APP.headers(mdl, BACK4APP))("PUT")(mdl)(
-      `${BACK4APP.baseUrl}/${url}`
-    )(dto),
-  deleteTask: (mdl) => (url) =>
-    HttpTask(BACK4APP.headers(mdl, BACK4APP))("DELETE")(mdl)(
-      `${BACK4APP.baseUrl}/${url}`
-    )(),
-}
+// const back4App = {
+//   getTask: (mdl) => (url) =>
+//     HttpTask(BACK4APP.headers(mdl, BACK4APP, cachCall(url)))("GET")(mdl)(
+//       `${BACK4APP.baseUrl}/${url}`
+//     )(null),
+//   postTask: (mdl) => (url) => (dto) =>
+//     HttpTask(BACK4APP.headers(mdl, BACK4APP))("POST")(mdl)(
+//       `${BACK4APP.baseUrl}/${url}`
+//     )(dto),
+//   putTask: (mdl) => (url) => (dto) =>
+//     HttpTask(BACK4APP.headers(mdl, BACK4APP))("PUT")(mdl)(
+//       `${BACK4APP.baseUrl}/${url}`
+//     )(dto),
+//   deleteTask: (mdl) => (url) =>
+//     HttpTask(BACK4APP.headers(mdl, BACK4APP))("DELETE")(mdl)(
+//       `${BACK4APP.baseUrl}/${url}`
+//     )(),
+// }
 
 const imgBB = {
   postTask: (mdl) => (file) => {
@@ -147,7 +151,7 @@ const openCage = {
 const http = {
   imgBB,
   openCage,
-  back4App,
+  // back4App,
   paypal,
   HttpTask,
   getTask,
