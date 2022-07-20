@@ -2,10 +2,6 @@ import m from 'mithril'
 import Task from "data.task"
 import { PAYPAL, BACK4APP, IMGBB, OpenCage } from "../../.secrets.js"
 
-
-
-console.log(import.meta.env.BASE_URL) // 123
-
 const updatePayPalAuth = (mdl) => (paypal) => (mdl.state.paypal = paypal)
 
 const onProgress = (mdl) => (e) => {

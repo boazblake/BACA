@@ -3,19 +3,19 @@ import { flowPlugin, esbuildFlowPlugin } from "@bunchtogether/vite-plugin-flow"
 import vsharp from 'vite-plugin-vsharp'
 import viteImagemin from 'vite-plugin-imagemin'
 import path from "path"
-// import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA } from 'vite-plugin-pwa'
 
-// const pwa = () =>
-//   VitePWA({
-//     registerType: 'autoUpdate',
-//     devOptions: {
-//       enabled: false,
-//     },
-//     strategies: "generateSW",
-//     // srcDir: 'app',
-//     filename: 'vite-sw.js',
-//     includeAssets: ['fonts/*.ttf', 'images/*.png']
-//   })
+const pwa = () =>
+  VitePWA({
+    registerType: 'autoUpdate',
+    devOptions: {
+      enabled: false,
+    },
+    strategies: "generateSW",
+    srcDir: 'app',
+    filename: 'vite-sw.js',
+    includeAssets: ['fonts/*.ttf', 'images/*.png']
+  })
 
 const imageMin = () => viteImagemin({
   gifsicle: {
@@ -67,7 +67,7 @@ const sharper = () => vsharp({
 
 export default defineConfig({
   optimizeDeps: { esbuildOptions: { plugins: [esbuildFlowPlugin()] } },
-  plugins: [flowPlugin(), sharper(), imageMin()],
+  plugins: [flowPlugin(), sharper(), imageMin(), pwa()],
   resolve: {
     alias: {
       stream: "mithril-stream",
