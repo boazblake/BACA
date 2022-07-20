@@ -3367,10 +3367,10 @@ mithril-stream@^2.0.0:
   resolved "https://registry.yarnpkg.com/mithril-stream/-/mithril-stream-2.0.0.tgz#b33a9b8d1f1a93b50f79e13a3454d3a39d7e39fb"
   integrity sha512-7anPud4n2FMGIXBQATVpFzclkddXHmJ1TzlqOP9STybk8JZYOPAD2otMYiMDc6sPrTNDY5S6GPDlYNIUY8Qs3Q==
 
-mithril@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/mithril/-/mithril-2.2.0.tgz#072fa16286eb3388915521ea00b9dc2564d148bb"
-  integrity sha512-Dqdp2As819R5Wgtjbe+L2mww+K5/sVAqb4K/d4wmNg9Qp5IzzQbanbiU2l8GCWu/k44gClqDQBwNytEMLagVJQ==
+mithril@2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/mithril/-/mithril-2.2.2.tgz#5a0743bd04726cc1efa6e91477f995d80fc6c539"
+  integrity sha512-YRm6eLv2UUaWaWHdH8L+desW9+DN7+oM34CxJv6tT2e1lNVue8bxQlknQeDRn9aKlO8sIujm2wqUHwM+Hb1wGQ==
   dependencies:
     ospec "4.0.0"
 
