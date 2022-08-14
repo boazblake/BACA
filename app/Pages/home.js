@@ -124,14 +124,15 @@ const Blog = {
         href: `/social/blog-post:${blog.objectId}`,
         key: idx,
         style: {
-          height: "200px",
           alignContent: "stretch",
-          overflow: "auto",
         },
       },
       m(
         ".card.opacity-overlay.is-vertical-align m6 row",
-        {},
+        {
+          oncreate: ({ dom }) => dom.style.height = '330px',
+          style: { overflow: "auto", }
+        },
         m("img", {
           src: blog.img || "images/main.webp",
           alt: "",

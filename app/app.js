@@ -5,7 +5,7 @@ const toRoutes = (mdl) => (acc, route) => {
     onmatch: (args, path, fullroute) => {
       mdl.state.showNavModal(false)
       if (route.group.includes("authenticated") && !mdl.state.isAuth()) {
-        console.log('m.route.get()', mdl.state.isAuth(), m.route.get())
+        // console.log('m.route.get()', mdl.state.isAuth(), m.route.get())
         m.route.set(m.route.get())
       }
       mdl.state.route = route
