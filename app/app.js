@@ -6,7 +6,7 @@ const toRoutes = (mdl) => (acc, route) => {
       mdl.state.showNavModal(false)
       if (route.group.includes("authenticated") && !mdl.state.isAuth()) {
         console.log('m.route.get()', mdl.state.isAuth(), m.route.get())
-        mdl.route.set(m.route.get())
+        m.route.set(m.route.get())
       }
       mdl.state.route = route
       mdl.state.anchor = path.split("#")[1]

@@ -1,4 +1,3 @@
-import m from "mithril"
 import Routes from "../Routes/index.js"
 import http from "@/Utils/http"
 import Stream from "mithril-stream"
@@ -72,8 +71,15 @@ const Model = {
     classList: Stream([]),
     footer: Stream([]),
   },
-  toggleLayoutModal: (mdl) =>
-    mdl.state.showLayoutModal(!mdl.state.showLayoutModal()),
+  toggleLayoutModal: (mdl) => {
+    mdl.state.showLayoutModal(!mdl.state.showLayoutModal());
+    if (!mdl.state.showLayoutModal()) {
+      mdl.modal.header([])
+      mdl.modal.content([])
+      mdl.modal.footer([])
+      mdl.modal.classList([])
+    }
+  },
   toggleUserModal: (mdl) => mdl.state.showUserModal(!mdl.state.showUserModal()),
   toggleAuthModal: (mdl) => mdl.state.showAuthModal(!mdl.state.showAuthModal()),
   toggleNavModal: (mdl) => mdl.state.showNavModal(!mdl.state.showNavModal()),

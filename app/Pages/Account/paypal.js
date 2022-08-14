@@ -37,7 +37,57 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
     paydues: false,
   }
 
-  const togglePaypal = () => (state.paydues = !state.paydues)
+  const togglePaypal = () => {
+    mdl.modal.header(m(
+      ".modal-header",
+      m(
+        "button.button",
+        {
+          onclick: () =>
+            mdl.toggleLayoutModal(mdl)
+        },
+        "Cancel Payment"
+      )
+    ))
+
+    mdl.modal.content(
+      m(
+        ".modal-content",
+        m("#payment-request-button.is-center", {
+          oncreate: ({ dom }) => {
+            paypal
+              .Buttons({
+                style: {
+                  shape: "rect",
+                  color: "silver",
+                  layout: "vertical",
+                  label: "pay",
+                },
+
+                createOrder: (data, actions) => {
+                  return actions.order.create({
+                    purchase_units: [
+                      {
+                        amount: { currency_code: "USD", value: 50 },
+                      },
+                    ],
+                  })
+                },
+
+                onApprove: (data, actions) => {
+                  status.paypal = "start"
+                  return makePayment(actions)
+                },
+              })
+              .render(dom)
+          },
+        })
+      )
+    )
+
+    mdl.toggleLayoutModal(mdl)
+
+  }
 
   const onSuccess = (mdl, reload) => (data) => {
     addSuccess("Dues Successfully Paid")
@@ -72,54 +122,7 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
     view: ({ attrs: { mdl, status } }) =>
       m(
         "section",
-        state.paydues
-          ? m(
-            ".modal-container",
-            m(
-              ".modal",
-              m(
-                ".modal-header",
-                m(
-                  "button.button",
-                  { onclick: togglePaypal },
-                  "Cancel Payment"
-                )
-              ),
-              m(
-                ".modal-content",
-                m("#payment-request-button.is-center", {
-                  oncreate: ({ dom }) => {
-                    paypal
-                      .Buttons({
-                        style: {
-                          shape: "rect",
-                          color: "silver",
-                          layout: "vertical",
-                          label: "pay",
-                        },
-
-                        createOrder: (data, actions) => {
-                          return actions.order.create({
-                            purchase_units: [
-                              {
-                                amount: { currency_code: "USD", value: 50 },
-                              },
-                            ],
-                          })
-                        },
-
-                        onApprove: (data, actions) => {
-                          status.paypal = "start"
-                          return makePayment(actions)
-                        },
-                      })
-                      .render(dom)
-                  },
-                })
-              )
-            )
-          )
-          : m("button.button", { onclick: togglePaypal }, "Pay Dues")
+        m("button.button", { onclick: togglePaypal }, "Pay Dues")
       ),
   }
 }
