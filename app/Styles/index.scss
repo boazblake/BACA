@@ -309,6 +309,17 @@ small {
 
 }
 
+.text-cover {
+  height: 100px;
+  /* border: 1px solid blue; */
+  width: calc(100%);
+  position: sticky;
+  bottom: -10px;
+  left: 0;
+  background: rgb(249,243,243);
+  background: linear-gradient(0deg, white 35%, rgba(43, 5, 147, 0) 100%);
+}
+
 header {
   display: flex;
   flex-direction: column;

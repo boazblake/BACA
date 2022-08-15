@@ -142,6 +142,7 @@ const Blog = {
           },
         }),
         m("h2.text-primary text-wrap", blog.title)
+        , m('.text-cover')
       )
     ),
 }
