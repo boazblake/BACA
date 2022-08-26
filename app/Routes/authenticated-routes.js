@@ -3,7 +3,7 @@ import Default from "@/Pages/default.js"
 import Account from "@/Pages/Account/index.js"
 import Admin from "@/Pages/Admin"
 import Layout from "@/Layouts/index.js"
-import { scrollToAnchor, ScrollToPageTitle } from "@/Utils"
+import { ScrollToPageTitle } from "@/Utils"
 
 const AuthenticatedRoutes = [
   {
@@ -45,15 +45,7 @@ const AuthenticatedRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      console.log(
-        "profile page login on match",
-        mdl,
-        args,
-        path,
-        fullroute,
-        isAnchor,
-        !mdl.state.isAuth()
-      )
+
       !isAnchor && ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Default, { mdl })),
@@ -68,15 +60,6 @@ const AuthenticatedRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      // console.log(
-      //   "manage users on match",
-      //   mdl,
-      //   args,
-      //   path,
-      //   fullroute,
-      //   isAnchor,
-      //   mdl.state.isAuth(),
-      // )
       mdl.user.role != "admin" && m.route.set(m.route.get())
       !isAnchor && ScrollToPageTitle()
     },
@@ -92,17 +75,10 @@ const AuthenticatedRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      // PageTitle().scroll({
-      //   top: 0,
-      //   left: 0,
-      //   behavior: "smooth",
-      // })
-
       localStorage.clear()
       sessionStorage.clear()
       mdl.state.isAuth(false)
       mdl.user = {}
-      console.log("loggout", mdl)
 
       let routes = ["/account"]
       let currentRoute = m.route.get()

@@ -37,7 +37,7 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
     paydues: false,
   }
 
-  const togglePaypal = () => {
+  const togglePaypal = status => () => {
     mdl.modal.header(m(
       ".modal-header",
       m(
@@ -122,7 +122,7 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
     view: ({ attrs: { mdl, status } }) =>
       m(
         "section",
-        m("button.button", { onclick: togglePaypal }, "Pay Dues")
+        m("button.button", { onclick: togglePaypal(status) }, "Pay Dues")
       ),
   }
 }

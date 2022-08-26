@@ -107,7 +107,7 @@ export const scrollToAnchor = (anchor) => {
 
 export const randomEl = (list) => list[Math.floor(Math.random() * list.length)]
 
-export const jsonCopy = (src) => JSON.parse(JSON.stringify(src))
+export const jsonCopy = (src) => structuredClone(src)
 
 export const isActiveRoute = (route) =>
   m.route.get() == route ? "is-active" : ""
