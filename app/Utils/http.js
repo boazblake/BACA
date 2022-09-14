@@ -78,6 +78,20 @@ const lookupLocationTask = (query) => {
 
 const getTask = (mdl) => (url) => HttpTask({})("GET")(mdl)(url)(null)
 
+// const paypalUrl = `${PAYPAL.sandbox.baseUrl}/`
+// const paypal = {
+//   getTokenTask: (mdl) =>
+//     HttpTask(PAYPAL.sandbox.headers())("POST")(mdl)(
+//       paypalUrl + "v1/oauth2/token/"
+//     )(`grant_type=client_credentials`).map(updatePayPalAuth(mdl)),
+//   getTask: (mdl) => (url) =>
+//     HttpTask(PAYPAL.sandbox.headers(PAYPAL))("GET")(mdl)(paypalUrl + url)(null),
+//   postTask: (mdl) => (url) => (dto) =>
+//     HttpTask(PAYPAL.sandbox.headers(PAYPAL))("POST")(mdl)(paypalUrl + url)(dto),
+//   putTask: (mdl) => (url) => (dto) =>
+//     HttpTask(PAYPAL.sandbox.headers(PAYPAL))("PUT")(mdl)(paypalUrl + url)(dto),
+// }
+
 const cachCall = (url) =>
   url == "users/me"
     ? { "Cache-Control": "private" }

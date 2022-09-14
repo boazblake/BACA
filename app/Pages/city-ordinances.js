@@ -294,7 +294,8 @@ const CityOrd = {
           m(
             ".p-y-6.is-center",
             mdl.state.isAuth()
-              ? m(
+              ?
+              m(
                 "button.button.icon.bd-error",
                 {
                   disabled: true,
@@ -318,6 +319,15 @@ const CityOrd = {
             //     mdl,
             //     showModal: state.showOrdinanceViolation,
             //   })
+          ),
+          m(
+            "a.button.p-y-6.is-center",
+            {
+              target: "__blank",
+              name: "gmail",
+              href: "http://mailto:bonhamacrescivicassociation@gmail.com/",
+            },
+            m("h4", "or, Click here to send us an email")
           ),
           m(
             "p",
