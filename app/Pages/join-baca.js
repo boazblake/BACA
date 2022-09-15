@@ -75,7 +75,7 @@ const JoinBACA = (mdl) => {
             "hgroup",
             m(
               "h4",
-              "Work with the City of Houston and Precinct 3 for the benefit of BACA."
+              "Work with the City of Houston and Precinct 4 for the benefit of BACA."
             ),
             m(
               "p",

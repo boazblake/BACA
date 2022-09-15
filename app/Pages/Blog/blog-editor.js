@@ -11,6 +11,109 @@ import {
 import Loader from "@/Components/loader.js"
 import Stream from "mithril-stream"
 
+
+const assignImg = (img, thumb) => {
+  if (state.img == img) {
+    state.img = ""
+    state.thumb = ""
+  } else {
+    state.img = img
+    state.thumb = thumb
+  }
+}
+
+const ImgsHeader = (state, mdl) => m(
+  "header.modal-header",
+  m(
+    "nav",
+    m(
+      ".tabs",
+      m(
+        `a.pointer.${state.modalState() == "upload" ? "active" : ""}`,
+        {
+          onclick: (e) => {
+            e.stopPropagation()
+            state.modalState("upload")
+          },
+        },
+        "Upload New Image"
+      ),
+      m(
+        `a.pointer.${state.modalState() == "select" ? "active" : ""}`,
+        {
+          onclick: (e) => {
+            e.stopPropagation()
+            state.modalState("select")
+            mdl.state.showLayoutModal(false)
+            !mdl.state.showLayoutModal(true)
+          },
+        },
+        "Select From Database"
+      )
+    )
+  )
+)
+
+const ImgsContent = (state) => m(
+  "form.grid",
+  state.modalState() == "upload"
+    ? m("input", { type: "file", id: "file" })
+    : state.images.map(({ image, thumb }) =>
+      m(
+        `figure.col-6.button.${thumb == state.thumb ? "primary" : "outline"
+        }`,
+        {
+          onclick: (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            assignImg(image, thumb)
+          },
+        },
+        m("img", { src: thumb })
+      )
+    )
+)
+
+const ImgsFooter = (state, mdl) => m(
+  "section.modal-footer",
+  m(
+    ".tabs grouped",
+    m(
+      "button.button",
+      { onclick: () => state.showModal(false) },
+      "Cancel"
+    ),
+    m(
+      "button.button.primary",
+      {
+        onclick: (e) => {
+          e.preventDefault()
+          handleImage(mdl, state)
+        },
+        role: "button",
+        disabled: !state.file && !exists(state.img),
+      },
+      state.modalState() == "select" ? "Use" : "Upload"
+    )
+  )
+)
+
+const addImages = (mdl, state) => {
+  const onError = (e) => log("fetchBlogImages - error")(e)
+  const onSuccess = ({ results }) => {
+    state.images = results
+    mdl.modal.header(ImgsHeader(state, mdl))
+    mdl.modal.content(ImgsContent(state))
+    mdl.modal.footer(ImgsFooter(state, mdl))
+    mdl.state.showLayoutModal(true)
+  }
+
+  fetchBlogImages(mdl)
+    .fork(onError, onSuccess)
+
+}
+
+
 const state = {
   status: "loading",
   objectId: null,
@@ -21,7 +124,6 @@ const state = {
   thumb: "",
   file: null,
   imageId: null,
-  showModal: Stream(false),
   images: [],
   modalState: Stream("upload"),
   showPreview: Stream(false),
@@ -32,11 +134,9 @@ const state = {
   },
 }
 
-const fetchBlogImages = ({ attrs: { mdl, state } }) => {
-  const onError = (e) => log("fetchBlogImages - error")(e)
-  const onSuccess = ({ results }) => (state.images = results)
-  mdl.http.back4App.getTask(mdl)("Classes/Gallery").fork(onError, onSuccess)
-}
+const fetchBlogImages = (mdl) =>
+  mdl.http.back4App.getTask(mdl)("Classes/Gallery")
+
 
 const setupEditor = ({ attrs: { mdl } }) => {
   const onError = (e) => {
@@ -71,11 +171,11 @@ const initEditor =
       state.editor = ClassicEditor.create(dom, {
         toolbar: [
           "heading",
-          "selectAll",
-          "undo",
-          "redo",
           "bold",
           "italic",
+          "undo",
+          "redo",
+          "selectAll",
           "blockQuote",
           "link",
           "indent",
@@ -109,20 +209,29 @@ const initEditor =
             },
           ],
         },
+        hooks: {
+          addImageBlobHook: (blob, cb) => {
+            const formData = new FormData()
+            const file = formData.append(0, blob, blob.name)
+            uploadImage(mdl, file, cb)
+          }
+        }
       })
 
       state.editor.then((e) => e.setData(state.text))
     }
 
-const handleImage = (mdl) => (state) =>
-  state.file ? uploadImage(mdl)(state.file) : state.showModal(false)
+// const handleImage = (mdl) => (state) =>
+//   state.file ? uploadImage(mdl)(state.file) : state.showModal(false)
 
-const uploadImage = (mdl) => (file) => {
+const uploadImage = (mdl, file, callback) => {
+  console.log('file or blob', file)
   const onError = (e) => (state.errors.img = e)
   const onSuccess = ({ image, thumb, objectId }) => {
     state.img = image
     state.thumb = thumb
     state.imageId = objectId
+    callback(image)
     state.showModal(false)
   }
 
@@ -154,103 +263,6 @@ const submitBlog =
       updateOrSubmitBlog.fork(onError, onSuccess)
     }
 
-const assignImg = (img, thumb) => {
-  if (state.img == img) {
-    state.img = ""
-    state.thumb = ""
-  } else {
-    state.img = img
-    state.thumb = thumb
-  }
-}
-
-const Modal = () => {
-  return {
-    onremove: () => resetModalState(state),
-    oninit: fetchBlogImages,
-    view: ({ attrs: { mdl, state } }) =>
-      m(
-        "section.modal-container",
-        m(
-          "article.modal.card.grid",
-          m(
-            "header.modal-header",
-            m(
-              "nav",
-              m(
-                ".tabs",
-                m(
-                  `a.pointer.${state.modalState() == "upload" ? "active" : ""}`,
-                  {
-                    onclick: (e) => {
-                      e.stopPropagation()
-                      state.modalState("upload")
-                    },
-                  },
-                  "Upload New Image"
-                ),
-                m(
-                  `a.pointer.${state.modalState() == "select" ? "active" : ""}`,
-                  {
-                    onclick: (e) => {
-                      e.stopPropagation()
-                      state.modalState("select")
-                    },
-                  },
-                  "Select From Database"
-                )
-              )
-            )
-          ),
-          m(
-            "section.modal-content",
-            m(
-              "form.grid",
-              state.modalState() == "upload"
-                ? m("input", { type: "file", id: "file" })
-                : state.images.map(({ image, thumb }) =>
-                  m(
-                    `figure.col-6.button.${thumb == state.thumb ? "primary" : "outline"
-                    }`,
-                    {
-                      onclick: (e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        assignImg(image, thumb)
-                      },
-                    },
-                    m("img", { src: thumb })
-                  )
-                )
-            )
-          ),
-          m(
-            "section.modal-footer",
-            m(
-              ".tabs grouped",
-              m(
-                "button.button",
-                { onclick: () => state.showModal(false) },
-                "Cancel"
-              ),
-              m(
-                "button.button.primary",
-                {
-                  onclick: (e) => {
-                    e.preventDefault()
-                    handleImage(mdl)(state)
-                  },
-                  role: "button",
-                  disabled: !state.file && !exists(state.img),
-                },
-                state.modalState() == "select" ? "Use" : "Upload"
-              )
-            )
-          )
-        )
-      ),
-  }
-}
 
 const BlogEditor = () => {
   return {
@@ -271,6 +283,7 @@ const BlogEditor = () => {
               m(
                 "label",
                 "Title",
+
                 m("input", { id: "title", value: state.title })
               )
             ),
@@ -300,14 +313,13 @@ const BlogEditor = () => {
                   {
                     onclick: (e) => {
                       e.preventDefault()
-                      state.showModal(!state.showModal())
+                      // addImages(mdl, state)
                     },
                   },
                   state.thumb ? "Update Image" : "Add An Image"
                 )
               )
             ),
-            state.showModal() && m(Modal, { state, mdl }),
 
             m(
               "section",

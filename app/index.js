@@ -5,7 +5,6 @@ import App from "./app.js"
 import Model from "@/Models/index.js"
 import { head, prop } from "ramda"
 
-import '@/Styles/w3.css'
 import '@/Styles/chota.scss'
 import '@/Styles/masonry.sass'
 import '@/Styles/glider.min.css'
