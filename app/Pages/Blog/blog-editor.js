@@ -8,10 +8,14 @@ import {
   deleteBlog,
   onInput,
 } from "./fns"
+// import { equals } from "ramda"
 import Loader from "@/Components/loader.js"
 import Stream from "mithril-stream"
+import Editor from '@toast-ui/editor'
+import '@toast-ui/editor/dist/toastui-editor.css'
 
 const state = {
+  show: Stream(false),
   status: "loading",
   objectId: null,
   title: "",
@@ -38,9 +42,9 @@ const fetchBlogImages = ({ attrs: { mdl, state } }) => {
   mdl.http.back4App.getTask(mdl)("Classes/Gallery").fork(onError, onSuccess)
 }
 
-const setupEditor = ({ attrs: { mdl } }) => {
+const fetchBlog = state => ({ attrs: { mdl } }) => {
   const onError = (e) => {
-    log("setupEditor error")(e)
+    log("fetchBlog error")(e)
     state.status = "error"
     e.code == 404 && m.route.set("/social/blog")
   }
@@ -50,8 +54,8 @@ const setupEditor = ({ attrs: { mdl } }) => {
     state.img = img
     state.thumb = thumb
     state.objectId = objectId
-    state.editor.then((e) => e.setData(text))
     state.status = "loaded"
+    state.show(true)
   }
 
   let id = m.route.get().split(":")[1]
@@ -62,56 +66,74 @@ const setupEditor = ({ attrs: { mdl } }) => {
       .fork(onError, onSuccess)
   } else {
     state.status = "loaded"
+    state.show(true)
   }
 }
 
-const initEditor =
-  (state) =>
-    ({ dom }) => {
-      state.editor = ClassicEditor.create(dom, {
-        toolbar: [
-          "heading",
-          "selectAll",
-          "undo",
-          "redo",
-          "bold",
-          "italic",
-          "blockQuote",
-          "link",
-          "indent",
-          "outdent",
-          "numberedList",
-          "bulletedList",
-          "mediaEmbed",
-          "insertTable",
-          "tableColumn",
-          "tableRow",
-          "mergeTableCells",
-        ],
-        heading: {
-          options: [
-            {
-              model: "paragraph",
-              title: "Paragraph",
-              class: "ck-heading_paragraph",
-            },
-            {
-              model: "heading1",
-              view: "h1",
-              title: "Heading 1",
-              class: "ck-heading_heading1",
-            },
-            {
-              model: "heading2",
-              view: "h2",
-              title: "Heading 2",
-              class: "ck-heading_heading2",
-            },
-          ],
-        },
-      })
+const getBase64 = file => {
+  return new Promise((res, rej) => {
+    const reader = new FileReader()
+    reader.addEventListener('load', () => res(reader.result))
+    reader.readAsDataURL(file)
+  })
+}
 
-      state.editor.then((e) => e.setData(state.text))
+const resizeBase64Img = (base64, newWidth, newHeight) => {
+  return new Promise((res, rej) => {
+    const canvas = document.createElement("canvas");
+    // canvas.style.width = newWidth.toString() + "%";
+    // canvas.style.height = newHeight.toString() + "%";
+    const context = canvas.getContext("2d");
+    const img = document.createElement("img");
+    img.src = base64;
+    img.onload = function () {
+      canvas.width = img.width / 3;
+      canvas.height = img.height / 3;
+      // context.drawImage(img, 0, 0);
+      // canvas.toBlob(
+      //   (blob) => {
+      //     if (blob === null) {
+      //       return rej(blob);
+      //     } else {
+      //       res(canvas.toDataUrl(blob));
+      //     }
+      //   },
+      //   "image/jpeg",
+      //   1 / 2
+      // );
+      context.scale(.3, .3)
+      // context.scale(newWidth / img.width, newHeight / img.height);
+      context.drawImage(img, 0, 0);
+      console.log(canvas.style)
+      return res(canvas.toDataURL());
+    }
+
+  })
+}
+
+const initEditor =
+  (state, mdl) =>
+    ({ dom }) => {
+      state.editor = new Editor({
+        autofocus: true,
+        viewer: true,
+        height: `500px`,
+        el: dom,
+        initialValue: state.text,
+        initialHTML: state.text,
+        placeholder: 'Add some text',
+        hooks: { addImageBlobHook: (x, cb) => { console.log('x', cb); getBase64(x).then(b64 => resizeBase64Img(b64, 50, 50)).then(cb) } },
+        events: {
+          change: () => {
+            // console.log(state.editor.getMarkdown())
+            // if (!equals(state.text.length, state.editor.getMarkdown().length))
+            state.text = state.editor.getMarkdown()
+          }
+        }
+      })
+      // console.log(state.editor)
+
+      // state.editor.then((e) => e.setData(state.text))
     }
 
 const handleImage = (mdl) => (state) =>
@@ -255,7 +277,7 @@ const Modal = () => {
 const BlogEditor = () => {
   return {
     onremove: () => resetEditorState(state),
-    oninit: setupEditor,
+    oninit: fetchBlog(state),
     view: ({ attrs: { mdl } }) => {
       return m(
         ".grid",
@@ -310,12 +332,10 @@ const BlogEditor = () => {
             ),
             state.showModal() && m(Modal, { state, mdl }),
 
-            m(
+            state.show() && m(
               "section",
               m("#editor.fr-view", {
-                onupdate: (e) =>
-                  state.editor.then((e) => (state.text = e.getData())),
-                oncreate: initEditor(state),
+                oncreate: initEditor(state, mdl),
               })
             ),
 

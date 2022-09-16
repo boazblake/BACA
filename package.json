@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@boazblake/fun-config": "https://github.com/boazblake/fun-config",
+    "@toast-ui/editor": "^3.1.8",
     "@mithril-icons/clarity": "^1.2.0",
     "daggy": "^1.5.0",
     "data.either": "^1.5.2",

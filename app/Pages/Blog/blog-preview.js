@@ -1,6 +1,6 @@
 import m from "mithril"
-import HtmlSanitizer from "@/Utils/html-sanitize"
 import { isAdminOrMod } from "@/Utils/helpers"
+import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 
 const BlogPreview = {
   view: ({
@@ -33,10 +33,17 @@ const BlogPreview = {
       ),
       m(
         "hgroup.col",
-        m.trust(
-          HtmlSanitizer.SanitizeHtml(text.replace(/<[^>]*>/g, "").slice(0, 100))
+        m('',
+          {
+            oncreate: ({ dom }) => {
+              const str = `${text.slice(0, 100)} ...`
+              new Viewer({
+                el: dom,
+                initialValue: str,
+              })
+            }
+          }
         ),
-        "...",
         m(
           m.route.Link,
           // "a.pointer",

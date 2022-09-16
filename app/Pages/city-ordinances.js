@@ -321,7 +321,7 @@ const CityOrd = {
             //   })
           ),
           m(
-            "a.button.p-y-6.is-center",
+            "a.button.bg-light.p-y-6.is-center",
             {
               target: "__blank",
               name: "gmail",

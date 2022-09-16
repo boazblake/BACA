@@ -75,7 +75,7 @@ const BoardMembers = (mdl) => {
           m(
             "row.container",
             m(
-              "a.button",
+              "a.button.bg-light",
               {
                 target: "__blank",
                 name: "gmail",

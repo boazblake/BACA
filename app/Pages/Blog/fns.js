@@ -1,5 +1,6 @@
 import { handlers, exists, confirmTask } from "@/Utils"
 import Task from "data.task"
+import m from 'mithril'
 
 export const resetModalState = (state) => {
   state.images = []
@@ -12,6 +13,7 @@ export const resetEditorState = (state) => {
   state.img = ""
   state.thumb = ""
   state.file = null
+  state.show(false)
   state.showPreview(false)
   state.isEditing(false)
   state.showModal(false)

@@ -1,7 +1,7 @@
 import m from "mithril"
 import { ArrowLine, NoteEditLine } from "@mithril-icons/clarity/cjs"
 import { parseMarkdown, AVATAR_URL } from "@/Utils"
-import HtmlSanitizer from "@/Utils/html-sanitize"
+import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 
 import { toViewModel } from "./blog"
 import Loader from "@/Components/loader.js"
@@ -9,13 +9,21 @@ import Loader from "@/Components/loader.js"
 const state = {
   status: "loading",
   blog: null,
+
   comments: null,
   new: {
     comment: "",
   },
 }
 
+const resetState = () => {
+  state.status = 'loading'
+  state.blog = null
+
+}
+
 const Post = {
+  onremove: () => { },
   view: ({ attrs: { blog, mdl } }) =>
     m(
       "section.card",
@@ -58,7 +66,14 @@ const Post = {
       ),
       m(
         "hgroup.col",
-        m.trust(HtmlSanitizer.SanitizeHtml(parseMarkdown(blog.text)))
+        {
+          oncreate: ({ dom, }) =>
+            new Viewer({
+              el: dom,
+              initialValue: blog.text,
+            })
+        },
+
       ),
       blog.author == mdl.user.name &&
       m(
@@ -157,6 +172,7 @@ const BackToBlogs = () =>
   )
 
 const BlogPost = {
+  onremove: resetState,
   oninit: fetchBlogPost,
   view: ({ attrs: { mdl } }) =>
     m(
