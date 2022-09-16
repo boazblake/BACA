@@ -1,13 +1,14 @@
 import Loader from "@/Components/loader.js"
 import { groupBy, compose, prop, descend, ascend, sortWith } from "ramda"
 import Stream from "mithril-stream"
+import m from "mithril"
 
 const log = (m) => (v) => {
   console.log(m, v)
   return v
 }
 
-const state = {
+export const state = {
   albums: [],
   showModal: Stream(false),
   newAlbum: { title: "", img: null },
@@ -22,7 +23,6 @@ const sortByUpdatedAlbum = sortWith([
 
 const groupByAlbumAndDate = compose(groupByAlbum, sortByUpdatedAlbum)
 
-import m from "mithril"
 const fetchAllAlbums = ({ attrs: { mdl } }) => {
   const onError = (e) => log("fetchAllAlbums- error")(e)
   const onSuccess = (albums) => (state.albums = albums)
@@ -79,14 +79,13 @@ const AlbumCover = {
     ),
 }
 
-const NewAlbumModal = {
+export const NewAlbumModal = {
   view: ({ attrs: { mdl } }) =>
     m(
-      ".modal-container",
-      m(
-        "form.modal.card",
+      "aside.modal-container",
+      m('article.modal',
         m(
-          "section.modal-content",
+          "section.modal-content.container",
           m(
             "label",
             "Album Title",
@@ -107,7 +106,7 @@ const NewAlbumModal = {
           )
         ),
         m(
-          ".modal-footer.is-right grouped",
+          ".footer.modal-footer.is-right grouped",
           m(
             "button.button.secondary",
             {
@@ -155,7 +154,6 @@ const Gallery = {
               },
               "Add A New Album"
             ),
-            state.showModal() && m(NewAlbumModal, { mdl })
           )
         ),
         m(

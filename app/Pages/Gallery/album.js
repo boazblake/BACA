@@ -6,7 +6,7 @@ import Task from "data.task"
 import { TimesCircleLine, ArrowLine } from "@mithril-icons/clarity/cjs"
 import Stream from "mithril-stream"
 
-const state = {
+export const state = {
   album: [],
   title: "",
   showSelectedImage: Stream(),
@@ -117,7 +117,7 @@ const handleUploadedImages = () => {
     .map(createObUrl)
 }
 
-const AddImagesModal = () => {
+export const AddImagesModal = () => {
   return {
     onremove: () => resetModalState(state),
     view: ({ attrs: { mdl } }) =>
@@ -225,7 +225,6 @@ const Album = {
               "Delete Album"
             ),
           ],
-          state.addImagesModal() && m(AddImagesModal, { mdl })
         ),
         m(
           "section.container",

@@ -12,6 +12,12 @@ import Loader from "@/Components/loader"
 import Task from "data.task"
 import { head, map, prop, tail, uniqWith, eqBy, reverse } from "ramda"
 import {
+  state as albumState, AddImagesModal
+} from '@/Pages/Gallery/album.js'
+import {
+  state as galleryState, NewAlbumModal
+} from '@/Pages/Gallery/gallery.js'
+import {
   state as eventState,
   submitEvent,
   deleteEvent,
@@ -165,6 +171,11 @@ const Layout = {
         event: eventState.event,
         resetState,
       }),
+
+      galleryState.showModal() && m(NewAlbumModal, { mdl }),
+
+      albumState.addImagesModal() && m(AddImagesModal, { mdl }),
+
 
       m(Footer, { mdl })
     ),
