@@ -78,38 +78,34 @@ const getBase64 = file => {
   })
 }
 
-const resizeBase64Img = (base64, newWidth, newHeight) => {
+const resizeBase64Img = (base64) => {
   return new Promise((res, rej) => {
-    const canvas = document.createElement("canvas");
-    // canvas.style.width = newWidth.toString() + "%";
-    // canvas.style.height = newHeight.toString() + "%";
-    const context = canvas.getContext("2d");
-    const img = document.createElement("img");
+    const canvas = document.createElement("canvas")
+    const context = canvas.getContext("2d")
+    const img = document.createElement("img")
     img.src = base64;
     img.onload = function () {
-      canvas.width = img.width / 3;
-      canvas.height = img.height / 3;
-      // context.drawImage(img, 0, 0);
-      // canvas.toBlob(
-      //   (blob) => {
-      //     if (blob === null) {
-      //       return rej(blob);
-      //     } else {
-      //       res(canvas.toDataUrl(blob));
-      //     }
-      //   },
-      //   "image/jpeg",
-      //   1 / 2
-      // );
+      canvas.width = img.width;
+      canvas.height = img.height;
+      canvas.toBlob(
+        (blob) => {
+          if (blob === null) {
+            return rej(blob);
+          } else {
+            res(URL.createObjectURL(blob));
+          }
+        },
+        "image/webp", 0.8
+      );
       context.scale(.3, .3)
-      // context.scale(newWidth / img.width, newHeight / img.height);
       context.drawImage(img, 0, 0);
-      console.log(canvas.style)
       return res(canvas.toDataURL());
     }
 
   })
 }
+
+const addImageBlobHook = (file, cb) => getBase64(file).then(resizeBase64Img).then(cb)
 
 const initEditor =
   (state, mdl) =>
@@ -122,7 +118,7 @@ const initEditor =
         initialValue: state.text,
         initialHTML: state.text,
         placeholder: 'Add some text',
-        hooks: { addImageBlobHook: (x, cb) => { console.log('x', cb); getBase64(x).then(b64 => resizeBase64Img(b64, 50, 50)).then(cb) } },
+        hooks: { addImageBlobHook },
         events: {
           change: () => {
             // console.log(state.editor.getMarkdown())

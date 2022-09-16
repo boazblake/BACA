@@ -164,7 +164,7 @@ export const AddImagesModal = () => {
                 )
               )
           ),
-          m(
+          !state.isUpLoading() && m(
             "section.modal-footer.grouped",
             m(
               "button",
