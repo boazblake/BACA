@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@boazblake/fun-config": "https://github.com/boazblake/fun-config",
-    "@toast-ui/editor": "^3.1.8",
     "@mithril-icons/clarity": "^1.2.0",
+    "@toast-ui/editor": "^3.1.8",
     "daggy": "^1.5.0",
     "data.either": "^1.5.2",
     "data.maybe": "^1.2.3",
@@ -26,7 +26,8 @@
     "dotenv": "^16.0.1",
     "mithril": "2.2.2",
     "mithril-stream": "^2.0.0",
-    "ramda": "^0.27.2"
+    "ramda": "^0.27.2",
+    "tui-editor-plugin-font-size": "^1.0.4"
   },
   "devDependencies": {
     "@bunchtogether/vite-plugin-flow": "^1.0.2",

@@ -33,10 +33,10 @@ const BlogPreview = {
       ),
       m(
         "hgroup.col",
-        m('',
+        m('.is-large-p',
           {
             oncreate: ({ dom }) => {
-              const str = `${text.slice(0, 100)} ...`
+              const str = `${text.slice(0, 100)}`
               new Viewer({
                 el: dom,
                 initialValue: str,
@@ -48,7 +48,7 @@ const BlogPreview = {
           m.route.Link,
           // "a.pointer",
           { href: `/social/blog-post:${objectId}` },
-          "continue reading"
+          "... continue reading"
         )
       ),
       (author == mdl.user.name || isAdminOrMod(mdl)) &&

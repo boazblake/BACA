@@ -173,6 +173,14 @@ p {
   font-size: 1.25em;
 }
 
+.toastui-editor-defaultUI .ProseMirror {
+  font-size: 1.75rem !important;
+}
+
+.is-large-p *> p {
+  font-size: 1.5em;
+}
+
 small {
   color: var(--muted-text);
 }

@@ -8,11 +8,11 @@ import {
   deleteBlog,
   onInput,
 } from "./fns"
-// import { equals } from "ramda"
 import Loader from "@/Components/loader.js"
 import Stream from "mithril-stream"
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css'
+
 
 const state = {
   show: Stream(false),

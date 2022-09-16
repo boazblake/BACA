@@ -1,8 +1,6 @@
 import m from "mithril"
 import { ArrowLine, NoteEditLine } from "@mithril-icons/clarity/cjs"
-import { parseMarkdown, AVATAR_URL } from "@/Utils"
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
-
 import { toViewModel } from "./blog"
 import Loader from "@/Components/loader.js"
 
@@ -65,7 +63,7 @@ const Post = {
         )
       ),
       m(
-        "hgroup.col",
+        "hgroup.col.is-large-p",
         {
           oncreate: ({ dom, }) =>
             new Viewer({
