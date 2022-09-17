@@ -7,8 +7,10 @@ import Stream from "mithril-stream"
 
 const validateForm = (mdl) => (data) => {
   const onError = (errs) => {
+    console.log(errs)
     if (errs.code != 209) {
-      state.errors = errs
+      state.errors = structuredClone(errs)
+      console.log('>???', (state.errors, errs.response))
       state.msg(state.errors?.response?.error)
       state.showMsg(true)
     } else {

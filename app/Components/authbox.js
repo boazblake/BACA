@@ -3,6 +3,14 @@ import { isActiveRoute, isAdminOrMod } from "@/Utils/index.js"
 import m from "mithril"
 
 const AuthBox = () => {
+  const updateLastLocation = (mdl) => {
+    const currentLocation = m.route.get()
+    const location = ['/register', '/login'].includes(currentLocation)
+      ? mdl.state.locationPreAuth()
+      : currentLocation
+    mdl.state.locationPreAuth(location)
+  }
+
   return {
     view: ({ attrs: { mdl } }) =>
       mdl.state.isAuth()
@@ -45,7 +53,7 @@ const AuthBox = () => {
             role: "button",
             href: "/login",
             link: "Login",
-            click: e => { mdl.state.locationPreAuth(m.route.get()); e.preventDefault(); m.route.set('/login') },
+            click: e => { updateLastLocation(mdl); e.preventDefault(); m.route.set('/login') },
             classList: `${isActiveRoute("/login")} button primary`,
           }),
           m(NavLink, {
@@ -54,7 +62,7 @@ const AuthBox = () => {
             role: "button",
             href: "/register",
             link: "Register",
-            click: e => { mdl.state.locationPreAuth(m.route.get()); e.preventDefault(); m.route.set('/register') },
+            click: e => { updateLastLocation(mdl); e.preventDefault(); m.route.set('/register') },
             classList: `${isActiveRoute("/register")} button secondary`,
           })
         ),
