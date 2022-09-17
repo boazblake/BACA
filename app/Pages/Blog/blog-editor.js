@@ -14,17 +14,16 @@ import Loader from "@/Components/loader.js"
 import Stream from "mithril-stream"
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css'
-import Task from "data.task/lib/task"
 
 
-const state = {
+export const state = {
   show: Stream(false),
   status: "loading",
   objectId: null,
   title: "",
   author: "",
   text: "",
-  img: "",
+  img: null,
   thumb: "",
   file: null,
   imageId: null,
@@ -34,12 +33,13 @@ const state = {
   showPreview: Stream(false),
   isEditing: Stream(false),
   showHelp: Stream(false),
+  modalIsDisabled: s => !s.img,
   errors: {
     img: null,
   },
 }
 
-const fetchBlogImages = ({ attrs: { mdl, state } }) => {
+const fetchBlogImages = ({ attrs: { mdl } }) => {
   const onError = (e) => log("fetchBlogImages - error")(e)
   const onSuccess = ({ results }) => (state.images = results)
   mdl.http.back4App.getTask(mdl)("Classes/Gallery").fork(onError, onSuccess)
@@ -105,7 +105,7 @@ const initEditor =
     }
 
 const handleImage = (mdl) => (state) =>
-  state.file ? uploadImage(mdl)(state.file) : state.showModal(false)
+  state.img ? uploadImage(mdl)(state.img) : state.showModal(false)
 
 const uploadImage = (mdl) => (file) => {
   const onError = (e) => (state.errors.img = e)
@@ -148,19 +148,19 @@ const submitBlog =
 
 const assignImg = (img, thumb) => {
   if (state.img == img) {
-    state.img = ""
-    state.thumb = ""
+    state.img = null
+    state.thumb = null
   } else {
     state.img = img
     state.thumb = thumb
   }
 }
 
-const Modal = () => {
+export const Modal = () => {
   return {
     onremove: () => resetModalState(state),
     oninit: fetchBlogImages,
-    view: ({ attrs: { mdl, state } }) =>
+    view: ({ attrs: { mdl } }) =>
       m(
         "section.modal-container",
         m(
@@ -199,7 +199,7 @@ const Modal = () => {
             m(
               "form.grid",
               state.modalState() == "upload"
-                ? m("input", { type: "file", id: "file" })
+                ? m("input", { type: "file", id: "file", onchange: e => state.img = e.target.files[0] })
                 : state.images.map(({ image, thumb }) =>
                   m(
                     `figure.col-6.button.${thumb == state.thumb ? "primary" : "outline"
@@ -233,7 +233,8 @@ const Modal = () => {
                     handleImage(mdl)(state)
                   },
                   role: "button",
-                  disabled: !state.file && !exists(state.img),
+                  disabled: state.modalIsDisabled(state),
+
                 },
                 state.modalState() == "select" ? "Use" : "Upload"
               )
@@ -279,8 +280,8 @@ const BlogEditor = () => {
                   {
                     onclick: (e) => {
                       e.preventDefault()
-                      state.thumb = ""
-                      state.img = ""
+                      state.thumb = null
+                      state.img = null
                     },
                   },
                   "Remove image"
@@ -300,7 +301,6 @@ const BlogEditor = () => {
                 )
               )
             ),
-            state.showModal() && m(Modal, { state, mdl }),
 
             state.show() && m(
               "section",

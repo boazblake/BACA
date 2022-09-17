@@ -11,6 +11,7 @@ import Toolbar from "./toolbar.js"
 import Loader from "@/Components/loader"
 import Task from "data.task"
 import { head, map, prop, tail, uniqWith, eqBy, reverse } from "ramda"
+import { state as blogState, Modal as BlogTitlePicModal } from '@/Pages/Blog/blog-editor'
 import {
   state as albumState, AddImagesModal
 } from '@/Pages/Gallery/album.js'
@@ -173,8 +174,8 @@ const Layout = {
       }),
 
       galleryState.showModal() && m(NewAlbumModal, { mdl }),
-
       albumState.addImagesModal() && m(AddImagesModal, { mdl }),
+      blogState.showModal() && m(BlogTitlePicModal, { mdl }),
 
 
       m(Footer, { mdl })
