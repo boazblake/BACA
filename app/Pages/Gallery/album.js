@@ -133,14 +133,14 @@ export const AddImagesModal = () => {
         "section.modal-container",
         m(
           "article.modal.card.grid",
-          m(
+          !state.isUpLoading() && m(
             "header.modal-header",
             m("h2", "Drag and drop or add using the button")
           ),
           m(
             "section.modal-content",
             state.isUpLoading()
-              ? m("p", "PROCESSING IMAGES... PLEASE BE PATIENT")
+              ? [m("p", "PROCESSING IMAGES... PLEASE BE PATIENT"), m(Loader)]
               : m(
                 "form.grid",
                 m("input", {
@@ -240,9 +240,10 @@ const Album = {
           m("h2", state.title.toLocaleUpperCase()),
           m(
             ".row",
-            state.album.map((pic, idx) =>
+            state.album.map((pic, key) =>
               m(
                 "figure.is-center.col-4.pos-rel",
+                { key },
                 mdl.state.isAuth() &&
                 m(TimesCircleLine, {
                   class: "pointer bg-white pos-abs",

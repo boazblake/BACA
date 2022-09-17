@@ -155,8 +155,8 @@ const Gallery = {
         ),
         m(
           ".row.container-fluid",
-          Object.keys(state.albums).map((album) =>
-            m(AlbumCover, { mdl, album: state.albums[album][0] })
+          Object.keys(state.albums).map((album, key) =>
+            m(AlbumCover, { key, mdl, album: state.albums[album][0] })
           )
         )
       ),
