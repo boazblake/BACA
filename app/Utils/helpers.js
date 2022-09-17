@@ -186,7 +186,7 @@ const getBase64 = file => {
 const resizeBase64Img = (base64) => {
   const MAX_WIDTH = 960;
   const MAX_HEIGHT = 540;
-  const MIME_TYPE = "image/webp";
+  const MIME_TYPE = "image/webp"
   // const QUALITY = 0.7;
   return new Promise((res, rej) => {
     const img = new Image()
@@ -237,7 +237,9 @@ export const toWebpFormat = file => getBase64(file).then(resizeBase64Img)
 
 export const ofP = x => new Promise((resolve) => resolve(x))
 
-export const resizeImageTask = img => new Task((rej, res) => toWebpFormat(img).then(toUploadB64).then(res, rej))
+export const resizeImageTask = img => new Task((rej, res) =>
+  navigator.userAgent.includes('Safari') ? res(img) :
+    toWebpFormat(img).then(toUploadB64).then(res, rej))
 
 
 export const toUploadB64 = b64 => b64.replace('data:image/webp;base64,', '')
