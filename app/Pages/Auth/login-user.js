@@ -21,7 +21,7 @@ const validateForm = (mdl) => (data) => {
 
   const onSuccess = (mdl) => (_) => {
     state.errors = {}
-    m.route.set("/")
+    m.route.set(mdl.state.locationPreAuth())
   }
 
   state.isSubmitted = true

@@ -13,12 +13,12 @@ const hideBorderStyle = (style) => {
 
 export const NavLink = () => {
   return {
-    view: ({ attrs: { mdl, selector, href, link, classList, ...rest } }) => {
+    view: ({ attrs: { mdl, selector, href, link, classList, click, ...rest } }) => {
       return m(
         m.route.Link,
         {
           selector,
-          onclick: (e) => e.stopPropagation(),
+          onclick: (e) => { click ? click(e) : e.stopPropagation(); },
           // style: {
           //   ...handlers(["onmouseover", "onmouseout"], (e) => {
           //     return e.type == "mouseover"

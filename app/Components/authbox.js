@@ -45,6 +45,7 @@ const AuthBox = () => {
             role: "button",
             href: "/login",
             link: "Login",
+            click: e => { mdl.state.locationPreAuth(m.route.get()); e.preventDefault(); m.route.set('/login') },
             classList: `${isActiveRoute("/login")} button primary`,
           }),
           m(NavLink, {
@@ -53,6 +54,7 @@ const AuthBox = () => {
             role: "button",
             href: "/register",
             link: "Register",
+            click: e => { mdl.state.locationPreAuth(m.route.get()); e.preventDefault(); m.route.set('/register') },
             classList: `${isActiveRoute("/register")} button secondary`,
           })
         ),
