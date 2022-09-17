@@ -1,10 +1,11 @@
 import m from "mithril"
 import Loader from "@/Components/loader.js"
-import { startsWith, traverse, prop, reverse, uniqWith, eqBy } from "ramda"
+import { startsWith, traverse, prop, reverse, uniqWith, eqBy, compose, map } from "ramda"
 import { exists, confirmTask } from "@/Utils"
 import Task from "data.task"
 import { TimesCircleLine, ArrowLine } from "@mithril-icons/clarity/cjs"
 import Stream from "mithril-stream"
+import { resizeImageTask } from "../../Utils/helpers"
 
 export const state = {
   album: [],
@@ -16,6 +17,8 @@ export const state = {
     imgFiles: [],
     selectedImgs: [],
     previewImgs: [],
+    isDisabled: s => !exists(Object.values(s.modalState.selectedImgs))
+
   },
 }
 
@@ -24,6 +27,7 @@ const resetModalState = (state) => {
     imgFiles: [],
     selectedImgs: [],
     previewImgs: [],
+    isDisabled: s => !exists(Object.values(s.modalState.selectedImgs))
   }
 }
 
@@ -33,10 +37,6 @@ const deleteImageTask =
       mdl.http.back4App.deleteTask(mdl)(`Classes/Gallery/${objectId}`)
 
 const deleteAlbum = (mdl) => {
-  // let album = m.route.get().split(":")[1].replaceAll("%20", " ")
-  // let byAlbumName = encodeURI(`where={"album":"${album}"}`)
-  // mdl.http.back4App
-  //   .deleteTask(mdl)(`Classes/Gallery?${byAlbumName}`)
   const onError = (e) => console.error(e)
   const onSuccess = () => m.route.set("/social/gallery")
   confirmTask(`Are you sure you want to delete Album ${state.title}?`)
@@ -45,8 +45,7 @@ const deleteAlbum = (mdl) => {
 }
 
 const deleteImg = (mdl, pic) => {
-  log("wtf")(pic)
-  // console.log(pic)
+
   const onError = (e) => {
     log("deleteImg - error")(e)
   }
@@ -86,26 +85,35 @@ const saveImgToGalleryTask =
         thumb: thumb.url,
       })
 
-const uploadImage = (mdl) => (file) =>
-  mdl.http.imgBB.postTask(mdl)(file).chain(saveImgToGalleryTask(mdl))
+
+const saveImgTask = mdl => img =>
+  mdl.http.imgBB.postTask(mdl)(img)
+    .chain(saveImgToGalleryTask(mdl))
+
 
 const submitImages = (mdl, images) => {
-  state.isUpLoading(true)
   const onSuccess = (d) => {
     fetchAlbum({ attrs: { mdl } })
     state.isUpLoading(false)
     state.addImagesModal(false)
   }
-  const onError = (e) => console.error("e", e)
-  traverse(Task.of, uploadImage(mdl), Object.values(images)).fork(
-    onError,
-    onSuccess
-  )
+  const onError = (e) => {
+    console.error("e", e);
+    state.isUpLoading(false)
+  }
+  state.isUpLoading(true)
+
+  Object.values(images)
+    .traverse(img => resizeImageTask(img).chain((saveImgTask(mdl))), Task.of)
+    .fork(
+      onError,
+      onSuccess
+    )
 }
 
 const selectImg = (src, file) => {
   state.modalState.selectedImgs[src]
-    ? (state.modalState.selectedImgs[src] = null)
+    ? (delete state.modalState.selectedImgs[src])
     : (state.modalState.selectedImgs[src] = file)
 }
 
@@ -178,10 +186,11 @@ export const AddImagesModal = () => {
                   submitImages(mdl, state.modalState.selectedImgs),
                 role: "button",
                 type: "submit",
-                disabled: !exists(Object.values(state.modalState.selectedImgs)),
+                disabled: state.modalState.isDisabled(state),
               },
               "Upload"
-            )
+            ),
+            state.modalState.isDisabled(state) && m('', 'You must select at least one photo to upload')
           )
         )
       ),
@@ -248,7 +257,6 @@ const Album = {
                       m("img.is-center", {
                         style: { height: "100%", margin: "0 auto" },
                         src: pic.image,
-                        onload: (e) => console.log("onload", e),
                         alt: "",
                       })
                     )

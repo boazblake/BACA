@@ -2,11 +2,8 @@ import Loader from "@/Components/loader.js"
 import { groupBy, compose, prop, descend, ascend, sortWith } from "ramda"
 import Stream from "mithril-stream"
 import m from "mithril"
+import { resizeImageTask } from "../../Utils/helpers"
 
-const log = (m) => (v) => {
-  console.log(m, v)
-  return v
-}
 
 export const state = {
   albums: [],
@@ -52,8 +49,8 @@ const createNewAlbum = (mdl) => {
     fetchAllAlbums({ attrs: { mdl } })
   }
 
-  mdl.http.imgBB
-    .postTask(mdl)(state.newAlbum.img)
+  resizeImageTask(state.newAlbum.img)
+    .chain(mdl.http.imgBB.postTask(mdl))
     .chain(saveImgToGalleryTask(mdl))
     .fork(onError, onSuccess)
 }

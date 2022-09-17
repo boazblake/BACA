@@ -173,9 +173,15 @@ p {
   font-size: 1.25em;
 }
 
+
+.toastui-editor-popup-add-image .toastui-editor-file-select-button {
+  padding: 0;
+}
 .toastui-editor-defaultUI .ProseMirror {
   font-size: 1.75rem !important;
 }
+
+
 
 .is-large-p *> p {
   font-size: 1.5em;
@@ -497,6 +503,18 @@ main {
 // main .grid > * {
 //   margin-bottom: var(--spacing);
 // }
+
+@media only screen and (max-width: 480px) {
+  .toastui-editor-dropdown-toolbar {
+    max-width: none;
+    flex-wrap: wrap;
+    height: fit-content;
+  }
+
+  .toastui-editor-popup, .toastui-editor-popup-add-image {
+    left: 153px !important;
+  }
+}
 
 @media (min-width: 992px) {
   main > .grid {

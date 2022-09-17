@@ -174,3 +174,70 @@ export const confirmTask = (msg) =>
   new Task((rej, res) => (window.confirm(msg) ? res() : rej()))
 
 export const isAdminOrMod = (mdl) => ["admin", "mod"].includes(mdl.user.role)
+
+const getBase64 = file => {
+  return new Promise((res, rej) => {
+    const reader = new FileReader()
+    reader.addEventListener('load', () => res(reader.result))
+    reader.readAsDataURL(file)
+  })
+}
+
+const resizeBase64Img = (base64) => {
+  const MAX_WIDTH = 960;
+  const MAX_HEIGHT = 540;
+  const MIME_TYPE = "image/webp";
+  // const QUALITY = 0.7;
+  return new Promise((res, rej) => {
+    const img = new Image()
+    img.src = base64;
+    return img.onload = function () {
+      URL.revokeObjectURL(img.src)
+      const [newWidth, newHeight] = calculateSize(img, MAX_WIDTH, MAX_HEIGHT)
+      const canvas = document.createElement("canvas")
+      canvas.width = newWidth
+      canvas.height = newHeight
+      const context = canvas.getContext("2d")
+      context.drawImage(img, 0, 0, newWidth, newHeight);
+      return canvas.toBlob(
+        (blob) => {
+          if (blob === null) {
+            return rej(blob);
+          } else {
+            res(canvas.toDataURL(MIME_TYPE));
+          }
+        },
+        MIME_TYPE, 0.8
+      );
+    }
+
+  })
+}
+
+function calculateSize(img, maxWidth, maxHeight) {
+  let width = img.width;
+  let height = img.height;
+
+  // calculate the width and height, constraining the proportions
+  if (width > height) {
+    if (width > maxWidth) {
+      height = Math.round((height * maxWidth) / width);
+      width = maxWidth;
+    }
+  } else {
+    if (height > maxHeight) {
+      width = Math.round((width * maxHeight) / height);
+      height = maxHeight;
+    }
+  }
+  return [width, height];
+}
+
+export const toWebpFormat = file => getBase64(file).then(resizeBase64Img)
+
+export const ofP = x => new Promise((resolve) => resolve(x))
+
+export const resizeImageTask = img => new Task((rej, res) => toWebpFormat(img).then(toUploadB64).then(res, rej))
+
+
+export const toUploadB64 = b64 => b64.replace('data:image/webp;base64,', '')

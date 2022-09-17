@@ -1,5 +1,7 @@
 import m from "mithril"
-import { exists } from "@/Utils"
+import {
+  exists, toWebpFormat, toUploadB64, resizeImageTask
+} from "@/Utils"
 import {
   resetModalState,
   resetEditorState,
@@ -12,6 +14,7 @@ import Loader from "@/Components/loader.js"
 import Stream from "mithril-stream"
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css'
+import Task from "data.task/lib/task"
 
 
 const state = {
@@ -70,42 +73,11 @@ const fetchBlog = state => ({ attrs: { mdl } }) => {
   }
 }
 
-const getBase64 = file => {
-  return new Promise((res, rej) => {
-    const reader = new FileReader()
-    reader.addEventListener('load', () => res(reader.result))
-    reader.readAsDataURL(file)
-  })
-}
 
-const resizeBase64Img = (base64) => {
-  return new Promise((res, rej) => {
-    const canvas = document.createElement("canvas")
-    const context = canvas.getContext("2d")
-    const img = document.createElement("img")
-    img.src = base64;
-    img.onload = function () {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      canvas.toBlob(
-        (blob) => {
-          if (blob === null) {
-            return rej(blob);
-          } else {
-            res(URL.createObjectURL(blob));
-          }
-        },
-        "image/webp", 0.8
-      );
-      context.scale(.3, .3)
-      context.drawImage(img, 0, 0);
-      return res(canvas.toDataURL());
-    }
 
-  })
-}
 
-const addImageBlobHook = (file, cb) => getBase64(file).then(resizeBase64Img).then(cb)
+const addImageBlobHook = (file, cb) => toWebpFormat(file).then(cb)
+
 
 const initEditor =
   (state, mdl) =>
@@ -144,8 +116,10 @@ const uploadImage = (mdl) => (file) => {
     state.showModal(false)
   }
 
-  mdl.http.imgBB
-    .postTask(mdl)(file)
+
+
+  resizeImageTask(file)
+    .chain(mdl.http.imgBB.postTask(mdl))
     .chain(saveImgToGalleryTask(mdl))
     .fork(onError, onSuccess)
 }
