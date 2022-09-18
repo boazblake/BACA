@@ -12,6 +12,15 @@ const Footer = () => {
             m(
               ".container.grouped",
               m(
+                "a.button.bg-light",
+                {
+                  target: "__blank",
+                  name: "gmail",
+                  href: "mailto:bonhamacrescivicassociation@gmail.com?subject=Website Suppport Request",
+                },
+                m("h3", "To contact Support for any website related issued click here")
+              ),
+              m(
                 "a.row.underline.nav-link",
                 {
                   target: "__blank",

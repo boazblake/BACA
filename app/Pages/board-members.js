@@ -79,7 +79,7 @@ const BoardMembers = (mdl) => {
               {
                 target: "__blank",
                 name: "gmail",
-                href: "http://mailto:bonhamacrescivicassociation@gmail.com/",
+                href: "mailto:bonhamacrescivicassociation@gmail.com?subject=Question for BACA Board",
               },
               m("h3", "Click here to send us an email!")
             )

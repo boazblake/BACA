@@ -325,7 +325,7 @@ const CityOrd = {
             {
               target: "__blank",
               name: "gmail",
-              href: "http://mailto:bonhamacrescivicassociation@gmail.com/",
+              href: "mailto:bonhamacrescivicassociation@gmail.com?subject=City Ordinance Issue",
             },
             m("h4", "or, Click here to send us an email")
           ),
