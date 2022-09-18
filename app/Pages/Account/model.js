@@ -30,12 +30,14 @@ const toProfileVM =
       avatar,
     })
 
-const getProfileTask = (mdl) => (id) =>
-  mdl.http.back4App
+const getProfileTask = (mdl) => (id) => {
+  return mdl.http.back4App
     .getTask(mdl)(`classes/Accounts?${id}`)
     .map(prop("results"))
     .map(head)
+    .map(log('address'))
     .map(toProfileVM(mdl))
+}
 
 const toDuesVM = ({ date, createdAt, status, full_name, address, email }) => {
   return date
@@ -78,12 +80,14 @@ const getMessagesTask = (mdl) => (id) =>
 
 export const loadAllTask = (mdl) => {
   let id = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
-  return Task.of((profile) => (dues) => (messages) => (addresses) => ({
-    profile,
-    dues,
-    messages,
-    addresses,
-  }))
+  return Task.of((profile) => (dues) => (messages) => (addresses) => {
+    return {
+      profile,
+      dues,
+      messages,
+      addresses,
+    }
+  })
     .ap(getProfileTask(mdl)(id))
     .ap(getDuesTask(mdl)(id))
     .ap(getMessagesTask(mdl)(id))

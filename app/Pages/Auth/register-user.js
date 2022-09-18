@@ -22,6 +22,7 @@ const state = {
   httpError: undefined,
   data: jsonCopy(dataModel),
   showErrorMsg: Stream(false),
+  showSuccessMsg: Stream(false),
   errorMsg: Stream(""),
   countdown: Stream(10),
 }
@@ -55,10 +56,7 @@ export const validateForm = (mdl) => (data) => {
     state.errors = {}
     // sessionStorage.setItem("baca-session-token", mdl.user["sessionToken"])
     // sessionStorage.setItem("baca-user", JSON.stringify(mdl.user.objectId))
-    state.errorMsg(
-      `Successfully registered - please check the email you used to register with for the verification link. After you have verified you may login. If you are not redirected to the login page in ${state.countdown()} seconds, click the login link below.`
-    )
-    state.showErrorMsg(true)
+    state.showSuccessMsg(true)
     setInterval(() => {
       state.countdown(state.countdown() - 1)
       m.redraw()
@@ -78,6 +76,8 @@ export const Register = () => {
     view: ({ attrs: { mdl } }) =>
       m(
         "section.container.p-y-50",
+        state.showSuccessMsg() && m("p.warning", "Successfully registered!", m('p.bold',
+          "Please check the email you used to register with for the verification link."), m('p', `After you have verified you may login. If you are not redirected to the login page in ${state.countdown()} seconds, click the login link below.`)),
         state.showErrorMsg() && m("p.warning", state.errorMsg()),
         m(
           "article.card",

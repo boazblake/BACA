@@ -7,7 +7,6 @@ import Stream from "mithril-stream"
 
 const validateForm = (mdl) => (data) => {
   const onError = (e) => {
-    console.log(e)
     if (e.code) {
       state.errors = e
       state.msg(e.error)

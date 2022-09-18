@@ -33,7 +33,7 @@ const getUserAccountTask = (mdl) => (encodeId) =>
     .map(prop("results"))
     .chain((account) =>
       account.any() ? Task.of(account) : createAccountTask(mdl)
-    )
+    ).map(log('?'))
     .map(head)
 
 const getUserDuesTask = (mdl) => (encodeId) =>
@@ -46,7 +46,7 @@ const getUserMessagesTask = (mdl) => (encodeId) =>
     .getTask(mdl)(`classes/Messages?${encodeId}`)
     .map(prop("results"))
     .chain((messages) => {
-      console.log("messages", messages)
+      // console.log("messages", messages)
       return messages.any()
         ? () => {
           let hasNotifications = messages.filter(
@@ -60,15 +60,10 @@ const getUserMessagesTask = (mdl) => (encodeId) =>
 
 const getUserInfoTask = (mdl) => {
   let encodeId = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
-  return Task.of((account) => (dues) =>
-  // (messages) =>
-  {
-    {
-      mdl.data.account = account
-      mdl.data.dues = dues
-      mdl.data.messages = []
-      // console.log(mdl)
-    }
+  return Task.of((account) => (dues) => {
+    mdl.data.account = account
+    mdl.data.dues = dues
+    mdl.data.messages = []
   }
   )
     .ap(getUserAccountTask(mdl)(encodeId))
@@ -101,13 +96,16 @@ export const createAccountTask = (mdl) => {
     name: mdl.user.name,
     avatar: "",
     address: "",
+    addressIds: [],
     telephone: "",
   }
+
+
   return mdl.http.back4App
     .postTask(mdl)("classes/Accounts")(mdl.user.account)
     .map(({ objectId }) => {
       mdl.user.account.objectId = objectId
-      return mdl
+      return [mdl.user.account]
     })
 }
 

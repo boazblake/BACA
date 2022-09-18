@@ -20,7 +20,6 @@ const Account = ({ attrs: { mdl } }) => {
       mdl.data.messages = messages
       mdl.data.addresses = addresses
       mdl.data.profile.addressIds = addresses.map(prop("objectId"))
-      console.log(mdl)
       state.status = "success"
     }
     const onError = (e) => {
