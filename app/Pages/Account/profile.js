@@ -113,7 +113,7 @@ const Profile = ({ attrs: { mdl, reload } }) => {
   return {
     view: ({ attrs: { mdl } }) => {
       return m(
-        "section.p-y-50",
+        "#PROFILE.section.p-y-50",
         m(
           "article.row",
           { ...onInput(mdl.data.profile) },

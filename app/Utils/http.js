@@ -38,7 +38,6 @@ const xhrProgress = (mdl) => ({
 
 export const parseHttpError = (mdl) => (rej) => (e) => {
   mdl.state.isLoading(false)
-
   return rej(structuredClone(e))
 }
 
@@ -125,7 +124,6 @@ const imgBB = {
     image.append("image", file)
     image.set("key", IMGBB.apiKey)
 
-    // console.log(image, file)
     return HttpTask()("POST")(mdl)(`${IMGBB.url}?key=${IMGBB.apiKey}`)(image)
   },
 }

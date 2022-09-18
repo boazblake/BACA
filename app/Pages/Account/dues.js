@@ -9,7 +9,7 @@ const state = {
 const Dues = {
   view: ({ attrs: { mdl, reload } }) =>
     m(
-      "section.p-y-50",
+      "#DUES.section.p-y-50",
       m(PayPal, { mdl, data: mdl.data.profile, status: state, reload }),
       mdl.data.dues.any() &&
       m(Table, {

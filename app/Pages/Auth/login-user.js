@@ -6,12 +6,11 @@ import { loginTask, resetPasswordTask } from "./fns.js"
 import Stream from "mithril-stream"
 
 const validateForm = (mdl) => (data) => {
-  const onError = (errs) => {
-    console.log(errs)
-    if (errs.code != 209) {
-      state.errors = structuredClone(errs)
-      console.log('>???', (state.errors, errs.response))
-      state.msg(state.errors?.response?.error)
+  const onError = (e) => {
+    console.log(e)
+    if (e.code) {
+      state.errors = e
+      state.msg(e.error)
       state.showMsg(true)
     } else {
       state.msg(

@@ -20,6 +20,7 @@ const Account = ({ attrs: { mdl } }) => {
       mdl.data.messages = messages
       mdl.data.addresses = addresses
       mdl.data.profile.addressIds = addresses.map(prop("objectId"))
+      console.log(mdl)
       state.status = "success"
     }
     const onError = (e) => {
@@ -50,7 +51,7 @@ const Account = ({ attrs: { mdl } }) => {
                 {
                   class:
                     state.tab == tab ? "active tab.pointer" : "tab.pointer",
-                  href: `/account/${mdl.user.routename}/#${tab}`,
+                  href: `/account/${mdl.user.routename}#${tab}`,
                 },
                 tab.toUpperCase()
               )
