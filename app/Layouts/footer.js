@@ -18,7 +18,7 @@ const Footer = () => {
                   name: "gmail",
                   href: "mailto:bonhamacrescivicassociation@gmail.com?subject=Website Suppport Request",
                 },
-                m("h3", "To contact Support for any website related issued click here")
+                m("h3", "Click here for any website related support")
               ),
               m(
                 "a.row.underline.nav-link",
@@ -49,7 +49,7 @@ const Footer = () => {
                 {
                   target: "__blank",
                   name: "gmail",
-                  href: "http://mailto:bonhamacrescivicassociation@gmail.com/",
+                  href: "mailto:bonhamacrescivicassociation@gmail.com/",
                 },
                 m("img", {
                   style: { width: "50px", height: "50px" },
