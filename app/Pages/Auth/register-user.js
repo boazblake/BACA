@@ -32,6 +32,7 @@ const resetState = () => {
   state.errors = {}
   state.httpError = undefined
   state.isSubmitted = false
+  state.showSuccessMsg = Stream(false)
   state.showErrorMsg(false)
   state.errorMsg("")
 }
