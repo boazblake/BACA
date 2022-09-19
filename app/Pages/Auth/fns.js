@@ -33,7 +33,8 @@ const getUserAccountTask = (mdl) => (encodeId) =>
     .map(prop("results"))
     .chain((account) =>
       account.any() ? Task.of(account) : createAccountTask(mdl)
-    ).map(log('?'))
+    )
+    // .map(log('?'))
     .map(head)
 
 const getUserDuesTask = (mdl) => (encodeId) =>

@@ -94,10 +94,11 @@ const fetchTask = (mdl) => (url) => mdl.http.back4App.getTask(mdl)(url)
 
 export const fetchAll = ({ attrs: { mdl } }) => {
   const onError = (e) => {
-    log("fetchAll - layout - error")(e)
     state.errors = e
-    if (e.code == 209) m.route.set('/logout')
     state.status = "error"
+    log("fetchAll - layout - error")(e)
+    if (!e) return m.route.set('/logout')
+    if (e.code == 209) return m.route.set('/logout')
   }
   const onSuccess = ({ events, images, blogs }) => {
     mdl.data.events = events
