@@ -10,7 +10,7 @@ import { SlideOutRight, SlideInLeft } from "@/Styles/animations.js"
 import Toolbar from "./toolbar.js"
 import Loader from "@/Components/loader"
 import Task from "data.task"
-import { head, map, prop, tail, uniqWith, eqBy, reverse } from "ramda"
+import { head, map, prop, tail, uniqWith, eqBy } from "ramda"
 import { state as blogState, Modal as BlogTitlePicModal } from '@/Pages/Blog/blog-editor'
 import {
   state as albumState, AddImagesModal
@@ -31,6 +31,7 @@ import Event from "@/Pages/Events/event.js"
 const state = {
   status: "loading",
   navDom: null,
+  errors: {}
 }
 
 const updateNavigationStyle = (dom, showNav) => {
@@ -94,7 +95,8 @@ const fetchTask = (mdl) => (url) => mdl.http.back4App.getTask(mdl)(url)
 export const fetchAll = ({ attrs: { mdl } }) => {
   const onError = (e) => {
     log("fetchAll - layout - error")(e)
-    e.code == 504 && fetchAll({ attrs: { mdl } })
+    state.errors = e
+    if (e.code == 209) m.route.set('/logout')
     state.status = "error"
   }
   const onSuccess = ({ events, images, blogs }) => {
@@ -143,7 +145,7 @@ const Layout = {
         m(SubNavbar, { mdl })
       ),
       m(Hero, { mdl }),
-      state.status == "error" && m("p", "ERROR"),
+      state.status == "error" && m("p", "ERROR", state.errors.error),
       state.status == "loading" && m(Loader),
       state.status == "loaded" && m("section", m(Main, { mdl, children })),
       showNavMenu(mdl) &&
