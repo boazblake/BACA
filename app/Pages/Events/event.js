@@ -41,9 +41,9 @@ const Event = {
     attrs: { mdl, event, previewEvent, editEvent, resetState, state },
   }) =>
     m(
-      ".modal-container",
+      "section.modal-container",
       m(
-        ".modal",
+        "article.modal",
         m(
           "header.modal-header",
           m("h2.text-primary strong is-center", event.title.toUpperCase())
@@ -113,7 +113,7 @@ const Event = {
           ),
           m(".grouped", m("img", { src: event.image })),
           m("hr.bd-primary"),
-          m(".grouped.container", m("p.p-t-25", event.description))
+          m(".grouped.container", m("p.p-t-25", { style: { 'overflow-wrap': 'anywhere' } }, event.description))
         ),
         m(
           "footer.modal-footer",
