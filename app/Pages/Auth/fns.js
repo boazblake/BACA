@@ -1,6 +1,5 @@
 import m from "mithril"
 import Task from "data.task"
-import { head, prop } from "ramda"
 
 const setUserAndSessionToken = (mdl) => (user) => {
   sessionStorage.setItem("baca-user", JSON.stringify(user.objectId))
@@ -14,10 +13,11 @@ const setUserAndSessionToken = (mdl) => (user) => {
 const loginUserTask =
   (mdl) =>
     ({ email, password }) => {
-      let login = encodeURI(`username=${email}&password=${password}`)
-      return mdl.http.back4App
-        .getTask(mdl)(`login?${login}`)
-        .map(setUserAndSessionToken(mdl))
+      let login = { email, password }//encodeURI(`username=${email}&password=${password}`)
+      return new Task((rej, res) => m.request(`http://localhost:3001/api/login/auth`, { 'method': 'POST', body: login }).then(res, rej))
+      // mdl.http.back4App
+      // .getTask(mdl)(`login?${login}`)
+      // .map(setUserAndSessionToken(mdl))
     }
 
 const getAddressTask = (mdl) => (addressId) => {
@@ -27,54 +27,10 @@ const getAddressTask = (mdl) => (addressId) => {
     .map(log("address??"))
 }
 
-const getUserAccountTask = (mdl) => (encodeId) =>
-  mdl.http.back4App
-    .getTask(mdl)(`classes/Accounts?${encodeId}`)
-    .map(prop("results"))
-    .chain((account) =>
-      account.any() ? Task.of(account) : createAccountTask(mdl)
-    )
-    // .map(log('?'))
-    .map(head)
-
-const getUserDuesTask = (mdl) => (encodeId) =>
-  mdl.http.back4App
-    .getTask(mdl)(`classes/Dues?${encodeId}`)
-    .map(prop("results"))
-
-const getUserMessagesTask = (mdl) => (encodeId) =>
-  mdl.http.back4App
-    .getTask(mdl)(`classes/Messages?${encodeId}`)
-    .map(prop("results"))
-    .chain((messages) => {
-      // console.log("messages", messages)
-      return messages.any()
-        ? () => {
-          let hasNotifications = messages.filter(
-            (message) => !message.hasRead
-          )
-          mdl.state.hasNotifications(hasNotifications.any())
-          return Task.of(messages)
-        }
-        : createMessagesTask(mdl)
-    })
-
-const getUserInfoTask = (mdl) => {
-  let encodeId = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
-  return Task.of((account) => (dues) => {
-    mdl.data.account = account
-    mdl.data.dues = dues
-    mdl.data.messages = []
-  }
-  )
-    .ap(getUserAccountTask(mdl)(encodeId))
-    .ap(getUserDuesTask(mdl)(encodeId))
-  // .ap(getUserMessagesTask(mdl)(encodeId))
-}
 export const loginTask =
   (mdl) =>
     ({ email, password }) =>
-      loginUserTask(mdl)({ email, password }).chain((_) => getUserInfoTask(mdl))
+      loginUserTask(mdl)({ email, password })//.chain((_) => getUserInfoTask(mdl))
 
 export const resetPasswordTask = (mdl, email) =>
   mdl.http.back4App.postTask(mdl)("requestPasswordReset")({ email })
