@@ -14,7 +14,7 @@ const loginUserTask =
   (mdl) =>
     ({ email, password }) => {
       let login = { email, password }//encodeURI(`username=${email}&password=${password}`)
-      return new Task((rej, res) => m.request(`http://localhost:3001/api/login/auth`, { 'method': 'POST', body: login }).then(res, rej))
+      return new Task((rej, res) => m.request(`http://localhost:3001/api/auth/login`, { 'method': 'POST', body: login }).then(res, rej))
       // mdl.http.back4App
       // .getTask(mdl)(`login?${login}`)
       // .map(setUserAndSessionToken(mdl))

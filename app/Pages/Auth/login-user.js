@@ -207,6 +207,14 @@ export const Login = () => {
             ),
             state.httpError && m(".toast toast-error", state.httpError)
           ),
+
+          m('button', {
+            onclick: e => {
+              m.request(`http://localhost:3001/api/auth/isauth`, { 'method': 'GET', }).then(log('s'), log('e'))
+            }
+          }, 'test'),
+
+
           m(
             ".auth-link",
             "Need to ",
