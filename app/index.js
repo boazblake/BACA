@@ -101,32 +101,34 @@ Model.settings.screenSize = getWinSize(winW)
 checkWidth(winW)
 
 if (sessionStorage.getItem("baca-session-token")) {
-  const getUserTask = (mdl) => Model.http.back4App.getTask(Model)(`users/me`)
-  const getUserAccountTask = (mdl) => (user) => {
-    let encodeId = encodeURI(`where={"userId":"${mdl.user.objectId}"}`)
-    return mdl.http.back4App
-      .getTask(mdl)(`classes/Accounts?${encodeId}`)
+  const checkIfLoggedIn = (mdl) => {
+    console.log(mdl, Model)
+    return Model.http.back4App.getTask(Model)(`auth/isAuth`)
+  }
+  const getUserAccountTask = () => {
+    return Model.http.back4App
+      .getTask(Model)(`accounts/${Model.user.objectId}`)
       .map(prop("results"))
       .map(head)
   }
 
-  const updateModelWithUser = (mdl) => (user) => {
-    mdl.user = user
-    mdl.user.routename = user.name.replaceAll(" ", "")
-    user.emailVerified ? mdl.state.isAuth(true) : sessionStorage.clear()
+  const updateModelWithUser = (user) => {
+    Model.user = user
+    Model.user.routename = user.name.replaceAll(" ", "")
+    user.emailVerified ? Model.state.isAuth(true) : sessionStorage.clear()
     return user
   }
 
-  const updateModelWithAccount = (mdl) => (account) => {
-    mdl.data.account = account
-    return mdl
+  const updateModelWithAccount = (account) => {
+    Model.data.account = account
+    return Model
   }
 
   const reloginTask = (mdl) =>
-    getUserTask(mdl)
-      .map(updateModelWithUser(mdl))
-      .chain(getUserAccountTask(mdl))
-      .map(updateModelWithAccount(mdl))
+    checkIfLoggedIn(mdl)
+      .map(updateModelWithUser)
+      .chain(getUserAccountTask)
+      .map(updateModelWithAccount)
 
   const onError = (e) => {
     sessionStorage.clear()

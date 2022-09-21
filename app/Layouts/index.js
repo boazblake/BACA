@@ -90,7 +90,7 @@ const toEventViewModel = (event) => {
   }
 }
 
-const fetchTask = (mdl) => (url) => mdl.http.back4App.getTask(mdl)(url)
+const fetchTask = (url) => new Task((rej, res) => m.request(`http://localhost:3001/api/${url}`, { 'method': 'GET', }).then(res, rej)).map(prop('results'))
 
 export const fetchAll = ({ attrs: { mdl } }) => {
   const onError = (e) => {
@@ -108,17 +108,9 @@ export const fetchAll = ({ attrs: { mdl } }) => {
   }
 
   Task.of((events) => (images) => (blogs) => ({ events, images, blogs }))
-    .ap(
-      fetchTask(mdl)("Classes/Events")
-        .map(prop("results"))
-        .map(map(toEventViewModel))
-    )
-    .ap(
-      fetchTask(mdl)("Classes/Gallery")
-        .map(prop("results"))
-        .map(uniqWith(eqBy(prop("thumb"))))
-    )
-    .ap(fetchTask(mdl)("Classes/Blogs").map(prop("results")))
+    .ap(fetchTask("events").map(map(toEventViewModel)))
+    .ap(fetchTask("gallery").map(uniqWith(eqBy(prop("thumb")))))
+    .ap(fetchTask("blogs"))
     .fork(onError, onSuccess)
 }
 

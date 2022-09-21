@@ -3,6 +3,11 @@ import Task from "data.task"
 import { BACK4APP, IMGBB, OpenCage } from "../../.secrets.js"
 
 
+const getSessionToken = () =>
+  sessionStorage.getItem("baca-session-token")
+    ? sessionStorage.getItem("baca-session-token")
+    : ""
+
 const onProgress = (mdl) => (e) => {
   if (e.lengthComputable) {
     mdl.state.loadingProgress.max = e.total
@@ -46,16 +51,17 @@ export const parseHttpSuccess = (mdl) => (res) => (data) => {
   return res(data)
 }
 
-const HttpTask = (_headers) => (method) => (mdl) => (url) => (body) => {
+const HttpTask = (method) => (mdl) => (url) => (body) => {
   mdl.state.isLoading(true)
   return new Task((rej, res) =>
     m
       .request({
+        headers: {
+          'user-role': mdl.user.role,
+          'session-token': getSessionToken()
+        },
         method,
         url,
-        headers: {
-          ..._headers,
-        },
         body,
         withCredentials: false,
         ...xhrProgress(mdl),
@@ -75,7 +81,7 @@ const lookupLocationTask = (query) => {
   )
 }
 
-const getTask = (mdl) => (url) => HttpTask({})("GET")(mdl)(url)(null)
+const getTask = (mdl) => (url) => HttpTask("GET")(mdl)(url)(null)
 
 const cachCall = (url) =>
   url == "users/me"
@@ -85,15 +91,13 @@ const cachCall = (url) =>
       "Cache-Control": "public, max-age=604800",
     }
 
+const BACK4APP_baseUrl = "http://localhost:3001/api"
+
 const back4App = {
-  getTask: (mdl) => (url) => HttpTask(BACK4APP.headers(mdl, BACK4APP, cachCall(url)))("GET")(mdl)(
-    `${BACK4APP.baseUrl}/${url}`)(null),
-  postTask: (mdl) => (url) => (dto) => HttpTask(BACK4APP.headers(mdl, BACK4APP))("POST")(mdl)(`${BACK4APP.baseUrl}/${url}`
-  )(dto),
-  putTask: (mdl) => (url) => (dto) => HttpTask(BACK4APP.headers(mdl, BACK4APP))("PUT")(mdl)(`${BACK4APP.baseUrl}/${url}`
-  )(dto),
-  deleteTask: (mdl) => (url) => HttpTask(BACK4APP.headers(mdl, BACK4APP))("DELETE")(mdl)(`${BACK4APP.baseUrl}/${url}`
-  )(),
+  getTask: (mdl) => (url) => HttpTask("GET")(mdl)(`${BACK4APP_baseUrl}/${url}`)(null),
+  postTask: (mdl) => (url) => (dto) => HttpTask("POST")(mdl)(`${BACK4APP_baseUrl}/${url}`)(dto),
+  putTask: (mdl) => (url) => (dto) => HttpTask("PUT")(mdl)(`${BACK4APP_baseUrl}/${url}`)(dto),
+  deleteTask: (mdl) => (url) => HttpTask("DELETE")(mdl)(`${BACK4APP_baseUrl}/${url}`)(null),
 }
 
 const imgBB = {
@@ -111,12 +115,7 @@ const OpenCageUrl = `${OpenCage.baseUrl}?key=${OpenCage.key}&q=`
 const openCage = {
   getLocationTask: (mdl) => (query) =>
     HttpTask(OpenCage.headers())("GET")(mdl)(
-      OpenCageUrl +
-      query +
-      `&pretty=1&countrycode=us&bounds=${encodeURIComponent(
-        mdl.Map.bounds()
-      )}`
-    )(null),
+      OpenCageUrl + query + `&pretty=1&countrycode=us&bounds=${encodeURIComponent(mdl.Map.bounds())}`)(null),
 }
 
 const http = {

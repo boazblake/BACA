@@ -1,23 +1,28 @@
-import m from "mithril"
-import Task from "data.task"
+// import m from "mithril"
+// import Task from "data.task"
+import { prop } from 'ramda'
 
-const setUserAndSessionToken = (mdl) => (user) => {
+const setUserAndSessionToken = (mdl) => ({ account, dues, user }) => {
   sessionStorage.setItem("baca-user", JSON.stringify(user.objectId))
   sessionStorage.setItem("baca-session-token", user["sessionToken"])
   mdl.state.isAuth(true)
   mdl.user = user
+  mdl.dues = dues
+  mdl.account = account
   mdl.user.routename = mdl.user.name.replaceAll(" ", "")
+  console.log(mdl)
   return mdl
 }
 
 const loginUserTask =
   (mdl) =>
     ({ email, password }) => {
-      let login = { email, password }//encodeURI(`username=${email}&password=${password}`)
-      return new Task((rej, res) => m.request(`http://localhost:3001/api/auth/login`, { 'method': 'POST', body: login }).then(res, rej))
-      // mdl.http.back4App
-      // .getTask(mdl)(`login?${login}`)
-      // .map(setUserAndSessionToken(mdl))
+      // let login = encodeURI(`username=${email}&password=${password}`)
+      // return new Task((rej, res) => m.request(`auth/login`, { 'method': 'POST', body: login }).then(res, rej))
+      return mdl.http.back4App
+        .postTask(mdl)(`auth/login`)({ email, password })
+        .map(prop('results'))
+        .map(setUserAndSessionToken(mdl))
     }
 
 const getAddressTask = (mdl) => (addressId) => {
