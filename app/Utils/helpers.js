@@ -122,28 +122,8 @@ export const uuid = () => {
 
 export const listOf = (x) => (y) => Array(x).fill(y)
 
-export const toProducts = (cart) =>
-  toPairs(cart).map(([product, genders]) => [product, toPairs(genders)])
-
-export const getPrice = (mdl, title, genders) =>
-  mdl.state.prices[title] * getQuantity(genders)
-
-export const getQuantity = (xs) =>
-  reduce(add, 0, filter(compose(equals("Number"), type), flatten(xs)))
-
-export const getTotal = (mdl, products) =>
-  getQuantity(products.map((p) => getPrice(mdl, p[0], p[1])))
-
-const toPriceModel = ({ Burpies, Wraps, Blankets, Collections }) => ({
-  Burpies,
-  Wraps,
-  Blankets,
-  Collections,
-})
-
-export const parsePrices = compose(toPriceModel, last, prop("results"))
-
 export const DAYSOFWEEK = ["Sun", "Mon", "Teus", "Wed", "Thurs", "Fri", "Sat"]
+
 export const formatDate = (date) => date.split("T")[0]
 
 export const handlers = (types, fn) =>

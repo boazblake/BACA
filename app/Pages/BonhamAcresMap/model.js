@@ -141,7 +141,7 @@ const updateModelDate = (mdl) => (addresses) => {
 
 export const loadResidentsTask = (mdl, state) =>
   mdl.http.back4App
-    .getTask(mdl)("classes/Addresses?limit=1000")
+    .getTask(mdl)("addresses?limit=1000")
     .map(prop("results"))
     .map(updateModelDate(mdl))
     .map(map(toPushPin))
@@ -157,7 +157,7 @@ export const findLocationTask = (mdl, query) =>
 
 const addAddressTask = (mdl, location) =>
   mdl.http.back4App
-    .postTask(mdl)("classes/Addresses")(location)
+    .postTask(mdl)("addresses")(location)
     .map(prop("results"))
 
 const updateAddressTask = (mdl, location, id) =>

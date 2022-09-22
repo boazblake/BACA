@@ -10,13 +10,13 @@ const Dues = {
   view: ({ attrs: { mdl, reload } }) =>
     m(
       "#DUES.section.p-y-50",
-      m(PayPal, { mdl, data: mdl.data.profile, status: state, reload }),
-      mdl.data.dues.any() &&
+      m(PayPal, { mdl, data: mdl.dues, status: state, reload }),
+      mdl.dues.any() &&
       m(Table, {
         mdl,
         data: formatDataForTable(
           ["userId", "objectId", "createdAt", "updatedAt"],
-          mdl.data.dues
+          mdl.dues
         ),
       })
     ),

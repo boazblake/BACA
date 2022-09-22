@@ -30,7 +30,7 @@ const formatInvoice =
     })
 
 const saveInvoiceTask = (mdl) => (invoice) =>
-  mdl.http.back4App.postTask(mdl)("classes/Dues")(invoice)
+  mdl.http.back4App.postTask(mdl)("Dues")(invoice)
 
 const PayPal = ({ attrs: { mdl, reload } }) => {
   const state = {
@@ -102,17 +102,8 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
     )
   }
 
-  // const logItem = (mdl) => (data) =>
-  //   mdl.http.back4App.postTask(mdl)("classes/Logging")({
-  //     mdl: JSON.stringify(mdl),
-  //     title: "paypal issue",
-  //     description: "paypal success returns undefined",
-  //     data: JSON.stringify(data),
-  //   })
-
   const makePayment = (actions) => {
     makePaymentTask(actions)
-      // .chain(logItem(mdl))
       .map(formatInvoice(mdl))
       .chain(saveInvoiceTask(mdl))
       .fork(onError(mdl, state), onSuccess(mdl, reload))

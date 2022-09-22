@@ -3,8 +3,8 @@ import Stream from "mithril-stream"
 import { FunConfig } from "@boazblake/fun-config"
 import App from "./app.js"
 import Model from "@/Models/index.js"
-import { head, prop } from "ramda"
-
+import { prop } from "ramda"
+import { setUserAndSessionToken } from './Pages/Auth/fns.js'
 import '@/Styles/chota.css'
 import '@/Styles/masonry.sass'
 import '@/Styles/glider.min.css'
@@ -101,41 +101,19 @@ Model.settings.screenSize = getWinSize(winW)
 checkWidth(winW)
 
 if (sessionStorage.getItem("baca-session-token")) {
-  const checkIfLoggedIn = (mdl) => {
-    console.log(mdl, Model)
-    return Model.http.back4App.getTask(Model)(`auth/isAuth`)
-  }
-  const getUserAccountTask = () => {
-    return Model.http.back4App
-      .getTask(Model)(`accounts/${Model.user.objectId}`)
-      .map(prop("results"))
-      .map(head)
-  }
-
-  const updateModelWithUser = (user) => {
-    Model.user = user
-    Model.user.routename = user.name.replaceAll(" ", "")
-    user.emailVerified ? Model.state.isAuth(true) : sessionStorage.clear()
-    return user
-  }
-
-  const updateModelWithAccount = (account) => {
-    Model.data.account = account
-    return Model
-  }
+  const checkIfLoggedIn = (mdl) =>
+    mdl.http.back4App.getTask(mdl)(`auth/isAuth`)
 
   const reloginTask = (mdl) =>
     checkIfLoggedIn(mdl)
-      .map(updateModelWithUser)
-      .chain(getUserAccountTask)
-      .map(updateModelWithAccount)
+      .map(setUserAndSessionToken(mdl))
 
   const onError = (e) => {
     sessionStorage.clear()
     console.error("problem fetching user", e)
   }
-  const onSuccess = (data) => {
-    console.log("relogin success")
+  const onSuccess = (mdl) => {
+    console.log("relogin success", mdl)
   }
 
   reloginTask(Model).fork(onError, onSuccess)

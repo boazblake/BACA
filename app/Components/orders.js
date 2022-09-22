@@ -21,8 +21,8 @@ const calcTotalPrice = (invoice) =>
 const invoiceUrl = (mdl) => {
   let userInvoices = `{"userId":"${mdl.user.objectId}"}`
   return mdl.state.route.id == "admin"
-    ? "classes/Invoices"
-    : `classes/Invoices?where=${encodeURI(userInvoices)}`
+    ? "Invoices"
+    : `Invoices/${userInvoices}`
 }
 
 const fetchInvoicesTask = (mdl) =>

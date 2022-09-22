@@ -14,7 +14,7 @@ const state = {
 
 const fetchLocationsTask = (mdl) =>
   mdl.http.back4App
-    .getTask(mdl)("classes/Addresses?limit=1000")
+    .getTask(mdl)("geo/addresses?limit=1000")
     .map(prop("results"))
 
 const toLocationVM = (addressIds) => (locations) =>
@@ -29,7 +29,7 @@ const fetchLocations = (mdl) => (state) => {
   }
 
   fetchLocationsTask(mdl)
-    .map(toLocationVM(mdl.data.profile.addressIds))
+    .map(toLocationVM(mdl.account.addressIds))
     .fork(onError, onSuccess)
 }
 
@@ -46,7 +46,7 @@ const onSuccess = (mdl, reload) => {
 
 const updateProfileTask = (mdl) => (data) =>
   mdl.http.back4App.putTask(mdl)(
-    `Classes/Accounts/${mdl.data.profile.objectId}`
+    `Classes/Accounts/${mdl.account.objectId}`
   )(data)
 
 const removeImage = (mdl, data) => {
@@ -79,7 +79,7 @@ const uploadImage = (mdl) => (file) => {
       return { avatar }
     })
     .chain(updateProfileTask(mdl))
-    .map(() => (mdl.data.profile.avatar = state.avatar))
+    .map(() => (mdl.account.avatar = state.avatar))
     .fork(onError, () => addSuccess("Image Updated", 5000))
 }
 
@@ -105,27 +105,29 @@ const removeAddress = (profile, addressId) => {
 const toggleEditProfile = (mdl, state, reload) => {
   state.disableEdit = !state.disableEdit
   fetchLocations(mdl)(state)
-  state.disableEdit && updateProfileMeta(mdl)(mdl.data.profile)(reload)
+  state.disableEdit && updateProfileMeta(mdl)(mdl.account)(reload)
 }
 
 const Profile = ({ attrs: { mdl, reload } }) => {
-  state.addresses = mdl.data.addresses
+  const onError = e => console.log('error loading addresses', e)
+  const onSuccess = addresses => state.addresses = addresses
+  fetchLocations(mdl)(state)
   return {
     view: ({ attrs: { mdl } }) => {
       return m(
         "#PROFILE.section.p-y-50",
         m(
           "article.row",
-          { ...onInput(mdl.data.profile) },
+          { ...onInput(mdl.account) },
           m(
             "figure.col",
             m("img.avatar", {
-              src: getImageSrc(mdl.data.profile),
+              src: getImageSrc(mdl.account),
             }),
             m(
               "figcaption",
               { style: { width: "180px" } },
-              mdl.data.profile.avatar
+              mdl.account.avatar
                 ? m(
                   "button.button",
                   {
@@ -133,7 +135,7 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                       borderColor: "var(--color-error)",
                       color: "var(--color-error)",
                     },
-                    onclick: (e) => removeImage(mdl, mdl.data.profile),
+                    onclick: (e) => removeImage(mdl, mdl.account),
                   },
                   "Remove Image"
                 )
@@ -192,7 +194,7 @@ const Profile = ({ attrs: { mdl, reload } }) => {
               ),
             m(
               "form",
-              !mdl.data.profile.emailVerified &&
+              !mdl.account.emailVerified &&
               m("label.warning", "email not verified"),
               m(
                 "label",
@@ -200,7 +202,7 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                 m("input", {
                   disabled: true,
                   id: "email",
-                  value: mdl.data.profile.email,
+                  value: mdl.account.email,
                 })
               ),
               m(
@@ -209,7 +211,7 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                 m("input", {
                   disabled: state.disableEdit,
                   id: "name",
-                  value: mdl.data.profile.name,
+                  value: mdl.account.name,
                 })
               ),
               m(
@@ -218,19 +220,20 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                 m("input", {
                   disabled: state.disableEdit,
                   id: "telephone",
-                  value: mdl.data.profile.telephone,
+                  value: mdl.account.telephone,
                 })
               ),
               m(
                 "label.icon",
                 "Address",
                 state.disableEdit
-                  ? mdl.data.addresses.map((address) =>
-                    m("input", {
+                  ? mdl.account.addressIds.map((address) => {
+                    console.log(address, state); return m("input", {
                       disabled: true,
                       id: "address",
                       value: address.property,
                     })
+                  }
                   )
                   : [
                     m(
@@ -239,7 +242,7 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                         "select",
                         {
                           multiple: true,
-                          value: mdl.data.profile.addressId,
+                          value: mdl.account.addressId,
                         },
                         state.locations.map((location) =>
                           m(
@@ -257,11 +260,11 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                                   : state.addresses.concat([location])
 
                                 addAddress(
-                                  mdl.data.profile,
+                                  mdl.account,
                                   location.objectId
                                 )
                               },
-                              class: mdl.data.profile.addressIds.includes(
+                              class: mdl.account.addressIds.includes(
                                 location.objectId
                               )
                                 ? "option text-primary"
@@ -289,7 +292,7 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                                   state.addresses = state.addresses.filter(
                                     (a) => a.objectId != l.objectId
                                   )
-                                  removeAddress(mdl.data.profile, l.objectId)
+                                  removeAddress(mdl.account, l.objectId)
                                 },
                               },
                               "remove"
