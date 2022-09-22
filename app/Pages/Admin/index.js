@@ -11,9 +11,9 @@ const state = {
   tab: "blogs",
 }
 
-const updateUserRole = (mdl) => (id) => (role) => (name) =>
+const updateUserRole = (mdl) => (userId) => (role) => (name) =>
   mdl.http.back4App
-    .putTask(mdl)(`Users/${id}`)({ role })
+    .putTask(mdl)(`auth/users/${userId}`)({ role })
     .fork(
       () => addDanger(`Was unable to update ${name}'s role`),
       () => {
@@ -117,12 +117,12 @@ const toViewmodel = (state, mdl) => {
 
 const getUsersTask = (mdl) =>
   mdl.http.back4App
-    .getTask(mdl)("Users")
+    .getTask(mdl)("auth/users")
     .map(prop("results"))
     .map(filter(prop("name")))
 
 const getDuesTask = (mdl) =>
-  mdl.http.back4App.getTask(mdl)("Classes/Dues").map(prop("results"))
+  mdl.http.back4App.getTask(mdl)("dues").map(prop("results"))
 
 const getData = ({ attrs: { mdl } }) => {
   Task.of((users) => (dues) => ({

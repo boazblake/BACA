@@ -32,9 +32,10 @@ const loadBlogs = ({ attrs: { mdl } }) => {
   const onSuccess = (results) => (state.blogs = results)
 
   mdl.http.back4App
-    .getTask(mdl)("Classes/Blogs")
+    .getTask(mdl)("blogs")
     .map(prop("results"))
-    .map(toViewModel)
+    // .map(log('wtf'))
+    // .map(toViewModel)
     .fork(onError, onSuccess)
 }
 

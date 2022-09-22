@@ -23,16 +23,7 @@ const resetState = () => {
   state.images = []
 }
 
-const submitReport = (mdl) => {
-  const onSuccess = (s) => { }
-  const onError = (e) => log("submitReport - error")(e)
-  console.log("submit", state)
-  // save imgBB then
 
-  // mdl.http.back4App
-  //   .postTask(mdl)("Classes/Reports")(state)
-  //   .fork(onError, onSuccess)
-}
 
 const footer = (mdl) =>
   m(
@@ -42,7 +33,8 @@ const footer = (mdl) =>
       {
         onclick: (e) => {
           e.preventDefault()
-          submitReport(mdl)
+          console.log('finish this', state)
+          // submitReport(mdl)
         },
       },
       "Submit Report"

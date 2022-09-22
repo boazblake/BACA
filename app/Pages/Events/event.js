@@ -12,7 +12,7 @@ import { DAYSOFWEEK, isAdminOrMod } from "@/Utils"
 import { includes, without } from "ramda"
 
 const updateEventTask = (mdl) => (id) => (event) =>
-  mdl.http.back4App.putTask(mdl)(`Classes/Events/${id}`)(event)
+  mdl.http.back4App.putTask(mdl)(`events/${id}`)(event)
 
 const onError = (e) => console.log("e", e)
 

@@ -124,7 +124,10 @@ export const listOf = (x) => (y) => Array(x).fill(y)
 
 export const DAYSOFWEEK = ["Sun", "Mon", "Teus", "Wed", "Thurs", "Fri", "Sat"]
 
-export const formatDate = (date) => date.split("T")[0]
+export const formatDate = (date) => {
+  console.log(date)
+  return date.split("T")[0]
+}
 
 export const handlers = (types, fn) =>
   types.reduce((acc, type) => Object.assign(acc, { [type]: fn }), {})

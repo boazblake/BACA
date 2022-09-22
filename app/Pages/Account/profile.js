@@ -46,7 +46,7 @@ const onSuccess = (mdl, reload) => {
 
 const updateProfileTask = (mdl) => (data) =>
   mdl.http.back4App.putTask(mdl)(
-    `Classes/Accounts/${mdl.account.objectId}`
+    `accounts/${mdl.account.objectId}`
   )(data)
 
 const removeImage = (mdl, data) => {
@@ -56,19 +56,11 @@ const removeImage = (mdl, data) => {
   )
 }
 
-const updateModelAccount = (mdl, addressIds) => {
-  mdl.data.account.addressIds = addressIds
-  return mdl
-}
 
 const updateProfileMeta =
   (mdl) =>
     ({ name, addressIds, telephone }) =>
-      (reload) => {
-        return updateProfileTask(mdl)({ name, addressIds, telephone })
-          .map((_) => updateModelAccount(mdl, addressIds))
-          .fork(onError, (_) => onSuccess(mdl, reload))
-      }
+      updateProfileTask(mdl)({ name, addressIds, telephone }).fork(log('error with updating profile'), () => console.log('s updated profile', mdl))
 
 const uploadImage = (mdl) => (file) => {
   mdl.http.imgBB
@@ -102,15 +94,13 @@ const removeAddress = (profile, addressId) => {
   profile.addressIds = without([addressId], profile.addressIds)
 }
 
-const toggleEditProfile = (mdl, state, reload) => {
+const toggleEditProfile = (mdl, state) => {
   state.disableEdit = !state.disableEdit
   fetchLocations(mdl)(state)
-  state.disableEdit && updateProfileMeta(mdl)(mdl.account)(reload)
+  state.disableEdit && updateProfileMeta(mdl)(mdl.account)
 }
 
 const Profile = ({ attrs: { mdl, reload } }) => {
-  const onError = e => console.log('error loading addresses', e)
-  const onSuccess = addresses => state.addresses = addresses
   fetchLocations(mdl)(state)
   return {
     view: ({ attrs: { mdl } }) => {
@@ -187,7 +177,7 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                       borderColor: "var(--green)",
                       color: "var(--green)",
                     },
-                    onclick: (e) => toggleEditProfile(mdl, state, reload),
+                    onclick: (e) => toggleEditProfile(mdl, state),
                   },
                   "Finish Edit and Save"
                 )
@@ -223,15 +213,15 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                   value: mdl.account.telephone,
                 })
               ),
-              m(
+              state.locations.any() && m(
                 "label.icon",
                 "Address",
                 state.disableEdit
                   ? mdl.account.addressIds.map((address) => {
-                    console.log(address, state); return m("input", {
+                    console.log(address); return m("input", {
                       disabled: true,
                       id: "address",
-                      value: address.property,
+                      value: state.locations.find(propEq('objectId', address)).property,
                     })
                   }
                   )

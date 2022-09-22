@@ -39,10 +39,10 @@ export const state = {
   },
 }
 
-const fetchBlogImages = ({ attrs: { mdl } }) => {
-  const onError = (e) => log("fetchBlogImages - error")(e)
+const getGallery = ({ attrs: { mdl } }) => {
+  const onError = (e) => log("getGallery - error")(e)
   const onSuccess = ({ results }) => (state.images = results)
-  mdl.http.back4App.getTask(mdl)("Classes/Gallery").fork(onError, onSuccess)
+  mdl.http.back4App.getTask(mdl)("gallery").fork(onError, onSuccess)
 }
 
 const fetchBlog = state => ({ attrs: { mdl } }) => {
@@ -65,7 +65,7 @@ const fetchBlog = state => ({ attrs: { mdl } }) => {
   if (exists(id)) {
     state.isEditing(true)
     mdl.http.back4App
-      .getTask(mdl)(`Classes/Blogs/${id}`)
+      .getTask(mdl)(`blogs/${id}`)
       .fork(onError, onSuccess)
   } else {
     state.status = "loaded"
@@ -140,8 +140,8 @@ const submitBlog =
         imageId,
       }
       const updateOrSubmitBlog = objectId
-        ? mdl.http.back4App.putTask(mdl)(`Classes/Blogs/${objectId}`)(dto)
-        : mdl.http.back4App.postTask(mdl)("Classes/Blogs")(dto)
+        ? mdl.http.back4App.putTask(mdl)(`blogs/${objectId}`)(dto)
+        : mdl.http.back4App.postTask(mdl)("blogs")(dto)
 
       updateOrSubmitBlog.fork(onError, onSuccess)
     }
@@ -159,7 +159,7 @@ const assignImg = (img, thumb) => {
 export const Modal = () => {
   return {
     onremove: () => resetModalState(state),
-    oninit: fetchBlogImages,
+    oninit: getGallery,
     view: ({ attrs: { mdl } }) =>
       m(
         "section.modal-container",

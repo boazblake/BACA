@@ -3,6 +3,7 @@ import { ArrowLine, NoteEditLine } from "@mithril-icons/clarity/cjs"
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 import { toViewModel } from "./blog"
 import Loader from "@/Components/loader.js"
+import { prop } from 'ramda'
 
 const state = {
   status: "loading",
@@ -151,7 +152,8 @@ const fetchBlogPost = ({ attrs: { mdl, id } }) => {
     state.status = "loaded"
   }
   mdl.http.back4App
-    .getTask(mdl)(`Classes/Blogs/${id}`)
+    .getTask(mdl)(`blogs/${id}`)
+    .map(prop("results"))
     .map(Array.of)
     .map(toViewModel)
     .fork(onError, onSuccess)

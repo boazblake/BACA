@@ -34,7 +34,7 @@ const resetModalState = (state) => {
 const deleteImageTask =
   (mdl) =>
     ({ objectId }) =>
-      mdl.http.back4App.deleteTask(mdl)(`Classes/Gallery/${objectId}`)
+      mdl.http.back4App.deleteTask(mdl)(`gallery/${objectId}`)
 
 const deleteAlbum = (mdl) => {
   const onError = (e) => console.error(e)
@@ -57,8 +57,7 @@ const deleteImg = (mdl, pic) => {
 }
 
 const fetchAlbum = ({ attrs: { mdl } }) => {
-  let album = m.route.get().split(":")[1].replaceAll("%20", " ")
-  let byAlbumName = encodeURI(`where={"album":"${album}"}`)
+  const albumName = m.route.get().split(":")[1].replaceAll("%20", " ")
   const onError = (e) => {
     log("fetchAlbum - error")(e)
   }
@@ -69,7 +68,7 @@ const fetchAlbum = ({ attrs: { mdl } }) => {
   }
 
   mdl.http.back4App
-    .getTask(mdl)(`Classes/Gallery?${byAlbumName}`)
+    .getTask(mdl)(`gallery/${albumName}`)
     .map(prop("results"))
     .map(reverse)
     .map(uniqWith(eqBy(prop("thumb"))))
@@ -79,7 +78,7 @@ const fetchAlbum = ({ attrs: { mdl } }) => {
 const saveImgToGalleryTask =
   (mdl) =>
     ({ data: { image, thumb } }) =>
-      mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
+      mdl.http.back4App.postTask(mdl)("gallery")({
         album: state.title,
         image: image.url,
         thumb: thumb.url,

@@ -27,7 +27,7 @@ export const saveImgToGalleryTask =
   (mdl) =>
     ({ data: { image, thumb } }) =>
       mdl.http.back4App
-        .postTask(mdl)("Classes/Gallery")({
+        .postTask(mdl)("gallery")({
           album: "blog",
           image: image.url,
           thumb: thumb.url,
@@ -48,11 +48,11 @@ export const deleteBlog =
       confirmTask(`Are you sure you want to delete the blog ${title}?`)
         .chain((_) =>
           imageId
-            ? mdl.http.back4App.deleteTask(mdl)(`Classes/Gallery/${imageId}`)
+            ? mdl.http.back4App.deleteTask(mdl)(`gallery/${imageId}`)
             : Task.of()
         )
         .chain((_) =>
-          mdl.http.back4App.deleteTask(mdl)(`Classes/Blogs/${objectId}`)
+          mdl.http.back4App.deleteTask(mdl)(`blogs/${objectId}`)
         )
         .fork((e) => {
           console.log(e)

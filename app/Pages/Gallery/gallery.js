@@ -25,7 +25,7 @@ const fetchAllAlbums = ({ attrs: { mdl } }) => {
   const onSuccess = (albums) => (state.albums = albums)
 
   mdl.http.back4App
-    .getTask(mdl)("Classes/Gallery")
+    .getTask(mdl)("gallery")
     .map(prop("results"))
     .map(groupByAlbumAndDate)
     .fork(onError, onSuccess)
@@ -34,7 +34,7 @@ const fetchAllAlbums = ({ attrs: { mdl } }) => {
 const saveImgToGalleryTask =
   (mdl) =>
     ({ data: { image, medium, thumb } }) =>
-      mdl.http.back4App.postTask(mdl)("Classes/Gallery")({
+      mdl.http.back4App.postTask(mdl)("gallery")({
         album: state.newAlbum.title.trim(),
         image: image.url,
         // medium: medium.url,

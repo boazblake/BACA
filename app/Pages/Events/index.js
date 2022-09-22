@@ -90,7 +90,7 @@ const fetchEvents = ({ attrs: { mdl } }) => {
     state.status("loaded")
   }
   mdl.http.back4App
-    .getTask(mdl)("Classes/Events")
+    .getTask(mdl)("events")
     .map(prop("results"))
     .fork(onError, onSuccess)
 }
@@ -109,7 +109,7 @@ export const deleteEvent = (mdl, id) => {
   }
 
   mdl.http.back4App
-    .deleteTask(mdl)(`Classes/Events/${id}`)
+    .deleteTask(mdl)(`events/${id}`)
     .fork(onError, onSuccess)
 }
 
@@ -138,7 +138,7 @@ const saveImgToGalleryTask =
   (mdl) =>
     ({ data: { image, thumb } }) =>
       mdl.http.back4App
-        .postTask(mdl)("Classes/Gallery")({
+        .postTask(mdl)("gallery")({
           album: "events",
           image: image.url,
           thumb: thumb.url,
@@ -203,8 +203,8 @@ export const submitEvent = (
 
   const submitOrUpdateTask = (id) => (data) =>
     id
-      ? mdl.http.back4App.putTask(mdl)(`Classes/Events/${id}`)(data)
-      : mdl.http.back4App.postTask(mdl)("Classes/Events")(data)
+      ? mdl.http.back4App.putTask(mdl)(`events/${id}`)(data)
+      : mdl.http.back4App.postTask(mdl)("events")(data)
 
   return validateEventTask(event)
     .chain(submitOrUpdateTask(id))

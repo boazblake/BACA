@@ -157,12 +157,12 @@ export const findLocationTask = (mdl, query) =>
 
 const addAddressTask = (mdl, location) =>
   mdl.http.back4App
-    .postTask(mdl)("addresses")(location)
+    .postTask(mdl)("geo/addresses")(location)
     .map(prop("results"))
 
 const updateAddressTask = (mdl, location, id) =>
   mdl.http.back4App
-    .putTask(mdl)(`classes/Addresses/${id}`)(location)
+    .putTask(mdl)(`geo/addresses/${id}`)(location)
     .map(prop("results"))
 
 export const saveResidentTask = (mdl, location) => {
