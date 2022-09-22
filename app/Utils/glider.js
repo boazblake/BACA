@@ -173,8 +173,8 @@ gliderPrototype.bindDrag = function () {
   }
 
   _.ele.classList.toggle('draggable', _.opt.draggable === true)
-  _.event(_.ele, 'remove', events)
-  if (_.opt.draggable) _.event(_.ele, 'add', events)
+  _.event(_.ele, 'remove', { events })
+  if (_.opt.draggable) _.event(_.ele, 'add', { events })
 }
 
 gliderPrototype.buildDots = function () {
@@ -201,7 +201,7 @@ gliderPrototype.buildDots = function () {
     dot.setAttribute('role', 'tab')
     dot.className = 'glider-dot ' + (i ? '' : 'active')
     _.event(dot, 'add', {
-      click: _.scrollItem.bind(_, i, true)
+      click: _.scrollItem.bind(_, i, true), passive: false
     })
     _.dots.appendChild(dot)
   }
@@ -212,7 +212,7 @@ gliderPrototype.bindArrows = function () {
   if (!_.opt.arrows) {
     Object.keys(_.arrows).forEach(function (direction) {
       var element = _.arrows[direction]
-      _.event(element, 'remove', { click: element._func })
+      _.event(element, 'remove', { click: element._func, passive: false })
     })
     return
   }
@@ -545,7 +545,7 @@ gliderPrototype.destroy = function () {
   [].forEach.call(replace.getElementsByTagName('*'), clear)
   _.ele.parentNode.replaceChild(replace, _.ele)
   _.event(_window, 'remove', {
-    resize: _.resize
+    resize: _.resize, passive: false
   })
   _.emit('destroy')
 }

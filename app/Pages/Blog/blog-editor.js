@@ -14,6 +14,7 @@ import Loader from "@/Components/loader.js"
 import Stream from "mithril-stream"
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css'
+import { prop } from "ramda"
 
 
 export const state = {
@@ -65,7 +66,7 @@ const fetchBlog = state => ({ attrs: { mdl } }) => {
   if (exists(id)) {
     state.isEditing(true)
     mdl.http.back4App
-      .getTask(mdl)(`blogs/${id}`)
+      .getTask(mdl)(`blogs/${id}`).map(prop('results'))
       .fork(onError, onSuccess)
   } else {
     state.status = "loaded"
@@ -119,7 +120,6 @@ const uploadImage = (mdl) => (file) => {
 
 
   resizeImageTask(file)
-    .chain(mdl.http.imgBB.postTask(mdl))
     .chain(saveImgToGalleryTask(mdl))
     .fork(onError, onSuccess)
 }
@@ -128,8 +128,10 @@ const submitBlog =
   (mdl) =>
     ({ title, img, text, thumb, objectId, imageId }) => {
       const onError = (e) => console.log("e", e)
-      const onSuccess = (data) =>
-        m.route.set(`/social/blog-post:${objectId ? objectId : data.objectId}`)
+      const onSuccess = id => (data) => {
+        const route = id ? id : data.results.objectId
+        m.route.set(`/social/blog-post:${route}`)
+      }
 
       let dto = {
         title,
@@ -143,7 +145,7 @@ const submitBlog =
         ? mdl.http.back4App.putTask(mdl)(`blogs/${objectId}`)(dto)
         : mdl.http.back4App.postTask(mdl)("blogs")(dto)
 
-      updateOrSubmitBlog.fork(onError, onSuccess)
+      updateOrSubmitBlog.fork(onError, onSuccess(objectId))
     }
 
 const assignImg = (img, thumb) => {

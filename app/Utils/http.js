@@ -101,6 +101,7 @@ const back4App = {
 }
 
 const imgBB = {
+  deleteTask: (mdl, url) => HttpTask('DELETE')(mdl)(url)(null),
   postTask: (mdl) => (file) => {
     const image = new FormData()
     image.append("image", file)

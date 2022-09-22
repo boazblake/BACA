@@ -32,14 +32,11 @@ const fetchAllAlbums = ({ attrs: { mdl } }) => {
 }
 
 const saveImgToGalleryTask =
-  (mdl) =>
-    ({ data: { image, medium, thumb } }) =>
-      mdl.http.back4App.postTask(mdl)("gallery")({
-        album: state.newAlbum.title.trim(),
-        image: image.url,
-        // medium: medium.url,
-        thumb: thumb.url,
-      })
+  (mdl) => img =>
+    mdl.http.back4App.postTask(mdl)("gallery")({
+      album: state.newAlbum.title.trim(),
+      image: img,
+    })
 
 const createNewAlbum = (mdl) => {
   const onError = (e) => log("createNewAlbum- error")(e)
@@ -50,7 +47,6 @@ const createNewAlbum = (mdl) => {
   }
 
   resizeImageTask(state.newAlbum.img)
-    .chain(mdl.http.imgBB.postTask(mdl))
     .chain(saveImgToGalleryTask(mdl))
     .fork(onError, onSuccess)
 }

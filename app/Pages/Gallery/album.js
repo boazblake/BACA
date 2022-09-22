@@ -40,7 +40,7 @@ const deleteAlbum = (mdl) => {
   const onError = (e) => console.error(e)
   const onSuccess = () => m.route.set("/social/gallery")
   confirmTask(`Are you sure you want to delete Album ${state.title}?`)
-    .chain((_) => traverse(Task.of, deleteImageTask(mdl), state.album))
+    .chain((_) => mdl.http.back4App.deleteTask(mdl)(`gallery/album/${state.title}`))
     .fork(onError, onSuccess)
 }
 
@@ -63,31 +63,15 @@ const fetchAlbum = ({ attrs: { mdl } }) => {
   }
   const onSuccess = (results) => {
     results.any()
-      ? ((state.album = results), (state.title = album))
+      ? ((state.album = results), (state.title = albumName))
       : m.route.set("/social/gallery")
   }
 
   mdl.http.back4App
     .getTask(mdl)(`gallery/${albumName}`)
     .map(prop("results"))
-    .map(reverse)
-    .map(uniqWith(eqBy(prop("thumb"))))
     .fork(onError, onSuccess)
 }
-
-const saveImgToGalleryTask =
-  (mdl) =>
-    ({ data: { image, thumb } }) =>
-      mdl.http.back4App.postTask(mdl)("gallery")({
-        album: state.title,
-        image: image.url,
-        thumb: thumb.url,
-      })
-
-
-const saveImgTask = mdl => img =>
-  mdl.http.imgBB.postTask(mdl)(img)
-    .chain(saveImgToGalleryTask(mdl))
 
 
 const submitImages = (mdl, images) => {
@@ -102,8 +86,8 @@ const submitImages = (mdl, images) => {
   }
   state.isUpLoading(true)
 
-  Object.values(images)
-    .traverse(img => resizeImageTask(img).chain((saveImgTask(mdl))), Task.of)
+  Object.values(images).traverse(resizeImageTask, Task.of)
+    .chain(mdl.http.back4App.postTask(mdl)(`gallery/${state.title}`))
     .fork(
       onError,
       onSuccess

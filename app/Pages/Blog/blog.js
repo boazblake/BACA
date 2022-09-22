@@ -34,8 +34,6 @@ const loadBlogs = ({ attrs: { mdl } }) => {
   mdl.http.back4App
     .getTask(mdl)("blogs")
     .map(prop("results"))
-    // .map(log('wtf'))
-    // .map(toViewModel)
     .fork(onError, onSuccess)
 }
 

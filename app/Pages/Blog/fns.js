@@ -24,28 +24,19 @@ export const resetEditorState = (state) => {
 export const isInvalid = (s) => !exists(s.title) || !exists(s.text)
 
 export const saveImgToGalleryTask =
-  (mdl) =>
-    ({ data: { image, thumb } }) =>
-      mdl.http.back4App
-        .postTask(mdl)("gallery")({
-          album: "blog",
-          image: image.url,
-          thumb: thumb.url,
-        })
-        .chain(({ objectId }) =>
-          Task.of({
-            image: image.url,
-            thumb: thumb.url,
-            objectId,
-          })
-        )
+  (mdl) => img =>
+    mdl.http.back4App.postTask(mdl)("gallery")({
+      album: 'blog',
+      image: img,
+    }).chain(({ results: { objectId } }) => mdl.http.back4App.getTask(mdl)(`gallery/album/${objectId}`))
+
 
 export const toBlogs = () => m.route.set("/social/blog")
 
 export const deleteBlog =
   (mdl) =>
-    ({ title, objectId, imageId }) =>
-      confirmTask(`Are you sure you want to delete the blog ${title}?`)
+    ({ title, objectId, imageId }) => {
+      console.log({ title, objectId, imageId }); return confirmTask(`Are you sure you want to delete the blog ${title}?`)
         .chain((_) =>
           imageId
             ? mdl.http.back4App.deleteTask(mdl)(`gallery/${imageId}`)
@@ -57,6 +48,7 @@ export const deleteBlog =
         .fork((e) => {
           console.log(e)
         }, toBlogs)
+    }
 
 export const onInput = (state) =>
   handlers(["oninput"], (e) => {
