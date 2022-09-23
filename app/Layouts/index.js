@@ -50,7 +50,7 @@ const showNavMenu = (mdl) =>
   mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal()
 
 const vertAlign = (mdl) => {
-  return !mdl.Routes.find((r) => mdl.state.navState() == r.id).children.any()
+  return !mdl.Routes.find((r) => mdl.state.navState() == r.id)?.children.any()
     ? "is-vertical-align"
     : ""
 }
@@ -140,13 +140,13 @@ const Layout = {
         {
           oncreate: ({ dom }) => (state.navDom = dom),
           style: updateNavigationStyle(state.navDom, mdl.state.showNavMenu()),
-          class: vertAlign(mdl),
+          // class: vertAlign(mdl),
         },
         m(Navbar, { mdl }),
         m(SubNavbar, { mdl })
       ),
       m(Hero, { mdl }),
-      state.status == "error" && m("p", "ERROR", state.errors.error),
+      state.status == "error" && m("p", "ERROR", state?.errors?.error),
       state.status == "loading" && m(Loader),
       state.status == "loaded" && m("section", m(Main, { mdl, children })),
       showNavMenu(mdl) &&

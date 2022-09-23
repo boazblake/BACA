@@ -140,7 +140,7 @@ const SocialRoutes = [
     name: "Bonham Family Nature Park",
     // icon: Icons.home,
     route: "/external",
-    external: "https://www.pct3.com/Parks/Bonham-Family-Nature-Park",
+    external: "https://www.hcp4.net/Parks/Bonham",
     isNav: true,
     group: ["nav", "social", "external"],
     children: [],
