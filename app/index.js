@@ -113,7 +113,7 @@ if (sessionStorage.getItem("baca-session-token")) {
     console.error("problem fetching user", e)
   }
   const onSuccess = (mdl) => {
-    console.log("relogin success", mdl)
+    // console.log("relogin success", mdl)
   }
 
   reloginTask(Model).fork(onError, onSuccess)

@@ -8,7 +8,6 @@ export const setUserAndSessionToken = (mdl) => ({ account, dues, user }) => {
   mdl.dues = dues
   mdl.account = account
   mdl.user.routename = mdl.user.name.replaceAll(" ", "")
-  console.log(mdl)
   return mdl
 }
 

@@ -28,11 +28,12 @@ const state = {
 }
 
 const resetState = () => {
+  state.countdown(10)
   state.data.userModel = jsonCopy(dataModel)
   state.errors = {}
   state.httpError = undefined
   state.isSubmitted = false
-  state.showSuccessMsg = Stream(false)
+  state.showSuccessMsg(false)
   state.showErrorMsg(false)
   state.errorMsg("")
 }
@@ -58,11 +59,14 @@ export const validateForm = (mdl) => (data) => {
     // sessionStorage.setItem("baca-session-token", mdl.user["sessionToken"])
     // sessionStorage.setItem("baca-user", JSON.stringify(mdl.user.objectId))
     state.showSuccessMsg(true)
-    setInterval(() => {
+    let interval = setInterval(() => {
       state.countdown(state.countdown() - 1)
       m.redraw()
     }, 1000)
-    setTimeout(() => m.route.set("/login"), 10000)
+    setTimeout(() => {
+      clearInterval(interval)
+      m.route.set("/login")
+    }, 10000)
   }
   // return console.log(data)
   state.isSubmitted = true

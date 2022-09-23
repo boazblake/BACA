@@ -1,4 +1,5 @@
 import m from "mithril"
+import Loader from '@/components/Loader'
 import { handlers, AVATAR_URL } from "@/Utils/index.js"
 import { path, prop, without, assoc, propEq } from "ramda"
 import { addSuccess } from "@/Components/toast"
@@ -8,7 +9,7 @@ const state = {
   addresses: [],
   files: [],
   locations: [],
-  status: "",
+  status: "loading",
   disableEdit: true,
 }
 
@@ -26,6 +27,7 @@ const fetchLocations = (mdl) => (state) => {
   const onError = log("error fetching locations")
   const onSuccess = (locations) => {
     state.locations = locations
+    state.status = 'loaded'
   }
 
   fetchLocationsTask(mdl)
@@ -39,9 +41,8 @@ const getImageSrc = (data) =>
 const onError = (x) => {
   log("on error  profile")(x)
 }
-const onSuccess = (mdl, reload) => {
+const onSuccess = (mdl) => {
   addSuccess("Profile updated successfully", 5000)
-  reload(mdl)
 }
 
 const updateProfileTask = (mdl) => (data) =>
@@ -60,7 +61,8 @@ const removeImage = (mdl, data) => {
 const updateProfileMeta =
   (mdl) =>
     ({ name, addressIds, telephone }) =>
-      updateProfileTask(mdl)({ name, addressIds, telephone }).fork(log('error with updating profile'), () => console.log('s updated profile', mdl))
+      updateProfileTask(mdl)({ name, addressIds, telephone }).fork(log('error with updating profile'),
+        () => onSuccess(mdl))
 
 const uploadImage = (mdl) => (file) => {
   mdl.http.imgBB
@@ -100,13 +102,16 @@ const toggleEditProfile = (mdl, state) => {
   state.disableEdit && updateProfileMeta(mdl)(mdl.account)
 }
 
-const Profile = ({ attrs: { mdl, reload } }) => {
+const Profile = ({ attrs: { mdl } }) => {
   fetchLocations(mdl)(state)
   return {
     view: ({ attrs: { mdl } }) => {
       return m(
         "#PROFILE.section.p-y-50",
-        m(
+        state.status == 'loading' && m(Loader,),
+        state.status == 'error' && m('', 'error'),
+
+        state.status == 'loaded' && m(
           "article.row",
           { ...onInput(mdl.account) },
           m(
@@ -184,8 +189,8 @@ const Profile = ({ attrs: { mdl, reload } }) => {
               ),
             m(
               "form",
-              !mdl.account.emailVerified &&
-              m("label.warning", "email not verified"),
+              !mdl.user.emailVerified &&
+              m("p.warning", "email not verified"),
               m(
                 "label",
                 "email",
@@ -217,13 +222,12 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                 "label.icon",
                 "Address",
                 state.disableEdit
-                  ? mdl.account.addressIds.map((address) => {
-                    console.log(address); return m("input", {
+                  ? mdl.account.addressIds.map((address) =>
+                    m("input", {
                       disabled: true,
                       id: "address",
                       value: state.locations.find(propEq('objectId', address)).property,
                     })
-                  }
                   )
                   : [
                     m(
@@ -293,21 +297,23 @@ const Profile = ({ attrs: { mdl, reload } }) => {
                   ]
               )
             )
-          )
+          ),
+          mdl.account.addressIds.any()
+            ? m(
+              "section",
+              m(
+                "h4",
+                "If the coordinates of the icon are not on top of your home please contact an administrator at BonhamAcresCivicAssociation at gmail dot com."
+              ),
+              m(Map, {
+                mdl,
+                locations: mdl.account.addressIds.map(id =>
+                  state.locations.find(propEq('objectId', id))
+                ),
+              })
+            )
+            : m("p.hero", "Edit your profile to select your address(s)")
         ),
-        state.addresses.any()
-          ? m(
-            "section",
-            m(
-              "h4",
-              "If the coordinates of the icon are not on top of your home please contact an administrator at BonhamAcresCivicAssociation at gmail dot com."
-            ),
-            m(Map, {
-              mdl,
-              locations: state.addresses,
-            })
-          )
-          : m("p.hero", "Edit your profile to select your address(s)")
       )
     },
   }

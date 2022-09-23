@@ -53,9 +53,10 @@ const loadMapConfig = (mdl) => (state) => {
 }
 
 const Map = ({ attrs: { mdl, locations } }) => {
+  console.log('locations', locations)
   const onError = (err) => log("err")(err)
   const onSuccess = (data) => {
-    // log("mad go state success")(data)
+    log("mad go state success")(data)
   }
 
   const state = {
