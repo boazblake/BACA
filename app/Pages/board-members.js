@@ -5,7 +5,7 @@ const current = [
     name: "Tim Hatton",
   },
   {
-    title: "Vice President",
+    title: "Vice President, Compliance Officer",
     name: "Steve Edwards",
   },
   {
