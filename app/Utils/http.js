@@ -91,37 +91,20 @@ const cachCall = (url) =>
       "Cache-Control": "public, max-age=604800",
     }
 
-const BACK4APP_baseUrl = "http://localhost:3001/api"
+const proxy = "http://localhost:3001/api"
 
 const back4App = {
-  getTask: (mdl) => (url) => HttpTask("GET")(mdl)(`${BACK4APP_baseUrl}/${url}`)(null),
-  postTask: (mdl) => (url) => (dto) => HttpTask("POST")(mdl)(`${BACK4APP_baseUrl}/${url}`)(dto),
-  putTask: (mdl) => (url) => (dto) => HttpTask("PUT")(mdl)(`${BACK4APP_baseUrl}/${url}`)(dto),
-  deleteTask: (mdl) => (url) => HttpTask("DELETE")(mdl)(`${BACK4APP_baseUrl}/${url}`)(null),
+  getTask: (mdl) => (url) => HttpTask("GET")(mdl)(`${proxy}/${url}`)(null),
+  postTask: (mdl) => (url) => (dto) => HttpTask("POST")(mdl)(`${proxy}/${url}`)(dto),
+  putTask: (mdl) => (url) => (dto) => HttpTask("PUT")(mdl)(`${proxy}/${url}`)(dto),
+  deleteTask: (mdl) => (url) => HttpTask("DELETE")(mdl)(`${proxy}/${url}`)(null),
 }
 
-const imgBB = {
-  deleteTask: (mdl, url) => HttpTask('DELETE')(mdl)(url)(null),
-  postTask: (mdl) => (file) => {
-    const image = new FormData()
-    image.append("image", file)
-    image.set("key", IMGBB.apiKey)
-
-    return HttpTask()("POST")(mdl)(`${IMGBB.url}?key=${IMGBB.apiKey}`)(image)
-  },
-}
-
-const OpenCageUrl = `${OpenCage.baseUrl}?key=${OpenCage.key}&q=`
-
-const openCage = {
-  getLocationTask: (mdl) => (query) =>
-    HttpTask(OpenCage.headers())("GET")(mdl)(
-      OpenCageUrl + query + `&pretty=1&countrycode=us&bounds=${encodeURIComponent(mdl.Map.bounds())}`)(null),
-}
+const openCageTask = (mdl) => (query) =>
+  HttpTask("POST")(mdl)(`${proxy}/geo/opencage`)({ query, bounds: mdl.Map.bounds() })
 
 const http = {
-  imgBB,
-  openCage,
+  openCageTask,
   back4App,
   paypal,
   HttpTask,

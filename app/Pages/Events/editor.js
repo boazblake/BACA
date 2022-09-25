@@ -1,6 +1,7 @@
 import m from "mithril"
 import dayjs from "dayjs"
 import { handlers, DAYSOFWEEK } from "@/Utils"
+import { prop } from 'ramda'
 
 const onInput = (event) =>
   handlers(["oninput"], (e) => {
@@ -188,16 +189,15 @@ const Editor = {
                 oninput: (e) => {
                   if (e.target.value.length > 3) {
                     data.status = "isloading"
-                    mdl.http.openCage
-                      .getLocationTask(mdl)(e.target.value.trim())
+                    mdl.http.openCageTask(mdl)(e.target.value.trim()).map(prop('results'))
                       .fork(
                         (e) => {
                           data.status = "error"
                           log("error fetching locations")(e)
                         },
-                        ({ results }) => {
+                        (locations) => {
                           data.status = "loaded"
-                          data.locations = results
+                          data.locations = locations
                         }
                       )
                   }
@@ -215,15 +215,15 @@ const Editor = {
                 m(
                   "ul",
 
-                  data.locations.map(({ formatted }) =>
+                  data.locations.map((location) =>
                     m(
                       "li.pointer",
                       {
                         onclick: (e) => {
-                          state.event.location = formatted
+                          state.event.location = location
                         },
                       },
-                      formatted
+                      location
                     )
                   )
                 )

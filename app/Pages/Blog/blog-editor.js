@@ -52,12 +52,13 @@ const fetchBlog = state => ({ attrs: { mdl } }) => {
     state.status = "error"
     e.code == 404 && m.route.set("/social/blog")
   }
-  const onSuccess = ({ title, text, img, thumb, objectId }) => {
+  const onSuccess = ({ title, text, img, thumb, objectId, imageId }) => {
     state.title = title
     state.text = text
     state.img = img
     state.thumb = thumb
     state.objectId = objectId
+    state.imageId = imageId
     state.status = "loaded"
     state.show(true)
   }
@@ -120,7 +121,7 @@ const uploadImage = (mdl) => (file) => {
 
 
   resizeImageTask(file)
-    .chain(saveImgToGalleryTask(mdl))
+    .chain(saveImgToGalleryTask(mdl)).map(prop('results'))
     .fork(onError, onSuccess)
 }
 
@@ -148,14 +149,17 @@ const submitBlog =
       updateOrSubmitBlog.fork(onError, onSuccess(objectId))
     }
 
-const assignImg = (img, thumb) => {
+const assignImg = (img, thumb, objectId) => {
   if (state.img == img) {
     state.img = null
     state.thumb = null
+    state.imageId = null
   } else {
     state.img = img
     state.thumb = thumb
+    state.imageId = objectId
   }
+  state.showModal(false)
 }
 
 export const Modal = () => {
@@ -202,7 +206,7 @@ export const Modal = () => {
               "form.grid",
               state.modalState() == "upload"
                 ? m("input", { type: "file", id: "file", onchange: e => state.img = e.target.files[0] })
-                : state.images.map(({ image, thumb }) =>
+                : state.images.map(({ image, thumb, objectId }) =>
                   m(
                     `figure.col-6.button.${thumb == state.thumb ? "primary" : "outline"
                     }`,
@@ -210,7 +214,7 @@ export const Modal = () => {
                       onclick: (e) => {
                         e.preventDefault()
                         e.stopPropagation()
-                        assignImg(image, thumb)
+                        assignImg(image, thumb, objectId)
                       },
                     },
                     m("img", { src: thumb })
