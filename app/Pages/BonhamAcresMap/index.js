@@ -5,12 +5,12 @@ import {
   loadMapConfig,
   findLocationTask,
   saveResidentTask,
-  defaultPushPinEntities,
+  // defaultPushPinEntities,
   selectLocation,
 } from "./model.js"
+import '@/Utils/stamen.js'
 
-const load = (mdl, state) =>
-  loadResidentsTask(mdl, state).map(loadMapConfig(mdl))
+const load = (mdl, state) => loadResidentsTask(mdl, state).map(loadMapConfig(mdl))
 
 const findResident = (mdl, state) => {
   const onError = (e) => {
@@ -36,10 +36,9 @@ const toggleEditResidents = (mdl, state) => (state.isEdit = !state.isEdit)
 
 const saveResident = (mdl, state) => {
   const onError = (e) => log("e")(e)
-  const onSuccess = (data) => log("suc")(data)
+  const onSuccess = (data) => { console.log('saveresident', data); load(mdl, state) }
 
   saveResidentTask(mdl, state.newLocation)
-    .chain(() => load(mdl, state))
     .fork(onError, onSuccess)
 }
 
@@ -48,12 +47,12 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
     findLocationResults: [],
     newLocation: null,
     dom: null,
-    entities: defaultPushPinEntities(mdl),
+    entities: [],// defaultPushPinEntities(mdl),
     input: null,
     map: null,
     isEdit: false,
     opts: {
-      mapTypeId: Microsoft.Maps.MapTypeId.road,
+      // mapTypeId: Microsoft.Maps.MapTypeId.road,
       zoom: 16,
       // center: Microsoft.Maps.Location(
       //   Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).latitude,
@@ -64,7 +63,6 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
 
   const onError = (err) => log("err")(err)
   const onSuccess = (location) => { }
-
   load(mdl, state).fork(onError, onSuccess)
   return {
     view: ({ attrs: { mdl } }) =>
@@ -134,7 +132,10 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
         ),
 
         m("section#map", {
-          oncreate: ({ dom }) => (state.dom = dom),
+          oncreate: ({ dom }) => {
+            // (state.dom = dom);
+            // load(mdl, state).fork(onError, onSuccess)
+          },
           style: {
             position: "relative",
             // width: "500px",

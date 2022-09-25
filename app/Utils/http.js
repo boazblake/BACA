@@ -1,6 +1,5 @@
 import m from 'mithril'
 import Task from "data.task"
-import { BACK4APP, IMGBB, OpenCage } from "../../.secrets.js"
 
 
 const getSessionToken = () =>
@@ -70,28 +69,30 @@ const HttpTask = (method) => (mdl) => (url) => (body) => {
   )
 }
 
-const lookupLocationTask = (query) => {
-  return new Task((rej, res) =>
-    m
-      .request({
-        method: "GET",
-        url: `https://nominatim.openstreetmap.org/search?q=${query}&format=json`,
-      })
-      .then(res, rej)
-  )
-}
+// const lookupLocationTask = (query) => {
+//   return new Task((rej, res) =>
+//     m
+//       .request({
+//         method: "GET",
+//         url: `https://nominatim.openstreetmap.org/search?q=${query}&format=json`,
+//       })
+//       .then(res, rej)
+//   )
+// }
 
 const getTask = (mdl) => (url) => HttpTask("GET")(mdl)(url)(null)
 
-const cachCall = (url) =>
-  url == "users/me"
-    ? { "Cache-Control": "private" }
-    : {
-      "If-Modified-Since": new Date(),
-      "Cache-Control": "public, max-age=604800",
-    }
+// const cachCall = (url) =>
+//   url == "users/me"
+//     ? { "Cache-Control": "private" }
+//     : {
+//       "If-Modified-Since": new Date(),
+//       "Cache-Control": "public, max-age=604800",
+//     }
 
-const proxy = "http://localhost:3001/api"
+const prod = "https://lucky-slippers-eel.cyclic.app/api"
+const dev = "http://localhost:3001/api"
+const proxy = dev//process.env.NODE_ENV ? dev : prod
 
 const back4App = {
   getTask: (mdl) => (url) => HttpTask("GET")(mdl)(`${proxy}/${url}`)(null),
@@ -106,10 +107,9 @@ const openCageTask = (mdl) => (query) =>
 const http = {
   openCageTask,
   back4App,
-  paypal,
+  // paypal,
   HttpTask,
   getTask,
-  lookupLocationTask,
 }
 
 export default http

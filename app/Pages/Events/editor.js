@@ -1,7 +1,7 @@
 import m from "mithril"
 import dayjs from "dayjs"
 import { handlers, DAYSOFWEEK } from "@/Utils"
-import { prop } from 'ramda'
+import { prop, pluck, path } from 'ramda'
 
 const onInput = (event) =>
   handlers(["oninput"], (e) => {
@@ -189,7 +189,7 @@ const Editor = {
                 oninput: (e) => {
                   if (e.target.value.length > 3) {
                     data.status = "isloading"
-                    mdl.http.openCageTask(mdl)(e.target.value.trim()).map(prop('results'))
+                    mdl.http.openCageTask(mdl)(e.target.value.trim()).map(path(['results', 'results'])).map(pluck('formatted'))
                       .fork(
                         (e) => {
                           data.status = "error"
