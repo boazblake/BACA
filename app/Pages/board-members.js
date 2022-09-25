@@ -1,19 +1,19 @@
 import m from "mithril"
 const current = [
   {
-    title: "President",
+    titles: ["President",],
     name: "Tim Hatton",
   },
   {
-    title: "Vice President, Compliance Officer",
+    titles: ["Vice President,", "Compliance Officer",],
     name: "Steve Edwards",
   },
   {
-    title: "Secretary",
+    titles: ["Secretary",],
     name: "Elaine Lupovitch",
   },
   {
-    title: "Treasurer",
+    titles: ["Treasurer",],
     name: "Donna Spencer",
   },
 ]
@@ -64,10 +64,10 @@ const BoardMembers = (mdl) => {
           ),
           m(
             ".row",
-            current.map(({ title, name }) =>
+            current.map(({ titles, name }) =>
               m(
                 `.card.col-${calcSize(mdl)}`,
-                m("h4.text-primary", title),
+                titles.map(title => m("h4.text-primary", title)),
                 m("p", name)
               )
             )

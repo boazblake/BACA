@@ -22,11 +22,7 @@ const contents = {
   car: {
     icons: { default: CarLine },
     title: "Car Parking in Residential Area",
-    contents: m(
-      "", // ".container",
-      // {
-      //   style: { maxHeight: "50vh", overflow: "auto", wordBreak: "break-word" },
-      // },
+    contents: m("",
       m(
         "em",
         "Parking of Vehicles on Residential Property Chapter 28, Article X"
@@ -112,11 +108,7 @@ const contents = {
   noise: {
     icons: { default: MusicNoteLine },
     title: "Noise Ordinances",
-    contents: m(
-      "", // ".container",
-      // {
-      //   style: { maxHeight: "50vh", overflow: "auto", wordBreak: "break-word" },
-      // },
+    contents: m("",
       m(
         "p",
         "According to the ",
@@ -148,11 +140,7 @@ const contents = {
   nuisance: {
     icons: { default: HomeLine },
     title: "Nuisance Ordinances",
-    contents: m(
-      "", // ".container",
-      // {
-      //   style: { maxHeight: "50vh", overflow: "auto", wordBreak: "break-word" },
-      // },
+    contents: m("",
       m(
         "p",
         m(
