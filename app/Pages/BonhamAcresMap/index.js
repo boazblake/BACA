@@ -80,6 +80,20 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
       m(
         "section",
         state.status == 'loading' && m(Loader),
+        m(
+          "select.outline.bd-primary",
+          {
+            onchange: ({ target: { value } }) => {
+              state.layerType = value
+              resetState(mdl, state)
+            }
+          },
+          [
+            m('option', 'watercolor'),
+            m('option', 'toner'),
+            m('option', 'terrain'),
+          ]
+        ),
         isAdminOrMod(mdl) &&
         m(
           "section",
@@ -127,21 +141,6 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
               { onclick: () => resetState(mdl, state) },
               "Edit"
             ),
-          m(
-            "select.outline.bd-primary",
-            {
-              onchange: ({ target: { value } }) => {
-                state.layerType = value
-                resetState(mdl, state)
-              }
-            },
-            [
-              m('option', 'watercolor'),
-              m('option', 'toner'),
-              m('option', 'terrain'),
-            ]
-          ),
-
         ),
 
         m("section#map", {

@@ -31,7 +31,11 @@ const addOsmLayers = state => {
 
 const newMap = (dom, state) => {
   state.dom = dom
-  state.map = L.map(dom, { dragging: false }).setView(state.opts.center, state.opts.zoom)
+  state.map = L.map(dom, {
+    attributionControl: false,
+    zoomControl: false,
+    dragging: false
+  }).setView(state.opts.center, state.opts.zoom)
   return state
 }
 
