@@ -1,14 +1,15 @@
 import m from "mithril"
 import Loader from '@/components/Loader'
 import { handlers, AVATAR_URL } from "@/Utils/index.js"
-import { path, prop, without, assoc, propEq } from "ramda"
+import { compose, filter, path, prop, pluck, assoc, propEq } from "ramda"
 import { addSuccess } from "@/Components/toast"
 import Map from "./map.js"
+import Stream from "mithril-stream"
 
 const state = {
   addresses: [],
   files: [],
-  locations: [],
+  locations: Stream([]),
   status: "loading",
   disableEdit: true,
 }
@@ -26,7 +27,7 @@ const toLocationVM = (addressIds) => (locations) =>
 const fetchLocations = (mdl) => (state) => {
   const onError = log("error fetching locations")
   const onSuccess = (locations) => {
-    state.locations = locations
+    state.locations(locations)
     state.status = 'loaded'
   }
 
@@ -42,6 +43,7 @@ const onError = (x) => {
   log("on error  profile")(x)
 }
 const onSuccess = (mdl) => {
+  fetchLocations(mdl)(state)
   addSuccess("Profile updated successfully", 5000)
 }
 
@@ -89,17 +91,18 @@ const onInput = (profile) =>
     }
   })
 
-const addAddress = (profile, addressId) => profile.addressIds.push(addressId)
-
-const removeAddress = (profile, addressId) => {
-  state.locations.find((l) => l.objectId == addressId).selected = false
-  profile.addressIds = without([addressId], profile.addressIds)
+const resetState = (mdl, state) => {
+  state.disableEdit = !state.disableEdit
+  fetchLocations(mdl)(state)
 }
 
 const toggleEditProfile = (mdl, state) => {
   state.disableEdit = !state.disableEdit
   fetchLocations(mdl)(state)
-  state.disableEdit && updateProfileMeta(mdl)(mdl.account)
+  if (state.disableEdit) {
+    mdl.account.addressIds = compose(pluck('objectId'), filter(propEq('selected', true)))(state.locations())
+    updateProfileMeta(mdl)(mdl.account)
+  }
 }
 
 const Profile = ({ attrs: { mdl } }) => {
@@ -148,6 +151,22 @@ const Profile = ({ attrs: { mdl } }) => {
                 )
             )
           ),
+
+          state.locations().filter(propEq("selected", true)).length > 0
+            ? m(
+              "section.col",
+              m(
+                "h4",
+                "If the coordinates of the icon are not on top of your home please contact an administrator at BonhamAcresCivicAssociation at gmail dot com."
+              ),
+              m(Map, {
+                mdl,
+                locations: state.locations().filter(propEq("selected", true)
+                ),
+              })
+            )
+            : m("p.hero", "Edit your profile to select your address(s)"),
+
           m(
             "section.col",
             state.disableEdit
@@ -171,7 +190,7 @@ const Profile = ({ attrs: { mdl } }) => {
                       borderColor: "var(--red)",
                       color: "var(--red)",
                     },
-                    onclick: () => (state.disableEdit = !state.disableEdit),
+                    onclick: () => resetState(mdl, state),
                   },
                   "Cancel Edit"
                 ),
@@ -218,7 +237,7 @@ const Profile = ({ attrs: { mdl } }) => {
                   value: mdl.account.telephone,
                 })
               ),
-              state.locations.any() && m(
+              state.locations().any() && m(
                 "label.icon",
                 "Address",
                 state.disableEdit
@@ -226,7 +245,7 @@ const Profile = ({ attrs: { mdl } }) => {
                     m("input", {
                       disabled: true,
                       id: "address",
-                      value: state.locations.find(propEq('objectId', address)).property,
+                      value: state.locations().find(propEq('objectId', address)).property,
                     })
                   )
                   : [
@@ -238,57 +257,45 @@ const Profile = ({ attrs: { mdl } }) => {
                           multiple: true,
                           value: mdl.account.addressId,
                         },
-                        state.locations.map((location) =>
+                        state.locations().filter(propEq('selected', false)).map((l) =>
                           m(
                             "option",
                             {
-                              onclick: (e) => {
-                                location.selected = true
-
-                                state.addresses = state.addresses
-                                  .filter(
-                                    (l) => l.objectId == location.objectId
-                                  )
-                                  .any()
-                                  ? state.addresses
-                                  : state.addresses.concat([location])
-
-                                addAddress(
-                                  mdl.account,
-                                  location.objectId
-                                )
-                              },
+                              onclick: () => l.selected = true,
                               class: mdl.account.addressIds.includes(
-                                location.objectId
+                                l.objectId
                               )
                                 ? "option text-primary"
                                 : "option",
-                              value: location.objectId,
+                              value: l.objectId,
                             },
-                            location.property
+                            l.property
                           )
                         )
                       )
                     ),
                     m(
                       "ul",
-                      state.locations
+                      state.locations()
                         .filter(propEq("selected", true))
                         .map((l) =>
                           m(
                             "li.grouped",
                             m("p", l.property),
                             m(
-                              ".text-primary.underline",
-                              {
-                                onclick: (_) => {
-                                  location.selected = false
-                                  state.addresses = state.addresses.filter(
-                                    (a) => a.objectId != l.objectId
-                                  )
-                                  removeAddress(mdl.account, l.objectId)
-                                },
-                              },
+                              ".text-primary.underline", {
+                              onclick: () => {
+                                let locs = state.locations
+                                  ().map(loc => {
+                                    if (loc.objectId == l.objectId) {
+                                      loc.selected = false
+                                    }
+                                    return loc
+                                  })
+                                state.locations(locs)
+
+                              }
+                            },
                               "remove"
                             )
                           )
@@ -298,21 +305,7 @@ const Profile = ({ attrs: { mdl } }) => {
               )
             )
           ),
-          mdl.account.addressIds.any()
-            ? m(
-              "section",
-              m(
-                "h4",
-                "If the coordinates of the icon are not on top of your home please contact an administrator at BonhamAcresCivicAssociation at gmail dot com."
-              ),
-              m(Map, {
-                mdl,
-                locations: mdl.account.addressIds.map(id =>
-                  state.locations.find(propEq('objectId', id))
-                ),
-              })
-            )
-            : m("p.hero", "Edit your profile to select your address(s)")
+
         ),
       )
     },

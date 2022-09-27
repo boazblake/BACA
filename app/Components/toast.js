@@ -13,8 +13,8 @@ const state = {
 
 export const addSuccess = (text, timeout = 3000) => {
   state.list.push({ id: uuid(), type: "success", text, timeout })
-  console.log("state", state)
 }
+
 export const addInfo = (text, timeout = 3000) => {
   state.list.push({ id: uuid(), type: "info", text, timeout })
 }

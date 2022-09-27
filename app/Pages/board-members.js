@@ -16,6 +16,10 @@ const current = [
     titles: ["Treasurer",],
     name: "Donna Spencer",
   },
+  {
+    titles: ["Webmaster"],
+    name: 'Boaz Blake'
+  }
 ]
 
 const past = [
@@ -55,7 +59,9 @@ const BoardMembers = (mdl) => {
   return {
     view: ({ attrs: { mdl } }) =>
       m(
-        "article",
+        "article", {
+        vocab: "https://schema.org/", typeof: "Organization"
+      },
         m(
           "section.container",
           m(

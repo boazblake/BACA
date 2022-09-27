@@ -1,194 +1,131 @@
-import Task from "data.task"
-import { compose, path, prop, map } from "ramda"
-import { isAdminOrMod } from "@/Utils/helpers"
+// import Task from "data.task"
+import { path, prop, map, paths, } from "ramda"
+import Stream from 'mithril-stream'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import Task from "data.task";
 L.Icon.Default.imagePath = 'images/leaflet-images/';
-const PopUp = L.popup()
 
-// export const defaultPushPinEntities = (mdl) => [
-//   toPushPin({
-//     property: "BACA",
-//     // lat: Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).latitude,
-//     // lng: Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).longitude,
-//   }).getLocation(),
-// ]
+const state = {
+  status: 'loading',
+  layerType: 'watercolor',
+  findLocationResults: [],
+  locations: [],
+  newLocation: null,
+  dom: null,
+  markers: [],
+  input: null,
+  map: null,
+  isEdit: Stream(false),
+  opts: {
+    zoom: 16,
+    center: [],
+    bounds: null
+  },
+}
 
-// export const getCenterView = (locations) =>
-//   Microsoft.Maps.LocationRect.fromLocations(locations)
 
-export const setCenterView = (state) => (bounds) =>
-  state.map.setView({ bounds, minZoom: 16 })
+const addStamenLayers = (state) => {
+  // layer
+  new L.StamenTileLayer(state.layerType).addTo(state.map)
+  return state
+}
 
-export const loadMapConfig = (mdl) => (state) => {
-  const getCenterViewFromStateEntities = () => {
-    let locations = state.entities//.map((e) => e.getLocation())
-    // return getCenterView(locations)
-    return locations
-  }
-
-  // let centerPoint = getCenterViewFromStateEntities()
-
-  // let lat = centerPoint.center.latitude
-  // let lng = centerPoint.center.longitude
-
-  state.opts.center = mdl.Map.bh.split(',') //[lat, lng]//new Microsoft.Maps.Location(lat, lng)
-  const [lat, lng] = state.opts.center
-  // make map
-  var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+const addOsmLayers = state => {
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '© OpenStreetMap'
-  });
-  const stamen = new L.StamenTileLayer("watercolor");
-
-  const markers = L.layerGroup(state.entities.map(e => L.marker([e.lat, e.lng, {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 500
-  }])))
-
-  // console.log('markers', markers)
-
-
-
-  state.map = L.map('map', {
-    layers: [
-      osm, stamen, markers
-    ],
-    zoom: 5,
-  }).setView(state.opts.center, state.opts.zoom)
-
-  state.map.attributionControl.setPrefix(false)
-
-  state.map.on('mapReady', map => {
-    console.log('map', map)
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 0);
-  })
-
-  state.map.on('click', (e) => {
-    popup
-      .setLatLng(e.latlng)
-      .setContent("You clicked the map at " + e.latlng.toString())
-      .openOn(state.map);
-
-
-  })
+  }).addTo(state.map)
   return state
 }
 
-const toPin = (lat, lng, opts) => ({ lat, lng, opts })
-// new Microsoft.Maps.Pushpin(
-//   {
-//     altitude: 0,
-//     altitudeReference: -1,
-//     latitude: lat,
-//     longitude: lng,
-//   },
-//   {
-//     ...opts,
-//     color: "purple",
-//   }
-// )
+const newMap = (dom, state) => {
+  state.dom = dom
+  state.map = L.map(dom, {
+    maxBounds: L.latLngBounds(state.opts.bounds),
+    dragging: state.isEdit()
+  }).setView(state.opts.center, state.opts.zoom)
 
-const addMetaData = (title) => (pin) => {
-  pin.metadata = { title }
-  return pin
-}
-
-export const toPushPin = ({ property, lat, lng }, opts) =>
-  compose(addMetaData(property), toPin)(lat, lng, opts)
-
-const updateStateEntities = (state) => (entities) => {
-  if (entities.any()) {
-    state.entities = entities
+  if (state.opts.bounds) { state.map.maxBounds = L.latLngBounds(state.opts.bounds) } else {
+    state.opts.bounds = state.map.getBounds()
   }
   return state
 }
 
-export const selectLocation = (
-  mdl,
-  state,
-  { formatted, geometry: { lat, lng } }
-) => {
-  state.newLocation = { property: formatted, lat, lng }
-  let pin = toPushPin(state.newLocation)
-
-  state.findLocationResults = []
-  state.entities.push(pin)
-  state.map.entities.push(pin)
-  setCenterView(state)(
-    getCenterView(state.entities.map((e) => e.getLocation()))
-  )
+const addMarkerLayer = state => {
+  state.markerLayer = L.layerGroup().addTo(state.map)
+  return state
 }
 
-// const addEventHandlers = (mdl, state) => (pin) => {
-//   const pinClicked = (pin, e) => {
-//     state.entities.map((e) => e.setOptions({ color: "purple" }))
+const createMap = state => ({ dom }) => Promise.resolve(newMap(dom, state))
+  .then(addOsmLayers)
+  .then(addStamenLayers)
+  .then(addMarkerLayer)
 
-//     if (isAdminOrMod(mdl)) {
-//       //only admins
-//       pin.setOptions({
-//         // enableHoverStyle: true,
-//         // enableClickedStyle: true,
-//         color: "green",
-//         draggable: true,
-//       })
 
-//       state.newLocation = {
-//         property: pin.metadata.title,
-//         lat: pin.geometry.y,
-//         lng: pin.geometry.x,
-//       }
+const toLeafletMarker = location => {
+  const marker = L.marker([location.lat, location.lng, {
+    location,
+    id: location.objectId,
+    dragging: (marker) => {
+      var position = marker.getLatLng()
+      console.log(position)
+      marker.setLatLng(position, {
+      }).bindPopup(position).update()
+    },
+    riseOnHover: true,
+  }])
+  marker.options.draggable = state.isEdit()
+  marker.on('click', () => marker.bindPopup(`${location.owner}'s property at ${location.property}`).openPopup())
+  marker.on('dragend', e => {
+    const { lat, lng } = e.target.getLatLng()
+    location.lat = lat
+    location.lng = lng
+    marker.bindPopup(`You moved ${location.owner}'s property at ${location.property}`).openPopup()
+  })
 
-//       // Microsoft.Maps.Events.addHandler(pin, "dragend", (e) => {
-//       //   state.newLocation.lng = pin.geometry.x
-//       //   state.newLocation.lat = pin.geometry.y
-//       // })
-//     } else {
-//       //regular user
-//       pin.setOptions({ color: "green" })
-//     }
-
-//     //all users
-//     state.infobox.setOptions({
-//       location: e.target.getLocation(),
-//       title: e.target.metadata.title,
-//       visible: true,
-//     })
-//     m.redraw()
-//   }
-//   // //Add mouse events to the pin.
-//   // Microsoft.Maps.Events.addHandler(pin, "click", (e) => pinClicked(pin, e))
-
-//   return pin
-// }
-
-export const formatLocationToPushPin = ([property, { lat, lng }]) =>
-  toPushPin({ property, lat, lng })
-
-const updateModelDate = (mdl) => (addresses) => {
-  mdl.data.addresses = addresses
-  return addresses
+  return { marker, location }
 }
 
-export const loadResidentsTask = (mdl, state) =>
+const updateStateLocations = (state) => ({ locations, markers }) => {
+  state.locations = locations
+  state.markers = markers
+  return state
+}
+
+const toMarkerVM = entities => entities.reduce((dto, { marker, location }) => {
+  dto.markers.push(marker)
+  dto.locations.push(location)
+  return dto
+}, { markers: [], locations: [] })
+
+
+const attachMarkers = state => {
+  state.markers.forEach(m => m.addTo(state.markerLayer))
+  return state
+}
+
+const loadResidentsTask = (mdl, state) =>
   mdl.http.back4App
     .getTask(mdl)("geo/addresses")
     .map(prop("results"))
-    // .map(log('?'))
-    .map(updateModelDate(mdl))
-    // .map(map(toPushPin))
-    // .map(map(addEventHandlers(mdl, state)))
-    .map(updateStateEntities(state))
+    .map(map(toLeafletMarker))
+    .map(toMarkerVM)
+    .map(updateStateLocations(state))
+    .map(attachMarkers)
 
-export const findLocationTask = (mdl, query) =>
+const toLocationViewModel = ([property, { lat, lng }]) => ({ property, lat, lng })
+
+const findLocationTask = (mdl, query) =>
   mdl.http.openCageTask(mdl)(query)
-    .map(log('?'))
-// .map(paths([["formatted"], ["geometry"]]))
-// .chain((xs) => (xs.includes(undefined) ? Task.rejected() : Task.of(xs)))
+    .map(path(['results', 'results', 0]))
+    .map(paths([["formatted"], ["geometry"]]))
+    .chain(xs => xs.includes(undefined) ? Task.rejected(xs) : Task.of(xs))
+    .map(toLocationViewModel)
+    .map(toLeafletMarker(mdl))
+    .map(
+      m => m.marker.addTo(state.map)
+    )
 
 const addAddressTask = (mdl, location) =>
   mdl.http.back4App
@@ -200,7 +137,7 @@ const updateAddressTask = (mdl, location, id) =>
     .putTask(mdl)(`geo/addresses/${id}`)(location)
     .map(prop("results"))
 
-export const saveResidentTask = (mdl, location) => {
+const saveResidentTask = (mdl, location) => {
   let currentAddress = mdl.data.addresses.find(
     (l) => l.property == location.property
   )
@@ -210,3 +147,8 @@ export const saveResidentTask = (mdl, location) => {
     : addAddressTask(mdl, location)
 }
 
+
+
+export {
+  state, newMap, loadResidentsTask, findLocationTask, createMap
+}

@@ -1,99 +1,92 @@
 import m from "mithril"
-import Task from "data.task"
+import L from 'leaflet'
+L.Icon.Default.imagePath = 'images/leaflet-images/';
 
-export const getCenterView = (locations) =>
-  Microsoft.Maps.LocationRect.fromLocations(locations)
 
-export const setCenterView = (state) => (bounds) =>
-  state.map.setView({ bounds, minZoom: 16 })
-
-export const toPushPin = ({ property, lat, lng }) =>
-  new Microsoft.Maps.Pushpin(
-    {
-      altitude: 0,
-      altitudeReference: -1,
-      latitude: lat,
-      longitude: lng,
-    },
-    {
-      title: property,
-    }
-  )
-
-const AddResidentsTask = (state, xs) => {
-  state.locations = xs ? xs : state.locations
-  state.entities = state.locations.map(toPushPin)
-  return Task.of(state)
+const state = {
+  locations: [],
+  dom: null,
+  entities: [],
+  input: null,
+  map: null,
+  opts: {
+    center: { lng: 0, lat: 0 },
+    zoom: 16,
+  },
 }
-const loadMapConfig = (mdl) => (state) => {
-  const getCenterViewFromStateEntities = () => {
-    let locations = state.entities.any()
-      ? state.entities.map((e) => e.getLocation())
-      : [
-        toPushPin({
-          property: "BACA",
-          lat: Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).latitude,
-          lng: Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).longitude,
-        }).getLocation(),
-      ]
 
-    return getCenterView(locations)
-  }
-
-  let centerPoint = getCenterViewFromStateEntities()
-
-  let lat = centerPoint.center.latitude
-  let lng = centerPoint.center.longitude
-
-  state.opts.center = new Microsoft.Maps.Location(lat, lng)
-  state.map = new Microsoft.Maps.Map(state.dom, state.opts)
-  state.map.entities.push(state.entities)
-  setCenterView(state)(centerPoint)
+const addStamenLayers = (state) => {
+  // layer
+  new L.StamenTileLayer("watercolor").addTo(state.map)
   return state
 }
 
-const Map = ({ attrs: { mdl, locations } }) => {
-  console.log('locations', locations)
-  const onError = (err) => log("err")(err)
-  const onSuccess = (data) => {
-    // log("mad go state success")(data)
-  }
+const addOsmLayers = state => {
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  }).addTo(state.map)
+  return state
+}
 
-  const state = {
-    locations,
-    dom: null,
-    entities: [],
-    input: null,
-    map: null,
-    opts: {
-      mapTypeId: Microsoft.Maps.MapTypeId.road,
-      zoom: 16,
-    },
-  }
+const newMap = (dom, state) => {
+  state.dom = dom
+  state.map = L.map(dom, { dragging: false }).setView(state.opts.center, state.opts.zoom)
+  return state
+}
 
-  const go = (xs) =>
-    AddResidentsTask(state, xs).map(loadMapConfig(mdl)).fork(onError, onSuccess)
+const addMarkerLayer = state => {
+  state.markerLayer = L.layerGroup().addTo(state.map)
+  return state
+}
+
+const toLeafletMarker = ({ lat, lng, owner, property }) => {
+  const marker = L.marker({ lat, lng })
+  marker.on('click', () => marker.bindPopup(`${owner}'s property at ${property}`).openPopup())
+  return marker
+}
+
+const formatLocations = state => {
+  state.markers = state.locations
+  state.markers.map(toLeafletMarker).forEach(home => home.addTo(state.markerLayer))
+  return state
+}
+const createMap = state => ({ dom }) => Promise.resolve(newMap(dom, state))
+  .then(addOsmLayers)
+  .then(addStamenLayers)
+  .then(addMarkerLayer)
+  .then(formatLocations)
+
+const updateMap = state => ({ dom, attrs: { locations } }) => {
+  if (state.locations.length != locations.length) {
+    state.locations = locations
+    state.map &&
+      (state.map.off(), state.map.remove())
+    createMap(state)({ dom })
+  } else return false
+
+
+}
+
+
+const Map = () => {
+
+
 
   return {
-    onupdate: (x) =>
-      x.attrs.locations.length != state.locations.length &&
-      go(x.attrs.locations),
+    onupdate: updateMap(state),
     view: ({ attrs: { mdl, locations } }) => {
-      return m(
-        "section",
-        m("section#map", {
-          oncreate: ({ attrs: { mdl }, dom }) => {
-            state.dom = dom
-            go()
-          },
-          style: {
-            position: "relative",
-            width: "500px",
-            height: "500px",
-            margin: "0 auto",
-          },
-        })
-      )
+      const [lat, lng] = mdl.Map.bh
+      state.opts.center = { lat, lng }
+      return m("section#map", {
+        oncreate: createMap(state),
+        style: {
+          position: "relative",
+          width: "500px",
+          height: "500px",
+          margin: "0 auto",
+        },
+      })
     },
   }
 }

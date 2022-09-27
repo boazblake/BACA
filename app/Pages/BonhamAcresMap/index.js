@@ -1,16 +1,16 @@
 import m from "mithril"
 import { isAdminOrMod } from "@/Utils/helpers"
+import Loader from '@/Components/loader'
 import {
+  state,
   loadResidentsTask,
-  loadMapConfig,
   findLocationTask,
-  saveResidentTask,
-  // defaultPushPinEntities,
-  selectLocation,
+  createMap,
+  // saveResidentTask,
+  // selectLocation,
 } from "./model.js"
 import '@/Utils/stamen.js'
-
-const load = (mdl, state) => loadResidentsTask(mdl, state).map(loadMapConfig(mdl))
+import { value } from "@boazblake/fun-config/lib/src/util.js"
 
 const findResident = (mdl, state) => {
   const onError = (e) => {
@@ -18,61 +18,72 @@ const findResident = (mdl, state) => {
     console.log(msg, e)
   }
 
-  const onSuccess = (results) => (state.findLocationResults = results)
+  const onSuccess = (results) =>
+    results.bindPopup(`added`).openPopup()
+
 
   state.input?.length > 5 &&
     findLocationTask(mdl, state.input).fork(onError, onSuccess)
 }
 
 const restartFindResident = (mdl, state) => {
-  load(mdl, state).fork(log("e"), () => {
+  loadResidentsTask(mdl, state).fork(log("e"), () => {
     state.newLocation = null
     state.findLocationResults = []
     state.input = null
   })
 }
 
-const toggleEditResidents = (mdl, state) => (state.isEdit = !state.isEdit)
+const toggleEditResidents = (state) => state.isEdit(!state.isEdit())
+const resetState = (mdl, state) => {
+  const onError = (err) => log("err")(err)
+  const onSuccess = (state) => {
+    state.map.on('mapReady', map => {
+      console.log('map', map)
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 0);
+    })
+    state.status = 'loaded'
+  }
+
+  toggleEditResidents(state)
+  state.map.remove()
+  createMap(state)({ dom: state.dom })
+  loadResidentsTask(mdl, state).fork(onError, onSuccess)
+}
 
 const saveResident = (mdl, state) => {
   const onError = (e) => log("e")(e)
-  const onSuccess = (data) => { console.log('saveresident', data); load(mdl, state) }
+  const onSuccess = (data) => { console.log('saveresident', data); }
 
-  saveResidentTask(mdl, state.newLocation)
+  saveResidentTask(mdl, state.newLocation).chain(() => loadResidentsTask(mdl, state))
     .fork(onError, onSuccess)
 }
 
 const BonhamAcresMap = ({ attrs: { mdl } }) => {
-  const state = {
-    findLocationResults: [],
-    newLocation: null,
-    dom: null,
-    entities: [],// defaultPushPinEntities(mdl),
-    input: null,
-    map: null,
-    isEdit: false,
-    opts: {
-      // mapTypeId: Microsoft.Maps.MapTypeId.road,
-      zoom: 16,
-      // center: Microsoft.Maps.Location(
-      //   Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).latitude,
-      //   Microsoft.Maps.Location.parseLatLong(mdl.Map.bh).longitude
-      // ),
-    },
-  }
-
+  state.opts.center = mdl.Map.bh
+  state.opts.bounds = mdl.Map.bounds
   const onError = (err) => log("err")(err)
-  const onSuccess = (location) => { }
-  load(mdl, state).fork(onError, onSuccess)
+  const onSuccess = (state) => {
+    state.map.on('mapReady', map => {
+      console.log('map', map)
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 0);
+    })
+    state.status = 'loaded'
+  }
+  loadResidentsTask(mdl, state).fork(onError, onSuccess)
   return {
     view: ({ attrs: { mdl } }) =>
       m(
         "section",
-
+        state.status == 'loading' && m(Loader),
         isAdminOrMod(mdl) &&
         m(
           "section",
-          state.isEdit
+          state.isEdit()
             ? m(
               ".grouped",
               m("input", {
@@ -100,42 +111,41 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
                     "Search"
                   ),
                   m(
+                    "button.primary",
+                    { onclick: () => saveResident(mdl, state) },
+                    "Save"
+                  ),
+                  m(
                     "button.outline.bd-danger",
-                    { onclick: () => toggleEditResidents(mdl, state) },
+                    { onclick: () => resetState(mdl, state) },
                     "Cancel"
                   ),
                 ]
             )
             : m(
               "button.outline.bd-primary",
-              { onclick: () => toggleEditResidents(mdl, state) },
+              { onclick: () => resetState(mdl, state) },
               "Edit"
             ),
-
-          state.findLocationResults.any() &&
           m(
-            "ul",
-            state.findLocationResults.map((location) =>
-              m(
-                "li.grouped",
-                m("p", location.formatted),
-                m(
-                  "button",
-                  {
-                    onclick: () => selectLocation(mdl, state, location),
-                  },
-                  "Select"
-                )
-              )
-            )
-          )
+            "select.outline.bd-primary",
+            {
+              onchange: ({ target: { value } }) => {
+                state.layerType = value
+                resetState(mdl, state)
+              }
+            },
+            [
+              m('option', 'watercolor'),
+              m('option', 'toner'),
+              m('option', 'terrain'),
+            ]
+          ),
+
         ),
 
         m("section#map", {
-          oncreate: ({ dom }) => {
-            // (state.dom = dom);
-            // load(mdl, state).fork(onError, onSuccess)
-          },
+          oncreate: createMap(state),
           style: {
             position: "relative",
             // width: "500px",
