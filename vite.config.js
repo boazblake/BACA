@@ -67,7 +67,9 @@ const sharper = () => vsharp({
 
 export default defineConfig({
   optimizeDeps: { esbuildOptions: { plugins: [esbuildFlowPlugin()] } },
-  plugins: [flowPlugin(), sharper(), imageMin(), pwa()],
+  plugins: [flowPlugin(),
+  // sharper(),
+  imageMin(), pwa()],
   resolve: {
     alias: {
       stream: "mithril-stream",
