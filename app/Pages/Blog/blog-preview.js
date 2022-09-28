@@ -5,12 +5,13 @@ import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 const BlogPreview = {
   view: ({
     attrs: {
+      key,
       mdl,
       post: { title, text, thumb, createdAt, updatedAt, author, objectId },
     },
   }) =>
     m(
-      "article.card.col-6",
+      "article.card.col-6", { key },
       m(
         ".row",
         m(

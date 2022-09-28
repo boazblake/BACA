@@ -1,8 +1,7 @@
 import m from "mithril"
 import Hamburger from "@/Components/Hamburger.js"
 import AuthBox from "@/Components/authbox.js"
-import { ScrollToPageTitle } from "@/Utils"
-import { BellOutlineBadged } from "@mithril-icons/clarity"
+import { ScrollToPageTitle, bellIcon } from "@/Utils"
 import Toasts from "@/Components/toast"
 
 const AuthDisplay = ({ attrs: { mdl } }) => {
@@ -16,7 +15,7 @@ const AuthDisplay = ({ attrs: { mdl } }) => {
         { href: `/account/${route}`, selector: "a.underline.pointer" },
         `Welcome ${mdl.user.name?.split(" ")[0]}`,
         mdl.state.hasNotifications() &&
-        m(BellOutlineBadged, { height: "24px", fill: "green" })
+        m('span', { height: "24px", fill: "green" }, bellIcon)
       ),
   }
 }

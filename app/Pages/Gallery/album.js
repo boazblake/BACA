@@ -1,11 +1,9 @@
 import m from "mithril"
 import Loader from "@/Components/loader.js"
-import { startsWith, traverse, prop, reverse, uniqWith, eqBy, compose, map } from "ramda"
-import { exists, confirmTask } from "@/Utils"
+import { startsWith, prop, } from "ramda"
+import { exists, confirmTask, leftArrowIcon, resizeImageTask, deleteIcon } from "@/Utils/"
 import Task from "data.task"
-import { TimesCircleLine, ArrowLine } from "@mithril-icons/clarity/cjs"
 import Stream from "mithril-stream"
-import { resizeImageTask } from "../../Utils/helpers"
 
 export const state = {
   album: [],
@@ -196,7 +194,7 @@ const Album = {
               href: "/social/gallery",
               class: "primary",
             },
-            m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
+            leftArrowIcon,
             "Back To Gallery"
           ),
           mdl.state.isAuth() && [
@@ -228,12 +226,10 @@ const Album = {
                 "figure.is-center.col-4.pos-rel",
                 { key },
                 mdl.state.isAuth() &&
-                m(TimesCircleLine, {
-                  class: "pointer bg-white pos-abs",
-                  style: { borderRadius: "50%", top: 0, right: "20%" },
-                  fill: "red",
+                m('button.button.error.pos-abs', {
+                  style: { top: 0, right: "20%" },
                   onclick: (e) => deleteImg(mdl, pic),
-                }),
+                }, deleteIcon),
                 m("img.pointer", {
                   src: pic.thumb,
                   onclick: (e) => {

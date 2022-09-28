@@ -1,9 +1,9 @@
 import m from "mithril"
 import { prop, filter } from "ramda"
 import { Table, formatDataForTable } from "@/Components/table.js"
-import { EditLine, RemoveLine } from "@mithril-icons/clarity/cjs"
+// import { &#128221;, RemoveLine } from "@mithril-icons/clarity/cjs"
 import Task from "data.task"
-import { formatDate, getUserByUserId } from "@/Utils/helpers"
+import { formatDate, getUserByUserId, editIcon } from "@/Utils"
 let tabs = ["blogs", "events", "images", "users", "dues"]
 import { addSuccess, addDanger } from "@/Components/toast"
 
@@ -42,10 +42,10 @@ const userViewmodel = (
       m("option", { value: "user" }, "user")
     ),
   ],
-  // action: [
-  //   m(EditLine, { onclick: () => console.log("edit", objectId) }),
-  //   m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
-  // ],
+  action: [
+    m('button', { onclick: () => console.log("edit", objectId) }, editIcon),
+    m('button', { onclick: () => () => console.log(objectId, "delete") }, deleteIcon),
+  ],
 })
 
 const eventsViewmodel = ({ objectId, title, image, startDate, startTime }) => ({
@@ -53,10 +53,10 @@ const eventsViewmodel = ({ objectId, title, image, startDate, startTime }) => ({
   image: m("img", { src: image }),
   startDate,
   startTime,
-  // action: [
-  //   m(EditLine, { onclick: () => console.log("edit", objectId) }),
-  //   m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
-  // ],
+  action: [
+    m('button', { onclick: () => console.log("edit", objectId) }, editIcon),
+    m('button', { onclick: () => () => console.log(objectId, "delete") }, deleteIcon),
+  ],
 })
 
 const blogsViewmodel = ({ objectId, title, img, text, author }) => ({
@@ -64,19 +64,19 @@ const blogsViewmodel = ({ objectId, title, img, text, author }) => ({
   img: m("img", { style: { maxWidth: "150px" }, src: img }),
   text: text.slice(0, 300),
   author,
-  // action: [
-  //   m(EditLine, { onclick: () => console.log("edit", objectId) }),
-  //   m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
-  // ],
+  action: [
+    m('button', { onclick: () => console.log("edit", objectId) }, editIcon),
+    m('button', { onclick: () => () => console.log(objectId, "delete") }, deleteIcon),
+  ],
 })
 
 const imagesViewmodel = ({ objectId, album, image }) => ({
   album,
   image: m("img", { style: { maxWidth: "150px" }, src: image }),
-  // action: [
-  //   m(EditLine, { onclick: () => console.log("edit", objectId) }),
-  //   m(RemoveLine, { onclick: () => console.log(objectId, "delete") }),
-  // ],
+  action: [
+    m('button', { onclick: () => console.log("edit", objectId) }, editIcon),
+    m('button', { onclick: () => () => console.log(objectId, "delete") }, deleteIcon),
+  ],
 })
 
 const duesViewModel = (

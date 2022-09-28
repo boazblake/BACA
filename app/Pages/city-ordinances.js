@@ -1,15 +1,7 @@
 import m from "mithril"
 import ViolationReport from "@/Components/report"
+import { truckIcon, recycleIcon, warningIcon, noiseIcon, homeIcon } from '@/Utils/'
 import Stream from "mithril-stream"
-// import Modal from "@/Components/Modal"
-import {
-  CarLine,
-  ExclamationTriangleLine,
-  HomeLine,
-  MusicNoteLine,
-  PopOutLine,
-  TrashLine,
-} from "@mithril-icons/clarity"
 
 const state = {
   showOrdinanceViolation: Stream(false),
@@ -20,7 +12,7 @@ const state = {
 
 const contents = {
   car: {
-    icons: { default: CarLine },
+    icons: { default: truckIcon },
     title: "Car Parking in Residential Area",
     contents: m("",
       m(
@@ -32,7 +24,7 @@ const contents = {
         "To read the complete ordinance, go to ",
         m(
           "a.nav-link",
-          { target: "__blank", href: "www.Municode.com" },
+          { target: "_blank", href: "www.Municode.com" },
           "www.Municode.com"
         ),
         " on the internet and search for City of Houston, Chapter 28, Article X, or enter Parking of Vehicles on Residential Property in the search block."
@@ -42,7 +34,7 @@ const contents = {
         m(
           "a.nav-link",
           {
-            target: "__blank",
+            target: "_blank",
             href: "https://www.houstontx.gov/police/pdfs/brochures/english/Parking_of_vehicles_on_residential_propert.pdf",
           },
           "https://www.houstontx.gov/police/pdfs/brochures/english/Parking_of_vehicles_on_residential_propert.pdf"
@@ -55,7 +47,7 @@ const contents = {
         m(
           "a.nav-link",
           {
-            target: "__blank",
+            target: "_blank",
             href: "http://mycity.houstontx.gov/public/",
           },
           " http://mycity.houstontx.gov/public/ "
@@ -68,7 +60,7 @@ const contents = {
         m(
           "a.nav-link",
           {
-            target: "__blank",
+            target: "_blank",
             href: "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html",
           },
           "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html"
@@ -77,7 +69,7 @@ const contents = {
     ),
   },
   trash: {
-    icons: { default: TrashLine },
+    icons: { default: recycleIcon },
     title: "Trash & Dumpster Ordinances",
     contents: m(
       "", // ".container",
@@ -88,8 +80,8 @@ const contents = {
         "p",
         m(
           "a.nav-link",
-          { target: "__blank", href: "https://www.rollouthouston.com/" },
-          ["Roll Out Houston!", m(PopOutLine)]
+          { target: "_blank", href: "https://www.rollouthouston.com/" },
+          "Roll Out Houston!"
         )
       ),
       m(
@@ -97,23 +89,23 @@ const contents = {
         m(
           "a.nav-link",
           {
-            target: "__blank",
+            target: "_blank",
             href: "https://www.houstontx.gov/solidwaste/trashfacts.pdf",
           },
-          ["Houston Trash Facts PDF", m(PopOutLine)]
+          "Houston Trash Facts PDF",
         )
       )
     ),
   },
   noise: {
-    icons: { default: MusicNoteLine },
+    icons: { default: noiseIcon },
     title: "Noise Ordinances",
     contents: m("",
       m(
         "p",
         "According to the ",
         ("a.nav-link",
-          { target: "__blank", href: "#" },
+          { target: "_blank", href: "#" },
           " Houston Sound Ordinance, "),
         " sound ",
         m("span.strong", " cannot exceed 65 decibels during the day "),
@@ -129,7 +121,7 @@ const contents = {
         m(
           "a.nav-link",
           {
-            target: "__blank",
+            target: "_blank",
             href: "https://library.municode.com/tx/houston/codes/code_of_ordinances?nodeId=COOR_CH30NOSOLERE",
           },
           "https://library.municode.com/tx/houston/codes/code_of_ordinances?nodeId=COOR_CH30NOSOLERE"
@@ -138,15 +130,15 @@ const contents = {
     ),
   },
   nuisance: {
-    icons: { default: HomeLine },
-    title: "Nuisance Ordinances",
+    icons: { default: homeIcon },
+    title: "Ordinances",
     contents: m("",
       m(
         "p",
         m(
           "a.nav-link",
           {
-            target: "__blank",
+            target: "_blank",
             href: "https://statutes.capitol.texas.gov/Docs/HS/htm/HS.342.htm#342.004",
           },
           "Section 342.004 of the Texas Health and Safety Code"
@@ -161,7 +153,7 @@ const contents = {
         m(
           "a.nav-link",
           {
-            target: "__blank",
+            target: "_blank",
             href: "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.311.htm#311.003",
           },
           "Sections 311.003 - 311.004 of the Texas Transportation Code"
@@ -177,7 +169,7 @@ const contents = {
         m(
           "a.nav-link",
           {
-            target: "__blank",
+            target: "_blank",
             href: "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.683.htm#E",
           },
           "Texas Transportation Code, Chapter 683, Subchapter E"
@@ -233,18 +225,16 @@ const CardOrd = () => {
             mdl.modal.header(m("h2", title))
             mdl.modal.content(contents)
             mdl.toggleLayoutModal(mdl)
-            // state.showModal(true)
           },
         },
 
         m(
           "hgroup.row",
-          m(icons.default, {
-            class: "col.is-center",
-            fill: isSelected && "#14854f",
-            style: { margin: "0 auto", width: "30%", height: "250px" },
-          }),
-          m("h2.col.is-center", title)
+          { style: { color: "#14854f", margin: "0 auto" } },
+          isSelected
+            ? m("h2.col.is-center", title)
+            : m('h2.col.is-center', { style: { fontSize: "10em" } }, icons.default)
+
         )
       ),
   }
@@ -291,7 +281,7 @@ const CityOrd = {
                   // state.showOrdinanceViolation(true)
                 },
                 "COMING SOON Report City Ordinance Violation",
-                m(ExclamationTriangleLine, { fill: "red" })
+                m('', { style: { fontSize: '5em' } }, warningIcon)
               )
               : m(
                 m.route.Link,
@@ -311,7 +301,7 @@ const CityOrd = {
           m(
             "a.button.bg-light.p-y-6.is-center",
             {
-              target: "__blank",
+              target: "_blank",
               name: "gmail",
               href: "mailto:bonhamacrescivicassociation@gmail.com?subject=City Ordinance Issue",
             },

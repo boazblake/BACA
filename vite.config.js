@@ -14,7 +14,7 @@ const pwa = () =>
     strategies: "generateSW",
     // srcDir: 'app',
     filename: 'vite-sw.js',
-    includeAssets: ['fonts/*.ttf', 'images/*.png']
+    includeAssets: ['fonts/*.ttf', 'fonts/*.woff', 'images/*.png']
   })
 
 const imageMin = () => viteImagemin({

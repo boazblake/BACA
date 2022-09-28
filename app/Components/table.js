@@ -1,11 +1,10 @@
 import m from "mithril"
-import { Times, CheckLine } from "@mithril-icons/clarity/cjs"
 import { toPairs, compose, map, keys, clone } from "ramda"
 
 const formatUIValue = (val) => {
   switch (val) {
     case typeof val == "boolean":
-      return val ? m(CheckLine) : m(Times)
+      return val ? `&#x2713;` : 'x'
       break
     default:
       return val

@@ -1,9 +1,8 @@
 import m from "mithril"
-import { ArrowLine, NoteEditLine } from "@mithril-icons/clarity/cjs"
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
-import { toViewModel } from "./blog"
 import Loader from "@/Components/loader.js"
 import { prop } from 'ramda'
+import { editIcon, leftArrowIcon } from "@/Utils/"
 
 const state = {
   status: "loading",
@@ -83,8 +82,7 @@ const Post = {
             selector: "button.button.primary.icon",
             href: `/social/blog-editor:${blog.objectId}`,
           },
-          "Edit",
-          m(NoteEditLine, { fill: "white" })
+          "Edit", editIcon
         )
       )
     ),
@@ -147,15 +145,13 @@ const fetchBlogPost = ({ attrs: { mdl, id } }) => {
     e.code == 404 && m.route.set("/social/blog")
     state.status = "error"
   }
-  const onSuccess = ([blog]) => {
+  const onSuccess = (blog) => {
     state.blog = blog
     state.status = "loaded"
   }
   mdl.http.back4App
     .getTask(mdl)(`blogs/${id}`)
     .map(prop("results"))
-    .map(Array.of)
-    .map(toViewModel)
     .fork(onError, onSuccess)
 }
 
@@ -167,7 +163,7 @@ const BackToBlogs = () =>
       href: "/social/blog",
       class: "primary",
     },
-    m(ArrowLine, { style: { transform: "rotate(270deg)" } }),
+    leftArrowIcon,
     "Back To Blogs"
   )
 

@@ -1,8 +1,8 @@
 import m from "mithril"
 import { fetchAll } from "../Layouts"
 import DateTime from "@/Components/DateTime"
-import { AngleDoubleLine } from "@mithril-icons/clarity/cjs"
 import GliderJS from "@/Utils/glider.js"
+import { leftArrowIcon, rightArrowIcon } from '@/Utils/html-identities'
 import { clone } from "ramda"
 import dayjs from "dayjs"
 
@@ -239,12 +239,8 @@ const Nav = {
           {
             style: { width: "80%" },
           },
-          m(AngleDoubleLine, {
-            style: {
-              transform: "rotate(270deg)",
-              transition: "transform .3s ease-out",
-            },
-          })
+          leftArrowIcon
+
         )
       ),
       m(
@@ -254,12 +250,7 @@ const Nav = {
           {
             style: { width: "80%" },
           },
-          m(AngleDoubleLine, {
-            style: {
-              transform: "rotate(90deg)",
-              transition: "transform .3s ease-out",
-            },
-          })
+          rightArrowIcon
         )
       )
     ),

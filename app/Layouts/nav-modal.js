@@ -1,5 +1,4 @@
 import m from "mithril"
-import { PopOutLine } from "@mithril-icons/clarity/cjs"
 import NavLink from "@/Components/nav-link"
 import AuthBox from "@/Components/authbox"
 import { isActiveRoute } from "@/Utils/index.js"
@@ -63,12 +62,7 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
               ? m(
                 "a.col-12 icon nav-link",
                 { target: "_blank", href: r.external },
-                r.name,
-                m(PopOutLine, {
-                  margin: "8px",
-                  width: "15px",
-                  height: "15px",
-                })
+                r.name
               )
               : displayRoute(mdl)(r)
           )

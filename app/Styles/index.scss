@@ -1,3 +1,13 @@
+/*
+Emoji Symbols Font (c)blockworks - Kenichi Kaneko
+http://emojisymbols.com/
+*/
+@font-face {
+  font-family: "EmojiSymbols-Regular";
+  src: local("EmojiSymbols-Regular"),
+   url('/fonts/EmojiSymbols-Regular.woff') format("truetype");
+  font-weight: bold;
+  }
 /* Global CSS variables */
 :root {
   --bg-color: #ffffff;
@@ -12,8 +22,8 @@
   --grid-gutter: 2rem;
   --font-size: 1.6rem;
   --font-color: #333333;
-  --font-family-sans: "Poppins", sans-serif;
-  --font-family-mono: monaco, "Consolas", "Lucida Console", monospace;
+  --font-family-sans: "Poppins",sans-serif;
+  --font-family-mono: monaco, "Consolas", "EmojiSymbols-Regular","Lucida Console", monospace;
   --navy: #001f3f;
   --blue: #0074d9;
   --aqua: #7fdbff;
@@ -135,6 +145,17 @@ body {
 img {
   height: intrinsic;
   width: intrinsic;
+}
+
+a[target="_blank"]::after {
+  content: "";
+  width: 1em;
+  height: 1em;
+  margin: 0 0.05em 0 0.1em;
+  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48cGF0aCBkPSJNOSAyTDkgMyAxMi4zIDMgNiA5LjMgNi43IDEwIDEzIDMuNyAxMyA3IDE0IDcgMTQgMlpNNCA0QzIuOSA0IDIgNC45IDIgNkwyIDEyQzIgMTMuMSAyLjkgMTQgNCAxNEwxMCAxNEMxMS4xIDE0IDEyIDEzLjEgMTIgMTJMMTIgNyAxMSA4IDExIDEyQzExIDEyLjYgMTAuNiAxMyAxMCAxM0w0IDEzQzMuNCAxMyAzIDEyLjYgMyAxMkwzIDZDMyA1LjQgMy40IDUgNCA1TDggNSA5IDRaIi8+PC9zdmc+) no-repeat;
+  background-size: contain;
+  display: inline-block;
+  vertical-align: text-bottom;
 }
 
 #logo-container {

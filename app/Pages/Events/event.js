@@ -1,14 +1,6 @@
 import m from "mithril"
-import {
-  CalendarLine,
-  HappyFaceLine,
-  HeartLine,
-  HomeSolid,
-  SadFaceLine,
-  UserLine,
-} from "@mithril-icons/clarity/cjs"
 import DateTime from "@/Components/DateTime"
-import { DAYSOFWEEK, isAdminOrMod } from "@/Utils"
+import { DAYSOFWEEK, isAdminOrMod, calendarIcon, homeIcon, personIcon, happyFaceIcon, sadFaceIcon, heartIcon } from "@/Utils"
 import { includes, without } from "ramda"
 
 const updateEventTask = (mdl) => (id) => (event) =>
@@ -58,7 +50,7 @@ const Event = {
               ".col",
               m(
                 ".grouped",
-                m(CalendarLine, { fill: "#14854f", height: 35, width: 35 }),
+                m('span', calendarIcon),
                 m(DateTime, { event })
               ),
 
@@ -72,7 +64,8 @@ const Event = {
               event.location &&
               m(
                 "h4.grouped",
-                m(HomeSolid, { fill: "#14854f", height: 35, width: 35 }),
+
+                m('span', { color: "#14854f", height: 35, width: 35 }, homeIcon),
                 m("label", event.location)
               ),
               event.allDay &&
@@ -82,31 +75,32 @@ const Event = {
               ".col",
               m(
                 ".grouped clear icon",
-                m(UserLine, { height: 35, width: 35, fill: "#14854f" }),
+                m('span', { color: "#14854f", height: 35, width: 35 }, personIcon),
                 m("label", "Attendees: ", event.attendees.length)
               ),
               mdl.state.isAuth() &&
               m(
-                ".tag grouped",
+                ".grouped",
                 m(
                   ".button.clear icon",
                   { onclick: () => updateAttendees(mdl, event) },
                   includes(mdl.user.objectId, event.attendees)
                     ? m(
                       "",
-                      m(HappyFaceLine, {
-                        fill: "green",
-                      }),
+                      m('span', { color: "#14854f", height: 35, width: 35 }, happyFaceIcon),
                       m("", "I'm Attending!")
                     )
-                    : m("", m(SadFaceLine), m("", "Not Attending"))
+                    : m("", m('span', { color: "#14854f", height: 35, width: 35 }, sadFaceIcon), m("", "Not Attending"))
                 ),
                 m(
-                  ".button.clear icon-only",
+                  ".button.clear icon-only.tag",
                   { onclick: () => updateLikes(mdl, event) },
-                  m(HeartLine, {
-                    fill: includes(mdl.user.objectId, event.likes) && "red",
-                  })
+                  m('span', {
+                    color: includes(mdl.user.objectId, event.likes) && "red",
+                  },
+                    m('span', { color: "#14854f", height: 35, width: 35 },
+                      heartIcon)
+                  )
                 )
               )
             )

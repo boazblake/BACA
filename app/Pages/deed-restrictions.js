@@ -1,5 +1,5 @@
 import m from "mithril"
-import { PopOutLine } from "@mithril-icons/clarity/cjs"
+import { spaceIcon } from "@/Utils"
 
 const DeedRes = ({ attrs: { mdl } }) => {
   const LUGARY = [
@@ -17,7 +17,7 @@ const DeedRes = ({ attrs: { mdl } }) => {
     ),
     m("p", { style: { "text-align": "center", "white-space": "pre-wrap" } }, [
       "Volume 2853 Page 466 of the Records of Maps and Plats of Harris County, Texas",
-      m.trust("&nbsp;"),
+      spaceIcon,
     ]),
     m("p", { style: { "white-space": "pre-wrap" } }, "THE STATE OF TEXAS"),
     m(
@@ -41,7 +41,7 @@ const DeedRes = ({ attrs: { mdl } }) => {
       " a subdivision of 20.92 acres of land out of the ",
       m("em", "J. "),
       "R. Black Survey, Abstract 134, Harris County, Texas, according",
-      m.trust("&nbsp;"),
+      spaceIcon,
     ]),
     m(
       "p",
@@ -73,9 +73,9 @@ const DeedRes = ({ attrs: { mdl } }) => {
       },
       [
         "A “corner lot” is one that abuts on more than one street.",
-        m.trust("&nbsp;"),
+        spaceIcon,
         " Any lot, except a corner, is deemed to front on the street upon which it abuts.",
-        m.trust("&nbsp;"),
+        spaceIcon,
         " A corner lot shall be deemed to front on the street on which it has smallest frontage.",
       ]
     ),
@@ -93,9 +93,9 @@ const DeedRes = ({ attrs: { mdl } }) => {
     ),
     m("p", { style: { "white-space": "pre-wrap" } }, [
       "For the purpose of creating and carrying out uniform plan for improvement and sale of property in said addition as a restricted addition, the following restrictions upon the use of said property are hereby established and adopted, subject to the provisions hereof, and shall be made part of each and every contract and deed executed by or on behalf of M. G. Rosenthal, his heirs, successors, and assigns, by appropriate reference to this dedication and same shall be considered a part of each contract and deed as though incorporated fully therein.",
-      m.trust("&nbsp;"),
+      spaceIcon,
       " And these restrictions as hereinafter set forth shall be and are, hereby imposed upon each lot or parcel of land in said additions shown by said plat and referred to herein, and same shall constitute",
-      m.trust("&nbsp;"),
+      spaceIcon,
       " covenants remaining with land and shall be binding upon, and shall insure to the benefit of M. G. Rosenthal, his heirs, successors, and assignee, and all subsequent purchases for said property, and each purchaser, by virtue of accepting a contract or deed of said property, shall be subject to and bound by such restrictions, covenants and conditions and for terms of this instrument as hereinafter set forth.",
     ]),
     m("p", {
@@ -166,7 +166,7 @@ const DeedRes = ({ attrs: { mdl } }) => {
     ),
     m("p", { style: { "white-space": "pre-wrap" } }, [
       "No improvements of any character shall be erected, or the erection thereof",
-      m.trust("&nbsp;"),
+      spaceIcon,
       " begun, of changes made in the exterior design thereof after original construction on any lot or home site in Bonham Acres Section 3, until plans and specifications have been submitted to and approved by the Architectural Committee hereinafter constituted. Such approval is to include exterior design, the type of material to be used, and the colors to be applied on the exterior of the structure, and such approval is to be based on the following general requirements, stipulations, and restrictions:",
     ]),
     m("p", {
@@ -356,9 +356,9 @@ const DeedRes = ({ attrs: { mdl } }) => {
     ]),
     m("p", { style: { "white-space": "pre-wrap" } }, [
       "The Architectural Committee shall be composed of Harold Hill, Ray Wilson, and Dr. Russell Bonham, all of Harris County, Texas.",
-      m.trust("&nbsp;"),
+      spaceIcon,
       " This Committee and its successors are hereby vested with the full right and authority to act as such under the provisions of these restrictions. The majority of such committee shall have the right to designate a representative to act for it in all matters arising hereunder.",
-      m.trust("&nbsp;"),
+      spaceIcon,
       " In the event of the death or resignation of any member of the Committee, the remaining members shall have full right and authority to act herein and to designate a representative to assist.",
     ]),
     m("p", {
@@ -382,9 +382,9 @@ const DeedRes = ({ attrs: { mdl } }) => {
     }),
     m("p", { style: { "white-space": "pre-wrap" } }, [
       "At any time a vacancy exists on said committee M.G. Rosenthal shall have the right to fill vacancies and should he fail to do so within 30 days after receiving notice of such vacancy the remaining members of the committee shall have the right to fill any vacancy.",
-      m.trust("&nbsp;"),
+      spaceIcon,
       " All appointments and designations of persons as successors to the Committee shall be made in writing by a recordable instrument, which shall be filed for record in Harris County Texas.",
-      m.trust("&nbsp;"),
+      spaceIcon,
       " The powers and duties of the Committee, as from time to time constituted, shall continue in force during the effective period of the restrictions hereby created.",
     ]),
     m("p", {
@@ -392,9 +392,9 @@ const DeedRes = ({ attrs: { mdl } }) => {
     }),
     m("p", { style: { "white-space": "pre-wrap" } }, [
       "Thereafter, the owners of fifty one percent (51%) of the lots in Bonham Acres Section 3 (one lot or home site constituting one ownership) becoming dissatisfied with any members as then constituted, shall have the right to remove any member or members of said committee, and may designate and appoint a new member or members by written petition bearing, the signatures of the property owners so acting.",
-      m.trust("&nbsp;"),
+      spaceIcon,
       " The petition shall show the property owned by each petitioner.",
-      m.trust("&nbsp;"),
+      spaceIcon,
       " In case property is owned by man and wife as community property, the signature of the husband alone shall be sufficient, except that in cases where the husband resides elsewhere, or has abandoned his wife, her signature shall be sufficient alone.",
       m("br"),
     ]),
@@ -466,7 +466,7 @@ const DeedRes = ({ attrs: { mdl } }) => {
     }),
     m("p", { style: { "white-space": "pre-wrap" } }, [
       "BEFORE ME, the undersigned authority, a Notary Public in and for said County and State, on this day personally appeared, M. G. Rosenthal known to me to be the person whose name is subscribed to the fore going instrument, and acknowledge to me that he executed the same for the purpose and consideration therein expressed.",
-      m.trust("&nbsp;"),
+      spaceIcon,
     ]),
     m("p", {
       style: { "white-space": "pre-wrap" },
@@ -508,7 +508,7 @@ const DeedRes = ({ attrs: { mdl } }) => {
       m("strong", "# 1052372")
     ),
     m("h3", { style: { "text-align": "center", "white-space": "pre-wrap" } }, [
-      m.trust("&nbsp;"),
+      spaceIcon,
       "Bonham Acres Subdivision Section 2 - Cadawac Rd",
     ]),
     m("p", { style: { "white-space": "pre-wrap" } }, "THE STATE OF TEXAS"),
@@ -853,7 +853,7 @@ const DeedRes = ({ attrs: { mdl } }) => {
       "Page 26 of the Records of Maps and Plats of Harris County, Texas, and joined herein by Richard I Anderson and wife Doris Anderson",
       m("strong", [
         ", do hereby establish the following minimum restrictions and covenants upon the use",
-        m.trust("&nbsp;"),
+        spaceIcon,
         " of lots Nos. 2 to 20 ",
       ]),
       "inclusive, in said Addition, and hereby declare that all conveyances of said lots or tracts in said Addition shall be subject to the following minimum restrictions, covenants, easements and conditions, which shall be, continue and remain in effect until January 1, 1970, at which time, said covenants and restrictions shall be automatically extended for successive periods of ten years unless by a vote of the majority of the then owners of the lots in said Addition, it is agreed to change the said covenants or restrictions it whole or in part. Such vote shall be evidenced by written declaration, signed and acknowledged by such owners wad recorded in the Deed Records of ",
@@ -1126,13 +1126,7 @@ const DeedRes = ({ attrs: { mdl } }) => {
             target: "_blank",
             href: "https://drive.google.com/drive/folders/17H-Zq2BBN8yKp19c4BQGIYvMPIqhgYL-",
           },
-          "View All Bonham Acres files",
-          m(PopOutLine, {
-            margin: "8px",
-            width: "15px",
-            height: "15px",
-          })
-        ),
+          "View All Bonham Acres files"),
         m(
           "nav.tabs",
           Object.keys(pages).map((tab) =>
