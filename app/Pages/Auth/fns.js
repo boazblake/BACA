@@ -1,8 +1,22 @@
 import { prop } from 'ramda'
 
+
+const addPayPal = () => {
+  window.paypal = null
+  const script = document.createElement('script')
+  script.src = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD"
+  script.id = 'paypal'
+  script.async = true
+  script.defer = true
+  script['data-sdk-integration-source'] = 'button-factory'
+  const head = document.head
+  head.insertBefore(script, head.firstChild)
+}
+
 export const setUserAndSessionToken = (mdl) => ({ account, dues, user }) => {
   sessionStorage.setItem("baca-user", JSON.stringify(user.objectId))
   sessionStorage.setItem("baca-session-token", user["sessionToken"])
+  addPayPal()
   mdl.state.isAuth(true)
   mdl.user = user
   mdl.dues = dues

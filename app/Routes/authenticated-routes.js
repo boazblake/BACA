@@ -79,6 +79,9 @@ const AuthenticatedRoutes = [
       sessionStorage.clear()
       mdl.state.isAuth(false)
       mdl.user = {}
+      window.paypal = null
+      const paypal = document.getElementById('paypal')
+      document.head.removeChild(paypal)
 
       let routes = ["/account"]
       let currentRoute = m.route.get()
