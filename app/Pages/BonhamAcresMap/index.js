@@ -7,10 +7,8 @@ import {
   findLocationTask,
   createMap,
   // saveResidentTask,
-  // selectLocation,
 } from "./model.js"
 import '@/Utils/stamen.js'
-import { value } from "@boazblake/fun-config/lib/src/util.js"
 
 const findResident = (mdl, state) => {
   const onError = (e) => {
