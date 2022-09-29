@@ -48,7 +48,7 @@ const updateBackground = (timestamp) => {
       : state.image(state.image() + 1)
     m.redraw()
   }
-  requestAnimationFrame(updateBackground)
+  requestIdleCallback(updateBackground)
 }
 
 const Hero = () => {
@@ -60,7 +60,7 @@ const Hero = () => {
     },
     oncreate: ({ attrs: { mdl } }) => {
       state.start(Date.now())
-      requestAnimationFrame(updateBackground)
+      requestIdleCallback(updateBackground)
     },
     view: ({ attrs: { mdl } }) =>
       m(

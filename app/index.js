@@ -93,7 +93,7 @@ const checkWidth = (winW) => {
     Model.settings.screenSize = getWinSize(w)
     if (lastProfile != Model.settings.screenSize) m.redraw()
   }
-  return requestAnimationFrame(checkWidth)
+  return requestIdleCallback(checkWidth)
 }
 
 Model.settings.screenSize = getWinSize(winW)
