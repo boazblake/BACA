@@ -32,7 +32,8 @@ const validateForm = (mdl) => (data) => {
 }
 
 const resetPassword = (mdl, email) => {
-  const onError = ({ message }) => {
+  const onError = (message) => {
+    console.log(message)
     state.msg(message)
     state.showMsg(true)
     state.showResetModal(false)

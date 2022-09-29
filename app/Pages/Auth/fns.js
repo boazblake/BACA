@@ -35,7 +35,7 @@ export const loginTask =
 
 
 export const resetPasswordTask = (mdl, email) =>
-  mdl.http.back4App.postTask(mdl)("auth/reset-password")({ email })
+  mdl.http.back4App.postTask(mdl)("auth/reset")({ email })
 
 export const registerUserTask =
   (mdl) =>
