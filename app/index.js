@@ -4,6 +4,7 @@ import { FunConfig } from "@boazblake/fun-config"
 import App from "./app.js"
 import Model from "@/Models/index.js"
 import { setUserAndSessionToken } from './Pages/Auth/fns.js'
+import { requestCallBack } from "@/Utils/helpers.js"
 import '@/Styles/chota.css'
 import '@/Styles/masonry.sass'
 import '@/Styles/glider.min.css'
@@ -93,7 +94,7 @@ const checkWidth = (winW) => {
     Model.settings.screenSize = getWinSize(w)
     if (lastProfile != Model.settings.screenSize) m.redraw()
   }
-  return requestIdleCallback(checkWidth)
+  return requestCallBack(checkWidth)
 }
 
 Model.settings.screenSize = getWinSize(winW)
