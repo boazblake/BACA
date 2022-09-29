@@ -130,7 +130,8 @@ const onImgError = (e) => {
   state.status("error")
 }
 const onImgSuccess = (img) => {
-  state.event.image = img.thumb
+  state.event.image = img.image
+  state.event.thumb = img.thumb
   state.status("loaded")
 }
 
