@@ -1,10 +1,11 @@
 import m from "mithril"
 import { toPairs, compose, map, keys, clone } from "ramda"
+import { tickIcon, xIcon } from '@/Utils/'
 
 const formatUIValue = (val) => {
   switch (val) {
     case typeof val == "boolean":
-      return val ? `&#x2713;` : 'x'
+      return val ? tickIcon : xIcon
       break
     default:
       return val

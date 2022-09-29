@@ -1,9 +1,8 @@
 import m from "mithril"
 import { prop, filter } from "ramda"
 import { Table, formatDataForTable } from "@/Components/table.js"
-// import { &#128221;, RemoveLine } from "@mithril-icons/clarity/cjs"
 import Task from "data.task"
-import { formatDate, getUserByUserId, editIcon } from "@/Utils"
+import { formatDate, getUserByUserId, editIcon, deleteIcon } from "@/Utils"
 let tabs = ["blogs", "events", "images", "users", "dues"]
 import { addSuccess, addDanger } from "@/Components/toast"
 

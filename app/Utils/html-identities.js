@@ -1,5 +1,6 @@
 import m from 'mithril'
 
+const tickIcon = m.trust('&#x2713;')
 const xIcon = m.trust('&#215;')
 const menuIcon = m.trust('&#9776;')
 const bellIcon = m.trust('&#128276;')
@@ -23,5 +24,5 @@ const vertEllipIcon = m.trust('&#8942;')
 
 export {
   menuIcon, xIcon, bellIcon, truckIcon, recycleIcon, noiseIcon, homeIcon, warningIcon, spaceIcon, ampIcon, editIcon, deleteIcon, leftArrowIcon, calendarIcon, personIcon, happyFaceIcon, sadFaceIcon,
-  rightArrowIcon, heartIcon, vertEllipIcon
+  rightArrowIcon, heartIcon, vertEllipIcon, tickIcon
 }
