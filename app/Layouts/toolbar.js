@@ -12,7 +12,7 @@ const AuthDisplay = ({ attrs: { mdl } }) => {
     view: ({ attrs: { mdl } }) =>
       m(
         m.route.Link,
-        { href: `/account/${route}`, selector: "a.underline.pointer" },
+        { href: `/account/${route}`, selector: "a.underline.pointer.outline" },
         `Welcome ${mdl.user.name?.split(" ")[0]}`,
         mdl.state.hasNotifications() &&
         m('span', { height: "24px", fill: "green" }, bellIcon)
@@ -57,7 +57,7 @@ export default {
           m(AuthBox, { mdl })
         )
         : m(
-          ".nav-right is-right",
+          ".nav-right is-right.grouped",
           mdl.state.isAuth() && m(AuthDisplay, { mdl }),
           m(Hamburger, { mdl })
         ),

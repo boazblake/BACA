@@ -38,11 +38,9 @@ const resetPassword = (mdl, email) => {
     state.showResetModal(false)
   }
 
-  const onSuccess = () => {
+  const onSuccess = ({ results: { message } }) => {
     state.showResetModal(false)
-    state.msg(
-      "A password reset request was sent to the email provided, please check your email to reset your password."
-    )
+    state.msg(message)
     state.showMsg(true)
   }
 

@@ -24,7 +24,11 @@ const contents = {
         "To read the complete ordinance, go to ",
         m(
           "a.nav-link",
-          { target: "_blank", href: "www.Municode.com" },
+          {
+            target: "_blank",
+            onclick: (e) => window.open(e.target.href),
+            href: "www.Municode.com"
+          },
           "www.Municode.com"
         ),
         " on the internet and search for City of Houston, Chapter 28, Article X, or enter Parking of Vehicles on Residential Property in the search block."
@@ -35,6 +39,7 @@ const contents = {
           "a.nav-link",
           {
             target: "_blank",
+            onclick: (e) => window.open(e.target.href),
             href: "https://www.houstontx.gov/police/pdfs/brochures/english/Parking_of_vehicles_on_residential_propert.pdf",
           },
           "https://www.houstontx.gov/police/pdfs/brochures/english/Parking_of_vehicles_on_residential_propert.pdf"
@@ -48,6 +53,7 @@ const contents = {
           "a.nav-link",
           {
             target: "_blank",
+            onclick: (e) => window.open(e.target.href),
             href: "http://mycity.houstontx.gov/public/",
           },
           " http://mycity.houstontx.gov/public/ "
@@ -61,6 +67,7 @@ const contents = {
           "a.nav-link",
           {
             target: "_blank",
+            onclick: (e) => window.open(e.target.href),
             href: "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html",
           },
           "https://www.houstontx.gov/planning/Prohibited-Yard-Parking-Ordinance.html"
@@ -80,7 +87,11 @@ const contents = {
         "p",
         m(
           "a.nav-link",
-          { target: "_blank", href: "https://www.rollouthouston.com/" },
+          {
+            target: "_blank",
+            onclick: (e) => window.open(e.target.href),
+            href: "https://www.rollouthouston.com/"
+          },
           "Roll Out Houston!"
         )
       ),
@@ -90,6 +101,7 @@ const contents = {
           "a.nav-link",
           {
             target: "_blank",
+            onclick: (e) => window.open(e.target.href),
             href: "https://www.houstontx.gov/solidwaste/trashfacts.pdf",
           },
           "Houston Trash Facts PDF",
@@ -105,7 +117,11 @@ const contents = {
         "p",
         "According to the ",
         ("a.nav-link",
-          { target: "_blank", href: "#" },
+        {
+          target: "_blank",
+          onclick: (e) => window.open(e.target.href),
+          href: "#"
+        },
           " Houston Sound Ordinance, "),
         " sound ",
         m("span.strong", " cannot exceed 65 decibels during the day "),
@@ -122,6 +138,7 @@ const contents = {
           "a.nav-link",
           {
             target: "_blank",
+            onclick: (e) => window.open(e.target.href),
             href: "https://library.municode.com/tx/houston/codes/code_of_ordinances?nodeId=COOR_CH30NOSOLERE",
           },
           "https://library.municode.com/tx/houston/codes/code_of_ordinances?nodeId=COOR_CH30NOSOLERE"
@@ -139,6 +156,7 @@ const contents = {
           "a.nav-link",
           {
             target: "_blank",
+            onclick: (e) => window.open(e.target.href),
             href: "https://statutes.capitol.texas.gov/Docs/HS/htm/HS.342.htm#342.004",
           },
           "Section 342.004 of the Texas Health and Safety Code"
@@ -154,6 +172,7 @@ const contents = {
           "a.nav-link",
           {
             target: "_blank",
+            onclick: (e) => window.open(e.target.href),
             href: "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.311.htm#311.003",
           },
           "Sections 311.003 - 311.004 of the Texas Transportation Code"
@@ -170,6 +189,7 @@ const contents = {
           "a.nav-link",
           {
             target: "_blank",
+            onclick: (e) => window.open(e.target.href),
             href: "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.683.htm#E",
           },
           "Texas Transportation Code, Chapter 683, Subchapter E"

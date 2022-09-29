@@ -1,5 +1,5 @@
 import m from "mithril"
-import { spaceIcon } from "@/Utils"
+import { spaceIcon, ampIcon } from "@/Utils"
 
 const DeedRes = ({ attrs: { mdl } }) => {
   const LUGARY = [
@@ -541,9 +541,9 @@ const DeedRes = ({ attrs: { mdl } }) => {
       "Page ____of the Records of Maps and Plats of Harris County, Texas, do hereby establish the following minimum restrictions and covenants upon the use ",
       m("strong", [
         "of Lots A ",
-        m.trust("&amp;"),
+        ampIcon,
         " B ",
-        m.trust("&amp;"),
+        ampIcon,
         " lots 1 to 32,",
       ]),
       " inclusive, in said Addition, and hereby declare that all conveyances of said lots or tracts in said Addition shall be subject to the following minimum restrictions, covenants, easements and conditions, which shall be, continue and remain in effect until January 1, 1972, at which time, said covenants and restrictions shall be automatically extended for successive periods of ten years unless by a vote of the majority of the then owners of the lots in said Addition, it is agreed to change the said covenants or restrictions it whole or in part. Such vote shall be evidenced by written declaration, signed and acknowledged by such owners wad recorded in the Deed Records of ",

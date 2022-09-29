@@ -78,27 +78,27 @@ if (process.env.NODE_ENV !== "production") {
   }
 }
 // set display profiles
-// const getWinSize = (w) => {
-//   if (w < 464) return "phone"
-//   if (w < 624) return "wide"
-//   if (w < 1000) return "tablet"
-//   return "desktop"
-// }
+const getWinSize = (w) => {
+  if (w < 464) return "phone"
+  if (w < 624) return "wide"
+  if (w < 1000) return "tablet"
+  return "desktop"
+}
 
-// const checkWidth = (winW) => {
-//   const w = window.innerWidth
-//   if (winW !== w) {
-//     winW = w
-//     var lastProfile = Model.settings.screenSize
-//     Model.settings.screenSize = getWinSize(w)
-//     if (lastProfile != Model.settings.screenSize) m.redraw()
-//   }
-//   return requestAnimationFrame(checkWidth)
-// }
+const checkWidth = (winW) => {
+  const w = window.innerWidth
+  if (winW !== w) {
+    winW = w
+    var lastProfile = Model.settings.screenSize
+    Model.settings.screenSize = getWinSize(w)
+    if (lastProfile != Model.settings.screenSize) m.redraw()
+  }
+  return requestAnimationFrame(checkWidth)
+}
 
-// Model.settings.screenSize = getWinSize(winW)
+Model.settings.screenSize = getWinSize(winW)
 
-// checkWidth(winW)
+checkWidth(winW)
 
 if (sessionStorage.getItem("baca-session-token")) {
   const checkIfLoggedIn = (mdl) =>

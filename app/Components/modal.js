@@ -12,6 +12,7 @@ const scaleWidth = (mdl) => {
       return "scale(1)"
   }
 }
+let DOM = null
 
 const Modal = {
   onremove: ({ attrs: { mdl } }) => {
@@ -24,7 +25,7 @@ const Modal = {
     return m(
       `dialog.modal.${mdl.modal.classList()}`,
       m(
-        ".modal-overlay",
+        "#modal-overlay.modal-overlay",
         {
           "aria-label": "Close",
           onclick: (e) => mdl.state.showLayoutModal(false),
@@ -32,8 +33,9 @@ const Modal = {
         m(
           "section.modal-container",
           m(
-            ".card.grid",
+            "#modal-card-grid.card.grid",
             {
+              oncreate: ({ dom }) => DOM = dom,
               style: {
                 position: "fixed",
                 // top: "5%",
@@ -44,9 +46,10 @@ const Modal = {
                 // transform: `${scaleWidth(mdl)}`,
               },
               onclick: (e) => {
-                console.log("modal", e)
-                e.preventDefault()
-                e.stopPropagation()
+                if (e.target.id != DOM.id) {
+                  e.preventDefault()
+                  e.stopPropagation()
+                }
               },
             },
             m("header.modal-header.row", mdl.modal.header()),

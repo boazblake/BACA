@@ -92,7 +92,7 @@ const getTask = (mdl) => (url) => HttpTask("GET")(mdl)(url)(null)
 
 const prod = "https://lucky-slippers-eel.cyclic.app/api"
 const dev = "http://localhost:3001/api"
-const proxy = prod//process.env.NODE_ENV ? dev : prod
+const proxy = dev//process.env.NODE_ENV ? dev : prod
 
 const back4App = {
   getTask: (mdl) => (url) => HttpTask("GET")(mdl)(`${proxy}/${url}`)(null),

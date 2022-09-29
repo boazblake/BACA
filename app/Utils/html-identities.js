@@ -19,7 +19,9 @@ const personIcon = m.trust('&#128100;')
 const happyFaceIcon = m.trust('&#9786;')
 const sadFaceIcon = m.trust('&#9785;')
 const heartIcon = m.trust('&#9825;')
+const vertEllipIcon = m.trust('&#8942;')
+
 export {
   menuIcon, xIcon, bellIcon, truckIcon, recycleIcon, noiseIcon, homeIcon, warningIcon, spaceIcon, ampIcon, editIcon, deleteIcon, leftArrowIcon, calendarIcon, personIcon, happyFaceIcon, sadFaceIcon,
-  rightArrowIcon, heartIcon
+  rightArrowIcon, heartIcon, vertEllipIcon
 }
