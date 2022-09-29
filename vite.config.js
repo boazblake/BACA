@@ -84,6 +84,7 @@ export default defineConfig({
   },
   build: { outDir: "docs" },
   server: {
+    port: 3001,
     open: true,
   },
   base: './'

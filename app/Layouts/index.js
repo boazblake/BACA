@@ -110,7 +110,7 @@ export const fetchAll = ({ attrs: { mdl } }) => {
   Task.of((events) => (images) => (blogs) => ({ events, images, blogs }))
     .ap(fetchTask(mdl, "events").map(map(toEventViewModel)))
     .ap(fetchTask(mdl, "gallery").map(uniqWith(eqBy(prop("thumb")))))
-    .ap(fetchTask(mdl, "blogs"))
+    .ap(fetchTask(mdl, "blogs")).map(log('??'))
     .fork(onError, onSuccess)
 }
 

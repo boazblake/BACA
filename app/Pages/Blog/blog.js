@@ -13,7 +13,7 @@ const state = {
 const loadBlogs = ({ attrs: { mdl } }) => {
   const onError = (error) => (state.errors = error)
 
-  const onSuccess = (results) => (state.blogs = results)
+  const onSuccess = (results) => (state.blogs = results.reverse())
 
   mdl.http.back4App
     .getTask(mdl)("blogs")
