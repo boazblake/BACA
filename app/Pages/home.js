@@ -181,8 +181,8 @@ const Event = {
       m.route.Link,
       {
         selector: "",
-        onclick: () => mdl.state.selectedPreviewEvent(event.objectId),
-        href: "/social/events",
+        onclick: () => mdl.state.locationPreEvent(m.route.get()),
+        href: `/social/events?${event.objectId}`,
         key: idx,
         style: {
           height: "200px",

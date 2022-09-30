@@ -42,6 +42,7 @@ const SocialRoutes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
+      mdl.state.selectedPreviewEvent(Object.keys(args)[0])
       return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Events, { mdl })),

@@ -32,6 +32,7 @@ const state = {
   },
   dragging: {},
   locationPreAuth: Stream('/'),
+  locationPreEvent: Stream('/'),
   isAuth: Stream(false),
   navSelected: Stream(""),
   showAuthModal: Stream(false),

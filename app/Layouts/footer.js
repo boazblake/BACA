@@ -70,7 +70,7 @@ const Footer = () => {
                 m(
                   "a.row.underline.nav-link",
                   {
-                    target: "__blank",
+                    target: "_blank",
                     href: "https://www.bonhamacres.org/city-ordinances",
                   },
                   "City of Houston City Ordinances"
@@ -81,7 +81,7 @@ const Footer = () => {
                 m(
                   "a.row.underline.nav-link",
                   {
-                    target: "__blank",
+                    target: "_blank",
                     href: "https://09ee40f4-9ff7-4e3d-819c-429f2403854d.filesusr.com/ugd/537320_f8abdef644b04cde8dc36f671bb9868f.pdf",
                   },
                   "COH trash facts"
@@ -92,7 +92,7 @@ const Footer = () => {
                 m(
                   "a.row.underline.nav-link",
                   {
-                    target: "__blank",
+                    target: "_blank",
                     href: "https://www.houstontx.gov/solidwaste/Recycle_Cal.pdf",
                   },
                   "COH recycling calendar Schedule B"
@@ -103,7 +103,7 @@ const Footer = () => {
                 m(
                   "a.row.underline.nav-link",
                   {
-                    target: "__blank",
+                    target: "_blank",
                     href: "https://mycity.maps.arcgis.com/apps/webappviewer/index.html?id=63ed96f439fe404387c9f9e479dc4965",
                   },
                   "COH trash service day"
@@ -114,7 +114,7 @@ const Footer = () => {
                 m(
                   "a.row.underline.nav-link",
                   {
-                    target: "__blank",
+                    target: "_blank",
                     href: "http://www.houstontx.gov/solidwaste/treewaste.html",
                   },
                   "COH tree and junk waste program"
@@ -125,7 +125,7 @@ const Footer = () => {
                 m(
                   "a.row.underline.nav-link",
                   {
-                    target: "__blank",
+                    target: "_blank",
                     href: "http://www.centerpointenergy.com/en-us/residential/customer-service/electric-outage-center/report-streetlight-outages?sa=ho",
                   },
                   "Streetlight outage repair"
@@ -135,7 +135,7 @@ const Footer = () => {
                 "li",
                 m(
                   "a.row.underline.nav-link",
-                  { target: "__blank", href: "http://www.hcad.org/" },
+                  { target: "_blank", href: "http://www.hcad.org/" },
                   "Harris County Appraisal District"
                 )
               ),
@@ -143,7 +143,7 @@ const Footer = () => {
                 "li",
                 m(
                   "a.row.underline.nav-link",
-                  { target: "__blank", href: "http://www.hcfcd.org/" },
+                  { target: "_blank", href: "http://www.hcfcd.org/" },
                   "Harris County Flood Control District"
                 )
               ),
@@ -152,7 +152,7 @@ const Footer = () => {
                 m(
                   "a.row.underline.nav-link",
                   {
-                    target: "__blank",
+                    target: "_blank",
                     href: "https://09ee40f4-9ff7-4e3d-819c-429f2403854d.filesusr.com/ugd/537320_2472d77b27c640bfa348613b3aa86c95.pdf",
                   },
                   "Construction in a Floodplain"

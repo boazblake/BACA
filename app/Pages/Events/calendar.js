@@ -21,6 +21,7 @@ const onEventClick = (mdl, state) => (info) => {
   state.event.endDate = head(end)
   state.event.endTime = head(tail(end))
   state.event.id = id
+  mdl.state.locationPreEvent(m.route.get())
   state.previewEvent(true)
 
   if (info.event.url) {

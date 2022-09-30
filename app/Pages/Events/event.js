@@ -133,8 +133,9 @@ const Event = {
               {
                 onclick: () => {
                   resetState(state)
-                  mdl.state.selectedPreviewEvent(null)
                   previewEvent(false)
+                  mdl.state.selectedPreviewEvent(null)
+                  m.route.set(mdl.state.locationPreEvent())
                 },
               },
               "Close"
