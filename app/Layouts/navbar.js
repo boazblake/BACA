@@ -4,16 +4,30 @@ const isActiveRoute = (a, b) => (a == b ? "active button outline" : "")
 
 const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
 
+
 const Navbar = {
   view: ({ attrs: { mdl } }) =>
     m(
-      "nav.nav#navbar.is-full-width",
+      "nav.nav#navbar.is-full-width", {
+      style: {
+        height: '50px',
+        transition: 'height 0.3s ease-out'
+      }
+    },
       routes(mdl).map((r) =>
         m(NavLink, {
+          onmouseout: () => {
+            // maxHeight = '50px'
+          },
           onmouseover: (e) => {
+            // if (r.children.any()) {
+            // maxHeight = '300px'
             mdl.state.navState(r.id)
             e.stopPropagation()
             e.preventDefault()
+            // }
+            // console.log('style', style())
+
           },
           onclick: (e) => {
             if (r.children.any()) {

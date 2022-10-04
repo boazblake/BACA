@@ -383,10 +383,10 @@ header hgroup {
 
 #navigation {
   z-index: 60;
-  transition: top 0.3s ease-in-out;
   top: 65px;
   background-color: rgba(255, 255, 255, 0.9);
-  min-height: 102px;
+  // max-height: 50px;
+  transition: top 0.3s ease-in-out, height 0.3s ease-in-out;
 }
 
 .nav-link {

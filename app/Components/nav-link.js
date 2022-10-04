@@ -1,5 +1,4 @@
 import m from "mithril"
-import { handlers } from "@/Utils"
 
 const showBorderStyle = (style) => {
   style.border = "1px solid black"

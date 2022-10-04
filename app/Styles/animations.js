@@ -15,14 +15,14 @@ export const AddToCartOut = ({ dom }) => {
 
 export const replaceCSS =
   (a, b) =>
-  ({ dom }) => {
-    dom.classList.replace(a, b)
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve()
-      }, 300)
-    )
-  }
+    ({ dom }) => {
+      dom.classList.replace(a, b)
+      return new Promise((resolve) =>
+        setTimeout(() => {
+          resolve()
+        }, 300)
+      )
+    }
 
 export const SlideOutRight = ({ dom }) => {
   dom.classList.replace("slideInLeft", "slideOutLeft")
@@ -60,12 +60,12 @@ export const FadeBack = ({ dom }) => {
 
 export const FadeOut = ({ dom }) => {
   dom.classList.replace("fade", "fadeOut")
-  return new Promise((resolve) =>
+  return new Promise((resolve) => {
     setTimeout(() => {
       dom.classList.replace("fadeOut", "fade")
-      dom.addEventListener("animationend", resolve)
     })
-  )
+    return dom.addEventListener("animationend", resolve)
+  })
 }
 
 export const FadeIn = ({ dom }) => {
@@ -102,33 +102,33 @@ export const SlideChildrenInRight = ({ dom }) => {
 
 export const StretchInLeft =
   (idx) =>
-  ({ dom }) => {
-    dom.style.opacity = 0
-    return setTimeout(() => {
-      dom.classList.toggle("stretchRight")
-      dom.style.opacity = 1
-    }, idx * 100 + 20)
-  }
+    ({ dom }) => {
+      dom.style.opacity = 0
+      return setTimeout(() => {
+        dom.classList.toggle("stretchRight")
+        dom.style.opacity = 1
+      }, idx * 100 + 20)
+    }
 
 export const SlideChildrenInDown =
   (idx) =>
-  ({ dom }) => {
-    dom.style.opacity = 0
-    setTimeout(() => {
-      dom.classList.toggle("slideDown")
-      dom.style.opacity = 1
-    }, (idx + 1) * 200)
-  }
+    ({ dom }) => {
+      dom.style.opacity = 0
+      setTimeout(() => {
+        dom.classList.toggle("slideDown")
+        dom.style.opacity = 1
+      }, (idx + 1) * 200)
+    }
 
 export const animate =
   (dir) =>
-  ({ dom }) => {
-    dom.style.opacity = 0
-    setTimeout(() => {
-      dom.classList.toggle(dir)
-      dom.style.opacity = 1
-    }, 200)
-  }
+    ({ dom }) => {
+      dom.style.opacity = 0
+      setTimeout(() => {
+        dom.classList.toggle(dir)
+        dom.style.opacity = 1
+      }, 200)
+    }
 
 export const RemoveChildrenOut = ({ dom }) =>
   new Promise(() => {
