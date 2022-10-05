@@ -17,25 +17,20 @@ const Navbar = {
           onmouseover: (e) => {
             // if (r.children.any()) {
             // maxHeight = '300px'
-            // let current = mdl.state.navState()
-            // if (current !== r.id) {
-            // console.log(current, r.id,)
+
             mdl.state.navState(r.id)
-            mdl.state.showingSubnav(r.children.any())
             e.stopPropagation()
             e.preventDefault()
-            // }
             // }
             // console.log('style', style())
 
           },
           onclick: (e) => {
-            // if (r.children.any()) {
-            mdl.state.navState(r.id)
-            mdl.state.showingSubnav(r.children.any())
-            e.stopPropagation()
-            e.preventDefault()
-            // }
+            if (r.children.any()) {
+              mdl.state.navState(r.id)
+              e.stopPropagation()
+              e.preventDefault()
+            }
           },
           mdl,
           role: "button",
