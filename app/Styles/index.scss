@@ -389,17 +389,20 @@ header hgroup {
   transition: top 0.3s ease-in-out, height 0.3s ease-in-out;
 }
 
-.nav-link {
+.large-font {
   font-size: larger;
+  a {
+    font-size: larger;
+  }
+}
+
+.nav-link {
   word-wrap: break-word;
 }
 
-// #navbar {
-//   top: 65px;
-// }
-
 #sub-navbar {
-  border-top: 2px dotted green;
+  // border-top: 2px dotted green;
+  height: 150px;
 }
 
 #toolbar {

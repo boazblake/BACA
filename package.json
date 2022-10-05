@@ -27,6 +27,7 @@
     "mithril": "../mithril.js/",
     "mithril-stream": "^2.0.0",
     "ramda": "^0.27.2",
+    "simplestatemanager": "^4.1.1",
     "tui-editor-plugin-font-size": "^1.0.4"
   },
   "devDependencies": {

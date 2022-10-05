@@ -1,7 +1,7 @@
 import m from "mithril"
 import Images from "../images.js"
 import Stream from "mithril-stream"
-import { requestCallBack } from "@/Utils/helpers.js"
+import { rIC } from "@/Utils/request-idle.js"
 
 const state = {
   image: Stream(0),
@@ -49,7 +49,7 @@ const updateBackground = (timestamp) => {
       : state.image(state.image() + 1)
     m.redraw()
   }
-  requestCallBack(updateBackground)
+  rIC(updateBackground)
 }
 
 const Hero = () => {
@@ -61,7 +61,7 @@ const Hero = () => {
     },
     oncreate: ({ attrs: { mdl } }) => {
       state.start(Date.now())
-      requestCallBack(updateBackground)
+      rIC(updateBackground)
     },
     view: ({ attrs: { mdl } }) =>
       m(

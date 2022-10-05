@@ -227,7 +227,7 @@ export const toUploadB64 = b64 => {
 export const resizeImageTask = img => new Task((rej, res) =>
   toWebpFormat(img).then(toUploadB64).then(res, rej))
 
-export const requestCallBack = fn => isChrome() ? requestIdleCallback(fn) : requestAnimationFrame(fn)
+// export const requestCallBack = fn => isChrome() ? requestIdleCallback(fn) : requestAnimationFrame(fn)
 
 export const isChrome = () => !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
 

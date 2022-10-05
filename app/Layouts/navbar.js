@@ -8,12 +8,7 @@ const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
 const Navbar = {
   view: ({ attrs: { mdl } }) =>
     m(
-      "nav.nav#navbar.is-full-width", {
-      style: {
-        height: '50px',
-        transition: 'height 0.3s ease-out'
-      }
-    },
+      "nav.nav",
       routes(mdl).map((r) =>
         m(NavLink, {
           onmouseout: () => {

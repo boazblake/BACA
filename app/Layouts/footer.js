@@ -21,7 +21,7 @@ const Footer = () => {
                 m("h3", "Click here for any website related support")
               ),
               m(
-                "a.row.underline.nav-link",
+                "a.row.underline.nav-link.large-font",
                 {
                   target: "__blank",
                   name: "facebook",
@@ -33,7 +33,7 @@ const Footer = () => {
                 })
               ),
               m(
-                "a.row.underline.nav-link",
+                "a.row.underline.nav-link.large-font",
                 {
                   target: "__blank",
                   name: "nextdoor",
@@ -45,7 +45,7 @@ const Footer = () => {
                 })
               ),
               m(
-                "a.row.underline.nav-link",
+                "a.row.underline.nav-link.large-font",
                 {
                   target: "__blank",
                   name: "gmail",
@@ -68,7 +68,7 @@ const Footer = () => {
               m(
                 "li",
                 m(
-                  "a.row.underline.nav-link",
+                  "a.row.underline.nav-link.large-font",
                   {
                     target: "_blank",
                     href: "https://www.bonhamacres.org/city-ordinances",
@@ -79,7 +79,7 @@ const Footer = () => {
               m(
                 "li",
                 m(
-                  "a.row.underline.nav-link",
+                  "a.row.underline.nav-link.large-font",
                   {
                     target: "_blank",
                     href: "https://09ee40f4-9ff7-4e3d-819c-429f2403854d.filesusr.com/ugd/537320_f8abdef644b04cde8dc36f671bb9868f.pdf",
@@ -90,7 +90,7 @@ const Footer = () => {
               m(
                 "li",
                 m(
-                  "a.row.underline.nav-link",
+                  "a.row.underline.nav-link.large-font",
                   {
                     target: "_blank",
                     href: "https://www.houstontx.gov/solidwaste/Recycle_Cal.pdf",
@@ -101,7 +101,7 @@ const Footer = () => {
               m(
                 "li",
                 m(
-                  "a.row.underline.nav-link",
+                  "a.row.underline.nav-link.large-font",
                   {
                     target: "_blank",
                     href: "https://mycity.maps.arcgis.com/apps/webappviewer/index.html?id=63ed96f439fe404387c9f9e479dc4965",
@@ -112,7 +112,7 @@ const Footer = () => {
               m(
                 "li",
                 m(
-                  "a.row.underline.nav-link",
+                  "a.row.underline.nav-link.large-font",
                   {
                     target: "_blank",
                     href: "http://www.houstontx.gov/solidwaste/treewaste.html",
@@ -123,7 +123,7 @@ const Footer = () => {
               m(
                 "li",
                 m(
-                  "a.row.underline.nav-link",
+                  "a.row.underline.nav-link.large-font",
                   {
                     target: "_blank",
                     href: "http://www.centerpointenergy.com/en-us/residential/customer-service/electric-outage-center/report-streetlight-outages?sa=ho",
@@ -134,7 +134,7 @@ const Footer = () => {
               m(
                 "li",
                 m(
-                  "a.row.underline.nav-link",
+                  "a.row.underline.nav-link.large-font",
                   { target: "_blank", href: "http://www.hcad.org/" },
                   "Harris County Appraisal District"
                 )
@@ -142,7 +142,7 @@ const Footer = () => {
               m(
                 "li",
                 m(
-                  "a.row.underline.nav-link",
+                  "a.row.underline.nav-link.large-font",
                   { target: "_blank", href: "http://www.hcfcd.org/" },
                   "Harris County Flood Control District"
                 )
@@ -150,7 +150,7 @@ const Footer = () => {
               m(
                 "li",
                 m(
-                  "a.row.underline.nav-link",
+                  "a.row.underline.nav-link.large-font",
                   {
                     target: "_blank",
                     href: "https://09ee40f4-9ff7-4e3d-819c-429f2403854d.filesusr.com/ugd/537320_2472d77b27c640bfa348613b3aa86c95.pdf",

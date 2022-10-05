@@ -19,7 +19,7 @@ const SubNavbar = () => {
         subroutes(mdl).map((r, key) =>
           r.group.includes("external")
             ? m(
-              "a.clear.nav-link",
+              "a.clear.nav-link.larger-font",
               { key, target: "_blank", href: r.external },
               r.name)
             : m(NavLink, {
@@ -27,7 +27,7 @@ const SubNavbar = () => {
               mdl,
               href: r.route,
               link: r.name,
-              classList: `clear ${isActiveRoute(
+              classList: `larger-font clear ${isActiveRoute(
                 mdl.state.subnavState(),
                 r.route
               )}`,

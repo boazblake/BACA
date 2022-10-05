@@ -1,6 +1,7 @@
 import Routes from "../Routes/index.js"
 import http from "@/Utils/http"
 import Stream from "mithril-stream"
+import Settings from './settings.js'
 
 const data = {
   events: [],
@@ -52,7 +53,6 @@ const state = {
 const user = {
   role: "user",
 }
-const settings = {}
 
 const errors = {}
 
@@ -64,7 +64,7 @@ const Model = {
   user,
   data,
   errors,
-  settings,
+  settings: Settings,
   paypal: {},
   modal: {
     header: Stream([]),

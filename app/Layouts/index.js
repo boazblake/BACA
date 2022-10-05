@@ -132,9 +132,7 @@ const Layout = {
         {
           oncreate: ({ dom }) => (state.navDom = dom),
           style: updateNavigationStyle(state.navDom, mdl.state.showNavMenu()),
-          // class: vertAlign(mdl),
         },
-        m(Navbar, { mdl }),
         m(SubNavbar, { mdl })
       ),
       m(Hero, { mdl }),

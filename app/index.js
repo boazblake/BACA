@@ -3,8 +3,8 @@ import Stream from "mithril-stream"
 import { FunConfig } from "@boazblake/fun-config"
 import App from "./app.js"
 import Model from "@/Models/index.js"
+import { addSuccess } from "@/Components/toast"
 import { setUserAndSessionToken } from './Pages/Auth/fns.js'
-import { requestCallBack } from "@/Utils/helpers.js"
 import '@/Styles/chota.css'
 import '@/Styles/masonry.sass'
 import '@/Styles/glider.min.css'
@@ -15,20 +15,22 @@ import '@/Styles/toast.css'
 import '@/Styles/leaflet.css'
 
 const root = document.body
-let winW = window.innerWidth
 window.log = (m) => (v) => {
   console.log(m, v)
   return v
 }
 
-window.perf = (fn) => {
-  const startTime = performance.now()
 
-  // Do the normal stuff for this function
 
-  const duration = performance.now() - startTime
-  console.log(`${fn} took ${duration}ms`)
-}
+
+// window.perf = (fn) => {
+//   const startTime = performance.now()
+
+//   // Do the normal stuff for this function
+
+//   const duration = performance.now() - startTime
+//   console.log(`${fn} took ${duration}ms`)
+// }
 
 FunConfig.configure()
 
@@ -78,28 +80,7 @@ if (process.env.NODE_ENV !== "production") {
     })
   }
 }
-// set display profiles
-const getWinSize = (w) => {
-  if (w < 464) return "phone"
-  if (w < 624) return "wide"
-  if (w < 1000) return "tablet"
-  return "desktop"
-}
 
-const checkWidth = (winW) => {
-  const w = window.innerWidth
-  if (winW !== w) {
-    winW = w
-    var lastProfile = Model.settings.screenSize
-    Model.settings.screenSize = getWinSize(w)
-    if (lastProfile != Model.settings.screenSize) m.redraw()
-  }
-  return requestCallBack(checkWidth)
-}
-
-Model.settings.screenSize = getWinSize(winW)
-
-checkWidth(winW)
 
 if (sessionStorage.getItem("baca-session-token")) {
   const checkIfLoggedIn = (mdl) =>
@@ -113,12 +94,9 @@ if (sessionStorage.getItem("baca-session-token")) {
     sessionStorage.clear()
     console.error("problem fetching user", e)
   }
-  const onSuccess = (mdl) => {
-    // console.log("relogin success", mdl)
-  }
+  const onSuccess = (mdl) => addSuccess(`Welcome back ${mdl.user.name}`)
 
   reloginTask(Model).fork(onError, onSuccess)
 }
-
 m.route(root, "/", App(Model))
 
