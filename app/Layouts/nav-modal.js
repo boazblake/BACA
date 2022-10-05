@@ -27,7 +27,7 @@ const displayRoute = (mdl) => (r) => {
         mdl,
         href: r.route,
         link: r.name,
-        classList: `${isActiveRoute(r.route)} col-12`,
+        classList: `${isActiveRoute(r.route)} col-12 large-font`,
       })
     } else {
       return
@@ -37,7 +37,7 @@ const displayRoute = (mdl) => (r) => {
       mdl,
       href: r.route,
       link: r.name,
-      classList: `${isActiveRoute(r.route)} col-12`,
+      classList: `${isActiveRoute(r.route)} col-12 large-font`,
     })
 }
 
@@ -54,13 +54,13 @@ const NavSection = ({ attrs: { mdl, route, toggleRoutes } }) => {
           class: "primary",
           onclick: (e) => toggleRoutes(mdl)(route.id),
         },
-        m("summary.nav-link", route.name),
+        m("summary.nav-link.large-font", route.name),
         m(
           "nav.row.fade.p-x-l-50",
           childRoutes.map((r) =>
             r.group.includes("external")
               ? m(
-                "a.col-12 icon nav-link",
+                "a.col-12 icon nav-link.large-font",
                 { target: "_blank", href: r.external },
                 r.name
               )
