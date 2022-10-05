@@ -16,7 +16,7 @@ import {
   slice,
   split,
   trim,
-  max,
+  max, head,
   toPairs,
   min,
   add,
@@ -231,3 +231,15 @@ export const resizeImageTask = img => new Task((rej, res) =>
 
 export const isChrome = () => !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
 
+const expireCookie = date => name => {
+  date.setTime(date.getTime - 1)
+  document.cookie = `${name}=;expres=${date}`
+}
+
+export const removePaypal = () => {
+  const paypal = document.getElementById('paypal')
+  document.head.removeChild(paypal)
+  window.paypal = null
+
+  Object.keys(window).forEach(k => ['zoid', 'paypal', '__post_robot'].map(s => k.includes(s) && delete window[k]))
+}

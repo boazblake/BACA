@@ -3,7 +3,7 @@ import Default from "@/Pages/default.js"
 import Account from "@/Pages/Account/index.js"
 import Admin from "@/Pages/Admin"
 import Layout from "@/Layouts/index.js"
-import { ScrollToPageTitle } from "@/Utils"
+import { ScrollToPageTitle, removePaypal } from "@/Utils"
 
 const AuthenticatedRoutes = [
   {
@@ -77,12 +77,9 @@ const AuthenticatedRoutes = [
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       localStorage.clear()
       sessionStorage.clear()
+      removePaypal()
       mdl.state.isAuth(false)
       mdl.user = {}
-      window.paypal = null
-      const paypal = document.getElementById('paypal')
-      document.head.removeChild(paypal)
-
       let routes = ["/account"]
       let currentRoute = m.route.get()
       routes.map((r) => currentRoute.includes(r))
