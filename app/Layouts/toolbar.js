@@ -4,24 +4,6 @@ import AuthBox from "@/Components/authbox.js"
 import { ScrollToPageTitle, bellIcon } from "@/Utils"
 import Toasts from "@/Components/toast"
 import Navbar from "./navbar.js"
-import SubNavbar from "./subnavbar.js"
-
-const state = {
-  navDom: null
-}
-
-const updateNavigationStyle = (dom, showNav) => {
-  console.log(dom, showNav)
-  let hide = { position: "unset", }
-  let show = { position: "sticky", }
-  if (dom) {
-    return showNav
-      ? () => (dom.classList.add("fadeOut"), hide)
-      : () => (dom.classList.remove("fadeOut"), show)
-  } else {
-    return showNav ? hide : show
-  }
-}
 
 const AuthDisplay = ({ attrs: { mdl } }) => {
   let route = mdl.state.hasNotifications()
@@ -64,17 +46,10 @@ export default {
         )
       ),
 
-      mdl.settings.screenSize == "desktop"
+      ['desktop'].includes(mdl.settings.screenSize)
         ? [
-          mdl.settings.screenSize == "desktop" &&
-          // m(
-          //   `animated`,
-          //   {
-          //     oncreate: ({ dom }) => (state.navDom = dom),
-          //     style: updateNavigationStyle(state.navDom, mdl.state.showNavMenu()),
-          //   },
+          ['desktop'].includes(mdl.settings.screenSize) &&
           !mdl.state.showNavMenu() && m(Navbar, { mdl }),
-          // ),
           m(
             ".nav-right is-right",
             mdl.state.showNavMenu() &&

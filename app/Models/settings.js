@@ -9,7 +9,8 @@ const Settings = {
 const getWinSize = (w) => {
   if (w < 464) return "phone"
   if (w < 624) return "wide"
-  if (w < 1140) return "tablet"
+  if (w < 1000) return "tablet"
+  if (w < 1490) return "laptop"
   return "desktop"
 }
 

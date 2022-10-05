@@ -10,11 +10,13 @@ const state = {
 }
 
 const calcHeight = ({
-  state: { showNavMenu, distanceFromTop },
+  state: { navState, navSelected, subnavState },
   settings: { screenSize },
 }) => {
   switch (screenSize) {
     case "desktop":
+      return "540px"
+    case "laptop":
       return "540px"
     case "tablet":
       return "340px"
@@ -26,11 +28,18 @@ const calcHeight = ({
 }
 
 const calcMargin = ({
-  state: { showNavMenu, distanceFromTop },
+  state: { showingSubnav },
   settings: { screenSize },
 }) => {
+
+  if (showingSubnav()) {
+    return '0'
+  }
+
   switch (screenSize) {
     case "desktop":
+      return "150px"
+    case "laptop":
       return "150px"
     case "tablet":
       return "90px"

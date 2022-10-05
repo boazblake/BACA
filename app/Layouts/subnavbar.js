@@ -1,6 +1,5 @@
 import m from "mithril"
 import NavLink from "@/Components/nav-link.js"
-import { FadeOut } from '@/Styles/animations.js'
 
 const isActiveRoute = (a, b) => (a == b ? "active" : "")
 
@@ -13,9 +12,6 @@ const SubNavbar = () => {
       subroutes(mdl).any() &&
       m(
         "nav.nav#sub-navbar.nav-right.animated.fade",
-        {
-          onbeforeremove: FadeOut,
-        },
         subroutes(mdl).map((r, key) =>
           r.group.includes("external")
             ? m(
@@ -27,7 +23,7 @@ const SubNavbar = () => {
               mdl,
               href: r.route,
               link: r.name,
-              classList: `larger-font clear ${isActiveRoute(
+              classList: `large-font clear ${isActiveRoute(
                 mdl.state.subnavState(),
                 r.route
               )}`,

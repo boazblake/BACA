@@ -27,6 +27,7 @@ import {
 } from "@/Pages/Events/index.js"
 import Editor from "@/Pages/Events/editor.js"
 import Event from "@/Pages/Events/event.js"
+import { FadeOut } from '@/Styles/animations.js'
 
 const state = {
   status: "loading",
@@ -47,13 +48,13 @@ const updateNavigationStyle = (dom, showNav) => {
 }
 
 const showNavMenu = (mdl) =>
-  mdl.settings.screenSize !== "desktop" && mdl.state.showNavModal()
+  !['desktop',].includes(mdl.settings.screenSize) && mdl.state.showNavModal()
 
-const vertAlign = (mdl) => {
-  return !mdl.Routes.find((r) => mdl.state.navState() == r.id)?.children.any()
-    ? "is-vertical-align"
-    : ""
-}
+// const vertAlign = (mdl) => {
+//   return !mdl.Routes.find((r) => mdl.state.navState() == r.id)?.children.any()
+//     ? "is-vertical-align"
+//     : ""
+// }
 
 const onBodyScroll =
   (mdl) =>
@@ -70,7 +71,7 @@ const onBodyScroll =
 const onLayout =
   (mdl) =>
     ({ dom }) =>
-      mdl.settings.screenSize == "desktop" &&
+      ["desktop"].includes(mdl.settings.screenSize) &&
       dom.parentNode.addEventListener("scroll", onBodyScroll(mdl))
 
 const toEventViewModel = (event) => {
@@ -126,11 +127,19 @@ const Layout = {
         role: "main",
       },
       m(Toolbar, { mdl }),
-      mdl.settings.screenSize == "desktop" &&
+      ["desktop"].includes(mdl.settings.screenSize) &&
       m(
         `nav#navigation.animated`,
         {
+          onbeforeremove: FadeOut,
           oncreate: ({ dom }) => (state.navDom = dom),
+          onmouseleave: () => {
+            // return false
+            // console.log(JSON.stringify(mdl.state))
+            // !mdl.state.navSelected() && mdl.state.navState(null);
+            // e.stopPropagation()
+            // e.preventDefault()
+          },
           style: updateNavigationStyle(state.navDom, mdl.state.showNavMenu()),
         },
         m(SubNavbar, { mdl })
