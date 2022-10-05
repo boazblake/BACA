@@ -19,6 +19,7 @@ const Navbar = {
             // maxHeight = '300px'
 
             mdl.state.navState(r.id)
+            mdl.state.showingSubnav(r.children.any())
             e.stopPropagation()
             e.preventDefault()
             // }
@@ -28,6 +29,7 @@ const Navbar = {
           onclick: (e) => {
             if (r.children.any()) {
               mdl.state.navState(r.id)
+              mdl.state.showingSubnav(r.children.any())
               e.stopPropagation()
               e.preventDefault()
             }
