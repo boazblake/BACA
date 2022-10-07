@@ -5,7 +5,7 @@ const JoinBACA = (mdl) => {
       m(
         "",
         m(
-          "section.is-marginless.p-x-50.p-y-6",
+          "section.container",
           m(
             "hgroup",
             m(
@@ -44,44 +44,44 @@ const JoinBACA = (mdl) => {
           )
         ),
         m(
-          "section.is-marginless.p-x-50.p-y-6.bg-primary.text-white",
-          m("h2", "Why Join?"),
-          m(
-            "hgroup",
+          "section.bg-primary.text-white",
+          m('.container', m("h2", "Why Join?"),
             m(
-              "h4",
-              "Safety & Peace for You & YOUR Family and everyone else in the neighborhood."
+              "hgroup",
+              m(
+                "h4",
+                "Safety & Peace for You & YOUR Family and everyone else in the neighborhood."
+              ),
+              m(
+                "p",
+                "If you want to protect YOU & YOUR family, you can either rely on yourself alone or else with neighbors working together—by reporting crimes and violations that disturb peace, tranquility and joy.  When you",
+                m("span.strong", " become involved "),
+                "in BACA, you are on the team that will be looking out for each other! "
+              )
             ),
             m(
-              "p",
-              "If you want to protect YOU & YOUR family, you can either rely on yourself alone or else with neighbors working together—by reporting crimes and violations that disturb peace, tranquility and joy.  When you",
-              m("span.strong", " become involved "),
-              "in BACA, you are on the team that will be looking out for each other! "
-            )
-          ),
-          m(
-            "hgroup",
-            m("h4", "Safeguard YOUR property value."),
-            m(
-              "p",
-              "If you want to protect your property value, you can either rely on someone else to do it or do it yourself by joining other residents to work for the betterment of our community. When you",
-              m("span.strong", " join "),
-              "BACA, you have better control over community rules and maintenance, which can affect the value of your property.As a ",
-              m("span.strong", " homeowner "),
-              " it's only normal to have an interest in your investment."
-            )
-          ),
-          m(
-            "hgroup",
-            m(
-              "h4",
-              "Work with the City of Houston and Precinct 4 for the benefit of BACA."
+              "hgroup",
+              m("h4", "Safeguard YOUR property value."),
+              m(
+                "p",
+                "If you want to protect your property value, you can either rely on someone else to do it or do it yourself by joining other residents to work for the betterment of our community. When you",
+                m("span.strong", " join "),
+                "BACA, you have better control over community rules and maintenance, which can affect the value of your property.As a ",
+                m("span.strong", " homeowner "),
+                " it's only normal to have an interest in your investment."
+              )
             ),
             m(
-              "p",
-              "If you want to leverage many voices, namely the many members of Bonham Acres, to work with organizations, commercial entities, governments to improvement our neighborhood you need to join."
-            )
-          )
+              "hgroup",
+              m(
+                "h4",
+                "Work with the City of Houston and Precinct 4 for the benefit of BACA."
+              ),
+              m(
+                "p",
+                "If you want to leverage many voices, namely the many members of Bonham Acres, to work with organizations, commercial entities, governments to improvement our neighborhood you need to join."
+              )
+            ))
         )
       ),
   }
