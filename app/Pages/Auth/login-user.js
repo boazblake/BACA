@@ -12,7 +12,7 @@ const validateForm = (mdl) => (data) => {
       state.errors = e
       state.msg(e.error)
       state.showMsg(true)
-      addDanger({ text: state.msg())
+      addDanger({ text: state.msg() })
     } else {
       state.msg(
         "There seems to be an issue with logging in. Have you registered or verified your email?"
