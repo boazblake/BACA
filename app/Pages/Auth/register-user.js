@@ -52,6 +52,7 @@ export const validateForm = (mdl) => (data) => {
       state.showErrorMsg(true)
       console.log("failed - state", state)
     }
+    addDanger({ text: state.errorMsg() })
   }
 
   const onSuccess = (mdl) => {
