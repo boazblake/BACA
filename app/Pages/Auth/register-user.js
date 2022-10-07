@@ -1,5 +1,6 @@
 import m from "mithril"
 import NavLink from "@/Components/nav-link"
+import { addDanger } from "@/Components/toast"
 import { jsonCopy } from "@/Utils"
 import { validateUserRegistrationTask } from "./Validations"
 import { registerUserTask } from "./fns.js"
