@@ -4,8 +4,7 @@ const JoinBACA = (mdl) => {
     view: ({ attrs: { mdl } }) =>
       m(
         "",
-        m(
-          "section.container",
+        m("section.container",
           m(
             "hgroup",
             m(
@@ -26,7 +25,7 @@ const JoinBACA = (mdl) => {
                 { selector: "a", class: "underline", href: "/" },
                 "bonhamacres.org"
               ),
-              ", Bonham Acre monuments, BACA work & communication uphold deed restriction and city ordinances, mailers & signage, social events, other items as voted on by BACA members."
+              " (this website), Bonham Acre monuments, BACA work & communication uphold deed restriction and city ordinances, mailers & signage, social events, other items as voted on by BACA members."
             ),
             m(
               "h3",
@@ -43,9 +42,8 @@ const JoinBACA = (mdl) => {
             )
           )
         ),
-        m(
-          "section.bg-primary.text-white",
-          m('.container', m("h2", "Why Join?"),
+        m("section.bg-primary.text-white",
+          m('.container', m("h2.text-center", "Why Join?"),
             m(
               "hgroup",
               m(

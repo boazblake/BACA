@@ -4,8 +4,6 @@ const About = (mdl) => {
     view: ({ attrs: { mdl } }) =>
       m(
         "section",
-        // { class: mdl.settings.screenSize == "desktop" ? "p-50" : "" },
-
         m("section",
           m('.container', m(
             "hgroup.grid",
@@ -13,8 +11,9 @@ const About = (mdl) => {
             m(
               ".row",
               m(
-                "p.col",
-                "The Bonham Acres Civic Association (BACA) is a registered 501(c)4 organization that was established to work for the common good of the community, providing a single voice for our neighborhood to area municipalities. The BACA operates with an all-volunteer staff, voluntary membership dues, and the donated time and energy of its neighbors."
+                ".col",
+                m('p', 'The Bonham Acres Civic Association (BACA) is a registered 501(c)4 organization that was established to work for the common good of the community, providing a single voice for our neighborhood to area municipalities.'),
+                m('p', " The BACA operates with an all-volunteer staff, voluntary membership dues, and the donated time and energy of its neighbors."),
               ),
               m(
                 "figure.col",
@@ -31,14 +30,19 @@ const About = (mdl) => {
             m(
               ".row",
               m(
-                "figure.col",
+                "figure.col-12.col-6-md",
                 m("img.height-auto", {
                   src: "images/baca-map.webp",
                 })
               ),
               m(
-                "p.col",
-                "A small jewell of a neighborhood located in Southwest Houston. Subdivision bounded by Bissonnet to the north, Braes Bayou to the south, Fondren to the east and Bonhomme Re to the west. There are 5 streets within, Bonhomme Rd, Cadawac Rd, Lugary Ln, Wanda Ln and Tree Frog. Bonham Acres Houston neighborhood is located in 77074 zip code in Harris county. Bonham Acres has 152 single family properties with a median build year of 1958 and a median size of 1,807 Sqft."
+                ".col",
+                m('p', 'A small jewell of a neighborhood located in Southwest Houston.'),
+                m('p', 'The subdivision is bounded by Bissonnet to the north, Braes Bayou to the south, Fondren to th,east and Bonhomme Rd to the west.'),
+                m('p', 'There are 5 streets within, Bonhomme Rd, Cadawac Rd, Lugary Ln, Wanda Ln and Tree Frog.'),
+                m('p', 'Bonham Acres Houston neighborhood is located in 77074 zip code in Harris county.'),
+                m('p', 'Bonham Acres has 152 single family properties with a median build year of 1958 and a media,size of 1,807 Sqft.'),
+
               )
             )
           ))
