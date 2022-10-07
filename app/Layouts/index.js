@@ -50,11 +50,12 @@ const onBodyScroll =
         m.redraw()
       }
     }
+
 const onLayout =
   (mdl) =>
     ({ dom }) =>
-      ["desktop", 'laptop', 'tablet'].includes(mdl.settings.screenSize) &&
       dom.parentNode.addEventListener("scroll", onBodyScroll(mdl))
+
 
 const toEventViewModel = (event) => {
   let start = event.start.split("T")
