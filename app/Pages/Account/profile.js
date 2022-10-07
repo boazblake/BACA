@@ -249,31 +249,31 @@ const Profile = ({ attrs: { mdl } }) => {
                     })
                   )
                   : [
+
                     m(
-                      "label.label",
-                      m(
-                        "select",
-                        {
-                          multiple: true,
-                          value: mdl.account.addressId,
-                        },
-                        state.locations().filter(propEq('selected', false)).map((l) =>
-                          m(
-                            "option",
-                            {
-                              onclick: () => l.selected = true,
-                              class: mdl.account.addressIds.includes(
-                                l.objectId
-                              )
-                                ? "option text-primary"
-                                : "option",
-                              value: l.objectId,
-                            },
-                            l.property
-                          )
-                        )
-                      )
-                    ),
+                      "select.pointer",
+                      {
+                        multiple: true,
+                        value: mdl.account.addressId,
+                        onchange: ({ target: { value } }) =>
+                          state.locations().find(propEq('objectId', value)).selected = true
+                        ,
+                      },
+                      state.locations().filter(propEq('selected', false)).map((l) =>
+                        m(
+                          "option.pointer",
+                          {
+                            class: mdl.account.addressIds.includes(
+                              l.objectId
+                            )
+                              ? "option text-primary"
+                              : "option",
+                            value: l.objectId,
+                          },
+                          l.property
+                        ))
+                    )
+                    ,
                     m(
                       "ul",
                       state.locations()
