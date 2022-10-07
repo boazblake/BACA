@@ -94,7 +94,9 @@ if (sessionStorage.getItem("baca-session-token")) {
     sessionStorage.clear()
     console.error("problem fetching user", e)
   }
-  const onSuccess = (mdl) => addSuccess(`Welcome back ${mdl.user.name}`)
+  const onSuccess = (mdl) =>
+    addSuccess({ text: `Welcome back ${mdl.user.name}` })
+
 
   reloginTask(Model).fork(onError, onSuccess)
 }

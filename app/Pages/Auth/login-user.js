@@ -1,5 +1,6 @@
 import m from "mithril"
 import NavLink from "@/Components/nav-link"
+import { addDanger } from "@/Components/toast"
 import { jsonCopy } from "@/Utils"
 import { validateLoginTask } from "./Validations.js"
 import { loginTask, resetPasswordTask } from "./fns.js"
@@ -11,6 +12,7 @@ const validateForm = (mdl) => (data) => {
       state.errors = e
       state.msg(e.error)
       state.showMsg(true)
+      addDanger(state.msg(), { top: 0 })
     } else {
       state.msg(
         "There seems to be an issue with logging in. Have you registered or verified your email?"

@@ -90,7 +90,7 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
   }
 
   const onSuccess = (mdl, reload) => (data) => {
-    addSuccess("Dues Successfully Paid")
+    addSuccess({ text: "Dues Successfully Paid" })
     log("on success", [state, data])
     reload(mdl)
   }

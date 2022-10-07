@@ -1,6 +1,6 @@
 import m from "mithril"
 import NavLink from "@/Components/nav-link.js"
-import { SlideUp } from '@/Styles/animations.js'
+// import { SlideUp } from '@/Styles/animations.js'
 
 const updateNavigationStyle = (dom, showNav) => {
   let hide = { position: "unset", top: 0 }
@@ -14,6 +14,11 @@ const updateNavigationStyle = (dom, showNav) => {
   }
 }
 
+const closeSubNav = mdl => ({ target, y }) => {
+  target.classList.replace('fade', "fadeOut")
+  y >= target.getBoundingClientRect().bottom && setTimeout(() => mdl.state.showingSubnav(false))
+}
+
 const isActiveRoute = (a, b) => (a == b ? "active" : "")
 const state = { navDom: null }
 const SubNavbar = () => {
@@ -22,6 +27,7 @@ const SubNavbar = () => {
 
   return {
     view: ({ attrs: { mdl } }) =>
+      mdl.state.showingSubnav() &&
       subroutes(mdl).any() &&
 
       m(
@@ -31,6 +37,7 @@ const SubNavbar = () => {
           oncreate: ({ dom }) => (state.navDom = dom),
           // onbeforeremove: SlideUp,
           style: updateNavigationStyle(state.navDom, mdl.state.showNavMenu()),
+          onmouseout: closeSubNav(mdl),
         },
         m(
           "nav.nav#sub-navbar.nav-right.animated.fade",

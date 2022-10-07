@@ -44,7 +44,7 @@ const onError = (x) => {
 }
 const onSuccess = (mdl) => {
   fetchLocations(mdl)(state)
-  addSuccess("Profile updated successfully", 5000)
+  addSuccess({ text: "Profile updated successfully", timeout: 5000 })
 }
 
 const updateProfileTask = (mdl) => (data) =>
@@ -55,7 +55,7 @@ const updateProfileTask = (mdl) => (data) =>
 const removeImage = (mdl, data) => {
   data.avatar = null
   updateProfileTask(mdl)(data).fork(log("e"), () =>
-    addSuccess("Image deleted", 5000)
+    addSuccess({ text: "Image deleted", timeout: 5000 })
   )
 }
 
@@ -76,7 +76,7 @@ const uploadImage = (mdl) => (file) => {
     })
     .chain(updateProfileTask(mdl))
     .map(() => (mdl.account.avatar = state.avatar))
-    .fork(onError, () => addSuccess("Image Updated", 5000))
+    .fork(onError, () => addSuccess({ text: "Image Updated", timeout: 5000 }))
 }
 
 const onInput = (profile) =>

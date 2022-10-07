@@ -11,18 +11,18 @@ const state = {
   },
 }
 
-export const addSuccess = (text, timeout = 3000) => {
-  state.list.push({ id: uuid(), type: "success", text, timeout })
+export const addSuccess = ({ text, timeout, style }) => {
+  state.list.push({ id: uuid(), type: "success", text, timeout, style })
 }
 
-export const addInfo = (text, timeout = 3000) => {
-  state.list.push({ id: uuid(), type: "info", text, timeout })
+export const addInfo = ({ text, timeout, style }) => {
+  state.list.push({ id: uuid(), type: "info", text, timeout, style })
 }
-export const addWarning = (text, timeout = 3000) => {
-  state.list.push({ id: uuid(), type: "warning", text, timeout })
+export const addWarning = ({ text, timeout, style }) => {
+  state.list.push({ id: uuid(), type: "warning", text, timeout, style })
 }
-export const addDanger = (text, timeout = 3000) => {
-  state.list.push({ id: uuid(), type: "danger", text, timeout })
+export const addDanger = ({ text, timeout, style }) => {
+  state.list.push({ id: uuid(), type: "danger", text, timeout, style })
 }
 
 const toastType = (type) => (toastTypes.includes(type) ? type : "info")
@@ -38,13 +38,14 @@ const destroyToast = ({ dom, attrs: { id } }) => {
 let Toast = (vnode) => {
   setTimeout(() => {
     destroyToast(vnode)
-  }, vnode.attrs.timeout)
+  }, vnode.attrs.timeout || 3000)
 
   return {
-    view: ({ attrs: { type, text } }) => {
+    view: ({ attrs: { type, text, style } }) => {
       return m(
         ".m-notification",
         {
+          style,
           class: toastType(type),
           onclick: () => destroyToast(vnode),
         },

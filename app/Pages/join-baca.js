@@ -5,7 +5,7 @@ const JoinBACA = (mdl) => {
       m(
         "",
         m(
-          "section.card",
+          "section.is-marginless.p-x-50.p-y-6",
           m(
             "hgroup",
             m(
@@ -44,7 +44,7 @@ const JoinBACA = (mdl) => {
           )
         ),
         m(
-          "section.bg-primary.text-white.card",
+          "section.is-marginless.p-x-50.p-y-6.bg-primary.text-white",
           m("h2", "Why Join?"),
           m(
             "hgroup",

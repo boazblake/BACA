@@ -14,9 +14,9 @@ const updateUserRole = (mdl) => (userId) => (role) => (name) =>
   mdl.http.back4App
     .putTask(mdl)(`auth/users/${userId}`)({ role })
     .fork(
-      () => addDanger(`Was unable to update ${name}'s role`),
+      () => addDanger({ text: `Was unable to update ${name}'s role` }),
       () => {
-        addSuccess(`${name}'s role was updated`)
+        addSuccess({ text: `${name}'s role was updated` })
         getData({ attrs: { mdl } })
       }
     )
