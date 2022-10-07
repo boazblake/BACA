@@ -1,9 +1,9 @@
 import m from "mithril"
 import NavLink from "@/Components/nav-link.js"
-const isActiveRoute = (a, b) => (a == b ? "active button outline large-font" : "large-font")
+const isActiveRoute = (a, b) => (a == b ? "active button outline" : "")
+
 
 const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
-
 
 const Navbar = {
   view: ({ attrs: { mdl } }) =>
@@ -11,20 +11,11 @@ const Navbar = {
       "nav.nav",
       routes(mdl).map((r) =>
         m(NavLink, {
-          onmouseout: () => {
-            // maxHeight = '50px'
-          },
           onmouseover: (e) => {
-            // if (r.children.any()) {
-            // maxHeight = '300px'
-
             mdl.state.navState(r.id)
             mdl.state.showingSubnav(r.children.any())
             e.stopPropagation()
             e.preventDefault()
-            // }
-            // console.log('style', style())
-
           },
           onclick: (e) => {
             if (r.children.any()) {
@@ -38,7 +29,7 @@ const Navbar = {
           role: "button",
           href: r.route,
           link: r.name,
-          classList: `primary clear ${isActiveRoute(
+          classList: `primary clear large-font ${isActiveRoute(
             `/${mdl.state.navState()}`,
             r.route
           )}`,

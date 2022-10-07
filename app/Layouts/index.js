@@ -1,6 +1,5 @@
 import m from "mithril"
 import Hero from "./hero.js"
-import Navbar from "./navbar.js"
 import SubNavbar from "./subnavbar.js"
 import Main from "./main.js"
 import Footer from "./footer.js"
@@ -10,7 +9,7 @@ import { SlideOutRight, SlideInLeft } from "@/Styles/animations.js"
 import Toolbar from "./toolbar.js"
 import Loader from "@/Components/loader"
 import Task from "data.task"
-import { head, map, prop, tail, uniqWith, eqBy } from "ramda"
+import { head, map, prop, tail, uniqWith, eqBy, allPass } from "ramda"
 import { state as blogState, Modal as BlogTitlePicModal } from '@/Pages/Blog/blog-editor'
 import {
   state as albumState, AddImagesModal
@@ -27,34 +26,17 @@ import {
 } from "@/Pages/Events/index.js"
 import Editor from "@/Pages/Events/editor.js"
 import Event from "@/Pages/Events/event.js"
-import { FadeOut } from '@/Styles/animations.js'
 
 const state = {
   status: "loading",
-  navDom: null,
   errors: {}
 }
 
-const updateNavigationStyle = (dom, showNav) => {
-  let hide = { position: "unset", top: 0 }
-  let show = { position: "sticky", top: "65px" }
-  if (dom) {
-    return showNav
-      ? (dom.classList.add("fadeOut"), hide)
-      : (dom.classList.remove("fadeOut"), show)
-  } else {
-    return showNav ? hide : show
-  }
-}
 
-const showNavMenu = (mdl) =>
-  !['desktop',].includes(mdl.settings.screenSize) && mdl.state.showNavModal()
+const isSmallScreen = mdl => !['desktop', 'laptop'].includes(mdl.settings.screenSize)
+const toShowNav = mdl => mdl.state.showNavModal()
+const showNavMenu = (mdl) => allPass([isSmallScreen, toShowNav])(mdl)
 
-// const vertAlign = (mdl) => {
-//   return !mdl.Routes.find((r) => mdl.state.navState() == r.id)?.children.any()
-//     ? "is-vertical-align"
-//     : ""
-// }
 
 const onBodyScroll =
   (mdl) =>
@@ -71,7 +53,7 @@ const onBodyScroll =
 const onLayout =
   (mdl) =>
     ({ dom }) =>
-      ["desktop"].includes(mdl.settings.screenSize) &&
+      ["desktop", 'laptop', 'tablet'].includes(mdl.settings.screenSize) &&
       dom.parentNode.addEventListener("scroll", onBodyScroll(mdl))
 
 const toEventViewModel = (event) => {
@@ -126,34 +108,27 @@ const Layout = {
         id: "layout",
         role: "main",
       },
+
+
       m(Toolbar, { mdl }),
-      ["desktop"].includes(mdl.settings.screenSize) &&
-      m(
-        `nav#navigation.animated`,
-        {
-          onbeforeremove: FadeOut,
-          oncreate: ({ dom }) => (state.navDom = dom),
-          onmouseleave: () => {
-            // return false
-            // console.log(JSON.stringify(mdl.state))
-            // !mdl.state.navSelected() && mdl.state.navState(null);
-            // e.stopPropagation()
-            // e.preventDefault()
-          },
-          style: updateNavigationStyle(state.navDom, mdl.state.showNavMenu()),
-        },
-        m(SubNavbar, { mdl })
-      ),
+
+      showNavMenu(mdl)
+        ? m(NavModal, {
+          oncreate: SlideInLeft,
+          onbeforeremove: SlideOutRight,
+          mdl,
+        })
+        : !isSmallScreen(mdl) && m(SubNavbar, { mdl }),
+
       m(Hero, { mdl }),
+
+
       state.status == "error" && m("p", "ERROR", state?.errors?.error),
       state.status == "loading" && m(Loader),
       state.status == "loaded" && m("section", m(Main, { mdl, children })),
-      showNavMenu(mdl) &&
-      m(NavModal, {
-        oncreate: SlideInLeft,
-        onbeforeremove: SlideOutRight,
-        mdl,
-      }),
+
+
+
       mdl.state.showLayoutModal() && m(Modal, { mdl }),
       eventState.showEditor() &&
       m(Editor, {
@@ -174,7 +149,6 @@ const Layout = {
         event: eventState.event,
         resetState,
       }),
-
       galleryState.showModal() && m(NewAlbumModal, { mdl }),
       albumState.addImagesModal() && m(AddImagesModal, { mdl }),
       blogState.showModal() && m(BlogTitlePicModal, { mdl }),

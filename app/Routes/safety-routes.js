@@ -6,7 +6,9 @@ import { scrollToAnchor, ScrollToPageTitle } from "@/Utils"
 const MemberRoutes = [
   {
     id: "safety",
+    parent: '/',
     name: "Safety",
+    title: "Neighborhood Safety",
     // icon: Icons.search,
     route: "/safety",
     isNav: true,
@@ -26,7 +28,9 @@ const MemberRoutes = [
   },
   {
     id: "report",
+    parent: '/',
     name: "File An Internal Report With BACA",
+    title: "File An Internal Report With BACA",
     // icon: Icons.search,
     route: "/safety/report",
     isNav: true,
@@ -40,7 +44,9 @@ const MemberRoutes = [
   },
   {
     id: "district-J",
+    parent: '/',
     name: "District J",
+    title: "District J",
     // icon: Icons.search,
     route: "/external",
     external: "https://www.houstontx.gov/council/j/request.html",
@@ -51,7 +57,9 @@ const MemberRoutes = [
   },
   {
     id: "Houston-311-Citizen-Portal",
+    parent: '/',
     name: "Houston 311 Citizen Portal",
+    title: "Houston 311 Citizen Portal",
     // icon: Icons.search,
     route: "/external",
     external: "https://apps.apple.com/us/app/id1556529541",
@@ -62,7 +70,9 @@ const MemberRoutes = [
   },
   {
     id: "Harrison-County-Public-Health",
+    parent: '/',
     name: "Harrison County Public Health",
+    title: "Harrison County Public Health",
     // icon: Icons.search,
     route: "/external",
     external:
@@ -74,7 +84,9 @@ const MemberRoutes = [
   },
   {
     id: "Houston-311-Service-Request/Report",
+    parent: '/',
     name: "Houston 311 Service Request/Report",
+    title: "Houston 311 Service Request/Report",
     // icon: Icons.search,
     route: "/external",
     external: "https://houston311.powerappsportals.us/en-US/",

@@ -8,11 +8,11 @@ import { flatten } from "ramda"
 
 const Routes = flatten([
   AuthenticatedRoutes,
-  MainRoutes,
   SocialRoutes,
+  MainRoutes,
   MemberRoutes,
-  LegalRoutes,
   SafetyRoutes,
+  LegalRoutes,
 ])
 
 export default Routes

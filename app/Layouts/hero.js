@@ -15,15 +15,15 @@ const calcHeight = ({
 }) => {
   switch (screenSize) {
     case "desktop":
-      return "540px"
+      return "440px"
     case "laptop":
-      return "540px"
+      return "440px"
     case "tablet":
-      return "340px"
+      return "240px"
     case "wide":
-      return "340px"
+      return "240px"
     case "phone":
-      return "340px"
+      return "240px"
   }
 }
 
@@ -33,7 +33,7 @@ const calcMargin = ({
 }) => {
 
   if (showingSubnav()) {
-    return '0'
+    return '0px'
   }
 
   switch (screenSize) {
@@ -58,7 +58,7 @@ const updateBackground = (timestamp) => {
       : state.image(state.image() + 1)
     m.redraw()
   }
-  rIC(updateBackground)
+  setTimeout(() => rIC(updateBackground))
 }
 
 const Hero = () => {
@@ -70,7 +70,7 @@ const Hero = () => {
     },
     oncreate: ({ attrs: { mdl } }) => {
       state.start(Date.now())
-      rIC(updateBackground)
+      setTimeout(() => rIC(updateBackground))
     },
     view: ({ attrs: { mdl } }) =>
       m(

@@ -26,7 +26,7 @@ const displayRoute = (mdl) => (r) => {
       return m(NavItem, {
         mdl,
         href: r.route,
-        link: r.name,
+        link: r.title,
         classList: `${isActiveRoute(r.route)} col-12 large-font`,
       })
     } else {
@@ -36,7 +36,7 @@ const displayRoute = (mdl) => (r) => {
     return m(NavItem, {
       mdl,
       href: r.route,
-      link: r.name,
+      link: r.title,
       classList: `${isActiveRoute(r.route)} col-12 large-font`,
     })
 }

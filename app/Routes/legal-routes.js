@@ -9,7 +9,9 @@ import { scrollToAnchor, ScrollToPageTitle } from "@/Utils/index.js"
 const LegalRoutes = [
   {
     id: "legal",
+    parent: 'legal',
     name: "Legal",
+    title: "Legal",
     // icon: Icons.home,
     route: "/legal",
     isNav: true,
@@ -23,7 +25,9 @@ const LegalRoutes = [
   },
   {
     id: "deed-restrictions",
+    parent: 'legal',
     name: "Deed Restrictions",
+    title: "Deed Restrictions",
     // icon: Icons.home,
     route: "/legal/deed-restrictions",
     isNav: true,
@@ -38,7 +42,9 @@ const LegalRoutes = [
   },
   {
     id: "city-ordinances",
+    parent: 'legal',
     name: "City Ordinances",
+    title: "City Ordinances",
     // icon: Icons.home,
     route: "/legal/city-ordinances",
     isNav: true,

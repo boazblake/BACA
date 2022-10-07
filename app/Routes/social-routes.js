@@ -13,7 +13,9 @@ import { scrollToAnchor, ScrollToPageTitle } from "@/Utils"
 const SocialRoutes = [
   {
     id: "social",
+    parent: 'social',
     name: "Social",
+    title: "Social",
     // icon: Icons.home,
     route: "/social",
     isNav: true,
@@ -34,7 +36,9 @@ const SocialRoutes = [
   },
   {
     id: "events",
+    parent: 'social',
     name: "Events",
+    title: "Events",
     // icon: Icons.home,
     route: "/social/events",
     isNav: true,
@@ -49,7 +53,9 @@ const SocialRoutes = [
   },
   {
     id: "gallery",
+    parent: 'social',
     name: "Photo Gallery",
+    title: "Photo Gallery",
     // icon: Icons.home,
     route: "/social/gallery",
     isNav: true,
@@ -63,7 +69,9 @@ const SocialRoutes = [
   },
   {
     id: "album",
+    parent: 'social',
     name: "Photo Gallery Album",
+    title: "Photo Gallery Album",
     // icon: Icons.home,
     route: "/social/gallery/album:album",
     isNav: false,
@@ -77,7 +85,9 @@ const SocialRoutes = [
   },
   {
     id: "blog",
+    parent: 'social',
     name: "Blog!",
+    title: "Blog!",
     // icon: Icons.home,
     route: "/social/blog",
     isNav: true,
@@ -91,7 +101,9 @@ const SocialRoutes = [
   },
   {
     id: "blog-editor",
+    parent: 'social',
     name: "Blog Editor",
+    title: "Blog Editor",
     // icon: Icons.home,
     route: "/social/blog-editor:objectId",
     isNav: false,
@@ -105,7 +117,9 @@ const SocialRoutes = [
   },
   {
     id: "blog-post",
+    parent: 'social',
     name: "",
+    title: "",
     // icon: Icons.home,
     route: "/social/blog-post:objectId",
     isNav: false,
@@ -124,7 +138,9 @@ const SocialRoutes = [
   },
   {
     id: "map-of-bonham-acres",
+    parent: 'social',
     name: "Explore Bonham Acres",
+    title: "Explore Bonham Acres",
     // icon: Icons.home,
     route: "/social/map",
     isNav: true,
@@ -138,7 +154,9 @@ const SocialRoutes = [
   },
   {
     id: "bfn-park",
+    parent: 'social',
     name: "Bonham Family Nature Park",
+    title: "Bonham Family Nature Park",
     // icon: Icons.home,
     route: "/external",
     external: "https://www.hcp4.net/Parks/Bonham",

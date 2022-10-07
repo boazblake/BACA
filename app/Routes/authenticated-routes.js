@@ -8,7 +8,9 @@ import { ScrollToPageTitle, removePaypal } from "@/Utils"
 const AuthenticatedRoutes = [
   {
     id: "account",
+    parent: "/",
     name: "Account",
+    title: "Account",
     // icon: Icons.logo,
     route: "/account/:name",
     position: ["toolbar"],
@@ -23,7 +25,9 @@ const AuthenticatedRoutes = [
   },
   {
     id: "admin",
+    parent: "/",
     name: "Admin",
+    title: "Admin",
     // icon: Icons.logo,
     route: "/admin/:name",
     position: ["toolbar"],
@@ -37,7 +41,9 @@ const AuthenticatedRoutes = [
   },
   {
     id: "profile-page",
+    parent: "/",
     name: "Profile Page",
+    title: "Profile Page",
     // icon: Icons.home,
     route: "/account/:name/profile",
     position: ["settings-nav"],
@@ -52,7 +58,9 @@ const AuthenticatedRoutes = [
   },
   {
     id: "manage-users",
+    parent: "/",
     name: "Manage Users",
+    title: "Manage Users",
     // icon: Icons.users,
     route: "/account/:name/user-management",
     position: ["settings-nav"],
@@ -67,7 +75,9 @@ const AuthenticatedRoutes = [
   },
   {
     id: "logout",
+    parent: "/",
     name: "",
+    title: "",
     // icon: Icons.users,
     route: "/logout",
     position: [],

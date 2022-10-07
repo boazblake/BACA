@@ -49,29 +49,28 @@ export const SlideDown = ({ dom }) => {
 }
 
 export const FadeBack = ({ dom }) => {
-  dom.classList.replace("fadeInRight", "fadeback")
+  dom.classList.add("fadeback")
   return new Promise((resolve) =>
     setTimeout(() => {
-      dom.classList.replace("fadeback", "fadeInRight")
+      dom.classList.add("fadeInRight")
       dom.addEventListener("animationend", resolve)
     }, 300)
   )
 }
 
 export const FadeOut = ({ dom }) => {
-  dom.classList.replace("fade", "fadeOut")
+  mdl.state.showingSubnav(false)
+  dom.classList.add("fadeOut")
   return new Promise((resolve) => {
     setTimeout(() => {
-      dom.classList.replace("fadeOut", "fade")
+      dom.classList.add("fade")
     })
     return dom.addEventListener("animationend", resolve)
   })
 }
 
 export const FadeIn = ({ dom }) => {
-  console.log(dom.classList)
   dom.classList.replace("fadeOut", "fade")
-  console.log(dom.classList)
   return new Promise((resolve) =>
     setTimeout(() => {
       dom.addEventListener("animationend", resolve)
@@ -79,14 +78,19 @@ export const FadeIn = ({ dom }) => {
   )
 }
 
+
+
 export const SlideUp = ({ dom }) => {
-  dom.classList.replace("slideInDown", "slideOutUp")
-  return new Promise((resolve) =>
+  dom.classList.add("fadeOut")
+  return new Promise((resolve) => {
     setTimeout(() => {
-      resolve()
-    }, 300)
-  )
+      dom.classList.add("fade")
+      console.log(dom)
+    })
+    return dom.addEventListener("animationend", resolve)
+  })
 }
+
 
 export const SlideChildrenInRight = ({ dom }) => {
   let children = [...dom.children]

@@ -46,20 +46,18 @@ export default {
         )
       ),
 
-      ['desktop'].includes(mdl.settings.screenSize)
-        ? [
-          ['desktop'].includes(mdl.settings.screenSize) &&
-          !mdl.state.showNavMenu() && m(Navbar, { mdl }),
-          m(
-            ".nav-right is-right",
-            mdl.state.showNavMenu() &&
+      ['desktop', 'laptop'].includes(mdl.settings.screenSize)
+        ?
+        m(
+          ".nav-right is-right",
+          mdl.state.showNavMenu() ?
             m(
               "Button.button success m-r-16",
               { onclick: () => ScrollToPageTitle() },
               "Menu"
-            ),
-            m(AuthBox, { mdl })
-          )]
+            ) : m(Navbar, { mdl }),
+          m(AuthBox, { mdl }),
+        )
         : m(
           ".nav-right is-right.grouped",
           mdl.state.isAuth() && m(AuthDisplay, { mdl }),

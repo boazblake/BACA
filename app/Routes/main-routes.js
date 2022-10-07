@@ -13,7 +13,9 @@ const Logo = m("img", {
 const Routes = [
   {
     id: "home",
-    name: "Welcome to Bonham Acres Civic Association (BACA)",
+    parent: '/',
+    name: "Welcome",
+    title: "Welcome to Bonham Acres Civic Association (BACA)",
     // icon: Icons.home,
     route: "/",
     isNav: true,
@@ -27,7 +29,9 @@ const Routes = [
   },
   {
     id: "about",
-    name: "About Bonham Acres",
+    parent: '/',
+    name: "About",
+    title: "About Bonham Acres Civic Association",
     // icon: Icons.home,
     route: "/about",
     isNav: true,
@@ -40,22 +44,10 @@ const Routes = [
     component: (mdl) => m(Layout, { mdl }, m(About, { mdl })),
   },
   {
-    id: "board-members",
-    name: "BACA Board Members",
-    // icon: Icons.search,
-    route: "/board-members",
-    isNav: true,
-    group: ["navmenu"],
-    children: [],
-    options: [],
-    onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
-    },
-    component: (mdl) => m(Layout, { mdl }, m(BoardMembers, { mdl })),
-  },
-  {
     id: "join-BACA",
-    name: "Join Bonham Acres Civic Association",
+    parent: '/',
+    name: "Join",
+    title: "Join Bonham Acres Civic Association",
     // icon: Icons.search,
     route: "/join-BACA",
     isNav: false,
@@ -66,6 +58,22 @@ const Routes = [
       return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(JoinBACA, { mdl })),
+  },
+  {
+    id: "board-members",
+    parent: '/',
+    name: "Board",
+    title: "Meet the Board of Bonham Acres Civic Association",
+    // icon: Icons.search,
+    route: "/board-members",
+    isNav: true,
+    group: ["navmenu"],
+    children: [],
+    options: [],
+    onmatch: (mdl, args, path, fullroute, isAnchor) => {
+      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
+    },
+    component: (mdl) => m(Layout, { mdl }, m(BoardMembers, { mdl })),
   },
 ]
 

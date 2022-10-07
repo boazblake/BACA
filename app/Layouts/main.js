@@ -3,7 +3,7 @@ export default {
   view: ({ attrs: { mdl, children } }) =>
     m(
       "main.bg-white.animated.zoomIn",
-      mdl.state.route.name &&
+      mdl.state.route.title &&
       m(
         "#page-title.is-marginless.text-primary",
         m(
@@ -15,7 +15,7 @@ export default {
               // height: !mdl.state.route.name && "57px",
             },
           },
-          mdl.state.route.name
+          mdl.state.route.title
         )
       ),
       children
