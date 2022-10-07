@@ -4,7 +4,7 @@ import NavLink from "@/Components/nav-link.js"
 
 const updateNavigationStyle = (dom, showNav) => {
   let hide = { position: "unset", top: 0 }
-  let show = { position: "sticky", top: "65px" }
+  let show = { position: "sticky", top: "70px" }
   if (dom) {
     return showNav
       ? (dom.classList.replace('fade', "fadeOut"), hide)
