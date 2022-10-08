@@ -31,7 +31,7 @@ const SubNavbar = () => {
       subroutes(mdl).any() &&
 
       m(
-        `nav#navigation.animated.fade`,
+        `nav#navigation.nav.nav-center.animated.fade`,
         {
           onremove: state.navDom = null,
           oncreate: ({ dom }) => (state.navDom = dom),

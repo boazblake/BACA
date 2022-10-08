@@ -1,6 +1,6 @@
 import m from "mithril"
 import NavLink from "@/Components/nav-link.js"
-const isActiveRoute = (a, b) => (a == b ? "active button outline" : "")
+const isActiveRoute = (a, b) => (a == b ? "active tab outline" : "")
 
 
 const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
@@ -8,7 +8,7 @@ const routes = (mdl) => mdl.Routes.filter((r) => r.group.includes("navmenu"))
 const Navbar = {
   view: ({ attrs: { mdl } }) =>
     m(
-      "nav.nav",
+      "nav.nav.nav-center.tabs",
       routes(mdl).map((r) =>
         m(NavLink, {
           onmouseover: (e) => {
