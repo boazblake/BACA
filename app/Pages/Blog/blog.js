@@ -52,20 +52,7 @@ const Blog = () => {
           m(
             ".row",
             state.blogs.any()
-              ? state.blogs.map((post, key) => m(BlogPreview, { key, mdl, post }))
-              : m(
-                "article.card",
-                mdl.state.isAuth()
-                  ? m(
-                    m.route.Link,
-                    {
-                      href: "/social/blog-editor:",
-                      class: "button primary",
-                    },
-                    "Add The First Post !"
-                  )
-                  : m("h1", "Log in to add the First Post!")
-              )
+            && state.blogs.map((post, key) => m(BlogPreview, { key, mdl, post }))
           )
         )
       ),
