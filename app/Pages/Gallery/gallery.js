@@ -1,4 +1,3 @@
-import Loader from "@/Components/loader.js"
 import { groupBy, compose, prop, descend, ascend, sortWith } from "ramda"
 import Stream from "mithril-stream"
 import m from "mithril"
@@ -130,32 +129,30 @@ export const NewAlbumModal = {
 const Gallery = {
   oninit: fetchAllAlbums,
   view: ({ attrs: { mdl } }) =>
-    mdl.state.isLoading()
-      ? m(Loader)
-      : m(
-        "article.fade",
-        mdl.state.isAuth() &&
+    m(
+      "article.fade",
+      mdl.state.isAuth() &&
+      m(
+        "nav.nav",
         m(
-          "nav.nav",
+          ".nav-center",
           m(
-            ".nav-center",
-            m(
-              "button.button.primary",
-              {
-                onclick: (e) => state.showModal(true),
-                class: mdl.settings.screenSize == "phone" ? "col-12" : "",
-              },
-              "Add A New Album"
-            ),
-          )
-        ),
-        m(
-          ".row.container-fluid",
-          Object.keys(state.albums).map((album, key) =>
-            m(AlbumCover, { key, mdl, album: state.albums[album][0] })
-          )
+            "button.button.primary",
+            {
+              onclick: (e) => state.showModal(true),
+              class: mdl.settings.screenSize == "phone" ? "col-12" : "",
+            },
+            "Add A New Album"
+          ),
         )
       ),
+      m(
+        ".row.container-fluid",
+        Object.keys(state.albums).map((album, key) =>
+          m(AlbumCover, { key, mdl, album: state.albums[album][0] })
+        )
+      )
+    ),
 }
 
 export default Gallery

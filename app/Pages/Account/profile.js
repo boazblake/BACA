@@ -1,5 +1,4 @@
 import m from "mithril"
-import Loader from '@/components/Loader'
 import { handlers, AVATAR_URL } from "@/Utils/index.js"
 import { compose, filter, path, prop, pluck, assoc, propEq } from "ramda"
 import { addSuccess } from "@/Components/toast"
@@ -111,7 +110,7 @@ const Profile = ({ attrs: { mdl } }) => {
     view: ({ attrs: { mdl } }) => {
       return m(
         "#PROFILE.section.p-y-50",
-        state.status == 'loading' && m(Loader,),
+        // state.status == 'loading' && m(Loader,),
         state.status == 'error' && m('', 'error'),
 
         state.status == 'loaded' && m(

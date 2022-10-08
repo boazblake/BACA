@@ -1,5 +1,4 @@
 import m from "mithril"
-import Loader from "@/Components/loader.js"
 import { prop, } from "ramda"
 import BlogPreview from "./blog-preview.js"
 
@@ -29,49 +28,47 @@ const Blog = () => {
       state.data = []
     },
     view: ({ attrs: { mdl } }) =>
-      mdl.state.isLoading()
-        ? m(Loader)
-        : m(
-          "article.grid.p-y-6.fade",
+      m(
+        "article.grid.p-y-6.fade",
+        m(
+          "section.container",
+          mdl.state.isAuth() &&
           m(
-            "section.container",
-            mdl.state.isAuth() &&
+            "nav.nav.m-y-6",
             m(
-              "nav.nav.m-y-6",
+              ".nav-center",
               m(
-                ".nav-center",
-                m(
-                  m.route.Link,
-                  {
-                    selector: "button.button.primary",
-                    href: "/social/blog-editor:",
-                    class:
-                      mdl.settings.screenSize == "phone" ? "col-12" : "",
-                  },
-                  "Add A Blog Post"
-                )
+                m.route.Link,
+                {
+                  selector: "button.button.primary",
+                  href: "/social/blog-editor:",
+                  class:
+                    mdl.settings.screenSize == "phone" ? "col-12" : "",
+                },
+                "Add A Blog Post"
               )
-            ),
-            m(
-              ".row",
-              state.blogs.any()
-                ? state.blogs.map((post, key) => m(BlogPreview, { key, mdl, post }))
-                : m(
-                  "article.card",
-                  mdl.state.isAuth()
-                    ? m(
-                      m.route.Link,
-                      {
-                        href: "/social/blog-editor:",
-                        class: "button primary",
-                      },
-                      "Add The First Post !"
-                    )
-                    : m("h1", "Log in to add the First Post!")
-                )
             )
+          ),
+          m(
+            ".row",
+            state.blogs.any()
+              ? state.blogs.map((post, key) => m(BlogPreview, { key, mdl, post }))
+              : m(
+                "article.card",
+                mdl.state.isAuth()
+                  ? m(
+                    m.route.Link,
+                    {
+                      href: "/social/blog-editor:",
+                      class: "button primary",
+                    },
+                    "Add The First Post !"
+                  )
+                  : m("h1", "Log in to add the First Post!")
+              )
           )
-        ),
+        )
+      ),
   }
 }
 

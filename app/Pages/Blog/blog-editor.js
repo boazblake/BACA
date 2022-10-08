@@ -10,7 +10,6 @@ import {
   deleteBlog,
   onInput,
 } from "./fns"
-import Loader from "@/Components/loader.js"
 import Stream from "mithril-stream"
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css'
@@ -258,7 +257,7 @@ const BlogEditor = () => {
     view: ({ attrs: { mdl } }) => {
       return m(
         ".grid",
-        state.status == "loading" && m(Loader),
+        // state.status == "loading" && m(Loader),
         state.status == "error" && m("p", "Error - redirecting"),
         (state.status =
           "loaded" &&

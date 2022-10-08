@@ -125,7 +125,7 @@ const Layout = {
 
 
       state.status == "error" && m("p", "ERROR", state?.errors?.error),
-      state.status == "loading" && m(Loader),
+      (state.status == "loading" || mdl.state.isLoading()) && m(Loader),
       state.status == "loaded" && m("section", m(Main, { mdl, children })),
 
 

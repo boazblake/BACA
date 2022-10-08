@@ -56,6 +56,8 @@ const deleteImg = (mdl, pic) => {
 
 const fetchAlbum = ({ attrs: { mdl } }) => {
   const albumName = m.route.get().split(":")[1].replaceAll("%20", " ")
+  console.log('albumname', mdl.state)
+
   const onError = (e) => {
     log("fetchAlbum - error")(e)
   }
@@ -66,7 +68,7 @@ const fetchAlbum = ({ attrs: { mdl } }) => {
   }
 
   mdl.http.back4App
-    .getTask(mdl)(`gallery/${albumName}`)
+    .getTask(mdl)(`gallery/${((albumName).replaceAll('\'', '%27'))}`)
     .map(prop("results"))
     .fork(onError, onSuccess)
 }
@@ -181,73 +183,71 @@ export const AddImagesModal = () => {
 const Album = {
   oninit: fetchAlbum,
   view: ({ attrs: { mdl } }) =>
-    mdl.state.isLoading() && !state.isUpLoading()
-      ? m(Loader)
-      : m(
-        "article.grid.p-y-6.fade.",
+    m(
+      "article.grid.p-y-6.fade.",
+      m(
+        "nav.grouped.m-y-6",
         m(
-          "nav.grouped.m-y-6",
-          m(
-            m.route.Link,
-            {
-              selector: "button.button.clear.icon",
-              href: "/social/gallery",
-              class: "primary",
-            },
-            leftArrowIcon,
-            "Back To Gallery"
-          ),
-          mdl.state.isAuth() && [
-            m(
-              "button.button.primary",
-              {
-                onclick: (e) => state.addImagesModal(true),
-              },
-              "Add more Images to Album"
-            ),
-            m(
-              "button.button error",
-              {
-                onclick: (e) => {
-                  deleteAlbum(mdl)
-                },
-              },
-              "Delete Album"
-            ),
-          ],
+          m.route.Link,
+          {
+            selector: "button.button.clear.icon",
+            href: "/social/gallery",
+            class: "primary",
+          },
+          leftArrowIcon,
+          "Back To Gallery"
         ),
-        m(
-          "section.container",
-          m("h2", state.title.toLocaleUpperCase()),
+        mdl.state.isAuth() && [
           m(
-            ".row",
-            state.album.map((pic, key) =>
-              m(
-                "figure.is-center.col-4.pos-rel",
-                { key },
-                mdl.state.isAuth() &&
-                m('button.button.error.pos-abs', {
-                  style: { top: 0, right: "20%" },
-                  onclick: (e) => deleteImg(mdl, pic),
-                }, deleteIcon),
-                m("img.pointer", {
-                  src: pic.thumb,
-                  onclick: (e) => {
-                    mdl.modal.content(
-                      m("img.is-center", {
-                        style: { height: "100%", margin: "0 auto" },
-                        src: pic.image,
-                        alt: "",
-                      })
-                    )
-                    mdl.toggleLayoutModal(mdl)
-                  },
-                })
-              )
+            "button.button.primary",
+            {
+              onclick: (e) => state.addImagesModal(true),
+            },
+            "Add more Images to Album"
+          ),
+          m(
+            "button.button error",
+            {
+              onclick: (e) => {
+                deleteAlbum(mdl)
+              },
+            },
+            "Delete Album"
+          ),
+        ],
+      ),
+      m(
+        "section.container",
+        m("h2", state.title.toLocaleUpperCase()),
+        m(
+          ".row",
+          state.album.map((pic, key) =>
+            m(
+              "figure.is-center.col-4.pos-rel",
+              { key },
+              mdl.state.isAuth() &&
+              m('button.button.error.pos-abs', {
+                style: { top: 0, right: "20%" },
+                onclick: (e) => deleteImg(mdl, pic),
+              }, deleteIcon),
+              m("img.pointer", {
+                src: pic.thumb,
+                onclick: (e) => {
+                  mdl.modal.content(
+                    m("img.is-center", {
+                      style: { height: "100%", margin: "0 auto" },
+                      src: pic.image,
+                      alt: "",
+                    })
+                  )
+                  mdl.toggleLayoutModal(mdl)
+                },
+              })
             )
           )
         )
-      ),
+      )
+    ),
 }
 
 export default Album

@@ -1,6 +1,5 @@
 import m from "mithril"
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
-import Loader from "@/Components/loader.js"
 import { prop } from 'ramda'
 import { editIcon, leftArrowIcon } from "@/Utils/"
 
@@ -174,7 +173,7 @@ const BlogPost = {
     m(
       "section.fade.p-y-6.container",
       state.status == "error" && m("p", "error redirecting"),
-      state.status == "loading" && m(Loader),
+      // state.status == "loading" && m(Loader),
       state.status == "loaded" && [
         BackToBlogs(),
         m(Post, { blog: state.blog, mdl }),

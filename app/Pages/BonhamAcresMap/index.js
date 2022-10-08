@@ -1,12 +1,10 @@
 import m from "mithril"
 import { isAdminOrMod } from "@/Utils/helpers"
-import Loader from '@/Components/loader'
 import {
   state,
   loadResidentsTask,
   findLocationTask,
   createMap,
-  // saveResidentTask,
 } from "./model.js"
 import '@/Utils/stamen.js'
 
@@ -77,7 +75,7 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
     view: ({ attrs: { mdl } }) =>
       m(
         "section",
-        state.status == 'loading' && m(Loader),
+        // state.status == 'loading' && m(Loader),
         m(
           "select.outline.bd-primary",
           {

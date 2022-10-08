@@ -1,7 +1,7 @@
 import m from "mithril"
 import Calendar from "./calendar"
 import { propEq, prop, head, tail, clone } from "ramda"
-import Loader from "@/Components/loader.js"
+// import Loader from "@/Components/loader.js"
 import { validateEventTask } from "./validations.js"
 import Stream from "mithril-stream"
 import { resizeImageTask } from "../../Utils/helpers"
@@ -218,7 +218,7 @@ const Events = {
       "article",
       state.status() == "loaded" &&
       m("section.container", m(Calendar, { mdl, state })),
-      state.status() == "loading" && m("section", m(Loader)),
+      // state.status() == "loading" && m("section", m(Loader)),
       state.status() == "error" && m("section", "is error")
     ),
 }
