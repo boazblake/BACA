@@ -252,7 +252,7 @@ const CardOrd = () => {
           "hgroup.row",
           { style: { color: "#14854f", margin: "0 auto" } },
           isSelected
-            ? m("h2.col.is-center", title)
+            ? m("h2.col.is-center", { style: { height: "32vh" } }, title)
             : m('h2.col.is-center', { style: { fontSize: "10em" } }, icons.default)
 
         )
