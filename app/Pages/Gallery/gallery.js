@@ -61,7 +61,7 @@ const AlbumCover = {
       {
         selector: "figure",
         class: "button card col-4 bg-white",
-        href: `social/gallery/album:${album}`,
+        href: `social/gallery/album/${album}`,
       },
       m("img", {
         alt: "",

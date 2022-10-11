@@ -21,6 +21,7 @@ export const state = {
 }
 
 const resetModalState = (state) => {
+  state.album = []
   state.modalState = {
     imgFiles: [],
     selectedImgs: [],
@@ -55,20 +56,18 @@ const deleteImg = (mdl, pic) => {
 }
 
 const fetchAlbum = ({ attrs: { mdl } }) => {
-  const albumName = m.route.get().split(":")[1].replaceAll("%20", " ")
-  console.log('albumname', mdl.state)
-
+  state.title = mdl.album
   const onError = (e) => {
     log("fetchAlbum - error")(e)
   }
   const onSuccess = (results) => {
     results.any()
-      ? ((state.album = results), (state.title = albumName))
+      ? state.album = results
       : m.route.set("/social/gallery")
   }
 
   mdl.http.back4App
-    .getTask(mdl)(`gallery/${((albumName).replaceAll('\'', '%27'))}`)
+    .getTask(mdl)(`gallery/album?name=${mdl.album}`)
     .map(prop("results"))
     .fork(onError, onSuccess)
 }

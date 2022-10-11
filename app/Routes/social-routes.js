@@ -73,12 +73,13 @@ const SocialRoutes = [
     name: "Photo Gallery Album",
     title: "Photo Gallery Album",
     // icon: Icons.home,
-    route: "/social/gallery/album:album",
+    route: "/social/gallery/album/:album",
     isNav: false,
     group: ["nav", "social"],
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
+      mdl.album = args.album
       return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(Album, { mdl })),
@@ -105,12 +106,13 @@ const SocialRoutes = [
     name: "Blog Editor",
     title: "Blog Editor",
     // icon: Icons.home,
-    route: "/social/blog-editor:objectId",
+    route: "/social/blog-editor/:objectId",
     isNav: false,
     group: ["social", "authenticated"],
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
+      mdl.blogpost = args.objectId == 'new-post' ? '' : args.objectId
       return ScrollToPageTitle()
     },
     component: (mdl) => m(Layout, { mdl }, m(BlogEditor, { mdl })),
@@ -121,14 +123,14 @@ const SocialRoutes = [
     name: "",
     title: "",
     // icon: Icons.home,
-    route: "/social/blog-post:objectId",
+    route: "/social/blog-post/:objectId",
     isNav: false,
     group: ["social"],
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
       isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
-      mdl.blogpost = args.objectId.slice(1)
+      mdl.blogpost = args.objectId
       mdl.blogpost.length > 1
         ? m(Layout, { mdl }, m(BlogPost, { mdl, id: mdl.blogpost }))
         : m.route.SKIP

@@ -61,8 +61,8 @@ const fetchBlog = state => ({ attrs: { mdl } }) => {
     state.status = "loaded"
     state.show(true)
   }
+  let id = mdl.blogpost
 
-  let id = m.route.get().split(":")[1]
   if (exists(id)) {
     state.isEditing(true)
     mdl.http.back4App
@@ -130,7 +130,7 @@ const submitBlog =
       const onError = (e) => console.log("e", e)
       const onSuccess = id => (data) => {
         const route = id ? id : data.results.objectId
-        m.route.set(`/social/blog-post:${route}`)
+        m.route.set(`/social/blog-post/${route}`)
       }
 
       let dto = {
@@ -321,7 +321,7 @@ const BlogEditor = () => {
                 {
                   selector: "button.button.secondary",
                   href: state.objectId
-                    ? `/social/blog-post:${state.objectId}`
+                    ? `/social/blog-post/${state.objectId}`
                     : `/social/blog`,
                 },
                 "Cancel"

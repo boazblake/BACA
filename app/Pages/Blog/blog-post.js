@@ -79,7 +79,7 @@ const Post = {
           m.route.Link,
           {
             selector: "button.button.primary.icon",
-            href: `/social/blog-editor:${blog.objectId}`,
+            href: `/social/blog-editor/${blog.objectId}`,
           },
           "Edit", editIcon
         )

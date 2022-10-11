@@ -48,7 +48,7 @@ const BlogPreview = {
         m(
           m.route.Link,
           // "a.pointer",
-          { href: `/social/blog-post:${objectId}` },
+          { href: `/social/blog-post/${objectId}` },
           "... continue reading"
         )
       ),
@@ -59,7 +59,7 @@ const BlogPreview = {
           m.route.Link,
           {
             selector: "button",
-            href: `/social/blog-editor:${objectId}`,
+            href: `/social/blog-editor/${objectId}`,
           },
           "Edit"
         )

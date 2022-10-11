@@ -121,7 +121,7 @@ const Blog = {
       m.route.Link,
       {
         selector: "",
-        href: `/social/blog-post:${blog.objectId}`,
+        href: `/social/blog-post/${blog.objectId}`,
         key: idx,
         style: {
           alignContent: "stretch",

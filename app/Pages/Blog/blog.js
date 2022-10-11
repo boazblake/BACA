@@ -41,7 +41,7 @@ const Blog = () => {
                 m.route.Link,
                 {
                   selector: "button.button.primary",
-                  href: "/social/blog-editor:",
+                  href: "/social/blog-editor/new-post",
                   class:
                     mdl.settings.screenSize == "phone" ? "col-12" : "",
                 },
