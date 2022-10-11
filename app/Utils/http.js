@@ -102,7 +102,7 @@ const back4App = {
 }
 
 const openCageTask = (mdl) => (query) =>
-  HttpTask("POST")(mdl)(`${proxy}/geo/opencage`)({ query, bounds: mdl.Map.bounds() })
+  HttpTask("POST")(mdl)(`${proxy}/geo/opencage`)({ query, bounds: mdl.Map.bounds })
 
 const http = {
   openCageTask,

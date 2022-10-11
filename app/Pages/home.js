@@ -128,7 +128,7 @@ const Blog = {
         },
       },
       m(
-        ".card.opacity-overlay.is-vertical-align m6 row",
+        "opacity-overlay.is-vertical-align m6 row",
         {
           oncreate: ({ dom }) => dom.style.height = '330px',
           style: { overflow: "auto", }
@@ -150,7 +150,7 @@ const Blog = {
 const Img = {
   view: ({ attrs: { mdl, idx, img } }) =>
     m(
-      ".card.m6",
+      ".m6",
       {
         onclick: () => {
           mdl.modal.content(
@@ -180,7 +180,6 @@ const Event = {
     m(
       m.route.Link,
       {
-        selector: "",
         onclick: () => mdl.state.locationPreEvent(m.route.get()),
         href: `/social/events?${event.objectId}`,
         key: idx,
