@@ -42,11 +42,11 @@ const calcMargin = ({
     case "laptop":
       return "150px"
     case "tablet":
-      return "90px"
+      return "0px"
     case "wide":
-      return "70px"
+      return "0px"
     case "phone":
-      return "30px"
+      return "0px"
   }
 }
 
