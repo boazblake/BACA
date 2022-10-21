@@ -102,6 +102,5 @@ if (sessionStorage.getItem("baca-session-token")) {
 }
 
 
-m.route.prefix = ''
 m.route(root, "/", App(Model))
 
