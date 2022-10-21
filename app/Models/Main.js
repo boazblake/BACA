@@ -2,7 +2,7 @@ import Routes from "../Routes/index.js"
 import http from "@/Utils/http"
 import Stream from "mithril-stream"
 import Settings from './settings.js'
-
+console.log(Routes)
 const data = {
   events: [],
   images: [],
