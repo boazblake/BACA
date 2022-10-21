@@ -100,5 +100,8 @@ if (sessionStorage.getItem("baca-session-token")) {
 
   reloginTask(Model).fork(onError, onSuccess)
 }
+
+
+m.route.prefix = ''
 m.route(root, "/", App(Model))
 
