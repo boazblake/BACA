@@ -1,0 +1,4 @@
+Sitemap: https://raw.githubusercontent.com/boazblake/BACA/master/sitemap.xml
+
+User-agent: *
+Disallow:

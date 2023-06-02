@@ -27,9 +27,9 @@ const contents = {
           {
             target: "_blank",
             onclick: (e) => window.open(e.target.href),
-            href: "www.Municode.com"
+            href: "https://library.municode.com/tx/houston/codes/code_of_ordinances"
           },
-          "www.Municode.com"
+          "library.municode.com"
         ),
         " on the internet and search for City of Houston, Chapter 28, Article X, or enter Parking of Vehicles on Residential Property in the search block."
       ),
