@@ -8,7 +8,7 @@ const state = {
 }
 
 const Dues = ({ attrs: { mdl } }) => {
-  const fetchDues = (mdl) => mdl.http.back4App.getTask(mdl)(`dues/${mdl.user.objectId}`).map(prop('results')).fork(log('e'), dues => { mdl.dues = dues; console.log(dues) })
+  const fetchDues = (mdl) => mdl.http.back4App.getTask(mdl)(`dues/${mdl.user.objectId}`).map(prop('results')).fork(log('e'), dues => { mdl.dues = dues })
   fetchDues(mdl)
 
   return {
