@@ -1,14 +1,14 @@
 import m from "mithril"
 import PayPal from "./paypal"
 import { Table, formatDataForTable } from "@/Components/table.js"
-import { propEq } from "ramda"
+import { prop } from "ramda"
 
 const state = {
   paypal: null,
 }
 
 const Dues = ({ attrs: { mdl } }) => {
-  const fetchDues = (mdl) => mdl.http.back4App.getTask(mdl)(`dues/${mdl.user.objectId}`).fork(log('e'), dues => mdl.dues = dues)
+  const fetchDues = (mdl) => mdl.http.back4App.getTask(mdl)(`dues/${mdl.user.objectId}`).map(prop('results')).fork(log('e'), dues => { mdl.dues = dues; console.log(dues) })
   fetchDues(mdl)
 
   return {
