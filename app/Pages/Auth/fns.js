@@ -4,7 +4,7 @@ import { prop } from 'ramda'
 const addPayPal = () => {
   window.paypal = null
   const script = document.createElement('script')
-  script.src = "https://www.paypal.com/sdk/js?client-id=ASs3FDsWTORwsfyCIoG4DSgm0ReuA2&enable-funding=venmo&currency=USD"
+  script.src = "https://www.paypal.com/sdk/js?client-id=ASs3FDsWTORwsfyCIoG4DSgm0ReuA2&components=buttons&enable-funding=venmo,paylater&currency=USD"
   script.id = 'paypal'
   script.async = true
   script.defer = true
