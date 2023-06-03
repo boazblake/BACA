@@ -92,6 +92,7 @@ const PayPal = ({ attrs: { mdl, reload } }) => {
   const onSuccess = (mdl, reload) => (data) => {
     addSuccess({ text: "Dues Successfully Paid" })
     log("on success", [state, data])
+    mdl.toggleLayoutModal(mdl)
     reload(mdl)
   }
 
