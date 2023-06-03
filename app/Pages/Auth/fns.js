@@ -1,10 +1,10 @@
 import { prop } from 'ramda'
 
-//ASs3FDsWTORwsfyCIoG4DSgm0ReuA2jQpU9A_2u9F-LMhSl0i3H3na6iJ6GS_tuHefm4y4-EY2JCAKAN
+
 const addPayPal = () => {
   window.paypal = null
   const script = document.createElement('script')
-  script.src = "https://www.paypal.com/sdk/js?client-id=AYWuxgG1kAOvtI3sK-KwMgust3Xq7HtrHJqvfyoQNRM2RC7CJPNcCZb4EkrY5wr-u31bbHax1lAMpicK&components=buttons&enable-funding=venmo,paylater&currency=USD"
+  script.src = "https://www.paypal.com/sdk/js?client-id=ASs3FDsWTORwsfyCIoG4DSgm0ReuA2jQpU9A_2u9F-LMhSl0i3H3na6iJ6GS_tuHefm4y4-EY2JCAKAN&components=buttons&enable-funding=venmo,paylater&currency=USD"
   script.id = 'paypal'
   script.async = true
   script.defer = true
