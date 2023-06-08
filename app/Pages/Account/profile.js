@@ -13,10 +13,11 @@ const state = {
   disableEdit: true,
 }
 
-const fetchLocationsTask = (mdl) =>
-  mdl.http.back4App
+const fetchLocationsTask = (mdl) => {
+  return mdl.http.back4App
     .getTask(mdl)("geo/addresses?limit=1000")
     .map(prop("results"))
+}
 
 const toLocationVM = (addressIds) => (locations) =>
   locations.map((location) =>
@@ -29,7 +30,6 @@ const fetchLocations = (mdl) => (state) => {
     state.locations(locations)
     state.status = 'loaded'
   }
-
   fetchLocationsTask(mdl)
     .map(toLocationVM(mdl.account.addressIds))
     .fork(onError, onSuccess)
