@@ -90,7 +90,7 @@ const getTask = (mdl) => (url) => HttpTask("GET")(mdl)(url)(null)
 //       "Cache-Control": "public, max-age=604800",
 //     }
 
-const prod = "https://lucky-slippers-eel.cyclic.app/api"
+const prod = "https://bonhamacres.cyclic.app/api"
 const dev = "http://localhost:3000/api"
 const proxy = prod//process.env.NODE_ENV ? dev : prod
 
