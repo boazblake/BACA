@@ -60,6 +60,7 @@ const saveResident = (mdl, state) => {
 const BonhamAcresMap = ({ attrs: { mdl } }) => {
   state.opts.center = mdl.Map.bh
   state.opts.bounds = mdl.Map.bounds
+  state.isLoggedIn = mdl.state.isAuth()
   const onError = (err) => log("err")(err)
   const onSuccess = (state) => {
     state.map.on('mapReady', map => {

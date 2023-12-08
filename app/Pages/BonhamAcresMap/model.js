@@ -17,6 +17,7 @@ const state = {
   input: null,
   map: null,
   isEdit: Stream(false),
+  isLoggedIn: false,
   opts: {
     zoom: 16,
     center: [],
@@ -79,7 +80,7 @@ const toLeafletMarker = location => {
     riseOnHover: true,
   }])
   marker.options.draggable = state.isEdit()
-  marker.on('click', () => marker.bindPopup(`${location.owner}'s property at ${location.property}`).openPopup())
+  state.isLoggedIn && marker.on('click', () => marker.bindPopup(`${location.owner}'s property at ${location.property}`).openPopup())
   marker.on('dragend', e => {
     const { lat, lng } = e.target.getLatLng()
     location.lat = lat
