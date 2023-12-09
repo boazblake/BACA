@@ -9,7 +9,6 @@ L.Icon.Default.imagePath = 'images/leaflet-images/';
 export const layerTypes = [
   { name: 'smooth', url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png' },
   { name: 'smooth dark', url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png' },
-  { name: 'satellite', url: 'https://tiles.stadiamaps.com/data/satellite/{z}/{x}/{y}.jpg' },
   { name: 'outdoors', url: 'https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png' },
   { name: 'toner', url: 'https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png' },
   { name: 'terrain', url: 'https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png' },
