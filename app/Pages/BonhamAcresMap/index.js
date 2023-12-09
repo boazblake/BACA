@@ -4,9 +4,9 @@ import {
   state,
   loadResidentsTask,
   findLocationTask,
-  createMap,
+  createMap, layerTypes
 } from "./model.js"
-import '@/Utils/stamen.js'
+// import '@/Utils/stamen.js'
 
 const findResident = (mdl, state) => {
   const onError = (e) => {
@@ -85,11 +85,7 @@ const BonhamAcresMap = ({ attrs: { mdl } }) => {
               resetState(mdl, state)
             }
           },
-          [
-            m('option', 'watercolor'),
-            m('option', 'toner'),
-            m('option', 'terrain'),
-          ]
+          layerTypes.map(l => m('option', { value: l.url }, l.name))
         ),
         isAdminOrMod(mdl) &&
         m(
