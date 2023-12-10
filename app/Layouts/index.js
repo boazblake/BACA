@@ -32,7 +32,7 @@ const state = {
   errors: {}
 }
 
-const showLoader = (mdl, state) => (state.status == "loading" || mdl.state.isLoading()) && !['/', '/about'].includes(m.route.get()) && m(Loader)
+const showLoader = (mdl, state) => (state.status == "loading" || mdl.state.isLoading()) && ['/', '/social/events', '/social/blog'].includes(m.route.get()) && m(Loader)
 const isSmallScreen = mdl => !['desktop', 'laptop'].includes(mdl.settings.screenSize)
 const toShowNav = mdl => mdl.state.showNavModal()
 const showNavMenu = (mdl) => allPass([isSmallScreen, toShowNav])(mdl)
@@ -126,7 +126,7 @@ const Layout = {
 
       state.status == "error" && m("p", "ERROR", state?.errors?.error),
       showLoader(mdl, state),
-      state.status == "loaded" && m("section", m(Main, { mdl, children })),
+      m("section", m(Main, { mdl, children })),
 
 
 
