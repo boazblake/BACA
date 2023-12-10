@@ -102,5 +102,5 @@ if (sessionStorage.getItem("baca-session-token")) {
 }
 
 
-m.route(root, "/", App(Model))
+m.route(root, '/', App(Model))
 

@@ -23,7 +23,9 @@ const Routes = [
     children: [],
     options: [],
     onmatch: (mdl, args, path, fullroute, isAnchor) => {
-      return isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
+      return mdl.data.blogs.any()
+        ? isAnchor ? scrollToAnchor(mdl.state.anchor) : ScrollToPageTitle()
+        : m.route.set('/about')
     },
     component: (mdl) => m(Layout, { mdl }, m(Home, { mdl })),
   },
