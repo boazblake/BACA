@@ -12,7 +12,7 @@ import {
 } from "./fns"
 import Stream from "mithril-stream"
 import Editor from '@toast-ui/editor'
-import '@toast-ui/editor/dist/toastui-editor.css'
+import('@toast-ui/editor/dist/toastui-editor.css')
 import { prop } from "ramda"
 
 

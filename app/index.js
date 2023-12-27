@@ -20,28 +20,12 @@ window.log = (m) => (v) => {
   return v
 }
 
-
-
-
-// window.perf = (fn) => {
-//   const startTime = performance.now()
-
-//   // Do the normal stuff for this function
-
-//   const duration = performance.now() - startTime
-//   console.log(`${fn} took ${duration}ms`)
-// }
-
 FunConfig.configure()
 
 Model.navState = Model.Routes.reduce((acc, r) => {
   if (r.children.any()) acc[r.id] = Stream(false)
   return acc
 }, {})
-
-// if (module.hot) {
-//   module.hot.accept()
-// }
 
 if (process.env.NODE_ENV !== "production") {
   console.log("Looks like we are in development mode!")

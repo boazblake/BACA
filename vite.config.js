@@ -4,6 +4,7 @@ import vsharp from 'vite-plugin-vsharp'
 import viteImagemin from 'vite-plugin-imagemin'
 import path from "path"
 import { VitePWA } from 'vite-plugin-pwa'
+import { dependencies } from './package.json'
 
 const pwa = () =>
   VitePWA({
@@ -45,7 +46,6 @@ const imageMin = () => viteImagemin({
   },
 })
 
-
 const sharper = () => vsharp({
   src: "./public/",
   dest: "docs/assets/",
@@ -64,6 +64,11 @@ const sharper = () => vsharp({
   ],
 })
 
+const renderDependencyChunks = (deps) => {
+  let chunks = {}
+  Object.keys(deps).forEach((key) => chunks[key] = [key])
+  return chunks;
+}
 
 export default defineConfig({
   optimizeDeps: { esbuildOptions: { plugins: [esbuildFlowPlugin()] } },
@@ -82,7 +87,13 @@ export default defineConfig({
       // "Pages": path.resolve(__dirname, "./app/Pages"),
     },
   },
-  build: { outDir: "docs" },
+  build: {
+    outDir: "docs", rollupOptions: {
+      manualChunks: {
+        ...renderDependencyChunks(dependencies)
+      }
+    }
+  },
   server: {
     port: 3001,
     open: true,
