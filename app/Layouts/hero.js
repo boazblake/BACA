@@ -84,6 +84,7 @@ const Hero = () => {
           m("img.hero-img.animated.fadeout", {
             alt: "hero",
             key: idx,
+            loading: 'lazy',
             class: state.image() == idx ? "fadeInRight" : "fadeOutLeft",
             onload: (e) => e.target.classList.replace("fadeout", "fadeInRight"),
             style: {
