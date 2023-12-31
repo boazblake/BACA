@@ -4,7 +4,8 @@ import vsharp from 'vite-plugin-vsharp'
 import viteImagemin from 'vite-plugin-imagemin'
 import path from "path"
 import { VitePWA } from 'vite-plugin-pwa'
-import { dependencies } from './package.json'
+
+
 
 const pwa = () =>
   VitePWA({
@@ -64,12 +65,6 @@ const sharper = () => vsharp({
   ],
 })
 
-const renderDependencyChunks = (deps) => {
-  let chunks = {}
-  Object.keys(deps).forEach((key) => chunks[key] = [key])
-  return chunks;
-}
-
 export default defineConfig({
   optimizeDeps: { esbuildOptions: { plugins: [esbuildFlowPlugin()] } },
   plugins: [flowPlugin(),
@@ -88,9 +83,10 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: "docs", rollupOptions: {
+    outDir: "docs",
+    rollupOptions: {
       manualChunks: {
-        ...renderDependencyChunks(dependencies)
+        '@toast-ui/editor': ['@toast-ui/editor'],
       }
     }
   },
